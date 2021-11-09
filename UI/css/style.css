@@ -37,8 +37,8 @@
   # Job Listing - Grid Layout
   # Tasks - List Layout
   # Tasks - Grid Layout
-  # Freelancers - Grid Layout
-  # Freelancers - List Layout
+  # Task-Runners - Grid Layout
+  # Task-Runners - List Layout
   # Browse Companies
 
 04. User Interface Elements -------------------------------------
@@ -92,10 +92,10 @@
   # Single Job Page
   # Single Freelancer Profile
 
-07. Dashboard ---------------------------------------------------
-  # Dashboard Navigation
-  # Dashboard Elements
-  # Dashboard Messages
+07. Market Place ---------------------------------------------------
+  # Market Place Navigation
+  # Market Place Elements
+  # Market Place Messages
 
 08. Others ------------------------------------------------------
   # Common Styles
@@ -5167,7 +5167,7 @@ span.blog-item-tag {
 
 
 /* ---------------------------------- */
-/* Freelancers - Grid Layout
+/* Task-Runners - Grid Layout
 ------------------------------------- */
 .freelancers-container {
 	display: flex;
@@ -5335,7 +5335,7 @@ span.blog-item-tag {
 }
 
 
-/* Media Queiers for Freelancers List */
+/* Media Queiers for Task-Runners List */
 @media (max-width: 1366px) {
 	.freelances-grid-layout .freelancer-overview .freelancer-avatar { width: 100px; }
 }
@@ -5347,7 +5347,7 @@ span.blog-item-tag {
 	.freelancers-container.freelancers-grid-layout .freelancer { width: 100%; margin-right: 0; }
 }
 
-/* Full Page Media Queiers for Freelancers List */
+/* Full Page Media Queiers for Task-Runners List */
 @media (max-width: 2560px) {
 	.full-page-container .freelancer { width: calc(100% * (1/4) - 30px); }
 }
@@ -5366,7 +5366,7 @@ span.blog-item-tag {
 }
 
 /* ---------------------------------- */
-/* Freelancers - List Layout
+/* Task-Runners - List Layout
 ------------------------------------- */
 .freelancers-container.freelancers-list-layout { width: 100%; }
 
@@ -5439,7 +5439,7 @@ span.blog-item-tag {
 	float: right;
 } 
 
-/* Freelancers Compact List */
+/* Task-Runners Compact List */
 .compact-list.freelancers-list-layout .freelancer {
     border-radius: 0;
     margin-bottom: 0;
@@ -5484,7 +5484,7 @@ span.blog-item-tag {
 }
 
 
-/* Media Queiers for Freelancers List Layout */
+/* Media Queiers for Task-Runners List Layout */
 @media (max-width: 1366px) {
 	.freelancers-list-layout .freelancer-overview .freelancer-avatar { width: 100px; }
 }
@@ -14498,7 +14498,7 @@ a.attachment-box:hover i {
 
 
 /* -------------------------------------------------------------- */
-/*  07. Dashboard
+/*  07. Market Place
 ----------------------------------------------------------------- */
 /* Full Page Adjustments */
 .full-page-container,
@@ -14513,7 +14513,7 @@ a.attachment-box:hover i {
 	}
 }
 
-/* Dashboard Basis */
+/* Market Place Basis */
 .dashboard-container {
     display: flex;
     width: 100%;
@@ -14550,7 +14550,7 @@ a.attachment-box:hover i {
 }
 
 
-/* Dashboard Header Logo Adjustent */
+/* Market Place Header Logo Adjustent */
 @media (min-width: 1099px) {
 	#header-container.dashboard-header .container {
 		padding-right: 35px;
@@ -14571,7 +14571,7 @@ a.attachment-box:hover i {
 
 
 /* ---------------------------------- */
-/* Dashboard Navigation
+/* Market Place Navigation
 ------------------------------------- */
 .dashboard-nav {
 	display: block;
@@ -14747,10 +14747,10 @@ a.dashboard-responsive-nav-trigger { display: none; }
 
 
 /* ---------------------------------- */
-/* Dashboard Elements
+/* Market Place Elements
 ------------------------------------- */
 
-/* Dashboard Headline
+/* Market Place Headline
 ------------------------------------- */
 .dashboard-headline {
 	display: block;
@@ -14846,7 +14846,7 @@ a.dashboard-responsive-nav-trigger { display: none; }
 
 
 
-/* Dashboard Box
+/* Market Place Box
 ------------------------------------- */
 .dashboard-box {
 	display: block;
@@ -14993,7 +14993,7 @@ a.dashboard-responsive-nav-trigger { display: none; }
 
 
 
-/* Dashboard Box List
+/* Market Place Box List
 ------------------------------------- */
 ul.dashboard-box-list {
 	list-style: none;
@@ -15035,7 +15035,7 @@ ul.dashboard-box-list > li:hover {
 }
 
 
-/* Dashboard Box List Buttons
+/* Market Place Box List Buttons
 ------------------------------------- */
 .buttons-to-right,
 .dashboard-box-list .button.to-right {
@@ -15198,7 +15198,7 @@ ul.dashboard-box-list > li:hover {
 }
 
 
-/* Dashboard Invoices List
+/* Market Place Invoices List
 ------------------------------------- */
 .invoice-list-item ul {
 	line-height: 22px;
@@ -15252,9 +15252,9 @@ ul.dashboard-box-list > li:hover {
 .unpaid { background-color: #dc3139; }
 
 
-/* Listings in Dashboard
+/* Listings in Market Place
 ------------------------------------- */
-/* Freelancers */
+/* Task-Runners */
 .dashboard-box .job-listing-details {
 	box-shadow: none;
 	padding: 10px 0;
@@ -15324,7 +15324,7 @@ ul.dashboard-box-list > li:hover {
 	align-self: flex-start;
 }
 
-/* Dashboard Task Info */
+/* Market Place Task Info */
 .dashboard-task-info {
 	list-style: none;
 	padding: 0;
@@ -15597,7 +15597,7 @@ ul.dashboard-box-list > li:hover {
 
 @media (max-width: 992px) {
 	.dashboard-content-inner { min-height: auto !important; }
-	/* Dashboard Mobile Basis */
+	/* Market Place Mobile Basis */
 	.dashboard-sidebar .dashboard-nav-container,
 	.dashboard-content-inner { padding: 15px; }
 	.dashboard-sidebar-inner { padding-bottom: 30px; }
@@ -15632,9 +15632,9 @@ ul.dashboard-box-list > li:hover {
 	.dashboard-content-container { height: auto !important; }
 	.dashboard-content-container .simplebar-scrollbar { display: none; }
 
-	/* Dashboard Mobile Basis - End */
+	/* Market Place Mobile Basis - End */
 
-	/* Dashboard Nav */
+	/* Market Place Nav */
 	.dashboard-nav {
 		width: 100%;
 		margin: 0;
@@ -15721,7 +15721,7 @@ ul.dashboard-box-list > li:hover {
 	a.dashboard-responsive-nav-trigger.active {
 		border-radius: 4px 4px 0 0;
 	}
-	/* Dashboard Nav - End */
+	/* Market Place Nav - End */
 
 	.buttons-to-right:not(.single-right-button)  {  opacity: 1; }
 	.fun-facts-container {
@@ -15778,7 +15778,7 @@ ul.dashboard-box-list > li:hover {
 
 
 /* ---------------------------------- */
-/* Dashboard Messages
+/* Market Place Messages
 ------------------------------------- */
 .messages-container {
 	margin: 0;

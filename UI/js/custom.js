@@ -349,10 +349,10 @@ $(document).ready(function(){
 
 
 	/*----------------------------------------------------*/
-	/* Dashboard Scripts
+	/* Market Place Scripts
 	/*----------------------------------------------------*/
 
-	// Dashboard Nav Submenus
+	// Market Place Nav Submenus
     $('.dashboard-nav ul li a').on('click', function(e){
 		if($(this).closest("li").children("ul").length) {
 			if ( $(this).closest("li").is(".active-submenu") ) {
@@ -439,7 +439,7 @@ $(document).ready(function(){
 		}
 	});
 
-	// Mobile Adjustment for Single Button Icon in Dashboard Box
+	// Mobile Adjustment for Single Button Icon in Market Place Box
 	$('.buttons-to-right').each(function() {
 		var btr = $(this).width();
 		if (btr < 36) {

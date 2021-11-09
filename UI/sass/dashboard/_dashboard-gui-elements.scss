@@ -1,9 +1,9 @@
 
 /* ---------------------------------- */
-/* Dashboard Elements
+/* Market Place Elements
 ------------------------------------- */
 
-/* Dashboard Headline
+/* Market Place Headline
 ------------------------------------- */
 
 .dashboard-headline {
@@ -99,7 +99,7 @@
   }
 }
 
-/* Dashboard Box
+/* Market Place Box
 ------------------------------------- */
 
 .dashboard-box {
@@ -266,7 +266,7 @@
   }
 }
 
-/* Dashboard Box List
+/* Market Place Box List
 ------------------------------------- */
 
 ul.dashboard-box-list {
@@ -312,7 +312,7 @@ ul.dashboard-box-list {
   }
 }
 
-/* Dashboard Box List Buttons
+/* Market Place Box List Buttons
 ------------------------------------- */
 
 .buttons-to-right {
@@ -499,7 +499,7 @@ ul.dashboard-box-list {
   }
 }
 
-/* Dashboard Invoices List
+/* Market Place Invoices List
 ------------------------------------- */
 
 .invoice-list-item {
@@ -557,9 +557,9 @@ ul.dashboard-box-list {
   background-color: #dc3139;
 }
 
-/* Listings in Dashboard
+/* Listings in Market Place
 ------------------------------------- */
-/* Freelancers */
+/* Task-Runners */
 
 .dashboard-box {
   .job-listing-details {
@@ -624,7 +624,7 @@ ul.dashboard-box-list {
 
 /* Jobs */
 
-/* Dashboard Task Info */
+/* Market Place Task Info */
 
 .dashboard-task-info {
   list-style: none;
@@ -895,7 +895,7 @@ ul.dashboard-box-list {
   .dashboard-content-inner {
     min-height: auto !important;
   }
-  /* Dashboard Mobile Basis */
+  /* Market Place Mobile Basis */
   .dashboard-sidebar .dashboard-nav-container, .dashboard-content-inner {
     padding: 15px;
   }
@@ -934,8 +934,8 @@ ul.dashboard-box-list {
       display: none;
     }
   }
-  /* Dashboard Mobile Basis - End */
-  /* Dashboard Nav */
+  /* Market Place Mobile Basis - End */
+  /* Market Place Nav */
   .dashboard-nav {
     width: 100%;
     margin: 0;
@@ -1028,7 +1028,7 @@ ul.dashboard-box-list {
       border-radius: $global-border-radius $global-border-radius 0 0;
     }
   }
-  /* Dashboard Nav - End */
+  /* Market Place Nav - End */
   .buttons-to-right:not(.single-right-button) {
     opacity: 1;
   }

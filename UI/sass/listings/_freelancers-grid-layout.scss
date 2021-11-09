@@ -1,6 +1,6 @@
 
 /* ---------------------------------- */
-/* Freelancers - Grid Layout
+/* Task-Runners - Grid Layout
 ------------------------------------- */
 
 .freelancers-container {
@@ -163,7 +163,7 @@
   }
 }
 
-/* Media Queiers for Freelancers List */
+/* Media Queiers for Task-Runners List */
 @media (max-width: 1366px) {
   .freelances-grid-layout .freelancer-overview .freelancer-avatar {
     width: 100px;
@@ -189,7 +189,7 @@
   }
 }
 
-/* Full Page Media Queiers for Freelancers List */
+/* Full Page Media Queiers for Task-Runners List */
 @media (max-width: 2560px) {
   .full-page-container .freelancer {
     width: calc(100% * (1/4) - 30px);
