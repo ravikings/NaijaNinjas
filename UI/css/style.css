@@ -90,7 +90,7 @@
 
 06. Single Pages ------------------------------------------------
   # Single Job Page
-  # Single Freelancer Profile
+  # Single Task-Runner Profile
 
 07. Market Place ---------------------------------------------------
   # Market Place Navigation
@@ -14255,10 +14255,10 @@ a.apply-now-button i {
 }
 
 
-/* Single Freelancer Profile
+/* Single Task-Runner Profile
 ------------------------------------- */
 
-/* Freelancer Socials*/
+/* Task-Runner Socials*/
 .freelancer-socials ul {
 	margin: 0;
 	padding: 0;
@@ -14420,7 +14420,7 @@ a.attachment-box:hover i {
 }
 
 
-/* Freelancer Indicators */
+/* Task-Runner Indicators */
 .freelancer-indicators {
 	display: flex;
 	flex-wrap: wrap;
