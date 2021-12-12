@@ -1,4 +1,4 @@
-dj-rest-auth==2.1.11
+dj-rest-auth
 django-allauth
 django
 djangorestframework
