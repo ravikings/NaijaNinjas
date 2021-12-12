@@ -56,3 +56,20 @@
     }
 
   }
+.regTab{
+     border: none;
+    color: #777 !important;
+    display: inline-block;
+    outline: none;
+    padding: 0;
+    text-decoration: none;
+    font-size: 16px;
+    z-index: 10;
+    position: relative;
+    height: 100%;
+    padding: 0 30px;
+    border-right: 1px solid transparent;
+    border-left: 1px solid transparent;
+    transition: all 0.3s, font-weight 0s;
+    border-right: 1px solid #e0e0e0;
+}

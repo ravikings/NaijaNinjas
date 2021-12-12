@@ -5,23 +5,29 @@ import axios from 'axios'
 
 import * as AiIcons from 'react-icons/ai';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Form,Modal} from 'react-bootstrap'
+import {Form,Modal,Tabs,Tab} from 'react-bootstrap'
 
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 import swal from 'sweetalert';
-import url from '../../baseUrl'
+import url from '../../baseUrl';
+import $ from 'jquery';
 const Navbar=() =>{
-   
+  useEffect(()=>{
+  
+  },[]) 
   const [sidebar, setSidebar] = useState(false);
-  const [login, setLogin] = useState(false);
+  // const [login, setLogin] = useState(  localStorage.getItem('activeNave');
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const history = useHistory();
+  const [firstName,setFirstName]=useState('');
+  const [lastName,setLastName]=useState('');
   const [email,setEmail]=useState('');
+  const [contactNo,setContactNo]=useState('');
   const [password,setPassword]=useState('');
   const showSidebar = () => setSidebar(!sidebar);
 // login auth start
@@ -35,7 +41,7 @@ const loginAuth=(e)=>{
   form.append("password", password);
 axios({
 method: 'POST',
-url: `${url.url}api/login`,
+url: `${url.url}dj-rest-auth/login/`,
 data:form
 })
 .then((response) => {
@@ -46,6 +52,7 @@ if(data.status==true){
   localStorage.setItem('token',data.token);
   localStorage.setItem('id',data.id)
   localStorage.setItem('fname',data.Fname)
+  localStorage.setItem('activeNave',true)
 
   // swal("successfully!", "You are successfully logged in!", "success");
   handleClose(false)
@@ -63,6 +70,45 @@ console.log(error);
 });
 }
 // login auth end
+// register start here
+const userRegister=(e)=>{
+  
+  e.preventDefault();
+  // axios post data
+  var formdata = new FormData();
+formdata.append("first_Name", firstName);
+formdata.append("last_Name", lastName);
+formdata.append("email", email);
+formdata.append("contact_no", contactNo);
+formdata.append("password", password);
+axios({
+method: 'POST',
+url: `${url.url}api/register`,
+data:formdata
+})
+.then((response) => {
+ 
+  var data=response.data;
+  console.log("reg data is ",data)
+if(data.status==true){
+  
+  swal("successfully!", "You are successfully logged in!", "success");
+  handleClose(false)
+  history.push('/')
+
+}
+else  if(data.status==false){
+  // setLoader(false)
+  swal("Incorrect!", data.message, "warning");
+
+
+}
+console.log(response.data);
+}, (error) => {
+console.log(error);
+});
+}
+// register end here
     return (
         <>
               {/* Header Container
@@ -182,7 +228,7 @@ console.log(error);
               {/* Right Side Content / End */}
               <div className="right-side">
                 {/*  User Notifications */}
-              {login ?
+              { localStorage.getItem('activeNave') ?
               <span>
                 <div className="header-widget hide-on-mobile">
                  
@@ -392,21 +438,25 @@ console.log(error);
         show={show}
         onHide={handleClose}
         
-        
+        id="sign-in-dialog" 
       >
-       
 
       {/* <div id="sign-in-dialog" > */}
         {/*Tabs */}
        
         <div className="sign-in-form">
-          <ul className="popup-tabs-nav">
-            <li><a href="#login">Log In</a></li>
-            <li><a href="#register">Register</a></li>
-          </ul>
+         
           <div className="popup-tabs-container">
-            {/* Login */}
-            <div className="popup-tab-content" id="login">
+          <Tabs
+  defaultActiveKey="login"
+  transition={false}
+  id="noanim-tab-example"
+  className="mb-3"
+
+>
+  <Tab tabClassName="regTab"	 eventKey="login" title="Login">
+   {/* Login */}
+   <div className="popup-tab-content" id="login">
               {/* Welcome Text */}
               <div className="welcome-text">
                 <h3>We're glad to see you again!</h3>
@@ -433,8 +483,10 @@ console.log(error);
                 <button className="google-login ripple-effect"><i className="icon-brand-google-plus-g" /> Log In via Google+</button>
               </div>
             </div>
-            {/* Register */}
-            <div className="popup-tab-content" id="register">
+  </Tab>
+  <Tab tabClassName="regTab" eventKey="register" title="Register">
+    {/* Register */}
+    <div className="popup-tab-content" id="register">
               {/* Welcome Text */}
               <div className="welcome-text">
                 <h3>Let's create your account!</h3>
@@ -451,26 +503,37 @@ console.log(error);
                 </div>
               </div>
               {/* Form */}
-              <form method="post" id="register-account-form">
+              <Form onSubmit={userRegister} id="register">
                 <div className="input-with-icon-left">
-                  <i className="icon-material-baseline-mail-outline" />
-                  <input type="text" className="input-text with-border" name="emailaddress-register" id="phoneno-register" placeholder="Phone number" required />
+                  <i className="icon-material-outline-account-circle" />
+                  <input type="text" className="input-text with-border" 
+                   onChange={(e) => setFirstName(e.target.value)} value={firstName} 
+                  placeholder="First Name" required />
+                </div>
+                <div className="input-with-icon-left">
+                  <i className="icon-material-outline-account-circle" />
+                  <input type="text" className="input-text with-border"  placeholder="Last Name"
+                   onChange={(e) => setLastName(e.target.value)} value={lastName} 
+                  required />
                 </div>
                 <div className="input-with-icon-left">
                   <i className="icon-material-baseline-mail-outline" />
-                  <input type="text" className="input-text with-border" name="emailaddress-register" id="emailaddress-register" placeholder="Email Address" required />
+                  <input type="text" className="input-text with-border" placeholder="Phone number"
+                   onChange={(e) => setContactNo(e.target.value)} value={contactNo} 
+                  required />
+                </div>
+                <div className="input-with-icon-left">
+                  <i className="icon-material-baseline-mail-outline" />
+                  <input type="text" className="input-text with-border"  onChange={(e) => setEmail(e.target.value)} value={email}  placeholder="Email Address" required />
                 </div>
                 <div className="input-with-icon-left" title="Should be at least 8 characters long" data-tippy-placement="bottom">
                   <i className="icon-material-outline-lock" />
-                  <input type="password" className="input-text with-border" name="password-register" id="password-register" placeholder="Password" required />
+                  <input type="password" className="input-text with-border"  onChange={(e) => setPassword(e.target.value)} value={password} placeholder="Password" required />
                 </div>
-                <div className="input-with-icon-left">
-                  <i className="icon-material-outline-lock" />
-                  <input type="password" className="input-text with-border" name="password-repeat-register" id="password-repeat-register" placeholder="Repeat Password" required />
-                </div>
-              </form>
+           
+              <button className="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit">Register <i className="icon-material-outline-arrow-right-alt" /></button>
+              </Form>
               {/* Button */}
-              <button className="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">Register <i className="icon-material-outline-arrow-right-alt" /></button>
               {/* Social Login */}
               <div className="social-login-separator"><span>or</span></div>
               <div className="social-login-buttons">
@@ -478,6 +541,12 @@ console.log(error);
                 <button className="google-login ripple-effect"><i className="icon-brand-google-plus-g" /> Register via Google+</button>
               </div>
             </div>
+  </Tab>
+  
+</Tabs>
+
+           
+           
           </div>
         </div>
       </Modal>

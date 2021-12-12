@@ -369,11 +369,11 @@ button {
 
 #sign-in-dialog, #small-dialog-1, #small-dialog-2, #small-dialog-3, #small-dialog-4, #small-dialog {
   background: #fff;
-  padding: 40px;
+  // padding: 40px;
   padding-top: 0;
   text-align: left;
   max-width: 610px;
-  margin: 40px auto;
+  // margin: 40px auto;
   position: relative;
   box-sizing: border-box;
   border-radius: $global-border-radius;
