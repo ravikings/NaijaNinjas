@@ -1,0 +1,6 @@
+dj-rest-auth==2.1.11
+django-allauth
+django
+djangorestframework
+pytz
+djangorestframework-simplejwt
