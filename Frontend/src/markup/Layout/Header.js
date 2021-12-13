@@ -196,13 +196,16 @@ class Header extends Component{
 										<form>
 											<h3 className="m-t0">Personal Details</h3>
 											<div className="form-group">
-												<input className="form-control" placeholder="Name"/>
+												<input className="form-control" placeholder="email"/>
 											</div>	
 											<div className="form-group">
-												<input  className="form-control" placeholder="Mobile Number"/>
+												<input type='password' className="form-control" placeholder="password"/>
+											</div>
+											<div >
+												Please provide a valid city.
 											</div>
 											<div className="clearfix">
-												<button type="button" className="btn-primary site-button btn-block">Submit </button>
+												<button type="button" className="btn-primary site-button btn-block">Login</button>
 											</div>
 										</form>
 									</div>
