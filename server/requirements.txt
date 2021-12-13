@@ -6,3 +6,4 @@ pytz
 djangorestframework-simplejwt
 django-cors-headers
 drf-yasg
+pillow
