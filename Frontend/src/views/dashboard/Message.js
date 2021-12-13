@@ -1,6 +1,21 @@
-import React from 'react'
-
+import React,{useEffect} from 'react'
+import $ from 'jquery';
 export default function Message() {
+   useEffect(()=>{
+
+	// Dashboard Nav Submenus
+  $('.dashboard-nav ul li a').on('click', function(e){
+		if($(this).closest("li").children("ul").length) {
+			if ( $(this).closest("li").is(".active-submenu") ) {
+	           $('.dashboard-nav ul li').removeClass('active-submenu');
+	        } else {
+	            $('.dashboard-nav ul li').removeClass('active-submenu');
+	            $(this).parent('li').addClass('active-submenu');
+	        }
+	        e.preventDefault();
+		}
+	})
+  },[])
     return (
         <>
           <div className="dashboard-content-container" data-simplebar>

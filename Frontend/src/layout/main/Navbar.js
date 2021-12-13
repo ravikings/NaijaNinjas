@@ -41,7 +41,7 @@ const loginAuth=(e)=>{
   form.append("password", password);
 axios({
 method: 'POST',
-url: `${url.url}dj-rest-auth/login/`,
+url: `${url.url}api/login`,
 data:form
 })
 .then((response) => {
@@ -127,8 +127,9 @@ console.log(error);
                 <nav id="navigation">
                   <ul id="responsive">
                     <li><NavLink to="/" activeClassName="current">Home</NavLink></li>
-                    <li><NavLink to="/profile" activeClassName="current">Find Company</NavLink></li>
+                    <li><NavLink to="/findcompany" activeClassName="current">Find Company</NavLink></li>
                     <li><NavLink to="/message" activeClassName="current"> Find Freelancer</NavLink></li>
+                    <li><NavLink to="/blog" activeClassName="current"> Blog</NavLink></li>
                     {/*<li><a href="#">Find Work</a>
                       <ul className="dropdown-nav">
                         <li><a href="#">Browse Jobs</a>
@@ -419,10 +420,18 @@ console.log(error);
            <NavLink to="/" activeClassName="current">Home</NavLink>
            </li>
            <li className="nav-text">
-           <NavLink to="/profile" activeClassName="current">Find Company</NavLink>
+           <NavLink to="/findcompany" activeClassName="current">Finds Company</NavLink>
            </li>
            <li className="nav-text">
            <NavLink to="/message" activeClassName="current">Find Freelancer</NavLink>
+           </li>
+           <li className="nav-text">
+           <NavLink to="/blog" activeClassName="current">Blog</NavLink>
+           
+           </li>
+           <li className="nav-text">
+           <NavLink to="#"  onClick={handleShow}>Log In / Register</NavLink>
+
            </li>
           </ul>
         </nav>
