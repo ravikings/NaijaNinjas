@@ -514,18 +514,6 @@ console.log(error);
               {/* Form */}
               <Form onSubmit={userRegister} id="register">
                 <div className="input-with-icon-left">
-                  <i className="icon-material-outline-account-circle" />
-                  <input type="text" className="input-text with-border" 
-                   onChange={(e) => setFirstName(e.target.value)} value={firstName} 
-                  placeholder="First Name" required />
-                </div>
-                <div className="input-with-icon-left">
-                  <i className="icon-material-outline-account-circle" />
-                  <input type="text" className="input-text with-border"  placeholder="Last Name"
-                   onChange={(e) => setLastName(e.target.value)} value={lastName} 
-                  required />
-                </div>
-                <div className="input-with-icon-left">
                   <i className="icon-material-baseline-mail-outline" />
                   <input type="text" className="input-text with-border" placeholder="Phone number"
                    onChange={(e) => setContactNo(e.target.value)} value={contactNo} 
@@ -534,6 +522,10 @@ console.log(error);
                 <div className="input-with-icon-left">
                   <i className="icon-material-baseline-mail-outline" />
                   <input type="text" className="input-text with-border"  onChange={(e) => setEmail(e.target.value)} value={email}  placeholder="Email Address" required />
+                </div>
+                <div className="input-with-icon-left" title="Should be at least 8 characters long" data-tippy-placement="bottom">
+                  <i className="icon-material-outline-lock" />
+                  <input type="password" className="input-text with-border"  onChange={(e) => setPassword(e.target.value)} value={password} placeholder="Password" required />
                 </div>
                 <div className="input-with-icon-left" title="Should be at least 8 characters long" data-tippy-placement="bottom">
                   <i className="icon-material-outline-lock" />

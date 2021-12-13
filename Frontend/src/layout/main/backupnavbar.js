@@ -35,7 +35,7 @@ const loginAuth=(e)=>{
   form.append("password", password);
 axios({
 method: 'POST',
-url: `${url.url}api/login`,
+url: `${url.url}dj-rest-auth/login/`,
 data:form
 })
 .then((response) => {
@@ -43,9 +43,9 @@ data:form
   var data=response.data;
   alert(data.status)
 if(data.status==true){
-  localStorage.setItem('token',data.token);
-  localStorage.setItem('id',data.id)
-  localStorage.setItem('fname',data.Fname)
+  //localStorage.setItem('token',data.refresh_token);
+  //localStorage.setItem('id',data.id)
+  //localStorage.setItem('fname',data.Fname)
 
   // swal("successfully!", "You are successfully logged in!", "success");
   handleClose(false)
