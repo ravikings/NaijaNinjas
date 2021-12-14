@@ -1,9 +1,7 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Modal} from 'react-bootstrap';
 import {useUser} from '../Context/AuthContext';
 import logo2 from './../../images/logo.png';
-import Avatar from '@material-ui/core/Avatar';
 import AuthState from "./AuthState";
 import LoginDialog from "./LoginDialog";
 

@@ -7,7 +7,6 @@ import createRequest from "../../utils/axios";
 import {useHistory} from 'react-router-dom';
 import {toast } from 'react-toastify';
 import {useUser} from "../Context/AuthContext";
-import axios from "axios";
 
 function LoginDialog({showLoginDialog,handleClose}) {
     const userDetails = useUser();

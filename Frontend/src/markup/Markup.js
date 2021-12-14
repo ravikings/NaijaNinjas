@@ -40,7 +40,7 @@ import Portfoliogrid2 from './Pages/Portfoliogrid2';
 
 import Loginpage1 from './Pages/Loginpage1';
 import Loginpage2 from './Pages/Loginpage2';
-import Loginpage3 from './Pages/Loginpage3';
+import Loginpage3 from './Pages/Auth/Loginpage3';
 
 import Register1 from './Pages/Register1';
 import Register2 from './Pages/Register2';
@@ -56,6 +56,7 @@ import Blogdetailgridsidebar from './Pages/Blogdetailgridsidebar';
 import Blogleftimg from './Pages/Blogleftimg';
 import Blogdetail from './Pages/Blogdetail';
 import ScrollToTop from './Element/ScrollToTop';
+import Register3 from "./Pages/Auth/Register3";
 
 class Markup extends Component{
 	render(){
@@ -107,6 +108,7 @@ class Markup extends Component{
 						
 						<Route path='/register' exact component={Register1} />
 						<Route path='/register-2' exact component={Register2} />
+						<Route path='/register-3' exact component={Register3} />
 						<Route path='/error-404' exact component={Error404} />
 						
 						<Route path='/contact' exact component={Contact} />
