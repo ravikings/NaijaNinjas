@@ -1,49 +1,49 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Modal} from 'react-bootstrap';
+import Avatar from '@material-ui/core/Avatar';
+import {useUser} from "../Context/AuthContext";
+import AuthState from "./AuthState";
 
 var bnr3 = require('./../../images/background/bg3.jpg');
 
-class Header2 extends Component{
-	state = {
-		// initial state
-		show: false,
-	}
+function Header2(){
+	const userDetails = useUser();
+	const [showLoginDialog, setShowLoginDialog] = useState(false)
 
-	handleClose = () => {
-		this.setState({ show: false });
+	const handleClose = () => {
+		setShowLoginDialog(false)
 	};
-	handleShow = () => {
-		this.setState({ show: true });
+	const handleShow = () => {
+		setShowLoginDialog(true)
 	};
-	componentDidMount() {
-        // sidebar open/close
-		
-        var Navicon = document.querySelector('.navicon');
-        var sidebarmenu = document.querySelector('.myNavbar ');
 
-        function toggleFunc() {
-            sidebarmenu.classList.toggle('show');
-         //   Navicon.classList.toggle('open');
-        }
-        Navicon.addEventListener('click', toggleFunc);
+	useEffect(()=>{
+		var Navicon = document.querySelector('.navicon');
+		var sidebarmenu = document.querySelector('.myNavbar ');
 
-        // Sidenav li open close
-        var navUl = [].slice.call(document.querySelectorAll('.navbar-nav > li > a, .sub-menu > li > a'));
-        for (var y = 0; y < navUl.length; y++) {
-            navUl[y].addEventListener('click', function () { checkLi(this) });
-        }
-		
-        function checkLi(current) {
-            current.parentElement.parentElement.querySelectorAll( "li" ).forEach( el =>
+		function toggleFunc() {
+			sidebarmenu.classList.toggle('show');
+			//   Navicon.classList.toggle('open');
+		}
+		Navicon.addEventListener('click', toggleFunc);
+
+		// Sidenav li open close
+		var navUl = [].slice.call(document.querySelectorAll('.navbar-nav > li > a, .sub-menu > li > a'));
+		for (var y = 0; y < navUl.length; y++) {
+			navUl[y].addEventListener('click', function () { checkLi(this) });
+		}
+
+		function checkLi(current) {
+			current.parentElement.parentElement.querySelectorAll( "li" ).forEach( el =>
 				(current.parentElement !== el) ? el.classList.remove('open') : ''
 			);
 			setTimeout(() => {
 				current.parentElement.classList.toggle('open');
-			}, 100);			
-        }
-	}	
-	render(){
+			}, 100);
+		}
+	},[])
+
 		return(
 			<>
 			<header className="site-header mo-left header border-bottom fullwidth">
@@ -61,13 +61,8 @@ class Header2 extends Component{
 								<span></span>
 								<span></span>
 							</button>
-							
-							<div className="extra-nav">
-								<div className="extra-cell">
-									<Link to={"/register-2"} className="site-button"><i className="fa fa-user"></i> Sign Up</Link>
-									<Link to={'#'} title="READ MORE" onClick={this.handleShow} className="site-button"><i className="fa fa-lock"></i> login </Link>
-								</div>
-							</div>
+
+							<AuthState userDetails={userDetails} handleShow={handleShow}/>
 							
 							<div className="header-nav navbar-collapse collapse myNavbar justify-content-start" id="navbarNavDropdown">
 								<ul className="nav navbar-nav">
@@ -166,10 +161,10 @@ class Header2 extends Component{
 				</div>				
 			</header>
 			{/*  Model Start */}
-			<Modal show={this.state.show} onHide={this.handleClose} className=" lead-form-modal"  centered >
+			<Modal show={showLoginDialog} onHide={handleClose} className=" lead-form-modal"  centered >
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
-						<button type="button" className="close" onClick={this.handleClose}>
+						<button type="button" className="close" onClick={handleClose}>
 							<span aria-hidden="true">&times;</span>
 						</button>
 						<div className="modal-body row m-a0 clearfix">
@@ -211,7 +206,6 @@ class Header2 extends Component{
 			{/*  Model END */}
 			</>
 		)
-	}
 }
 
 export default Header2;
