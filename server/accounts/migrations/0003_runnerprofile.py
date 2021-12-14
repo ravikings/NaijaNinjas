@@ -8,27 +8,42 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_accountuser_photo'),
+        ("accounts", "0002_accountuser_photo"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RunnerProfile',
+            name="RunnerProfile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('Name', models.CharField(max_length=50)),
-                ('Title', models.CharField(max_length=55)),
-                ('Language', models.CharField(max_length=55)),
-                ('location', models.CharField(max_length=55)),
-                ('salary', models.CharField(max_length=55)),
-                ('country', models.CharField(max_length=55)),
-                ('address', models.CharField(max_length=255)),
-                ('postcode', models.CharField(max_length=55)),
-                ('description', models.TextField()),
-                ('state', models.CharField(max_length=55)),
-                ('city', models.CharField(max_length=55)),
-                ('local_goverment_zone', models.CharField(max_length=55)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='userinfo', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("Name", models.CharField(max_length=50)),
+                ("Title", models.CharField(max_length=55)),
+                ("Language", models.CharField(max_length=55)),
+                ("location", models.CharField(max_length=55)),
+                ("salary", models.CharField(max_length=55)),
+                ("country", models.CharField(max_length=55)),
+                ("address", models.CharField(max_length=255)),
+                ("postcode", models.CharField(max_length=55)),
+                ("description", models.TextField()),
+                ("state", models.CharField(max_length=55)),
+                ("city", models.CharField(max_length=55)),
+                ("local_goverment_zone", models.CharField(max_length=55)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="userinfo",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

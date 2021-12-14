@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.core import serializers as core_serializers
-from rest_framework import serializers 
+from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
@@ -36,8 +36,20 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer):
 
 
 class RunnerProfileSerializer(serializers.ModelSerializer):
-   
     class Meta:
         model = RunnerProfile
-        fields = ("author", "Name","Title", "Language", "location", "salary", "country",
-        "address", "postcode", "description", "state", "city", "local_goverment_zone")
+        fields = (
+            "author",
+            "Name",
+            "Title",
+            "Language",
+            "location",
+            "salary",
+            "country",
+            "address",
+            "postcode",
+            "description",
+            "state",
+            "city",
+            "local_goverment_zone",
+        )
