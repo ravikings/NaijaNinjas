@@ -7,7 +7,7 @@ import {useFormik} from "formik";
 import {GoogleLoginButton,FacebookLoginButton} from './components';
 import Button from "@material-ui/core/Button";
 
-function Loginpage3(){
+function LoginPage(){
 	const userDetails = useUser();
 	const history = useHistory();
 
@@ -15,6 +15,7 @@ function Loginpage3(){
 		createRequest().post('/dj-rest-auth/login/', loginDetails)
 			.then((res) => {
 				console.log(res)
+				localStorage.setItem('userID',res?.data?.user?.pk)
 				userDetails.signIn(res?.data?.user);
 				history.push("/")
 			})
@@ -48,7 +49,7 @@ function Loginpage3(){
 										<p className="font-weight-bold text-center text-dark h4">We're glad to see you again!</p>
 										<p className="font-weight-600 text-center">
 											Don't have an account?
-											<Link to="register-3" className="text-primary"> Sign Up</Link>
+											<Link to="register" className="text-primary"> Sign Up</Link>
 										</p>
 										<div className="form-group">
 											<label>E-Mail Address*</label>
@@ -132,4 +133,4 @@ function Loginpage3(){
 		</div>
 	)
 }
-export default Loginpage3;
+export default LoginPage;
