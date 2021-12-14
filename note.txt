@@ -12,3 +12,5 @@ python3 manage.pyakemigrations accounts
 
 "start": "react-scripts start",
 "build": "react-scripts build",
+
+docker-compose up -d --build
