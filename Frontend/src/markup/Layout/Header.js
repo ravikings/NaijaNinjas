@@ -169,6 +169,25 @@ function Header() {
 
                                                 </ul>
                                             </li>
+                                            <li><Link to={'#'} className="dez-page">Login <i
+                                                className="fa fa-angle-right"></i></Link>
+                                                <ul className="sub-menu">
+                                                    <li><Link to={"/login"} className="dez-page">login 1</Link></li>
+                                                    <li><Link to={"/login-2"} className="dez-page">login 2 <span
+                                                        className="new-page">New</span></Link></li>
+                                                    <li><Link to={"/login-3"} className="dez-page">login 3 <span
+                                                        className="new-page">New</span></Link></li>
+                                                </ul>
+                                            </li>
+                                            <li><Link to={'#'} className="dez-page">register <i
+                                                className="fa fa-angle-right"></i></Link>
+                                                <ul className="sub-menu">
+                                                    <li><Link to={"/register"} className="dez-page">register 1</Link>
+                                                    </li>
+                                                    <li><Link to={"/register-2"} className="dez-page">register 2 <span
+                                                        className="new-page">New</span></Link></li>
+                                                </ul>
+                                            </li>
                                             <li><Link to={"/error-404"} className="dez-page">Error 404</Link></li>
 
                                             <li><Link to={"/contact"} className="dez-page">Contact Us</Link></li>

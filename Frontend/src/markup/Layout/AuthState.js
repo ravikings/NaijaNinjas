@@ -65,9 +65,9 @@ function AuthState({userDetails,handleShow}) {
                 </div> :
                 <div className="extra-nav">
                     <div className="extra-cell">
-                        <Link to={"/register"} className="site-button"><i
+                        <Link to={"/register-3"} className="site-button"><i
                             className="fa fa-user"></i> Sign Up</Link>
-                        <Link to={'/login'} title="READ MORE" className="site-button"><i
+                        <Link to={'/login-3'} title="READ MORE" className="site-button"><i
                             className="fa fa-lock"></i> login </Link>
                     </div>
                 </div>
