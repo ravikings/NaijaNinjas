@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "corsheaders",
     "drf_yasg",
+    "taggit",
+    'taggit_serializer',
     # Local
     "accounts",
 ]

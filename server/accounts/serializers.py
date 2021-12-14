@@ -31,7 +31,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 class CustomUserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountUser
-        fields = ("pk", "email", "phone_number", "is_a_runner", "photo")
+        fields = ("pk", "email", "phone_number", "is_a_runner")
         read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
 
 
