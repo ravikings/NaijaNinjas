@@ -7,14 +7,14 @@ import createRequest from "../../utils/axios";
 import {useHistory} from 'react-router-dom';
 import {toast } from 'react-toastify';
 import {useUser} from "../Context/AuthContext";
+import axios from "axios";
 
 function LoginDialog({showLoginDialog,handleClose}) {
     const userDetails = useUser();
     const history = useHistory();
 
     const login = (loginDetails) => {
-        createRequest()
-            .post('/dj-rest-auth/login/', loginDetails)
+        axios.post('http://127.0.0.1:8000/dj-rest-auth/login/', loginDetails)
             .then((res) => {
                 console.log(res)
                 userDetails.signIn(res?.data?.user);
@@ -29,7 +29,10 @@ function LoginDialog({showLoginDialog,handleClose}) {
                 }
             });
 /*        fetch('http://127.0.0.1:8000/dj-rest-auth/login/', {
-            method: 'POST', // or 'PUT'
+            method: 'POST', // or 'PUT',
+            headers:{
+                'Content-Type':'application/json'
+            },
             body: JSON.stringify(loginDetails),
         })
             .then(response => response.json())
