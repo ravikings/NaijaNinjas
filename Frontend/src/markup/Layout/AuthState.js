@@ -6,6 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import createRequest from "../../utils/axios";
+import Badge from "@material-ui/core/Badge";
+import MailOutlineOutlinedIcon from '@material-ui/icons/MailOutlineOutlined';
+import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
+import {Divider} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -37,8 +41,20 @@ function AuthState({userDetails,handleShow}) {
     return (
         <div>
             {userDetails.isAuthenticated ?
-                <div className="extra-nav" style={{padding:'10px 0px'}}>
-                    <div className="extra-cell">
+                <div className="extra-nav d-flex align-items-center justify-content-between" style={{padding:'10px 0px', width:200}}>
+                    <Divider orientation="vertical" flexItem />
+                    <div>
+                        <Badge badgeContent={4} color="primary">
+                            <MailOutlineOutlinedIcon color="action" />
+                        </Badge>
+                    </div>
+                    <div>
+                        <Badge badgeContent={8} color="primary">
+                            <NotificationsNoneOutlinedIcon color="action" />
+                        </Badge>
+                    </div>
+                    <Divider orientation="vertical" flexItem />
+                    <div>
                         <Avatar
                             aria-describedby={id}
                             onClick={handleClick}

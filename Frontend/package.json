@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.3",
-    "@mui/material": "^5.2.3",
+    "@material-ui/icons": "^4.11.2",
     "axios": "^0.24.0",
     "bootstrap-icons": "^1.7.2",
     "formik": "^2.2.9",
