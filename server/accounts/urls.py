@@ -3,10 +3,10 @@ from .views import Account_cred, RunnnerProfile
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r"dashboard-profile", RunnnerProfile)
+router.register(r"dashboard-profile", RunnnerProfile, basename="user_dashboard")
 
 
 urlpatterns = [
-    path("account/info", Account_cred.as_view()),
+    
     path("account/profile", include(router.urls)),
 ]
