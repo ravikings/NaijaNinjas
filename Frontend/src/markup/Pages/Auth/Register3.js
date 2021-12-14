@@ -13,16 +13,15 @@ function Register3(){
     const userDetails = useUser();
     const history = useHistory();
 
-    const login = (loginDetails) => {
-        createRequest().post('/dj-rest-auth/login/', loginDetails)
+    const register = (loginDetails) => {
+        createRequest().post('/dj-rest-auth/registration/', {...loginDetails,password2:loginDetails.password1})
             .then((res) => {
-                console.log(res)
                 userDetails.signIn(res?.data?.user);
-                history.push("/")
+                history.push('/')
             })
             .catch((e) => {
                 if(e.response?.status===400){
-                    toast.error(e?.response?.data?.non_field_errors[0]);
+                    toast.error("Unknown Error");
                 }else{
                     toast.error("Unknown Error");
                 }
@@ -30,10 +29,10 @@ function Register3(){
     };
 
     const formik = useFormik({
-        initialValues: { email: '', password: '',is_a_runner: false },
+        initialValues: { email: '', password1: '',is_a_runner: false },
         enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
-            login(values);
+            register(values);
             console.log(values)
         },
     });
@@ -81,9 +80,9 @@ function Register3(){
                                         <div style={{marginBottom:15}} className="form-group">
                                             <label style={{fontSize:13, marginBottom:5}}>Password *</label>
                                             <div className="input-group">
-                                                <input  name='password'
+                                                <input  name='password1'
                                                         onChange={formik.handleChange}
-                                                        value={formik.values.password}
+                                                        value={formik.values.password1}
                                                         type='password'
                                                         className="form-control"
                                                         placeholder="password" />
