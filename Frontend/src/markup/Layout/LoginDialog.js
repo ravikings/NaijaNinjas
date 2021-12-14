@@ -14,7 +14,7 @@ function LoginDialog({showLoginDialog,handleClose}) {
     const history = useHistory();
 
     const login = (loginDetails) => {
-        axios.post('http://127.0.0.1:8000/dj-rest-auth/login/', loginDetails)
+        createRequest().post('/dj-rest-auth/login/', loginDetails)
             .then((res) => {
                 console.log(res)
                 userDetails.signIn(res?.data?.user);
