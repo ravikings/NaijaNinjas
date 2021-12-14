@@ -14,7 +14,7 @@ function UserProvider({ children }) {
     useEffect(() => {
         if (localStorage.getItem('idToken')) {
             createRequest()
-                .get('/users')
+                .get('api/v1/profile/')
                 .then((res) => {
                     console.log(res?.data?.user);
                     setUser(res?.data?.user);
