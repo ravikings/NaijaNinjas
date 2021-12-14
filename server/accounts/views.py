@@ -1,7 +1,13 @@
 from rest_framework import generics
-from .models import AccountUser
-from .serializers import CustomUserDetailsSerializer
+from rest_framework import viewsets
+from .models import AccountUser, RunnerProfile
+from .serializers import CustomUserDetailsSerializer, RunnerProfileSerializer
 
-class profiles(generics.ListAPIView):
+class Account_cred(generics.ListAPIView):
     queryset = AccountUser.objects.all()
     serializer_class = CustomUserDetailsSerializer
+
+
+class RunnnerProfile(viewsets.ModelViewSet): 
+    queryset = RunnerProfile.objects.all()
+    serializer_class = RunnerProfileSerializer
