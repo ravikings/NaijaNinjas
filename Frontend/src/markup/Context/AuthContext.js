@@ -13,7 +13,7 @@ function UserProvider({ children }) {
 
     useEffect(() => {
             createRequest()
-                .get('api/v1/profile/')
+                .get('/api/v1/account/profiledashboard-profile/1/')
                 .then((res) => {
                     console.log(res?.data?.user);
                     setUser(res?.data?.user);
