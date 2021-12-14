@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_yasg",
     "taggit",
-    'taggit_serializer',
+    "taggit_serializer",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
     # Local
     "accounts",
 ]
@@ -201,7 +203,21 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {"google":{}, "facebook": {}}
 # LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = "accounts.AccountUser"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
