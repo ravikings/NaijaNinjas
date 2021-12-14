@@ -1,10 +1,41 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
+import {useUser} from "../Context/AuthContext";
+import createRequest from "../../utils/axios";
+import {toast} from "react-toastify";
+import {useFormik} from "formik";
 
 var bnr = require('./../../images/background/bg6.jpg');
 
-class Register2 extends Component{	
-	render(){
+function Register2(){
+
+	const userDetails = useUser();
+	const history = useHistory();
+
+	const register = (loginDetails) => {
+		createRequest().post('/dj-rest-auth/login/', loginDetails)
+			.then((res) => {
+				userDetails.signIn(res?.data?.user);
+				history.push('/')
+			})
+			.catch((e) => {
+				if(e.response?.status===400){
+					toast.error("Unknown Error");
+				}else{
+					toast.error("Unknown Error");
+				}
+			});
+	};
+
+	const formik = useFormik({
+		initialValues: { email: '', password1: '',password2: '',phone_number: '',is_a_runner: false },
+		enableReinitialize: true,
+		onSubmit: (values, { resetForm }) => {
+			register(values);
+			console.log(values)
+		},
+	});
+
 		return(
 			<div className="page-wraper">
 				<div className="browse-job login-style3">
@@ -18,7 +49,7 @@ class Register2 extends Component{
 									</div>
 									<div className="clearfix"></div>
 									<div className="tab-content nav p-b30 tab">
-										<div id="login" className="tab-pane active ">
+										<div id="login" className="tab-pane fade ">
 											<form className=" dez-form p-b30">
 												<h3 className="form-title m-t0">Personal Information</h3>
 												<div className="dez-separator-outer m-b5">
@@ -69,39 +100,35 @@ class Register2 extends Component{
 												</div>
 											</form>
 										</div>
-										<div id="registration-form" className="tab-pane fade">
-											<form className="dez-form ">
+										<div id="registration-form" className="tab-pane active">
+											<form className="dez-form " onSubmit={formik.handleSubmit}>
 												<h3 className="form-title m-t0">Sign Up</h3>
 												<div className="dez-separator-outer m-b5">
 													<div className="dez-separator bg-primary style-liner"></div>
 												</div>
 												<p>Enter your personal details below: </p>
 												<div className="form-group">
-													<input name="dzName" required="" className="form-control" placeholder="Full Name" type="text" />
-												</div>
-												<div className="form-group">
-													<input name="dzName" required="" className="form-control" placeholder="User Name" type="text" />
-												</div>
-												<div className="form-group">
-													<input name="dzName" required="" className="form-control" placeholder="Email Address" type="text" />
+													<input name="email" required="" className="form-control" placeholder="Email Address" type="text" />
 												</div>
 												
 												<div className="form-group">
-													<input name="dzName" required="" className="form-control" placeholder="Password" type="password" />
+													<input name="password1" required="" className="form-control" placeholder="Password" type="password" />
 												</div>
 												<div className="form-group">
-													<input name="dzName" required="" className="form-control" placeholder="Re-type Your Password" type="password" />
+													<input name="phone_number" required="" className="form-control" placeholder="Phone Number" type="text" />
 												</div>
 												<div className="m-b30">
-													<span className="custom-control custom-checkbox float-left m-r5">
-														<input type="checkbox" className="custom-control-input" id="check2" name="example1" />
-														<label className="custom-control-label" htmlFor="check2">I agree to the</label>
+													<span className="custom-control custom-checkbox m-r5">
+														<input type="radio" className="custom-control-input" id="check11" name="example1" />
+														<label className="custom-control-label" htmlFor="check11">is_a_runner</label>
+
+														<input type="radio" className="custom-control-input" id="check12" name="example1" />
+														<label className="custom-control-label" htmlFor="check12">is_a_runner</label>
 													</span>
-													<label><Link to="#">Terms of Service </Link>& <Link to="#">Privacy Policy</Link></label>
 												</div>
 												<div className="form-group clearfix text-left">
-													<Link className="site-button outline gray" data-toggle="tab" to="#login">Back</Link>
-													<button className="site-button pull-right">Submit</button>
+													<Link className="site-button outline gray" data-toggle="tab" to="/">Back</Link>
+													<button type='submit' className="site-button pull-right">Submit</button>
 												</div>
 											</form>
 										</div>
@@ -109,9 +136,10 @@ class Register2 extends Component{
 									<div className="bottom-footer clearfix m-t10 m-b20 row text-center">
 										<div className="col-lg-12 text-center">
 											<span> © Copyright by <i className="fa fa-heart m-lr5 text-red heart"></i>
-											<Link to= {''} >DexignZone </Link> All rights reserved.</span> 
+											<Link to= {''} >DexignZone </Link> All rights reserved.</span>
 										</div>
-									</div>	
+									</div>
+
 								</div>
 							</div>
 						</div>
@@ -120,6 +148,5 @@ class Register2 extends Component{
 				</div>
 			</div>
 		)
-	}
 }
 export default Register2;

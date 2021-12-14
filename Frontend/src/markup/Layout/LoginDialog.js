@@ -28,20 +28,6 @@ function LoginDialog({showLoginDialog,handleClose}) {
                     toast.error("Unknown Error");
                 }
             });
-/*        fetch('http://127.0.0.1:8000/dj-rest-auth/login/', {
-            method: 'POST', // or 'PUT',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(loginDetails),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });*/
     };
 
     const formik = useFormik({

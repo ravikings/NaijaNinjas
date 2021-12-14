@@ -12,7 +12,6 @@ function UserProvider({ children }) {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (localStorage.getItem('idToken')) {
             createRequest()
                 .get('api/v1/profile/')
                 .then((res) => {
@@ -23,7 +22,7 @@ function UserProvider({ children }) {
                 .catch((e) => {
                     console.log(e);
                 });
-        }
+
     }, []);
 
     const signIn = (userDetails) => {

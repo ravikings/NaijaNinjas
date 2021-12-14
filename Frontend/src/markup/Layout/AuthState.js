@@ -5,6 +5,7 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import createRequest from "../../utils/axios";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -22,8 +23,17 @@ function AuthState({userDetails,handleShow}) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+
+    const signOut = () => {
+        createRequest().post('/dj-rest-auth/logout/').then(res=>{
+            handleClose();
+            userDetails.signOut()
+        })
+    }
+
     return (
         <div>
             {userDetails.isAuthenticated ?
@@ -39,7 +49,7 @@ function AuthState({userDetails,handleShow}) {
                 </div> :
                 <div className="extra-nav">
                     <div className="extra-cell">
-                        <Link to={"/register-2"} className="site-button"><i
+                        <Link to={"/register"} className="site-button"><i
                             className="fa fa-user"></i> Sign Up</Link>
                         <Link to={'#'} title="READ MORE" onClick={handleShow} className="site-button"><i
                             className="fa fa-lock"></i> login </Link>
@@ -62,7 +72,12 @@ function AuthState({userDetails,handleShow}) {
             >
                 <Typography className={classes.typography}>The content of the Popover.</Typography>
                 <div style={{textAlign:'center', paddingBottom:20}}>
-                    <Button aria-describedby={id} variant="contained" color="primary">
+                    <Button
+                        aria-describedby={id}
+                        variant="contained"
+                        color="primary"
+                        onClick={signOut}
+                    >
                         Logout
                     </Button>
                 </div>
