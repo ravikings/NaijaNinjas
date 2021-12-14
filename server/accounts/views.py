@@ -8,6 +8,6 @@ class Account_cred(generics.ListAPIView):
     serializer_class = CustomUserDetailsSerializer
 
 
-class RunnnerProfile(viewsets.ModelViewSet): 
+class RunnnerProfile(generics.ListCreateAPIView): 
     queryset = RunnerProfile.objects.all()
     serializer_class = RunnerProfileSerializer
