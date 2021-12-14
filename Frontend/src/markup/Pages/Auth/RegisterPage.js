@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import BusinessCenterOutlinedIcon from '@material-ui/icons/BusinessCenterOutlined';
 
-function Register3(){
+function RegisterPage(){
     const userDetails = useUser();
     const history = useHistory();
 
@@ -49,7 +49,7 @@ function Register3(){
                                         <p className="font-weight-bold text-center text-dark h4">Let's create your account!</p>
                                         <p className="font-weight-600 text-center">
                                             Already have an account?
-                                            <Link to="login-3" className="text-primary"> Sign In</Link>
+                                            <Link to="login" className="text-primary"> Sign In</Link>
                                         </p>
                                         <div style={{marginBottom:15}} className="form-group d-flex justify-content-between">
                                             <RunnerButton
@@ -160,4 +160,4 @@ function Register3(){
         </div>
     )
 }
-export default Register3;
+export default RegisterPage;

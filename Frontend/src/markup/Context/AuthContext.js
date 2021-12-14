@@ -12,8 +12,9 @@ function UserProvider({ children }) {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
+        const userID = localStorage.getItem("userID")
             createRequest()
-                .get('/api/v1/account/profiledashboard-profile/1/')
+                .get(`/api/v1/account/profiledashboard-profile/${userID}/`)
                 .then((res) => {
                     console.log(res?.data?.user);
                     setUser(res?.data?.user);
@@ -21,6 +22,8 @@ function UserProvider({ children }) {
                 })
                 .catch((e) => {
                     console.log(e);
+                    setUser({});
+                    setIsAuthenticated(true);
                 });
 
     }, []);

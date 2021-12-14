@@ -40,7 +40,7 @@ import Portfoliogrid2 from './Pages/Portfoliogrid2';
 
 import Loginpage1 from './Pages/Loginpage1';
 import Loginpage2 from './Pages/Loginpage2';
-import Loginpage3 from './Pages/Auth/Loginpage3';
+import LoginPage from './Pages/Auth/LoginPage';
 
 import Register1 from './Pages/Register1';
 import Register2 from './Pages/Register2';
@@ -56,7 +56,7 @@ import Blogdetailgridsidebar from './Pages/Blogdetailgridsidebar';
 import Blogleftimg from './Pages/Blogleftimg';
 import Blogdetail from './Pages/Blogdetail';
 import ScrollToTop from './Element/ScrollToTop';
-import Register3 from "./Pages/Auth/Register3";
+import RegisterPage from "./Pages/Auth/RegisterPage";
 
 class Markup extends Component{
 	render(){
@@ -102,13 +102,13 @@ class Markup extends Component{
 						
 						<Route path='/portfolio-grid-2' exact component={Portfoliogrid2} />
 						
-						<Route path='/login' exact component={Loginpage1} />
+						<Route path='/login-1' exact component={Loginpage1} />
 						<Route path='/login-2' exact component={Loginpage2} />
-						<Route path='/login-3' exact component={Loginpage3} />
+						<Route path='/login' exact component={LoginPage} />
 						
-						<Route path='/register' exact component={Register1} />
+						<Route path='/register-1' exact component={Register1} />
 						<Route path='/register-2' exact component={Register2} />
-						<Route path='/register-3' exact component={Register3} />
+						<Route path='/register' exact component={RegisterPage} />
 						<Route path='/error-404' exact component={Error404} />
 						
 						<Route path='/contact' exact component={Contact} />
