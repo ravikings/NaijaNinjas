@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import AccountUser, Photo, RunnerResume, Vidoe
+from .models import RunnerProfile
 
 # Register your models here.
+admin.site.register(RunnerProfile)

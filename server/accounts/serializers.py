@@ -27,18 +27,8 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         return user
 
-class UserAccountSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = AccountUser
-        fields = ("pk", "email", "phone_number", "is_a_runner")
-        read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
-
-
 
 class UserProfileDetailsSerializer(serializers.ModelSerializer):
-
-    user_info = UserAccountSerializer(many=True)
 
     class Meta:
         model = RunnerProfile
@@ -57,8 +47,14 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
             "state",
             "city",
             "local_goverment_zone",
-            "user_info"
+            
         )
 
+class UserAccountSerializer(serializers.ModelSerializer):
 
+    userinfo = UserProfileDetailsSerializer(read_only=True, many= True)
 
+    class Meta:
+        model = AccountUser
+        fields = ("pk", "email", "phone_number", "is_a_runner", "userinfo")
+        read_only_fields = ("pk", "email", "phone_number", "is_a_runner")

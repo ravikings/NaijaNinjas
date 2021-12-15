@@ -2,22 +2,16 @@ from rest_framework import generics, viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import AccountUser, RunnerProfile
-from .serializers import UserProfileDetailsSerializer
+from .models import AccountUser
+from .serializers import UserAccountSerializer
 
 
-class Account_cred(generics.ListAPIView):
+class AccountProfile(viewsets.ModelViewSet):
     queryset = AccountUser.objects.all()
-    serializer_class = UserProfileDetailsSerializer
+    serializer_class = UserAccountSerializer
 
-
-
-class RunnnerProfile(viewsets.ModelViewSet):
-    queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileDetailsSerializer
-
-    @action(detail=True, methods=['get'])
-    def get_query(self, pk=None):
-        user = get_object_or_404(pk=pk)
-        serializer = UserProfileDetailsSerializer(user)
+    def retrieve(self, request, pk=None):
+        queryset = AccountUser.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = UserAccountSerializer(user)
         return Response(serializer.data)
