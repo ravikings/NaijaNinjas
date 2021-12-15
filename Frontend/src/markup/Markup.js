@@ -54,6 +54,7 @@ import Blogdetailgridsidebar from './Pages/Blogdetailgridsidebar';
 import Blogleftimg from './Pages/Blogleftimg';
 import Blogdetail from './Pages/Blogdetail';
 import ScrollToTop from './Element/ScrollToTop';
+import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage";
 
 
 class Markup extends Component{
@@ -84,6 +85,7 @@ class Markup extends Component{
 						
 						<Route path='/about-us' exact component={Aboutus} />
 						<Route path='/job-detail' exact component={Jobdetail} />
+						<Route path='/make-offer' exact component={MakeOfferPage} />
 						<Route path='/companies' exact component={Companies} />
 						<Route path='/free-job-alerts' exact component={Freejobalerts} />
 						<Route path='/browse-job-list' exact component={Browsejoblist} />
