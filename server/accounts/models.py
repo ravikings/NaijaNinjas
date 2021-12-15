@@ -2,7 +2,6 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from taggit.managers import TaggableManager
 
 # testing out cache is ignore
 
@@ -37,7 +36,7 @@ class RunnerResume(models.Model):
         RunnerProfile, on_delete=models.CASCADE, related_name="runner_profile"
     )
     headline = models.CharField(max_length=255)
-    skills = TaggableManager()
+    skills = models.TextField()
     employment = models.TextField()
     education = models.TextField()
     projects = models.TextField()
@@ -57,7 +56,7 @@ class Photo(models.Model):
     description = models.CharField(max_length=250)
     image = models.ImageField(upload_to="users/%Y/%m/%d/")
 
-    tags = TaggableManager()
+    tags = models.CharField(max_length=250)
 
     def __str__(self):
         return self.description
@@ -71,7 +70,7 @@ class Vidoe(models.Model):
     description = models.CharField(max_length=250)
     video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True)
 
-    tags = TaggableManager()
+    tags = models.CharField(max_length=250)
 
     def __str__(self):
         return self.description

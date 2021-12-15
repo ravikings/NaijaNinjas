@@ -49,8 +49,8 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "corsheaders",
     "drf_yasg",
-    "taggit",
-    "taggit_serializer",
+    "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
     # Local
@@ -66,6 +66,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",  # new
     ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
 }
 
 REST_USE_JWT = True
