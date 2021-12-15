@@ -27,4 +27,12 @@ export const useStyles = makeStyles((theme) => ({
       margin: "0px 50px",
     },
   },
+  tab: {
+    "&:hover": {
+      fontWeight: "bold",
+    },
+    "&:focus": {
+      outline: "none",
+    },
+  },
 }));

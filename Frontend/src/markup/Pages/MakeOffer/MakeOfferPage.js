@@ -12,6 +12,7 @@ import MakeOfferForm from "./components/MakeOfferForm";
 import SocialMedia from "./components/SocialMedia";
 import Skills from "./components/Skills";
 import Attachments from "./components/Attachments";
+import TabsGroup from "./components/TabsGroup";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -83,7 +84,7 @@ function MakeOfferPage() {
         <div className={classes.main}>
           <Grid container spacing={8}>
             <Grid item xs={12} sm={12} md={7} lg={8}>
-              <AboutMe />
+              <TabsGroup />
               <Feedback />
             </Grid>
             <Grid item xs={12} sm={12} md={5} lg={4}>
