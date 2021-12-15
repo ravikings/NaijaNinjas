@@ -4,7 +4,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
-from accounts.models import AccountUser, RunnerProfile
+from accounts.models import AccountUser, RunnerProfile, Photo, Vidoe
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -28,6 +28,18 @@ class CustomRegisterSerializer(RegisterSerializer):
         return user
 
 
+class PhotosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = "__all__"
+
+
+class VidoesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vidoe
+        fields = "__all__"
+
+
 class UserProfileDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -47,12 +59,13 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
             "state",
             "city",
             "local_goverment_zone",
-            
         )
+
 
 class UserAccountSerializer(serializers.ModelSerializer):
 
-    userinfo = UserProfileDetailsSerializer(read_only=True, many= True)
+    userinfo = UserProfileDetailsSerializer(read_only=True, many=True)
+    # photo = PhotosSerializer
 
     class Meta:
         model = AccountUser
