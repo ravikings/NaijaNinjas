@@ -23,7 +23,7 @@ function SingleFeedback(props) {
           </Grid>
         </Grid>
 
-        <div style={{ fontSize: 16, color: "#808080" }}>
+        <div style={{ fontSize: 16, color: "#808080", marginTop: 10 }}>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquid
           aspernatur dolorem eaque exercitationem laboriosam nobis pariatur
           provident rem temporibus!
