@@ -26,7 +26,7 @@ SECRET_KEY = "h@e3z6yev#04x)$kdhp5!+y=q0t2-&)q-#wvbt-h@%dwem=8s#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     # Local
     "accounts",
+    "search_indexes",  # Search app
 ]
 
 
@@ -68,6 +69,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
+    "ORDERING_PARAM": "ordering",
 }
 
 REST_USE_JWT = True
@@ -241,3 +243,18 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+
+
+# Elasticsearch configuration
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200',
+        'timeout': 30,
+    },
+}
+
+# Name of the Elasticsearch index
+ELASTICSEARCH_INDEX_NAMES = {
+    'search_indexes.documents.profile': 'profile'}
+
+ELASTICSEARCH_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
