@@ -1,10 +1,11 @@
 from django.db import transaction
-from django.core import serializers as core_serializers
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
-from accounts.models import AccountUser, RunnerProfile, Photo, Vidoe
+from accounts.models import AccountUser, RunnerProfile,RunnerResume, Photo, Vidoe
+
+from .models import RunnerProfile
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -62,12 +63,31 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
         )
 
 
+class UserResumeDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RunnerResume
+        fields = (
+            "headline",
+            "skills",
+            "employment",
+            "education",
+            "projects",
+            "profile_summary",
+            "accomplishment",
+            "career_profile",
+            "postcode",
+            "description",
+            "resume"
+        )
+
 class UserAccountSerializer(serializers.ModelSerializer):
 
     userinfo = UserProfileDetailsSerializer(read_only=True, many=True)
-    # photo = PhotosSerializer
+    photo = PhotosSerializer(read_only=True, many=True)
+    resume = UserResumeDetailsSerializer(read_only=True, many=True)
 
     class Meta:
         model = AccountUser
-        fields = ("pk", "email", "phone_number", "is_a_runner", "userinfo")
+        fields = ("pk", "email", "phone_number", "is_a_runner", "userinfo", "photo", "resume")
         read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
+

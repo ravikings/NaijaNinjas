@@ -49,13 +49,13 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "corsheaders",
     "drf_yasg",
-    "django_elasticsearch_dsl",
-    "django_elasticsearch_dsl_drf",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
     # Local
     "accounts",
-    "search_indexes",  # Search app
+    "debug_toolbar",
+    "haystack",
+
 ]
 
 
@@ -96,6 +96,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware"
 ]
 
 
@@ -245,16 +246,8 @@ SOCIALACCOUNT_PROVIDERS = {
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
 
-# Elasticsearch configuration
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'localhost:9200',
-        'timeout': 30,
-    },
+HAYSTACK_CONNECTIONS = {"default": { "ENGINE":"haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine",
+   "URL": "http://127.0.0.1:9200/",
+   "INDEX_NAME": "haystack"},
 }
 
-# Name of the Elasticsearch index
-ELASTICSEARCH_INDEX_NAMES = {
-    'search_indexes.documents.profile': 'profile'}
-
-ELASTICSEARCH_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
