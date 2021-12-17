@@ -23,8 +23,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             user.is_a_runner = self.data.get("is_a_runner")
             user.save()
         except IntegrityError as e:
-            print(f"Unexpected {e=}, {type(e)=}")
-            raise
+          
+            raise e("error: sorry no already exist")
 
         return user
 
@@ -47,10 +47,11 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = (
             "author",
-            "Name",
+            "first_name",
+            "last_name",
             "photo",
-            "Title",
-            "Language",
+            "title",
+            "language",
             "location",
             "salary",
             "country",

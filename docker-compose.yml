@@ -5,32 +5,13 @@ services:
   backend:
     build: ./server
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    networks:
+      - es-net
     volumes:
       - ./server:/server/accounts/
+      - /server/server/accounts
     ports:
       - "8000:8000"
-
-  elasticsearch:
-    image: 'bitnami/elasticsearch:latest'
-    container_name: elasticsearch
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-      - 9300:9300
-
 
 
   # frontend:
@@ -47,6 +28,4 @@ services:
   #     - CHOKIDAR_USEPOLLING=true
 
 volumes:
-  node-modules:
-  elasticsearch-data:
-    driver: local
+  backend:

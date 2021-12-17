@@ -54,10 +54,8 @@ INSTALLED_APPS = [
     # Local
     "accounts",
     "debug_toolbar",
-    "haystack",
 
 ]
-
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -244,10 +242,4 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
-
-
-HAYSTACK_CONNECTIONS = {"default": { "ENGINE":"haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine",
-   "URL": "http://127.0.0.1:9200/",
-   "INDEX_NAME": "haystack"},
-}
 
