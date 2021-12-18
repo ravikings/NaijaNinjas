@@ -49,7 +49,12 @@ function AuthState({ userDetails, handleShow }) {
           <Divider orientation="vertical" flexItem />
           <div>
             <Badge badgeContent={4} color="primary">
-              <MailOutlineOutlinedIcon color="action" />
+              <Link
+                to={"/messages"}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <MailOutlineOutlinedIcon color="action" />
+              </Link>
             </Badge>
           </div>
           <div>

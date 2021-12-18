@@ -5,7 +5,6 @@ import Avatar from "@material-ui/core/Avatar";
 import { Divider, Grid, Hidden } from "@material-ui/core";
 import { useStyles } from "./MakeOfferStyles";
 import Ratings from "./components/Ratings";
-import AboutMe from "./components/AboutMe";
 import Feedback from "./components/Feedback";
 import HourlyRate from "./components/HourlyRate";
 import MakeOfferForm from "./components/MakeOfferForm";

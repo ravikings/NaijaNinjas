@@ -124,3 +124,72 @@ a.attachment-box:hover i {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Chat */
+
+.talk-bubble-left {
+    margin: 0px 0px 0px 20px;
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    background-color: #2A41E8;
+    color:white;
+    border-radius: 5px;
+}
+
+.talk-bubble-right {
+    margin: 0px 20px 0px 0px;
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    background-color: #dedddd;
+    color:#666666;
+    border-radius: 5px;
+}
+
+.border{
+    border: 8px solid #666;
+}
+
+/* Right triangle, left side slightly down */
+
+.tri-right.left-in:after{
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -20px;
+    right: auto;
+    top: 15px;
+    bottom: auto;
+    border: 12px solid;
+    border-color: #2A41E8 #2A41E8 transparent transparent;
+}
+
+.tri-right.right-in:after{
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: auto;
+    right: -20px;
+    top: 15px;
+    bottom: auto;
+    border: 20px solid;
+    border-color: #dedddd transparent transparent transparent;
+}
+
+
+/* talk bubble contents */
+.talktext{
+    padding: 1em;
+    text-align: left;
+    line-height: 1.5em;
+}
+.talktext p{
+    /* remove webkit p margins */
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+}
