@@ -12,7 +12,7 @@ class AccountUser(AbstractUser):
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
 
     class Meta:
-        unique_together = ('phone_number',)
+        unique_together = ("phone_number",)
 
 
 class RunnerProfile(models.Model):
@@ -27,12 +27,18 @@ class RunnerProfile(models.Model):
     location = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     salary = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     country = models.CharField(max_length=55, blank=True, null=True, db_index=True)
-    address = models.CharField(max_length=255, blank=True, null=True,)
+    address = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+    )
     postcode = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     description = models.TextField(null=True, db_index=True)
     state = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     city = models.CharField(max_length=55, blank=True, null=True, db_index=True)
-    local_goverment_zone = models.CharField(max_length=55, blank=True, null=True, db_index=True)
+    local_goverment_zone = models.CharField(
+        max_length=55, blank=True, null=True, db_index=True
+    )
 
     def __str__(self):
         return self.first_name
@@ -63,10 +69,10 @@ class Photo(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="photo_author"
     )
-    description = models.CharField(max_length=250,null=True, db_index=True)
+    description = models.CharField(max_length=250, null=True, db_index=True)
     image = models.ImageField(upload_to="users/%Y/%m/%d/")
 
-    tags = models.CharField(max_length=250,null=True, db_index=True)
+    tags = models.CharField(max_length=250, null=True, db_index=True)
 
     def __str__(self):
         return self.description
@@ -77,10 +83,26 @@ class Vidoe(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="video_author"
     )
-    description = models.CharField(max_length=250,null=True, db_index=True)
+    description = models.CharField(max_length=250, null=True, db_index=True)
     video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
     def __str__(self):
         return self.description
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="categories"
+    )
+    profile = models.ManyToManyField(
+        "RunnerProfile", related_name="categories", blank=True
+    )
+    resume = models.ManyToManyField(
+        "RunnerResume", related_name="categories", blank=True
+    )
+
+    class meta:
+        verbose_name_plural = "categories"
