@@ -96,10 +96,7 @@ function Header() {
                     <Link to={"/"}>Home</Link>
                   </li>
                   <li>
-                    <Link to={"#"}>marketplace</Link>
-                  </li>
-                  <li>
-                    <Link to={"/browse-candidates"}>Explore</Link>
+                    <Link to={"/browse-job-filter-list"}>marketplace</Link>
                   </li>
                   <li>
                     <Link to={"/blog-detailed-grid-sidebar"}>Forum</Link>
