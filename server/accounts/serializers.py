@@ -3,7 +3,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
-from accounts.models import AccountUser, RunnerProfile,RunnerResume, Photo, Vidoe
+from accounts.models import AccountUser, RunnerProfile, RunnerResume, Photo, Vidoe
 
 from .models import RunnerProfile
 
@@ -23,7 +23,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             user.is_a_runner = self.data.get("is_a_runner")
             user.save()
         except IntegrityError as e:
-          
+
             raise e("error: sorry no already exist")
 
         return user
@@ -41,29 +41,6 @@ class VidoesSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class UserProfileDetailsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = RunnerProfile
-        fields = (
-            "author",
-            "first_name",
-            "last_name",
-            "photo",
-            "title",
-            "language",
-            "location",
-            "salary",
-            "country",
-            "address",
-            "postcode",
-            "description",
-            "state",
-            "city",
-            "local_goverment_zone",
-        )
-
-
 class UserResumeDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = RunnerResume
@@ -78,8 +55,38 @@ class UserResumeDetailsSerializer(serializers.ModelSerializer):
             "career_profile",
             "postcode",
             "description",
-            "resume"
+            "resume",
         )
+
+
+class UserProfileDetailsSerializer(serializers.ModelSerializer):
+
+    photo = PhotosSerializer(read_only=True, many=True)
+    resume = UserResumeDetailsSerializer(read_only=True, many=True)
+    video = VidoesSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = RunnerProfile
+        fields = (
+            "author",
+            "first_name",
+            "last_name",
+            "title",
+            "language",
+            "location",
+            "salary",
+            "country",
+            "address",
+            "postcode",
+            "description",
+            "state",
+            "city",
+            "local_goverment_zone",
+            "resume",
+            "photo",
+            "video",
+        )
+
 
 class UserAccountSerializer(serializers.ModelSerializer):
 
@@ -89,6 +96,13 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountUser
-        fields = ("pk", "email", "phone_number", "is_a_runner", "userinfo", "photo", "resume")
+        fields = (
+            "pk",
+            "email",
+            "phone_number",
+            "is_a_runner",
+            "userinfo",
+            "photo",
+            "resume",
+        )
         read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
-
