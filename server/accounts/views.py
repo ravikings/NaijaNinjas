@@ -6,13 +6,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from .models import AccountUser, Photo, Vidoe, RunnerProfile
 from .serializers import (
-    UserAccountSerializer,
     PhotosSerializer,
     VidoesSerializer,
     UserProfileDetailsSerializer,
 )
 
-class AccountProfile(viewsets.ModelViewSet):
+class AccountDashboardProfile(viewsets.ModelViewSet):
     queryset = RunnerProfile.objects.all()
     serializer_class = UserProfileDetailsSerializer
     permission_classes = IsOwner
@@ -20,7 +19,7 @@ class AccountProfile(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = RunnerProfile.objects.all()
         user = get_object_or_404(queryset, pk=pk)
-        serializer = UserAccountSerializer(user)
+        serializer = UserProfileDetailsSerializer(user)
         return Response(serializer.data)
 
 class PhotoUpload(viewsets.ModelViewSet):

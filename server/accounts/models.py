@@ -90,3 +90,19 @@ class Vidoe(models.Model):
 
     def __str__(self):
         return self.description
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="categories"
+    )
+    profile = models.ManyToManyField(
+        "RunnerProfile", related_name="categories", blank=True
+    )
+    resume = models.ManyToManyField(
+        "RunnerResume", related_name="categories", blank=True
+    )
+
+    class meta:
+        verbose_name_plural = "categories"

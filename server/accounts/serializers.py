@@ -3,7 +3,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
-from accounts.models import AccountUser, RunnerProfile, RunnerResume, Photo, Vidoe
+from accounts.models import AccountUser, RunnerProfile, RunnerResume, Photo, Vidoe, Category
 
 from .models import RunnerProfile
 
@@ -58,12 +58,21 @@ class UserResumeDetailsSerializer(serializers.ModelSerializer):
             "resume",
         )
 
+class CategorySerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source= "AccountUser.first_name")
+    profile = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    resume = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+
+    class Meta:
+        model = Category
+        fields = ["name","author", "profile","resume" ]
 
 class UserProfileDetailsSerializer(serializers.ModelSerializer):
 
     photo = PhotosSerializer(read_only=True, many=True)
     resume = UserResumeDetailsSerializer(read_only=True, many=True)
     video = VidoesSerializer(read_only=True, many=True)
+    category = CategorySerializer(read_only=True, many=True)
 
     class Meta:
         model = RunnerProfile
@@ -82,6 +91,7 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
             "state",
             "city",
             "local_goverment_zone",
+            "category",
             "resume",
             "photo",
             "video",
@@ -90,10 +100,6 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
 
 class UserAccountSerializer(serializers.ModelSerializer):
 
-    userinfo = UserProfileDetailsSerializer(read_only=True, many=True)
-    photo = PhotosSerializer(read_only=True, many=True)
-    resume = UserResumeDetailsSerializer(read_only=True, many=True)
-
     class Meta:
         model = AccountUser
         fields = (
@@ -101,8 +107,6 @@ class UserAccountSerializer(serializers.ModelSerializer):
             "email",
             "phone_number",
             "is_a_runner",
-            "userinfo",
-            "photo",
-            "resume",
+
         )
         read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
