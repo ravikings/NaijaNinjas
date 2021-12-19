@@ -4,6 +4,7 @@ import { useStyles } from "./messagesStyles";
 import { Grid, Hidden } from "@material-ui/core";
 import ChatList from "./ChatList";
 import MessageWindow from "./MessageWindow";
+import Header2 from "../../Layout/Header2";
 
 function MessagesPage(props) {
   const classes = useStyles();
@@ -15,9 +16,9 @@ function MessagesPage(props) {
         flexFlow: "column",
       }}
     >
-      <Header />
+      <Header2 />
       <div className={classes.main}>
-        <Grid container style={{ height: "100%" }}>
+        <Grid container style={{}}>
           <Hidden smDown>
             <Grid item style={{ borderRight: "1px solid #ccc" }}>
               <ChatList />

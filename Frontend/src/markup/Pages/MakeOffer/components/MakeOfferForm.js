@@ -1,7 +1,9 @@
 import React from "react";
 import { Button, TextField } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 function MakeOfferForm(props) {
+  const history = useHistory();
   return (
     <div>
       <h5 style={{ textAlign: "center" }}>Discuss your project with David</h5>
@@ -30,6 +32,7 @@ function MakeOfferForm(props) {
         fullWidth
         variant={"contained"}
         color={"primary"}
+        onClick={() => history.push("/messages")}
       >
         Make an Offer
       </Button>

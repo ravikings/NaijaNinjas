@@ -2,9 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
   main: {
-    background: "white",
-    flex: 1,
-    margin: "0px 220px",
+    margin: "20px 220px",
     [theme.breakpoints.down("sm")]: {
       margin: "0px 75px",
     },

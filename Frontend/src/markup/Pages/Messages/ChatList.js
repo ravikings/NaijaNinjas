@@ -32,13 +32,7 @@ const CssTextField = withStyles({
 function ChatList(props) {
   const classes = useStyles();
   return (
-    <div
-      style={{
-        overflowY: "auto",
-        overflowX: "hidden",
-        height: "100%",
-      }}
-    >
+    <div>
       <div style={{ padding: "22px 30px", borderBottom: "1px solid #ccc" }}>
         <CssTextField
           size={"small"}
@@ -55,12 +49,22 @@ function ChatList(props) {
           }}
         />
       </div>
-
-      <ChatListItem />
-      <ChatListItem selected={true} />
-      <ChatListItem />
-      <ChatListItem />
-      <ChatListItem />
+      <div
+        style={{
+          overflowY: "auto",
+          overflowX: "hidden",
+          height: "calc(100vh - 220px)",
+        }}
+      >
+        <ChatListItem />
+        <ChatListItem selected={true} />
+        <ChatListItem />
+        <ChatListItem />
+        <ChatListItem />
+        <ChatListItem />
+        <ChatListItem />
+        <ChatListItem />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -17,6 +17,7 @@ import { useStyles } from "./LayoutStyles";
 
 function AuthState({ userDetails, handleShow }) {
   const classes = useStyles();
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [onlineState, setOnlineState] = React.useState("Online");
   const handleClick = (event) => {
@@ -142,7 +143,10 @@ function AuthState({ userDetails, handleShow }) {
         </div>
         <Divider style={{ margin: "20px 0px" }} />
         <div style={{ paddingBottom: 20, paddingLeft: 20 }}>
-          <div className={classes.listItem}>
+          <div
+            onClick={() => history.push("/jobs-profile")}
+            className={classes.listItem}
+          >
             <DashboardOutlinedIcon style={{ marginRight: 8 }} />
             <div>Dashboard</div>
           </div>

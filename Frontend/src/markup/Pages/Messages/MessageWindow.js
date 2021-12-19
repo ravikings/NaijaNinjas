@@ -80,8 +80,13 @@ function MessageWindow(props) {
             overflowY: "auto",
             overflowX: "hidden",
             padding: "30px 0px",
+            height: "calc(100vh - 320px)",
           }}
         >
+          <LeftMsg />
+          <RightMsg />
+          <LeftMsg />
+          <RightMsg />
           <LeftMsg />
           <RightMsg />
         </div>
