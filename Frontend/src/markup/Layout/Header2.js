@@ -93,6 +93,9 @@ function Header2() {
                     <Link to={"/browse-job-filter-list"}>marketplace</Link>
                   </li>
                   <li>
+                    <Link to={"/browse-candidates"}>Explore</Link>
+                  </li>
+                  <li>
                     <Link to={"/blog-detailed-grid-sidebar"}>Forum</Link>
                   </li>
                 </ul>
