@@ -93,13 +93,16 @@ function Header() {
                 </div>
                 <ul className="nav navbar-nav">
                   <li className="">
-                    <Link to={"#"}>Home</Link>
+                    <Link to={"/"}>Home</Link>
                   </li>
                   <li>
-                    <Link to={"#"}>Pages</Link>
+                    <Link to={"#"}>marketplace</Link>
                   </li>
                   <li>
-                    <Link to={"#"}>Blog</Link>
+                    <Link to={"/browse-candidates"}>Explore</Link>
+                  </li>
+                  <li>
+                    <Link to={"/blog-detailed-grid-sidebar"}>Forum</Link>
                   </li>
                 </ul>
               </div>
