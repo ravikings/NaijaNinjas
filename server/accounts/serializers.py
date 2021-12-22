@@ -3,7 +3,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
-from accounts.models import AccountUser, RunnerProfile, RunnerResume, Photo, Vidoe, Category
+from accounts.models import AccountUser, RunnerProfile, RunnerResume, Photo, Vidoe
 
 from .models import RunnerProfile
 
@@ -71,26 +71,26 @@ class UserResumeDetailsSerializer(serializers.ModelSerializer):
             "resume",
         )
 
-class CategorySerializer(serializers.ModelSerializer):
+# class CategorySerializer(serializers.ModelSerializer):
 
-    """
-    categories serializers use for entry data for resume from ui
-    """
+#     """
+#     categories serializers use for entry data for resume from ui
+#     """
 
-    author = serializers.ReadOnlyField(source= "AccountUser.first_name")
-    profile = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    resume = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+#     author = serializers.ReadOnlyField(source= "AccountUser.first_name")
+#     profile = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+#     resume = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
-    class Meta:
-        model = Category
-        fields = ["name","author", "profile","resume" ]
+#     class Meta:
+#         model = Category
+#         fields = ["name","author", "profile","resume" ]
 
 class UserProfileDetailsSerializer(serializers.ModelSerializer):
 
     photo = PhotosSerializer(read_only=True, many=True)
     resume = UserResumeDetailsSerializer(read_only=True, many=True)
     video = VidoesSerializer(read_only=True, many=True)
-    category = CategorySerializer(read_only=True, many=True)
+    #category = CategorySerializer(read_only=True, many=True)
 
     class Meta:
         model = RunnerProfile
@@ -109,7 +109,7 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
             "state",
             "city",
             "local_goverment_zone",
-            "category",
+            #"category",
             "resume",
             "photo",
             "video",
