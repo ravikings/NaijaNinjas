@@ -1,8 +1,8 @@
 from django.urls import path
-
-from . import views
+from chatserver.views import start_convo, get_conversation, conversations
 
 urlpatterns = [
-    path("fakeroom/", views.index, name="index-chat"),
-    path('<str:room_name>/', views.room, name='room'),
+    path("start/", start_convo, name="start_convo"),
+    path("<int:convo_id>/", get_conversation, name="get_conversation"),
+    path("", conversations, name="conversations"),
 ]

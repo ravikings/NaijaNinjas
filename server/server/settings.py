@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     "drf_yasg",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    "channels",
     # Local
+    "chatserver",
     "accounts",
     "debug_toolbar",
 ]
@@ -241,3 +243,4 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+ASGI_APPLICATION = "server.asgi.application"
