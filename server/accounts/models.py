@@ -33,7 +33,7 @@ class RunnerProfile(models.Model):
         null=True,
     )
     postcode = models.CharField(max_length=55, blank=True, null=True, db_index=True)
-    description = models.TextField(null=True, db_index=True)
+    description = models.TextField(null=True, blank=True, db_index=True)
     state = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     city = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     local_goverment_zone = models.CharField(

@@ -2,19 +2,19 @@ import base64
 import json
 import secrets
 from datetime import datetime
+import logging
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
 
-#from users.models import MyUser
+# from users.models import MyUser
 from .models import Message, Conversation
 from .serializers import MessageSerializer
 
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        print("here")
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
 
@@ -22,15 +22,16 @@ class ChatConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
-        print("here2")
+
         self.accept()
-        print("here3")
+        logging.warning("connected to room group!")
 
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
+        logging.warning("chat disconnect!")
 
     # Receive message from WebSocket
     def receive(self, text_data=None, bytes_data=None):
@@ -67,7 +68,7 @@ class ChatConsumer(WebsocketConsumer):
             )
         # Send message to room group
         chat_type = {"type": "chat_message"}
-        message_serializer = (dict(MessageSerializer(instance=_message).data))
+        message_serializer = dict(MessageSerializer(instance=_message).data)
         return_dict = {**chat_type, **message_serializer}
         if _message.attachment:
             async_to_sync(self.channel_layer.group_send)(
@@ -90,10 +91,7 @@ class ChatConsumer(WebsocketConsumer):
     def chat_message(self, event):
         dict_to_be_sent = event.copy()
         dict_to_be_sent.pop("type")
+        logging.warning("Receive message from room group!")
 
         # Send message to WebSocket
-        self.send(
-                text_data=json.dumps(
-                    dict_to_be_sent
-                )
-            )
+        self.send(text_data=json.dumps(dict_to_be_sent))

@@ -4,7 +4,6 @@ from .views import (
     PhotoUpload,
     VideoUpload,
     SearchProfile,
-    
 )
 from rest_framework.routers import DefaultRouter
 
