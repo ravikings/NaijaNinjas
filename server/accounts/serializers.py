@@ -9,7 +9,6 @@ from accounts.models import (
     RunnerResume,
     Photo,
     Vidoe,
-    Category,
 )
 
 from .models import RunnerProfile
@@ -36,7 +35,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             user.save()
         except IntegrityError as e:
 
-            raise e("error: sorry no already exist")
+            raise e("error: sorry phone number already exist")
 
         return user
 
@@ -46,6 +45,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = AccountUser
         fields = ["id"]
 
+class ProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
 
 class PhotosSerializer(serializers.ModelSerializer):
     """
@@ -85,53 +92,36 @@ class UserResumeDetailsSerializer(serializers.ModelSerializer):
             "career_profile",
             "postcode",
             "description",
-            "resume",
+            "attachment",
         )
 
 
-class CategorySerializer(serializers.ModelSerializer):
-
-#     """
-#     categories serializers use for entry data for resume from ui
-#     """
-
-    author = serializers.ReadOnlyField(source="AccountUser.first_name")
-    profile = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-    resume = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+class UserResumeSearchSerializer(serializers.ModelSerializer):
+    """
+    resume search serializers use for entry data for resume from ui
+    """
 
     class Meta:
-        model = Category
-        fields = ["name", "author", "profile", "resume"]
+        model = RunnerResume
+        fields = (
+            "skills",
+            "employment",
+        )
 
 
-class UserProfileDetailsSerializer(serializers.ModelSerializer):
+class UserProfileSearchSerializer(serializers.ModelSerializer):
 
-    photo = PhotosSerializer(read_only=True, many=True)
-    resume = UserResumeDetailsSerializer(read_only=True, many=True)
-    video = VidoesSerializer(read_only=True, many=True)
-    #category = CategorySerializer(read_only=True, many=True)
+    resume = UserResumeSearchSerializer(read_only=True, many=True)
 
     class Meta:
         model = RunnerProfile
         fields = (
             "author",
             "first_name",
-            "last_name",
             "title",
-            "language",
             "location",
             "salary",
-            "country",
-            "address",
-            "postcode",
-            "description",
-            "state",
-            "city",
-            "local_goverment_zone",
-            #"category",
             "resume",
-            "photo",
-            "video",
         )
 
 

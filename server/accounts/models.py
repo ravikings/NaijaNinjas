@@ -61,7 +61,7 @@ class RunnerResume(models.Model):
     career_profile = models.CharField(max_length=255, blank=True, db_index=True)
     postcode = models.CharField(max_length=55, blank=True, db_index=True)
     description = models.TextField(null=True, db_index=True)
-    resume = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
+    attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
 
 
 class Photo(models.Model):
