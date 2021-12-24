@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     "drf_yasg",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    "channels",
     # Local
+    "chatserver",
     "accounts",
     "debug_toolbar",
 ]
@@ -240,4 +242,28 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+import os
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
+
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+ASGI_APPLICATION = "server.asgi.application"

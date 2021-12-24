@@ -41,6 +41,7 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
     path("accounts/", include("allauth.urls")),
     path("api/v1/", include("accounts.urls")),
+    path("ws/chat/", include("chatserver.urls")),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     path(

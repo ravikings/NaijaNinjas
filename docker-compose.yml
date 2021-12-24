@@ -5,13 +5,23 @@ services:
   backend:
     build: ./server
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-    networks:
-      - es-net
     volumes:
       - ./server:/server/accounts/
       - /server/server/accounts
     ports:
       - "8000:8000"
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+     - "6379:6379"
+    volumes:
+     - ./redis-data:/var/lib/redis
+      - /redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+     - REDIS_REPLICATION_MODE=master
+
 
 
   # frontend:

@@ -11,6 +11,7 @@ from .serializers import (
     UserProfileDetailsSerializer,
 )
 
+
 class AccountDashboardProfile(viewsets.ModelViewSet):
 
     """
@@ -27,30 +28,35 @@ class AccountDashboardProfile(viewsets.ModelViewSet):
         serializer = UserProfileDetailsSerializer(user)
         return Response(serializer.data)
 
+
 class PhotoUpload(viewsets.ModelViewSet):
 
     """
-    uses to upload pictures to ui dashboard 
+    uses to upload pictures to ui dashboard
     """
 
     queryset = Photo.objects.all()
     serializer_class = PhotosSerializer
     permissions_classes = IsOwnerOrReadOnly
 
+
 class VideoUpload(viewsets.ModelViewSet):
 
     """
-    uses to upload video to ui dashboard 
+    uses to upload video to ui dashboard
     """
+
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
     permissions_classes = IsOwnerOrReadOnly
 
+
 class SearchProfile(viewsets.ModelViewSet):
 
     """
-    uses for search engine for the application 
+    uses for search engine for the application
     """
+
     queryset = RunnerProfile.objects.all()
     serializer_class = UserProfileDetailsSerializer
     filter_backends = [
