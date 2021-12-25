@@ -18,19 +18,7 @@ function Blogdetail(){
 		<>
 			<Header />
 			<div className="page-content bg-white">
-				<div className="dez-bnr-inr overlay-black-middle" style={{backgroundImage:"url(" + bnr + ")" }}>
-					<div className="container">
-						<div className="dez-bnr-inr-entry">
-							<h1 className="text-white">Blog Details</h1>	
-							<div className="breadcrumb-row">
-								<ul className="list-inline">
-									<li><Link to={"#"}>Home</Link></li>
-									<li>Blog Details</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				<div className="content-area">
 					<div className="container">
 						<div className="row">
