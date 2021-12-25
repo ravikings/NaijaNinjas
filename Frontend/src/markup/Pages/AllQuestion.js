@@ -1,16 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import Header2 from './../Layout/Header2';
-import Footer from './../Layout/Footer';
+import Header2 from '../Layout/Header2';
+import Footer from '../Layout/Footer';
 import ProfileSideBar from './components/ProfileSideBar';
 
 const postBlog = [
-	{ title: 'PHP Web Developer', },
-	{ title: 'Software Developer', },
-	{ title: 'Branch Credit Manager', },
+	{ title: 'How to Delete Facebook Account?', },
+	{ title: 'What is Facebook?', },
+	{ title: 'Branch Credit Manager how to work ?', },
 ]
 
-function Jobsappliedjob (){
+function AllQuestion (){
 	return(
 		<>
 			<Header2 />
@@ -22,16 +22,13 @@ function Jobsappliedjob (){
 								<ProfileSideBar />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 									<div className="job-bx-title  clearfix">
-										<h5 className="font-weight-700 pull-left text-uppercase">12269 Jobs Found</h5>
+										<h5 className="font-weight-700 pull-left text-uppercase">22 All Questions </h5>
 										<div className="float-right">
-											<span className="select-title">Sort by freshness</span>
-											<select className="custom-btn">
-												<option>Last 2 Months</option>
-												<option>Last Months</option>
-												<option>Last Weeks</option>
-												<option>Last 3 Days</option>
-											</select>
+								
+										
+											<Link to="ask-questions" className="btn btn-primary">Ask Question</Link>
 										</div>
+										
 									</div>
 									<ul className="post-job-bx browse-job">
 										{postBlog.map((item,index)=>(
@@ -39,11 +36,7 @@ function Jobsappliedjob (){
 												<div className="post-bx">
 													<div className="job-post-info m-a0">
 														<h4><Link to={"/job-detail"}>{item.title}</Link></h4>
-														<ul>
-															<li><Link to={"/company-profile"}>@company-name</Link></li>
-															<li><i className="fa fa-map-marker"></i> Sacramento, California</li>
-															<li><i className="fa fa-money"></i> 25,000</li>
-														</ul>
+														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex reprehenderit sequi possimus ab aliquid itaque nam facere quas culpa doloremque in nihil unde earum perspiciatis assumenda, provident pariatur fugiat. Maiores?</p>
 														<div className="job-time m-t15 m-b10">
 															<Link to={''} className="mr-1"><span>PHP</span></Link>
 															<Link to={''} className="mr-1"><span>Angular</span></Link>
@@ -51,8 +44,13 @@ function Jobsappliedjob (){
 															<Link to={''} className="mr-1"><span>Wordpress</span></Link>
 														</div>
 														<div className="posted-info clearfix">
-															<p className="m-tb0 text-primary float-left"><span className="text-black m-r10">Posted:</span> 2 day ago</p>
-															<Link to={"/jobs-my-resume"} className="site-button button-sm float-right">Apply Job</Link>
+															<p className="m-tb0 text-primary float-left m-r30">
+																<span className="text-black m-r10">Posted:</span> 2 day ago</p>
+															<p className="m-tb0 text-primary float-left m-r30">
+																<span className="text-black m-r10 ">Anwsers:</span> 21</p>
+															<p className="m-tb0 text-primary float-left m-r30">
+																<span className="text-black m-r10 ">Vote:</span> 211</p>
+															<Link to={"/jobs-my-resume"} className="site-button button-sm float-right">Edit Question</Link>
 														</div>
 													</div>
 												</div>
@@ -79,4 +77,4 @@ function Jobsappliedjob (){
 		</>
 	)
 }
-export default Jobsappliedjob; 
+export default AllQuestion; 

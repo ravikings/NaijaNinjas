@@ -2,7 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Header2 from './../Layout/Header2';
 import Footer from './../Layout/Footer';
-import Profilesidebar from './../Element/Profilesidebar';
+import ProfileSideBar from './components/ProfileSideBar';
+
  
 function Jobprofile(){
 	return(
@@ -13,7 +14,7 @@ function Jobprofile(){
 					<div className="section-full bg-white browse-job p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-								<Profilesidebar /> 
+							<ProfileSideBar />
 								<div className="col-xl-9 col-lg-8 m-b30">
 									<div className="job-bx job-profile">
 										<div className="job-bx-title clearfix">

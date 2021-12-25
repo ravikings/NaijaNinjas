@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Homepage from "./Pages/Homepage1";
 import Homepage2 from "./Pages/Homepage2";
 
+import AskQuestion from "./Pages/AskQuestion";
+import AllQuestion from "./Pages/AllQuestion";
 import Jobprofile from "./Pages/Jobprofile";
 import Jobmyresume from "./Pages/Jobmyresume";
 import Jobsappliedjob from "./Pages/Jobsappliedjob";
@@ -65,6 +67,8 @@ class Markup extends Component {
             <Route path="/messages" exact component={MessagesPage} />
 
             <Route path="/jobs-profile" exact component={Jobprofile} />
+            <Route path="/ask-questions" exact component={AskQuestion} />
+            <Route path="/all-questions" exact component={AllQuestion} />
             <Route path="/jobs-my-resume" exact component={Jobmyresume} />
             <Route path="/jobs-applied-job" exact component={Jobsappliedjob} />
             <Route path="/jobs-alerts" exact component={Jobsalert} />
