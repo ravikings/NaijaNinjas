@@ -2,6 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # testing out cache is ignore
 
@@ -16,7 +17,7 @@ class AccountUser(AbstractUser):
 
 
 class RunnerProfile(models.Model):
-    author = models.ForeignKey(
+    author = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="userinfo"
     )
     first_name = models.CharField(max_length=50, blank=True, null=True)
@@ -92,17 +93,22 @@ class Vidoe(models.Model):
         return self.description
 
 
-# class Category(models.Model):
-#     name = models.CharField(max_length=255, blank=True, null=True, db_index=True)
-#     author = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="categories"
-#     )
-#     profile = models.ManyToManyField(
-#         "RunnerProfile", related_name="categories", blank=True
-#     )
-#     resume = models.ManyToManyField(
-#         "RunnerResume", related_name="categories", blank=True
-#     )
+class Review(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
+    )
+    profile = models.ForeignKey(
+        RunnerProfile, on_delete=models.CASCADE, related_name="profilereview"
+    )
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
 
-#     class meta:
-#         verbose_name_plural = "categories"
+    class Meta:
+        ordering = ("created",)
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.profile}"

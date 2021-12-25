@@ -1,17 +1,18 @@
 from rest_framework import generics, permissions, viewsets
-from accounts.permissions import IsOwner, IsOwnerOrReadOnly
+from accounts.permissions import IsOwner, IsOwnerOrReadonly
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from .models import AccountUser, Photo, Vidoe, RunnerProfile, RunnerResume
+from .models import AccountUser, Photo, Vidoe, RunnerProfile, RunnerResume, Review
 from .serializers import (
     PhotosSerializer,
     VidoesSerializer,
     UserProfileSearchSerializer,
     ProfileSerializer,
     UserAccountSerializer,
-    UserResumeDetailsSerializer
+    UserResumeDetailsSerializer,
+    ReviewSerializer
 )
 
 
@@ -23,7 +24,7 @@ class DashboardProfile(viewsets.ModelViewSet):
 
     queryset = RunnerProfile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = IsOwner
+    permission_classes = [IsOwner]
 
     def retrieve(self, request, pk=None):
         queryset = RunnerProfile.objects.all()
@@ -39,7 +40,7 @@ class DashboardResume(viewsets.ModelViewSet):
 
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeDetailsSerializer
-    permissions_classes = IsOwnerOrReadOnly
+    permissions_classes = [IsOwner]
 
 
 
@@ -51,7 +52,6 @@ class AccountStatus(viewsets.ModelViewSet):
 
     queryset = Photo.objects.all()
     serializer_class = UserAccountSerializer
-    permissions_classes = IsOwnerOrReadOnly
 
 
 class PhotoUpload(viewsets.ModelViewSet):
@@ -62,7 +62,7 @@ class PhotoUpload(viewsets.ModelViewSet):
 
     queryset = Photo.objects.all()
     serializer_class = PhotosSerializer
-    permissions_classes = IsOwnerOrReadOnly
+    permissions_classes = [IsOwner]
 
 
 class VideoUpload(viewsets.ModelViewSet):
@@ -73,8 +73,17 @@ class VideoUpload(viewsets.ModelViewSet):
 
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
-    permissions_classes = IsOwnerOrReadOnly
+    permissions_classes = [IsOwner]
 
+class ReviewView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permissions_classes = [IsOwnerOrReadonly]
 
 class SearchProfile(viewsets.ModelViewSet):
 

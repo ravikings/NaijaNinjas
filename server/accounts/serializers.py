@@ -9,6 +9,7 @@ from accounts.models import (
     RunnerResume,
     Photo,
     Vidoe,
+    Review
 )
 
 from .models import RunnerProfile
@@ -73,6 +74,15 @@ class VidoesSerializer(serializers.ModelSerializer):
         model = Vidoe
         fields = "__all__"
 
+
+class ReviewSerializer(serializers.ModelSerializer):
+    """
+    Review serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = Review
+        fields = "__all__"
 
 class UserResumeDetailsSerializer(serializers.ModelSerializer):
     """
