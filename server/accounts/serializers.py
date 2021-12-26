@@ -1,5 +1,6 @@
 from django.db import transaction
 from rest_framework import serializers
+from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
@@ -79,10 +80,15 @@ class ReviewSerializer(serializers.ModelSerializer):
     """
     Review serializers use profile for picture uploads and retrieve
     """
+    total_reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
         fields = "__all__"
+
+    def get_total_reviews(self, instance, pk):
+        return instance.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
+
 
 class UserResumeDetailsSerializer(serializers.ModelSerializer):
     """
@@ -136,12 +142,21 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
 
 
 class UserAccountSerializer(serializers.ModelSerializer):
+
+    online = serializers.SerializerMethodField()
+
     class Meta:
         model = AccountUser
         fields = (
-            "pk",
+            "id",
             "email",
             "phone_number",
             "is_a_runner",
+            "online"
         )
-        read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
+        read_only_fields = ("id", "email", "phone_number", "is_a_runner", "online")
+
+    def get_online(self, instance):
+        user = self.context["request"].user
+        status = user.is_authenticated
+        return status

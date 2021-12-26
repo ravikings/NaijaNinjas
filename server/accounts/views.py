@@ -50,7 +50,7 @@ class AccountStatus(viewsets.ModelViewSet):
     uses to upload pictures to ui dashboard
     """
 
-    queryset = Photo.objects.all()
+    queryset = AccountUser.objects.all()
     serializer_class = UserAccountSerializer
 
 
