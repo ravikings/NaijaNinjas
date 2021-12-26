@@ -1,13 +1,28 @@
 from django.db import transaction
-from django.core import serializers as core_serializers
 from rest_framework import serializers
+from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
-from accounts.models import AccountUser, RunnerProfile
+from django.utils.safestring import mark_safe
+from accounts.models import (
+    AccountUser,
+    RunnerProfile,
+    RunnerResume,
+    Photo,
+    Vidoe,
+    Review,
+)
+
+from .models import RunnerProfile
 
 
 class CustomRegisterSerializer(RegisterSerializer):
+
+    """
+    Custom serializers use profile for singup and login
+    """
+
     phone_number = serializers.CharField(
         max_length=30, validators=[UniqueValidator(queryset=AccountUser.objects.all())]
     )
@@ -22,43 +37,126 @@ class CustomRegisterSerializer(RegisterSerializer):
             user.is_a_runner = self.data.get("is_a_runner")
             user.save()
         except IntegrityError as e:
-            print(f"Unexpected {e=}, {type(e)=}")
-            raise
+
+            raise e("error: sorry phone number already exist")
 
         return user
 
-class UserAccountSerializer(serializers.ModelSerializer):
-    
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountUser
-        fields = ("pk", "email", "phone_number", "is_a_runner")
-        read_only_fields = ("pk", "email", "phone_number", "is_a_runner")
+        fields = ["id"]
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
 
-class UserProfileDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
 
-    user_info = UserAccountSerializer(many=True)
+
+class PhotosSerializer(serializers.ModelSerializer):
+    """
+    Photo serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = Photo
+        fields = "__all__"
+
+
+class VidoesSerializer(serializers.ModelSerializer):
+    """
+    Vidoe serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = Vidoe
+        fields = "__all__"
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    """
+    Review serializers use profile for picture uploads and retrieve
+    """
+
+    total_reviews = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Review
+        fields = "__all__"
+
+    def get_total_reviews(self, instance, pk):
+        return instance.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return mark_safe(representation)
+
+class UserResumeDetailsSerializer(serializers.ModelSerializer):
+    """
+    resume serializers use for entry data for resume from ui
+    """
+
+    class Meta:
+        model = RunnerResume
+        fields = (
+            "headline",
+            "skills",
+            "employment",
+            "education",
+            "projects",
+            "profile_summary",
+            "accomplishment",
+            "career_profile",
+            "postcode",
+            "description",
+            "attachment",
+        )
+
+
+class UserResumeSearchSerializer(serializers.ModelSerializer):
+    """
+    resume search serializers use for entry data for resume from ui
+    """
+
+    class Meta:
+        model = RunnerResume
+        fields = (
+            "skills",
+            "employment",
+        )
+
+
+class UserProfileSearchSerializer(serializers.ModelSerializer):
+
+    resume = UserResumeSearchSerializer(read_only=True, many=True)
 
     class Meta:
         model = RunnerProfile
         fields = (
             "author",
-            "Name",
-            "photo",
-            "Title",
-            "Language",
+            "first_name",
+            "title",
             "location",
             "salary",
-            "country",
-            "address",
-            "postcode",
-            "description",
-            "state",
-            "city",
-            "local_goverment_zone",
-            "user_info"
+            "resume",
         )
 
 
+class UserAccountSerializer(serializers.ModelSerializer):
 
+    online = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AccountUser
+        fields = ("id", "email", "phone_number", "is_a_runner", "online")
+        read_only_fields = ("id", "email", "phone_number", "is_a_runner", "online")
+
+    def get_online(self, instance):
+
+        return self.context["request"].user.is_authenticated
