@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from ckeditor.fields import RichTextField
 
 # testing out cache is ignore
 
@@ -100,7 +101,7 @@ class Review(models.Model):
     profile = models.ForeignKey(
         RunnerProfile, on_delete=models.CASCADE, related_name="profilereview"
     )
-    body = models.TextField()
+    body = RichTextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     rating = models.IntegerField(

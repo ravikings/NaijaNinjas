@@ -4,13 +4,14 @@ from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
+from django.utils.safestring import mark_safe
 from accounts.models import (
     AccountUser,
     RunnerProfile,
     RunnerResume,
     Photo,
     Vidoe,
-    Review
+    Review,
 )
 
 from .models import RunnerProfile
@@ -47,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = AccountUser
         fields = ["id"]
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
@@ -55,6 +57,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RunnerProfile
         fields = "__all__"
+
 
 class PhotosSerializer(serializers.ModelSerializer):
     """
@@ -80,6 +83,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     """
     Review serializers use profile for picture uploads and retrieve
     """
+
     total_reviews = serializers.SerializerMethodField()
 
     class Meta:
@@ -89,6 +93,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     def get_total_reviews(self, instance, pk):
         return instance.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return mark_safe(representation)
 
 class UserResumeDetailsSerializer(serializers.ModelSerializer):
     """
@@ -147,16 +154,9 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountUser
-        fields = (
-            "id",
-            "email",
-            "phone_number",
-            "is_a_runner",
-            "online"
-        )
+        fields = ("id", "email", "phone_number", "is_a_runner", "online")
         read_only_fields = ("id", "email", "phone_number", "is_a_runner", "online")
 
     def get_online(self, instance):
-        user = self.context["request"].user
-        status = user.is_authenticated
-        return status
+
+        return self.context["request"].user.is_authenticated
