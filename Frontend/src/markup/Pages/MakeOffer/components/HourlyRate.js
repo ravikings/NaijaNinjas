@@ -26,7 +26,7 @@ function HourlyRate(props) {
         </Grid>
         <Grid item>
           <div style={{ color: "black", fontWeight: "bold" }}>22</div>
-          <div>Rehired</div>
+          <div>Response Time</div>
         </Grid>
       </Grid>
     </div>
