@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "channels",
     "ckeditor",
+    #"hitcount",
     # Local
     "chatserver",
     "accounts",
