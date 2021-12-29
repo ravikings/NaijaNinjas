@@ -41,13 +41,13 @@ const ProfileSideBar=()=>{
 												<li><NavLink to= {"/jobs-cv-manager"} activeClassName="active">
 													<i className="fa fa-id-card-o" aria-hidden="true"></i> 
 													<span>CV Manager</span></NavLink></li>
-												<li><NavLink to= {"/all-questions"} activeClassName="active">
+												<li><NavLink to= {"/ask-questions"} activeClassName="active">
 													<i className="fa fa-user" aria-hidden="true"></i> 
 													<span>Ask  Question</span></NavLink></li>
 												<li><NavLink to={"/jobs-change-password"} activeClassName="active">
 													<i className="fa fa-key" aria-hidden="true"></i> 
 													<span>Change Password</span></NavLink></li>
-												<li><NavLink to={"./"} activeClassName="active">
+												<li><NavLink to={"/logout"} activeClassName="active">
 													<i className="fa fa-sign-out" aria-hidden="true"></i> 
 													<span>Log Out</span></NavLink></li>
 											</ul>

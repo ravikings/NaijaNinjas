@@ -26,7 +26,7 @@ function AllQuestion (){
 										<div className="float-right">
 								
 										
-											<Link to="ask-questions" className="btn btn-primary">Ask Question</Link>
+										
 										</div>
 										
 									</div>

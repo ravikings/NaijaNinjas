@@ -26,7 +26,9 @@ function AskQuestion (){
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 								<div className="job-bx-title  clearfix">
 										<h5 className="font-weight-700 pull-left text-uppercase">Ask a Question</h5>
-										
+										<div className="float-right">
+													<Link to="all-questions" className="btn btn-primary">Previous Question</Link>
+													</div>
 									</div>
 								<form>
 											<div className="row">
@@ -35,6 +37,7 @@ function AskQuestion (){
 														<label>Question Title</label>
 														<input type="text" className="form-control" placeholder="Enter Job Title" />
 													</div>
+													
 												</div>
 												
 												<div className="col-lg-12 col-md-12">
