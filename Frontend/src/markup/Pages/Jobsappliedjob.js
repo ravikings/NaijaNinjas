@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Header2 from './../Layout/Header2';
 import Footer from './../Layout/Footer';
-import ProfileSideBar from './components/ProfileSideBar';
+import ProfileSidebar from "./../Element/Profilesidebar";
 
 const postBlog = [
 	{ title: 'PHP Web Developer', },
@@ -19,7 +19,7 @@ function Jobsappliedjob (){
 					<div className="section-full bg-white p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-								<ProfileSideBar />
+							<ProfileSidebar active={"jobsapplied"} />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 									<div className="job-bx-title  clearfix">
 										<h5 className="font-weight-700 pull-left text-uppercase">12269 Jobs Found</h5>

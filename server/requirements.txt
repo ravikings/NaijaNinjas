@@ -1,11 +1,13 @@
 dj-rest-auth
 django-allauth
-django
+django==4.0
 djangorestframework
 pytz
 djangorestframework-simplejwt
 django-cors-headers
 drf-yasg
 pillow
-django-taggit 
-django-taggit-serializer
+django-debug-toolbar
+django-ckeditor==6.2.0
+channels==3.0.4
+django-filter==21.1

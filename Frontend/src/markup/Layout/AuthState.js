@@ -9,11 +9,12 @@ import createRequest from "../../utils/axios";
 import Badge from "@material-ui/core/Badge";
 import MailOutlineOutlinedIcon from "@material-ui/icons/MailOutlineOutlined";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import { Divider } from "@material-ui/core";
+import { Divider, Hidden } from "@material-ui/core";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined";
 import { useStyles } from "./LayoutStyles";
+import { toast } from "react-toastify";
 
 function AuthState({ userDetails, handleShow }) {
   const classes = useStyles();
@@ -37,6 +38,9 @@ function AuthState({ userDetails, handleShow }) {
       .then((res) => {
         handleClose();
         userDetails.signOut();
+      })
+      .catch((e) => {
+        toast.error("Error Logout");
       });
   };
 
@@ -79,8 +83,8 @@ function AuthState({ userDetails, handleShow }) {
           </div>
         </div>
       ) : (
-        <div className="extra-nav">
-          <div className="extra-cell">
+        /*<div className="extra-nav">
+          <div>
             <Link to={"/register"} className="site-button">
               <i className="fa fa-user"></i> Sign Up
             </Link>
@@ -88,7 +92,20 @@ function AuthState({ userDetails, handleShow }) {
               <i className="fa fa-lock"></i> login{" "}
             </Link>
           </div>
-        </div>
+        </div>*/
+        <Hidden xsDown>
+          <div
+            className="extra-nav d-flex align-items-center justify-content-end"
+            style={{ padding: "20px 0px", width: 200 }}
+          >
+            <Link to={"/register"} className="site-button">
+              <i className="fa fa-user"></i> Sign Up
+            </Link>
+            <Link to={"/login"} title="READ MORE" className="site-button">
+              <i className="fa fa-lock"></i> login{" "}
+            </Link>
+          </div>
+        </Hidden>
       )}
       <Popover
         anchorOrigin={{

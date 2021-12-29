@@ -5,7 +5,7 @@ import Footer from './../Layout/Footer';
 import {Form}  from 'react-bootstrap';  
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import ProfileSideBar from './components/ProfileSideBar';
+import ProfileSidebar from "./../Element/Profilesidebar";
 const postBlog = [
 	{ title: 'PHP Web Developer', },
 	{ title: 'Software Developer', },
@@ -22,7 +22,7 @@ function AskQuestion (){
 					<div className="section-full bg-white p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-							<ProfileSideBar />
+							<ProfileSidebar active={"question"} />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 								<div className="job-bx-title  clearfix">
 										<h5 className="font-weight-700 pull-left text-uppercase">Ask a Question</h5>

@@ -2,8 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Header2 from '../Layout/Header2';
 import Footer from '../Layout/Footer';
-import ProfileSideBar from './components/ProfileSideBar';
-
+import ProfileSidebar from "./../Element/Profilesidebar";
 const postBlog = [
 	{ title: 'How to Delete Facebook Account?', },
 	{ title: 'What is Facebook?', },
@@ -19,7 +18,7 @@ function AllQuestion (){
 					<div className="section-full bg-white p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-								<ProfileSideBar />
+							<ProfileSidebar active={"question"} />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 									<div className="job-bx-title  clearfix">
 										<h5 className="font-weight-700 pull-left text-uppercase">22 All Questions </h5>

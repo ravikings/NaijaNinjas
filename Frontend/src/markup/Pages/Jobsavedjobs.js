@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import Header2 from './../Layout/Header2';
 import Footer from './../Layout/Footer';
 import {Modal} from 'react-bootstrap';
-import ProfileSideBar from './components/ProfileSideBar';
+import ProfileSidebar from "./../Element/Profilesidebar";
 
 const jobAlert=[
 	{ title: 'Social Media Expert', date:'December 15,2018', },
@@ -28,7 +28,7 @@ function Jobsavedjobs(){
 					<div className="section-full bg-white p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-							<ProfileSideBar />
+							<ProfileSidebar active={"jobssave"} />
 								<div className="col-xl-9 col-lg-8 m-b30">
 									<div className="job-bx save-job browse-job table-job-bx clearfix">
 										<div className="job-bx-title clearfix">
