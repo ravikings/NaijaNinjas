@@ -1,10 +1,20 @@
 from rest_framework import generics, permissions, viewsets
+from rest_framework.serializers import Serializer
 from accounts.permissions import IsOwner, IsOwnerOrReadonly
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import AccountUser, Photo, Vidoe, RunnerProfile, RunnerResume, Review
+from .models import (
+    AccountUser,
+    Photo,
+    Vidoe,
+    RunnerProfile,
+    RunnerResume,
+    Review,
+    IpModel,
+)
 from .serializers import (
     PhotosSerializer,
     VidoesSerializer,
@@ -12,7 +22,8 @@ from .serializers import (
     ProfileSerializer,
     UserAccountSerializer,
     UserResumeDetailsSerializer,
-    ReviewSerializer
+    ReviewSerializer,
+    UserSearchDetialSerializer,
 )
 
 
@@ -32,8 +43,9 @@ class DashboardProfile(viewsets.ModelViewSet):
         serializer = ProfileSerializer(user)
         return Response(serializer.data)
 
+
 class DashboardResume(viewsets.ModelViewSet):
-    
+
     """
     uses to upload pictures to ui dashboard
     """
@@ -43,9 +55,8 @@ class DashboardResume(viewsets.ModelViewSet):
     permissions_classes = [IsOwner]
 
 
-
 class AccountStatus(viewsets.ModelViewSet):
-    
+
     """
     uses to upload pictures to ui dashboard
     """
@@ -75,8 +86,9 @@ class VideoUpload(viewsets.ModelViewSet):
     serializer_class = VidoesSerializer
     permissions_classes = [IsOwner]
 
+
 class ReviewView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
@@ -84,6 +96,7 @@ class ReviewView(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permissions_classes = [IsOwnerOrReadonly]
+
 
 class SearchProfile(viewsets.ModelViewSet):
 
@@ -112,3 +125,33 @@ class SearchProfile(viewsets.ModelViewSet):
         "id",
     ]
     ordering_fields = "__all__"
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
+
+
+class UserSearchDetails(viewsets.ViewSet):
+    """
+    A simple ViewSet for listing or retrieving users.
+    which include view count for each unique ip
+    """
+
+    def retrieve(self, request, pk=None):
+
+        ip = get_client_ip(request)
+        profile = RunnerProfile.objects.get(author=pk)
+        if IpModel.objects.filter(ip=ip).exists():
+            profile.views.add(IpModel.objects.get(ip=ip))
+        else:
+            IpModel.objects.create(ip=ip)
+            profile.views.add(IpModel.objects.get(ip=ip))
+        queryset = RunnerProfile.objects.all()
+        profile = get_object_or_404(queryset, author=pk)
+        serializer = UserSearchDetialSerializer(profile)
+        return Response(serializer.data)

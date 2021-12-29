@@ -14,7 +14,7 @@ from accounts.models import (
     Review,
 )
 
-from .models import RunnerProfile
+from .models import IpModel, RunnerProfile
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -79,23 +79,40 @@ class VidoesSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class IpSerializer(serializers.ModelSerializer):
+    """
+    IP serializers use profile for picture uploads and retrieve
+    """
+
+    total_views = serializers.SerializerMethodField()
+
+    class Meta:
+        model = IpModel
+        fields = "__all__"
+
+    def get_total_views(self, instance):
+        return instance.total_views()
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     """
     Review serializers use profile for picture uploads and retrieve
     """
 
-    total_reviews = serializers.SerializerMethodField()
+    #total_reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
         fields = "__all__"
 
-    def get_total_reviews(self, instance, pk):
-        return instance.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
+    #def get_total_reviews(self, instance, pk=None):
+        # return Review.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
+        #return instance.body
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        return mark_safe(representation)
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     return mark_safe(representation)
+
 
 class UserResumeDetailsSerializer(serializers.ModelSerializer):
     """
@@ -160,3 +177,28 @@ class UserAccountSerializer(serializers.ModelSerializer):
     def get_online(self, instance):
 
         return self.context["request"].user.is_authenticated
+
+
+class UserSearchDetialSerializer(serializers.ModelSerializer):
+
+    total_reviews = serializers.SerializerMethodField()
+    total_views = serializers.SerializerMethodField()
+
+    class Meta:
+        model = RunnerProfile
+        fields = (
+            "author",
+            "first_name",
+            "last_name",
+            "title",
+            "photo",
+            "salary",
+            "total_reviews",
+            "total_views",
+        )
+
+    def get_total_views(self, instance):
+        return instance.total_views()
+
+    def get_total_reviews(self, instance):
+        return instance.total_reviews()

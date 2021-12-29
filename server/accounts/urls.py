@@ -6,7 +6,8 @@ from .views import (
     SearchProfile,
     DashboardProfile,
     AccountStatus,
-    ReviewView
+    ReviewView,
+    UserSearchDetails,
 )
 
 
@@ -18,6 +19,9 @@ router.register(r"video", VideoUpload, basename="dashboard-videos")
 router.register(r"search", SearchProfile, basename="search")
 router.register(r"user-status", AccountStatus, basename="user-status")
 router.register(r"user-review", ReviewView, basename="user-review")
+router.register(
+    r"user-search-detials/", UserSearchDetails, basename="user-search-detials"
+)
 
 urlpatterns = [
     path("account/", include(router.urls)),
