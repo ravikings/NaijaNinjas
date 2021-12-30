@@ -6,10 +6,6 @@ from django.db.models import Avg, F
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
 
-# from hitcount.models import HitCountMixin
-
-# testing out cache is ignore
-
 
 class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
@@ -39,6 +35,23 @@ class Review(models.Model):
         ordering = ("created",)
 
 
+class RunnerResume(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"
+    )
+    headline = models.CharField(max_length=255, blank=True, db_index=True)
+    skills = models.TextField(null=True, db_index=True)
+    employment = models.TextField(null=True, db_index=True)
+    education = models.TextField(null=True, db_index=True)
+    projects = models.TextField(null=True, db_index=True)
+    profile_summary = models.CharField(max_length=255, blank=True, db_index=True)
+    accomplishment = models.CharField(max_length=55, blank=True, db_index=True)
+    career_profile = models.CharField(max_length=255, blank=True, db_index=True)
+    postcode = models.CharField(max_length=55, blank=True, db_index=True)
+    description = models.TextField(null=True, db_index=True)
+    attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
+
+
 class RunnerProfile(models.Model):
     author = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="userinfo"
@@ -65,6 +78,9 @@ class RunnerProfile(models.Model):
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
     reviews = models.ManyToManyField(Review, related_name="buyers_review", blank=True)
+    resumes = models.ManyToManyField(
+        RunnerResume, related_name="user_resume", blank=True
+    )
 
     def __str__(self):
         return self.first_name
@@ -75,26 +91,6 @@ class RunnerProfile(models.Model):
     def total_reviews(self):
         # return self.reviews.aggregate(total_ratings=Avg("rating"))
         return self.reviews.count()
-
-
-class RunnerResume(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resumeinfo"
-    )
-    runner_profile = models.ForeignKey(
-        RunnerProfile, on_delete=models.CASCADE, related_name="user_resume"
-    )
-    headline = models.CharField(max_length=255, blank=True, db_index=True)
-    skills = models.TextField(null=True, db_index=True)
-    employment = models.TextField(null=True, db_index=True)
-    education = models.TextField(null=True, db_index=True)
-    projects = models.TextField(null=True, db_index=True)
-    profile_summary = models.CharField(max_length=255, blank=True, db_index=True)
-    accomplishment = models.CharField(max_length=55, blank=True, db_index=True)
-    career_profile = models.CharField(max_length=255, blank=True, db_index=True)
-    postcode = models.CharField(max_length=55, blank=True, db_index=True)
-    description = models.TextField(null=True, db_index=True)
-    attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
 
 
 class Photo(models.Model):

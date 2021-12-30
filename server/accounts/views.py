@@ -1,10 +1,9 @@
-from rest_framework import generics, permissions, viewsets
-from rest_framework.serializers import Serializer
-from accounts.permissions import IsOwner, IsOwnerOrReadonly
+from rest_framework import viewsets
+from accounts.permissions import IsRunner
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from history.signals import history_tracker
 from .models import (
@@ -34,26 +33,34 @@ class DashboardProfile(viewsets.ModelViewSet):
     dashboard serializers use for entry data for getting data to the ui
     """
 
-    queryset = RunnerProfile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated and IsRunner]
 
-    def retrieve(self, request, pk=None):
-        queryset = RunnerProfile.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = ProfileSerializer(user)
-        return Response(serializer.data)
+    def get_queryset(self):
+
+        return RunnerProfile.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+
+        serializer.save(author=self.request.user)
 
 
 class DashboardResume(viewsets.ModelViewSet):
 
     """
-    uses to upload pictures to ui dashboard
+    uses to update resume for only runner dashboard
     """
 
-    queryset = RunnerResume.objects.all()
     serializer_class = UserResumeDetailsSerializer
-    permissions_classes = [IsOwner]
+    permissions_classes = [IsAuthenticated and IsRunner]
+
+    def get_queryset(self):
+
+        return RunnerResume.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+
+        serializer.save(author=self.request.user)
 
 
 class AccountStatus(viewsets.ModelViewSet):
@@ -74,7 +81,16 @@ class PhotoUpload(viewsets.ModelViewSet):
 
     queryset = Photo.objects.all()
     serializer_class = PhotosSerializer
-    permissions_classes = [IsOwner]
+    permissions_classes = [IsAuthenticated and IsRunner]
+
+    def get_queryset(self):
+        if self.request.method == "GET":
+            return Photo.objects.all()
+        else:
+            return Photo.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
 class VideoUpload(viewsets.ModelViewSet):
@@ -85,7 +101,7 @@ class VideoUpload(viewsets.ModelViewSet):
 
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
-    permissions_classes = [IsOwner]
+    permissions_classes = [IsAuthenticated and IsRunner]
 
 
 class ReviewView(viewsets.ModelViewSet):
@@ -96,7 +112,7 @@ class ReviewView(viewsets.ModelViewSet):
 
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permissions_classes = [IsOwnerOrReadonly]
+    permissions_classes = [IsAuthenticated]
 
 
 class SearchProfile(viewsets.ModelViewSet):

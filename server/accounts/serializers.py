@@ -121,19 +121,7 @@ class UserResumeDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RunnerResume
-        fields = (
-            "headline",
-            "skills",
-            "employment",
-            "education",
-            "projects",
-            "profile_summary",
-            "accomplishment",
-            "career_profile",
-            "postcode",
-            "description",
-            "attachment",
-        )
+        fields = "__all__"
 
 
 class UserResumeSearchSerializer(serializers.ModelSerializer):
