@@ -6,6 +6,7 @@ from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from history.signals import history_tracker
 from .models import (
     AccountUser,
     Photo,
@@ -146,6 +147,7 @@ class UserSearchDetails(viewsets.ViewSet):
 
         ip = get_client_ip(request)
         profile = RunnerProfile.objects.get(author=pk)
+        history_tracker(request, profile)
         if IpModel.objects.filter(ip=ip).exists():
             profile.views.add(IpModel.objects.get(ip=ip))
         else:

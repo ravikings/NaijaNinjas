@@ -76,6 +76,7 @@ class RunnerProfile(models.Model):
         # return self.reviews.aggregate(total_ratings=Avg("rating"))
         return self.reviews.count()
 
+
 class RunnerResume(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resumeinfo"
@@ -122,6 +123,3 @@ class Vidoe(models.Model):
 
     def __str__(self):
         return self.description
-
-
-

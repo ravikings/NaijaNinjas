@@ -99,15 +99,15 @@ class ReviewSerializer(serializers.ModelSerializer):
     Review serializers use profile for picture uploads and retrieve
     """
 
-    #total_reviews = serializers.SerializerMethodField()
+    # total_reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
         fields = "__all__"
 
-    #def get_total_reviews(self, instance, pk=None):
-        # return Review.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
-        #return instance.body
+    # def get_total_reviews(self, instance, pk=None):
+    # return Review.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
+    # return instance.body
 
     # def to_representation(self, instance):
     #     representation = super().to_representation(instance)
