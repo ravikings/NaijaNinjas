@@ -112,7 +112,7 @@ class ReviewView(viewsets.ModelViewSet):
 
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permissions_classes = [IsAuthenticated]
+    #permissions_classes = [IsAuthenticated]
 
 
 class SearchProfile(viewsets.ModelViewSet):

@@ -5,6 +5,7 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
+from django.db.models import Avg, F, Count
 from accounts.models import (
     AccountUser,
     RunnerProfile,
@@ -14,7 +15,7 @@ from accounts.models import (
     Review,
 )
 
-from .models import IpModel, RunnerProfile
+from .models import IpModel, RunnerProfile, Review
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -99,19 +100,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     Review serializers use profile for picture uploads and retrieve
     """
 
-    # total_reviews = serializers.SerializerMethodField()
-
     class Meta:
         model = Review
         fields = "__all__"
-
-    # def get_total_reviews(self, instance, pk=None):
-    # return Review.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
-    # return instance.body
-
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     return mark_safe(representation)
 
 
 class UserResumeDetailsSerializer(serializers.ModelSerializer):
@@ -182,11 +173,13 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
             "photo",
             "salary",
             "total_reviews",
-            "total_views",
+            #"total_views",     
         )
 
-    def get_total_views(self, instance):
-        return instance.total_views()
+    # def get_total_views(self, instance):
+    #     return instance.total_views()
 
-    def get_total_reviews(self, instance):
-        return instance.total_reviews()
+    def get_total_reviews(self, pk=None):
+
+        return Review.objects.filter(profile_id=pk).aggregate(Avg("rating"))
+

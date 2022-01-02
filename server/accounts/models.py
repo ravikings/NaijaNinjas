@@ -2,7 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Avg, F
+from django.db.models import Avg, F, Count
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
 
@@ -18,21 +18,6 @@ class IpModel(models.Model):
 
     def __str__(self):
         return self.ip
-
-
-class Review(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
-    )
-    body = RichTextField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    rating = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
-
-    class Meta:
-        ordering = ("created",)
 
 
 class RunnerResume(models.Model):
@@ -77,7 +62,6 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
-    reviews = models.ManyToManyField(Review, related_name="buyers_review", blank=True)
     resumes = models.ManyToManyField(
         RunnerResume, related_name="user_resume", blank=True
     )
@@ -88,9 +72,25 @@ class RunnerProfile(models.Model):
     def total_views(self):
         return self.views.count()
 
-    def total_reviews(self):
-        # return self.reviews.aggregate(total_ratings=Avg("rating"))
-        return self.reviews.count()
+
+class Review(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="author_reviewer",
+    )
+    profile = models.ForeignKey(
+        RunnerProfile, on_delete=models.CASCADE, related_name="reviwer_profile"
+    )
+    body = RichTextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+
+    class Meta:
+        ordering = ("created",)
 
 
 class Photo(models.Model):
