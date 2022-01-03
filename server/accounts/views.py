@@ -1,10 +1,20 @@
-from rest_framework import generics, permissions, viewsets
-from accounts.permissions import IsOwner, IsOwnerOrReadonly
+from rest_framework import viewsets
+from accounts.permissions import IsRunner
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from .models import AccountUser, Photo, Vidoe, RunnerProfile, RunnerResume, Review
+from history.signals import history_tracker
+from .models import (
+    AccountUser,
+    Photo,
+    Vidoe,
+    RunnerProfile,
+    RunnerResume,
+    Review,
+    IpModel,
+)
 from .serializers import (
     PhotosSerializer,
     VidoesSerializer,
@@ -12,7 +22,8 @@ from .serializers import (
     ProfileSerializer,
     UserAccountSerializer,
     UserResumeDetailsSerializer,
-    ReviewSerializer
+    ReviewSerializer,
+    UserSearchDetialSerializer,
 )
 
 
@@ -22,30 +33,38 @@ class DashboardProfile(viewsets.ModelViewSet):
     dashboard serializers use for entry data for getting data to the ui
     """
 
-    queryset = RunnerProfile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated and IsRunner]
 
-    def retrieve(self, request, pk=None):
-        queryset = RunnerProfile.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = ProfileSerializer(user)
-        return Response(serializer.data)
+    def get_queryset(self):
+
+        return RunnerProfile.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+
+        serializer.save(author=self.request.user)
+
 
 class DashboardResume(viewsets.ModelViewSet):
-    
+
     """
-    uses to upload pictures to ui dashboard
+    uses to update resume for only runner dashboard
     """
 
-    queryset = RunnerResume.objects.all()
     serializer_class = UserResumeDetailsSerializer
-    permissions_classes = [IsOwner]
+    permissions_classes = [IsAuthenticated and IsRunner]
 
+    def get_queryset(self):
+
+        return RunnerResume.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+
+        serializer.save(author=self.request.user)
 
 
 class AccountStatus(viewsets.ModelViewSet):
-    
+
     """
     uses to upload pictures to ui dashboard
     """
@@ -62,7 +81,16 @@ class PhotoUpload(viewsets.ModelViewSet):
 
     queryset = Photo.objects.all()
     serializer_class = PhotosSerializer
-    permissions_classes = [IsOwner]
+    permissions_classes = [IsAuthenticated and IsRunner]
+
+    def get_queryset(self):
+        if self.request.method == "GET":
+            return Photo.objects.all()
+        else:
+            return Photo.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
 class VideoUpload(viewsets.ModelViewSet):
@@ -73,17 +101,19 @@ class VideoUpload(viewsets.ModelViewSet):
 
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
-    permissions_classes = [IsOwner]
+    permissions_classes = [IsAuthenticated and IsRunner]
+
 
 class ReviewView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permissions_classes = [IsOwnerOrReadonly]
+    permissions_classes = [IsAuthenticated]
+
 
 class SearchProfile(viewsets.ModelViewSet):
 
@@ -112,3 +142,34 @@ class SearchProfile(viewsets.ModelViewSet):
         "id",
     ]
     ordering_fields = "__all__"
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
+
+
+class UserSearchDetails(viewsets.ViewSet):
+    """
+    A simple ViewSet for listing or retrieving users.
+    which include view count for each unique ip
+    """
+
+    def retrieve(self, request, pk=None):
+
+        ip = get_client_ip(request)
+        profile = RunnerProfile.objects.get(author=pk)
+        history_tracker(request, profile)
+        if IpModel.objects.filter(ip=ip).exists():
+            profile.views.add(IpModel.objects.get(ip=ip))
+        else:
+            IpModel.objects.create(ip=ip)
+            profile.views.add(IpModel.objects.get(ip=ip))
+        queryset = RunnerProfile.objects.all()
+        profile = get_object_or_404(queryset, author=pk)
+        serializer = UserSearchDetialSerializer(profile)
+        return Response(serializer.data)
