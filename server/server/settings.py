@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "ckeditor",
     # "hitcount",
     # Local
+    "forum",
     "history",
     "chatserver",
     "accounts",
