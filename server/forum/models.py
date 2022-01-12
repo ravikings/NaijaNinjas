@@ -22,6 +22,7 @@ class Forum(models.Model):
         ordering = ("created",)
 
 
+
 class Comment(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="author_comment"

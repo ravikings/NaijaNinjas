@@ -22,7 +22,11 @@ class ForumSerializer(serializers.ModelSerializer):
     """
 
     forum_comment = CommentSerializer(read_only=True, many=True)
+    total_comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Forum
         fields = "__all__"
+
+    def get_total_comments(self, instance, pk=None):
+        return Comment.objects.filter(forum=pk).count()
