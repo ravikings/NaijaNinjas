@@ -1,30 +1,24 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Link} from 'react-router-dom';
 import Header from './../Layout/Header';
 import Footer from './../Layout/Footer';
 import Sidebar from './../Element/Sidebar';
-
+import * as bi from 'react-icons/bi';
+import * as gr  from 'react-icons/gr';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 //Images
 var bnr = require('./../../images/banner/bnr1.jpg');
 
 function Blogdetail(){
+	const [showIcon,setShowIcon]=useState(true);
+	const [key,setkey]=useState([1,2]);
+	const [detailsValue,setDetailsValue]= useState();
 	return(
 		<>
 			<Header />
 			<div className="page-content bg-white">
-				<div className="dez-bnr-inr overlay-black-middle" style={{backgroundImage:"url(" + bnr + ")" }}>
-					<div className="container">
-						<div className="dez-bnr-inr-entry">
-							<h1 className="text-white">Blog Details</h1>	
-							<div className="breadcrumb-row">
-								<ul className="list-inline">
-									<li><Link to={"#"}>Home</Link></li>
-									<li>Blog Details</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				<div className="content-area">
 					<div className="container">
 						<div className="row">
@@ -104,99 +98,123 @@ function Blogdetail(){
 								</div>
 								<div className="clear" id="comment-list">
 									<div className="comments-area" id="comments">
-										<h2 className="comments-title">8 Comments</h2>
+										<h2 className="comments-title">8 Answers</h2>
 										<div className="clearfix m-b20">
 											
 											<ol className="comment-list">
 												<li className="comment">
 													<div className="comment-body">
+														
 														<div className="comment-author vcard"> 
-															<img  className="avatar photo" src={require("./../../images/testimonials/pic1.jpg")} alt="" /> 	<cite className="fn">Stacy poe</cite> <span className="says">says:</span> 
+														
+													
+																<cite className="fn">Stacy poe</cite> <span className="says">says:</span> 
+														<div className="vote text-center">
+														<bi.BiUpArrow className="thumb" />
+														<p>5</p>
+														<bi.BiDownArrow className="thumb"/>
+
+														
 														</div>
+														</div>
+														
 														<div className="comment-meta"> <Link to={""}>October 6, 2015 at 7:15 am</Link> </div>
+
 														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neqnsectetur adipiscing elit. Nam viae neqnsectetur adipiscing elit.
 															Nam vitae neque vitae sapien malesuada aliquet. </p>
-														<div className="reply"> <Link to={""} className="comment-reply-link">Reply</Link> </div>
-													</div>
-													<ol className="children">
-														<li className="comment odd parent">
-															<div className="comment-body">
-																<div className="comment-author vcard"> <img  className="avatar photo" src={require("./../../images/testimonials/pic2.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
-																<div className="comment-meta"> <Link to={""}>October 6, 2015 at 7:15 am</Link> </div>
-																<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-																	In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-																	ac elementum ligula blandit ac.</p>
-																<div className="reply"> <Link to={""} className="comment-reply-link">Reply</Link> </div>
-															</div>
-															<ol className="children">
-																<li className="comment odd parent">
-																	<div className="comment-body">
-																		<div className="comment-author vcard"> <img  className="avatar photo" src={require("./../../images/testimonials/pic3.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
-																		<div className="comment-meta"> <Link to={""}>October 6, 2015 at 7:15 am</Link> </div>
-																		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-																			In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-																			ac elementum ligula blandit ac.</p>
-																		<div className="reply"> <Link to={""} className="comment-reply-link">Reply</Link> </div>
-																	</div>
-																</li>
-															</ol>
+															<div className="reply">
+																	{/* share social network start */}
+													<div className="social-share">
+        <label className="toggle" htmlFor="toggle">
+          <input type="checkbox" id="toggle" />
+          <div className="sbtn" onClick={()=>setShowIcon(!showIcon)}>
+			
+			
+			<bi.BiShareAlt />
+			
+          
+            <div className="social">
+              <a href="#"><gr.GrFacebook /></a>
+              <a href="#"><gr.GrTwitter /></a>
+              <a href="#"><gr.GrInstagram /></a>
+              <a href="#"><gr.GrLinkedin /></a>
+           
+            </div>
+          </div>
+        </label>
+      </div>
+
+													{/* share social network end */}
 															
-														</li>
-													</ol>
+															</div>
+													</div>
+												
 												</li>
 												<li className="comment">
 													<div className="comment-body">
+														
 														<div className="comment-author vcard"> 
-														<img  className="avatar photo" src={require("./../../images/testimonials/pic1.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
+															 
+													
+																<cite className="fn">Stacy poe</cite> <span className="says">says:</span> 
+														<div className="vote text-center">
+														<bi.BiUpArrow className="thumb" />
+														<p>5</p>
+														<bi.BiDownArrow className="thumb"/>
+
+														
+														</div>
+														</div>
+														
 														<div className="comment-meta"> <Link to={""}>October 6, 2015 at 7:15 am</Link> </div>
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-															In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-															ac elementum ligula blandit ac.</p>
-														<div className="reply"> <Link to={""} className="comment-reply-link">Reply</Link> </div>
+
+														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neqnsectetur adipiscing elit. Nam viae neqnsectetur adipiscing elit.
+															Nam vitae neque vitae sapien malesuada aliquet. </p>
+															<div className="reply">
+																	{/* share social network start */}
+													<div className="social-share">
+        <label className="toggle" htmlFor="toggle1">
+          <input type="checkbox" id="toggle1" />
+          <div className="sbtn" onClick={()=>setShowIcon(!showIcon)}>
+			
+			
+			<bi.BiShareAlt />
+			
+          
+            <div className="social">
+              <a href="#"><gr.GrFacebook /></a>
+              <a href="#"><gr.GrTwitter /></a>
+              <a href="#"><gr.GrInstagram /></a>
+              <a href="#"><gr.GrLinkedin /></a>
+           
+            </div>
+          </div>
+        </label>
+      </div>
+
+													{/* share social network end */}
+															
+															</div>
 													</div>
+												
 												</li>
-												<li className="comment">
-													<div className="comment-body">
-														<div className="comment-author vcard"> 
-														<img  className="avatar photo" src={require("./../../images/testimonials/pic2.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
-														<div className="comment-meta"> <Link to={""}>October 6, 2015 at 7:15 am</Link> </div>
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-															In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-															ac elementum ligula blandit ac.</p>
-														<div className="reply"> <Link to={""} className="comment-reply-link">Reply</Link> </div>
-													</div>
-												</li>
-												<li className="comment">
-													<div className="comment-body">
-														<div className="comment-author vcard"> 
-														<img  className="avatar photo" src={require("./../../images/testimonials/pic3.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
-														<div className="comment-meta"> <Link to={""}>October 6, 2015 at 7:15 am</Link> </div>
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-															In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-															ac elementum ligula blandit ac.</p>
-														<div className="reply"> <Link to={""} className="comment-reply-link">Reply</Link> </div>
-													</div>
-												</li>
+											
 											</ol>
 										
 											<div className="comment-respond" id="respond">
-												<h4 className="comment-reply-title" id="reply-title">Leave a Reply <small> <Link to={""} style={{display:"none"}} id="cancel-comment-reply-link" rel="nofollow">Cancel reply</Link> </small> </h4>
+												<h4 className="comment-reply-title" id="reply-title">Your Answer <small> <Link to={""} style={{display:"none"}} id="cancel-comment-reply-link" rel="nofollow">Cancel reply</Link> </small> </h4>
 												<form className="comment-form" id="commentform" method="post" action="http://sedatelab.com/developer/donate/wp-comments-post.php">
-													<p className="comment-form-author">
-														<label htmlFor="author">Name <span className="required">*</span></label>
-														<input type="text" defaultValue="Author" name="Author"  placeholder="Author" id="author" />
-													</p>
-													<p className="comment-form-email">
-														<label htmlFor="email">Email <span className="required">*</span></label>
-														<input type="text" defaultValue="email" placeholder="Email" name="email" id="email" />
-													</p>
-													<p className="comment-form-url">
-														<label htmlFor="url">Website</label>
-														<input type="text"  defaultValue="url"  placeholder="Website"  name="url" id="url" />
-													</p>
+													
+													
 													<p className="comment-form-comment">
 														<label htmlFor="comment">Comment</label>
-														<textarea rows="8" name="comment" placeholder="Comment" id="comment"></textarea>
+														<Editor
+  editorState={detailsValue}
+  toolbarClassName="toolbarClassName"
+  wrapperClassName="wrapperClassName"
+  editorClassName="editorClassName"
+  onEditorStateChange={(e)=>setDetailsValue(e)}
+/>
 													</p>
 													<p className="form-submit">
 														<input type="submit" defaultValue="Post Comment" className="submit site-button" id="submit" name="submit" />
@@ -215,6 +233,7 @@ function Blogdetail(){
 					</div>
 				</div>
 			</div>	
+			
 			<Footer />
 		</>	
 	)			

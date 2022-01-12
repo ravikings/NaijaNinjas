@@ -27,9 +27,7 @@ function Blogdetailgridsidebar(){
 		<>
 			<Header />
 			<div className="page-content bg-white">
-				<div className="dez-bnr-inr overlay-black-middle" style={{backgroundImage:"url(" + bnr +" )" }}>
-					<PageTitle motherName="Home" activeName="Blog Detailed Grid Sidebar" />
-				</div>
+			
 				<div className="content-area">
 					<div className="container">
 						<div className="row">

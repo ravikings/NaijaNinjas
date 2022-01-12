@@ -193,3 +193,156 @@ a.attachment-box:hover i {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
 }
+.vote{
+    position: absolute;
+    top: 15%;
+    left: -85px;
+    width: 56px;
+    height: 56px;
+}
+.thumb{
+    font-size: 30px;
+    color:#253FE9;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+
+}
+.vote p{
+   font-size: 21px;
+   font-weight: bolder;
+}
+
+/* social icon share start */
+.social-share {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sbtn {
+    height: 57px;
+    width: 55px;
+    border-radius: 50%;
+    box-shadow: 4px 2px 10px 1px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    position: relative;
+    background: #fff;
+    z-index: 100;
+    right: 0;
+  }
+  .sbtn .fa-share-alt {
+    margin-right: 2px;
+  }
+  .sbtn > i:hover {
+    color: #405de6;
+  }
+  .sbtn:active:not(:focus-within) {
+    box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.2) inset;
+  }
+  .sbtn:active:not(:focus-within) > i {
+    transform: translate(0.8px, 0.8px);
+  }
+  
+  .social {
+    box-shadow: 4px 2px 10px 1px rgb(0 0 0 / 20%);
+    position: absolute;
+    top: -70px;
+    display: none;
+    justify-content: space-between;
+    background-color: white;
+    padding: 10px 38px;
+    border-radius: 50px;
+    right: -8px;
+  }
+  .toggle input[type="checkbox"]:checked + .sbtn .social {
+    animation: fadeIn 1s;
+    display: flex;
+  }
+  .toggle input[type="checkbox"]:not(:checked) + .sbtn .social {
+    animation: fadeOut 1s;
+  }
+  
+  .toggle input[type="checkbox"]:checked + .sbtn .fa-share-alt {
+    display: none;
+  }
+  .toggle input[type="checkbox"]:not(:checked) + .sbtn .fa-times {
+    display: none;
+  }
+  .social a {
+    margin: 0 15px;
+    font-size: 32px;
+    color: #999 !important;
+    text-decoration: none;
+  }
+  .social a:before {
+    content: "" !important;
+    font-weight: normal;
+    color: #555555;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  
+  .fa-twitter:hover {
+    color: rgb(29, 161, 242);
+  }
+  .fa-instagram-square:hover {
+    background: -webkit-linear-gradient(
+      #405de6,
+      #5851db,
+      #833ab4,
+      #c13584,
+      #e1306c,
+      #fd1d1d,
+      #f56040,
+      #f77737,
+      #fcaf45,
+      #ffdc80
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .fa-vk:hover {
+    color: #4c75a3;
+  }
+  
+  .fa-behance-square:hover {
+    color: black;
+  }
+  
+  input[type="checkbox"] {
+    display: none;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .vote{
+        position: absolute;
+        top: 15%;
+        left: -70px;
+        width: 56px;
+        height: 56px;
+    }
+  }
+/* social icon share end */
