@@ -38,11 +38,11 @@ class DashboardProfile(viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        return RunnerProfile.objects.filter(author=self.request.user)
+        return RunnerProfile.objects.filter(author=self.request.user.id)
 
     def perform_create(self, serializer):
 
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user.id)
 
 
 class DashboardResume(viewsets.ModelViewSet):
