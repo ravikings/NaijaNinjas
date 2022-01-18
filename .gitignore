@@ -26,3 +26,5 @@ note.txt
 *.pyc
 *.json
 server/db.sqlite3
+*.pyc
+*.pyc

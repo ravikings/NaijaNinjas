@@ -18,6 +18,15 @@ class ForumList(viewsets.ViewSet):
     def list(self, request):
         queryset = Forum.objects.all()
         serializer = ForumSerializer(queryset, many=True)
+
+        from datetime import datetime, timedelta
+        from pytz import timezone
+        import pytz
+
+        utc = pytz.utc
+        x = utc.zone
+        print("heloo people")
+        print(x)
         return Response(serializer.data)
 
 

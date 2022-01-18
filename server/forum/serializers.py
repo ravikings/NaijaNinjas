@@ -1,19 +1,46 @@
 from rest_framework import serializers
 from forum.models import Forum, Comment
+from accounts.models import RunnerProfile
+import datetime
 
 
 class CommentSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
+
     total_votes = serializers.SerializerMethodField()
+    author_name = serializers.SerializerMethodField()
+    time_created = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = "__all__"
+        exclude = ("updated", "created")
 
     def get_total_votes(self, instance):
         return instance.number_of_votes()
+
+    def get_time_created(self, instance):
+        dateTimeObj = instance.created
+        timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
+        time_difference = instance.updated - dateTimeObj
+        if int(time_difference.seconds) >= 60:
+            return {"Updated": timestampStr}
+
+        else:
+            return {"Created": timestampStr}
+
+    def get_author_name(self, instance):
+        profile = RunnerProfile.objects.filter(author_id=instance.author_id)
+        try:
+            data = profile.values("first_name")[0].get("first_name")
+            return data
+
+        except:
+            print("author not found")
+
+        else:
+            return None
 
 
 class ForumSerializer(serializers.ModelSerializer):
@@ -23,10 +50,34 @@ class ForumSerializer(serializers.ModelSerializer):
 
     forum_comment = CommentSerializer(read_only=True, many=True)
     total_comments = serializers.SerializerMethodField()
+    author_name = serializers.SerializerMethodField()
+    time_created = serializers.SerializerMethodField()
 
     class Meta:
         model = Forum
-        fields = "__all__"
+        exclude = ("updated", "created")
 
     def get_total_comments(self, instance, pk=None):
         return Comment.objects.filter(forum=pk).count()
+
+    def get_time_created(self, instance):
+        dateTimeObj = instance.created
+        timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
+        time_difference = instance.updated - dateTimeObj
+        if int(time_difference.seconds) >= 60:
+            return {"Updated": timestampStr}
+
+        else:
+            return {"Created": timestampStr}
+
+    def get_author_name(self, instance):
+        profile = RunnerProfile.objects.filter(author_id=instance.author_id)
+        try:
+            data = profile.values("first_name")[0].get("first_name")
+            return data
+
+        except:
+            print("author not found")
+
+        else:
+            return None

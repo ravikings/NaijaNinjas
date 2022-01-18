@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from forum.views import ForumView,ForumList, CommentView, CommentVotes
+from forum.views import ForumView, ForumList, CommentView, CommentVotes
 
 router = DefaultRouter()
 router.register(r"detail", ForumView, basename="forum-dashboard")
