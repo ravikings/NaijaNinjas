@@ -139,7 +139,14 @@ class SearchProfile(viewsets.ModelViewSet):
         "local_goverment_zone",
     ]
     search_fields = [
-        "id",
+        "title",
+        "location",
+        "salary",
+        "postcode",
+        "description",
+        "state",
+        "city",
+        "local_goverment_zone",
     ]
     ordering_fields = "__all__"
 

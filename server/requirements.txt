@@ -1,7 +1,7 @@
 dj-rest-auth
 django-allauth
 django==4.0
-djangorestframework
+djangorestframework==3.13.1
 pytz
 djangorestframework-simplejwt
 django-cors-headers

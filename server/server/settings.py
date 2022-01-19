@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "channels",
     "ckeditor",
+    "django_filters",
     # "hitcount",
     # Local
     "forum",

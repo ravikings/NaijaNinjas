@@ -5,29 +5,25 @@ from forum.serializers import CommentSerializer, ForumSerializer
 from forum.models import Forum, Comment
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
-
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
 
-class ForumList(viewsets.ViewSet):
+# class ForumList(viewsets.ViewSet):
+class ForumList(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
     """
 
-    def list(self, request):
-        queryset = Forum.objects.all()
-        serializer = ForumSerializer(queryset, many=True)
+    queryset = Forum.objects.all()
+    serializer_class = ForumSerializer
 
-        from datetime import datetime, timedelta
-        from pytz import timezone
-        import pytz
-
-        utc = pytz.utc
-        x = utc.zone
-        print("heloo people")
-        print(x)
-        return Response(serializer.data)
+    # def list(self, request):
+    #     queryset = Forum.objects.all()
+    #     serializer = ForumSerializer(queryset, many=True)
+    #     return Response(serializer.data)
 
 
 class ForumView(viewsets.ModelViewSet):
@@ -72,3 +68,15 @@ class CommentVotes(viewsets.ViewSet):
             comment.votes.add(request.user)
             data = {"vote": True}
         return Response(data)
+
+
+class SearchForum(viewsets.ModelViewSet):
+
+    search_fields = ["title", "body", "tags", "category"]
+    queryset = Forum.objects.all()
+    serializer_class = ForumSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
