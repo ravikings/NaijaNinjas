@@ -9,9 +9,10 @@ from ckeditor.fields import RichTextField
 
 class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
-    phone_number = models.CharField(max_length=12, unique=True)
+    phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
-
+    class Meta:
+        models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)
