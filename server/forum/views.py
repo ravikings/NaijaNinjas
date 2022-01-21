@@ -48,13 +48,13 @@ class CommentView(viewsets.ModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    # permissions_classes = [IsAuthenticated]
+    permissions_classes = [IsAuthenticated]
 
 
 class CommentVotes(viewsets.ViewSet):
     """
-    A simple ViewSet for listing or retrieving users.
-    which include view count for each unique ip
+    A simple ViewSet for voting for users.
+    which include id pass will be the comment id
     """
 
     permissions_classes = [IsAuthenticated]

@@ -93,11 +93,3 @@ class ForumSerializer(serializers.ModelSerializer):
         else:
             return None
 
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     similar_posts = Forum.objects.filter(tags__in=[instance.tags]).exclude(id=instance.id)
-    #     data = similar_posts.annotate(same_tags=Count('tags'))\
-    #                             .order_by('-same_tags','-created')[:5]
-    #     #d = similar_posts.values_list(flat=True)
-    #     representation['admin'] = data
-    #     return representation

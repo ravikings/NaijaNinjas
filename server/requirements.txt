@@ -14,3 +14,4 @@ django-filter==21.1
 django-redis
 pytz
 black
+PyJWT==2.3.0
