@@ -21,9 +21,10 @@ from .serializers import (
     UserProfileSearchSerializer,
     ProfileSerializer,
     UserAccountSerializer,
-    UserResumeDetailsSerializer,
+    RunnerProfileSerializer,
     ReviewSerializer,
     UserSearchDetialSerializer,
+    UserResumeSerializer
 )
 
 
@@ -51,7 +52,7 @@ class DashboardResume(viewsets.ModelViewSet):
     uses to update resume for only runner dashboard
     """
 
-    serializer_class = UserResumeDetailsSerializer
+    serializer_class = UserResumeSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
 
     def get_queryset(self):
@@ -121,7 +122,17 @@ class SearchProfile(viewsets.ModelViewSet):
     uses for search engine for the application
     """
 
-    queryset = RunnerProfile.objects.all()
+    search_fields = [
+        "title",
+        "location",
+        "salary",
+        "postcode",
+        "description",
+        "state",
+        "city",
+        "local_goverment_zone",
+    ]
+    queryset = RunnerProfile.objects.all() 
     serializer_class = UserProfileSearchSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -138,17 +149,8 @@ class SearchProfile(viewsets.ModelViewSet):
         "city",
         "local_goverment_zone",
     ]
-    search_fields = [
-        "title",
-        "location",
-        "salary",
-        "postcode",
-        "description",
-        "state",
-        "city",
-        "local_goverment_zone",
-    ]
-    ordering_fields = "__all__"
+
+    #ordering_fields = "__all__"
 
 
 def get_client_ip(request):
@@ -180,3 +182,13 @@ class UserSearchDetails(viewsets.ViewSet):
         profile = get_object_or_404(queryset, author=pk)
         serializer = UserSearchDetialSerializer(profile)
         return Response(serializer.data)
+
+
+class TestView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    queryset = RunnerProfile.objects.all()
+    serializer_class = UserProfileSearchSerializer

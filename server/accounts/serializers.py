@@ -114,43 +114,42 @@ class ReviewSerializer(serializers.ModelSerializer):
     #     return mark_safe(representation)
 
 
-class UserResumeDetailsSerializer(serializers.ModelSerializer):
+class RunnerProfileSerializer(serializers.ModelSerializer):
     """
     resume serializers use for entry data for resume from ui
     """
 
     class Meta:
-        model = RunnerResume
+        model = RunnerProfile
         fields = "__all__"
 
 
-class UserResumeSearchSerializer(serializers.ModelSerializer):
+class UserResumeSerializer(serializers.ModelSerializer):
     """
     resume search serializers use for entry data for resume from ui
     """
 
     class Meta:
         model = RunnerResume
-        fields = (
-            "skills",
-            "employment",
-        )
-
+        fields = "__all__"
+        
 
 class UserProfileSearchSerializer(serializers.ModelSerializer):
 
-    resume = UserResumeSearchSerializer(read_only=True, many=True)
+    user_profile = UserResumeSerializer(read_only=True, many=True)
 
     class Meta:
         model = RunnerProfile
-        fields = (
-            "author",
-            "first_name",
-            "title",
-            "location",
-            "salary",
-            "resume",
-        )
+        # fields = (
+        #     "author",
+        #     "first_name",
+        #     "title",
+        #     "location",
+        #     "salary",
+        #     "user_profile",
+    
+        # )
+        fields = "__all__"
 
 
 class UserAccountSerializer(serializers.ModelSerializer):
