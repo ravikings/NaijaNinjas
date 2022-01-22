@@ -73,7 +73,7 @@ class ForumSerializer(serializers.ModelSerializer):
         data = (
             similar_posts.annotate(same_tags=Count("tags"))
             .order_by("-same_tags", "-created")
-            .values_list()[:5]
+            .values()[:5]
         )
         return data
 
