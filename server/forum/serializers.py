@@ -1,8 +1,11 @@
+import re
+import json
 from rest_framework import serializers
 from forum.models import Forum, Comment
 from accounts.models import RunnerProfile
 import datetime
 from django.db.models import Count
+from django.http import JsonResponse
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -38,7 +41,7 @@ class CommentSerializer(serializers.ModelSerializer):
             return data
 
         except:
-            print("author not found")
+            return {"error": "author not found"}
 
         else:
             return None
@@ -63,12 +66,15 @@ class ForumSerializer(serializers.ModelSerializer):
         return Comment.objects.filter(forum=pk).count()
 
     def get_similar_posts(self, instance, pk=None):
-        similar_posts = Forum.objects.filter(tags__in=list(instance.tags)).exclude(
+
+        similar_posts = Forum.objects.filter(tags__icontains=instance.tags).exclude(
             id=instance.id
         )
-        data = similar_posts.annotate(same_tags=Count("tags")).order_by(
-            "-same_tags", "-created"
-        )[:5]
+        data = (
+            similar_posts.annotate(same_tags=Count("tags"))
+            .order_by("-same_tags", "-created")
+            .values_list()[:5]
+        )
         return data
 
     def get_time_created(self, instance):
@@ -88,8 +94,7 @@ class ForumSerializer(serializers.ModelSerializer):
             return data
 
         except:
-            print("author not found")
+            return {"eror": "author not found"}
 
         else:
             return None
-

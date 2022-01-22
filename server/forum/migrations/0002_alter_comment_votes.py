@@ -8,13 +8,15 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('forum', '0001_initial'),
+        ("forum", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='comment',
-            name='votes',
-            field=models.ManyToManyField(blank=True, related_name='votes_forum', to=settings.AUTH_USER_MODEL),
+            model_name="comment",
+            name="votes",
+            field=models.ManyToManyField(
+                blank=True, related_name="votes_forum", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

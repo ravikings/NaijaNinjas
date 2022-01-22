@@ -28,7 +28,9 @@ class Comment(models.Model):
         related_name="author_comment",
     )
     body = RichTextField()
-    votes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="votes_forum", blank=True)
+    votes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="votes_forum", blank=True
+    )
     forum = models.ForeignKey(
         Forum, on_delete=models.CASCADE, related_name="forum_comment"
     )
