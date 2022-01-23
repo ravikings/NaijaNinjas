@@ -150,7 +150,7 @@ class SearchProfile(viewsets.ModelViewSet):
         "local_goverment_zone",
     ]
 
-    #ordering_fields = "__all__"
+    ordering_fields = "__all__"
 
 
 def get_client_ip(request):
