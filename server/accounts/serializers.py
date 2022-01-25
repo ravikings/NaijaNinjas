@@ -132,7 +132,7 @@ class UserResumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RunnerResume
         fields = "__all__"
-        
+
 
 class UserProfileSearchSerializer(serializers.ModelSerializer):
 
@@ -147,7 +147,7 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
         #     "location",
         #     "salary",
         #     "user_profile",
-    
+
         # )
         fields = "__all__"
 

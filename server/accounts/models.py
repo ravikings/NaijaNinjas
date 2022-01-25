@@ -79,7 +79,6 @@ class RunnerProfile(models.Model):
         return self.reviews.count()
 
 
-
 class RunnerResume(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"

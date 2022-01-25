@@ -24,7 +24,7 @@ from .serializers import (
     RunnerProfileSerializer,
     ReviewSerializer,
     UserSearchDetialSerializer,
-    UserResumeSerializer
+    UserResumeSerializer,
 )
 
 
@@ -132,7 +132,7 @@ class SearchProfile(viewsets.ModelViewSet):
         "city",
         "local_goverment_zone",
     ]
-    queryset = RunnerProfile.objects.all() 
+    queryset = RunnerProfile.objects.all()
     serializer_class = UserProfileSearchSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -185,7 +185,7 @@ class UserSearchDetails(viewsets.ViewSet):
 
 
 class TestView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """

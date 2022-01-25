@@ -62,6 +62,16 @@ class CommentVotes(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         comment = get_object_or_404(Comment, id=pk)
+
+        from django.core.mail import send_mail
+
+        send_mail(
+            "Django mail",
+            "This e-mail was sent with Django i just voted.",
+            "barry.shoki1@gmail.com",
+            ["barry.shoki1@gmail.com"],
+            fail_silently=False,
+        )
         if comment.votes.filter(id=request.user.id).exists():
             comment.votes.remove(request.user)
             data = {"vote": False}

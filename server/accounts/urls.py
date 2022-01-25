@@ -9,7 +9,7 @@ from accounts.views import (
     ReviewView,
     UserSearchDetails,
     DashboardResume,
-    TestView
+    TestView,
 )
 
 

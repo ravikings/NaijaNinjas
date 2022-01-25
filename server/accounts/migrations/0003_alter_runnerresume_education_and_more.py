@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_alter_accountuser_options_and_more'),
+        ("accounts", "0002_alter_accountuser_options_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='runnerresume',
-            name='education',
+            model_name="runnerresume",
+            name="education",
             field=models.TextField(blank=True, db_index=True, null=True),
         ),
         migrations.AlterField(
-            model_name='runnerresume',
-            name='employment',
+            model_name="runnerresume",
+            name="employment",
             field=models.TextField(blank=True, db_index=True, null=True),
         ),
         migrations.AlterField(
-            model_name='runnerresume',
-            name='projects',
+            model_name="runnerresume",
+            name="projects",
             field=models.TextField(blank=True, db_index=True, null=True),
         ),
         migrations.AlterField(
-            model_name='runnerresume',
-            name='skills',
+            model_name="runnerresume",
+            name="skills",
             field=models.TextField(blank=True, db_index=True, null=True),
         ),
     ]

@@ -15,3 +15,4 @@ django-redis
 pytz
 black
 PyJWT==2.3.0
+python-dotenv
