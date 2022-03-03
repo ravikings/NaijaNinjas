@@ -3,7 +3,8 @@ import React from "react";
 function AboutMe(props) {
   return (
     <div>
-      <p>
+        <div>
+        <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae eius
         expedita iure quae quis sunt tempora. Accusamus neque pariatur quasi
         quibusdam tempore! Adipisci aspernatur doloremque, magnam maiores minima
@@ -25,7 +26,13 @@ function AboutMe(props) {
         numquam odio omnis quae quo quod reiciendis similique sit, totam ullam
         unde. Ab, natus velit?
       </p>
+        </div>
+        <div className="actions">
+            <button className="site-button"> <i className="fa fa-comments-o  mr-2"></i> Message</button>
+            <button className="site-button btn-outlined ml-4"><i className="fa fa-phone mr-2"></i> Request a Call</button>
+        </div>
     </div>
+
   );
 }
 
