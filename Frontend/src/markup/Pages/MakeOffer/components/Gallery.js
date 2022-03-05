@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 const photos = [
   {
@@ -29,6 +31,17 @@ const photos = [
 ];
 
 function Gallery(props) {
+
+  const [open,setOpen]=useState(false);
+  const [photoIndex,setPhotoIndex]=useState(0);
+
+
+  const handleSetOpen=(index)=>{
+    setOpen(true);
+    setPhotoIndex(index)
+  }
+
+
   return (
     <div className="container">
       <ul className="sp10 grid portfolio-box">
@@ -48,7 +61,7 @@ function Gallery(props) {
                     <a
                       className="mfp-link"
                       title="Image Title Come Here"
-                      href="images/gallery/masonry/img6.jpg"
+                      onClick={()=>handleSetOpen(index)} 
                     >
                       {" "}
                       <i className="ti-fullscreen"></i>{" "}
@@ -60,6 +73,18 @@ function Gallery(props) {
           </li>
         ))}
       </ul>
+
+
+      {open && (
+          <Lightbox
+            mainSrc={photos[photoIndex].url}
+            nextSrc={photos[(photoIndex + 1) % photos.length].url}
+            prevSrc={photos[(photoIndex + photos.length - 1) % photos.length].url}
+            onCloseRequest={() => setOpen(false)}
+            onMovePrevRequest={()=>setPhotoIndex(photoIndex - 1)}
+            onMoveNextRequest={()=>setPhotoIndex(photoIndex + 1)}
+          />
+        )}
     
     </div>
   );
