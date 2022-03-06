@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import AboutMe from "./AboutMe";
 import { Tab, Tabs } from "@material-ui/core";
-import Photos from "./Photos";
-import Videos from "./Videos";
-import Resume from "./Resume";
 import { useStyles } from "../MakeOfferStyles";
+import {AboutMe,Gallery,Resume,Services} from './'
+
 
 function TabsGroup(props) {
   const classes = useStyles();
@@ -20,11 +18,11 @@ function TabsGroup(props) {
       case 0:
         return <AboutMe />;
       case 1:
-        return <Photos />;
+        return <Services />;
       case 2:
-        return <Videos />;
-      default:
         return <Resume />;
+      default:
+        return <Gallery />;
     }
   };
 
@@ -39,9 +37,9 @@ function TabsGroup(props) {
           aria-label="disabled tabs example"
         >
           <Tab className={classes.tab} label="About Me" />
-          <Tab className={classes.tab} label="Photos" />
-          <Tab className={classes.tab} label="Videos" />
+          <Tab className={classes.tab} label="Services" />
           <Tab className={classes.tab} label="Resume" />
+          <Tab className={classes.tab} label="Gallery" />
         </Tabs>
       </div>
       {renderSelectedTab()}
