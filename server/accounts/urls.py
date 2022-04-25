@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import (
+from accounts.views import (
     PhotoUpload,
     VideoUpload,
     SearchProfile,
@@ -9,6 +9,7 @@ from .views import (
     ReviewView,
     UserSearchDetails,
     DashboardResume,
+    TestView,
 )
 
 
@@ -20,6 +21,7 @@ router.register(r"video", VideoUpload, basename="dashboard-videos")
 router.register(r"search", SearchProfile, basename="search")
 router.register(r"user-status", AccountStatus, basename="user-status")
 router.register(r"user-review", ReviewView, basename="user-review")
+router.register(r"test", TestView, basename="test-view")
 router.register(
     r"user-search-detials/", UserSearchDetails, basename="user-search-detials"
 )

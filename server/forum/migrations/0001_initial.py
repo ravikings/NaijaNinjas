@@ -11,41 +11,89 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('accounts', '0001_initial'),
+        ("accounts", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Forum',
+            name="Forum",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, db_index=True, max_length=255)),
-                ('body', ckeditor.fields.RichTextField(db_index=True)),
-                ('tags', models.CharField(blank=True, db_index=True, max_length=255)),
-                ('category', models.CharField(blank=True, db_index=True, max_length=255)),
-                ('attachment', models.FileField(blank=True, upload_to='forum/documents/%Y/%m/%d/')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='authorforum', to='accounts.accountuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, db_index=True, max_length=255)),
+                ("body", ckeditor.fields.RichTextField(db_index=True)),
+                ("tags", models.CharField(blank=True, db_index=True, max_length=255)),
+                (
+                    "category",
+                    models.CharField(blank=True, db_index=True, max_length=255),
+                ),
+                (
+                    "attachment",
+                    models.FileField(blank=True, upload_to="forum/documents/%Y/%m/%d/"),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="authorforum",
+                        to="accounts.accountuser",
+                    ),
+                ),
             ],
             options={
-                'ordering': ('created',),
+                "ordering": ("created",),
             },
         ),
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('body', ckeditor.fields.RichTextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('updated', models.DateTimeField(auto_now=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_comment', to='accounts.accountuser')),
-                ('forum', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='forum_comment', to='forum.forum')),
-                ('votes', models.ManyToManyField(related_name='votes_forum', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("body", ckeditor.fields.RichTextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("updated", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="author_comment",
+                        to="accounts.accountuser",
+                    ),
+                ),
+                (
+                    "forum",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="forum_comment",
+                        to="forum.forum",
+                    ),
+                ),
+                (
+                    "votes",
+                    models.ManyToManyField(
+                        related_name="votes_forum", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
-                'ordering': ('created',),
+                "ordering": ("created",),
             },
         ),
     ]

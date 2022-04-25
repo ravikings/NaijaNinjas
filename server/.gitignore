@@ -28,5 +28,3 @@ note.txt
 server/db.sqlite3
 *.pyc
 *.pyc
-server/db.sqlite3
-server/.env

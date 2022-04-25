@@ -21,9 +21,10 @@ from .serializers import (
     UserProfileSearchSerializer,
     ProfileSerializer,
     UserAccountSerializer,
-    UserResumeDetailsSerializer,
+    RunnerProfileSerializer,
     ReviewSerializer,
     UserSearchDetialSerializer,
+    UserResumeSerializer,
 )
 
 
@@ -38,11 +39,11 @@ class DashboardProfile(viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        return RunnerProfile.objects.filter(author=self.request.user)
+        return RunnerProfile.objects.filter(author=self.request.user.id)
 
     def perform_create(self, serializer):
 
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user.id)
 
 
 class DashboardResume(viewsets.ModelViewSet):
@@ -51,7 +52,7 @@ class DashboardResume(viewsets.ModelViewSet):
     uses to update resume for only runner dashboard
     """
 
-    serializer_class = UserResumeDetailsSerializer
+    serializer_class = UserResumeSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
 
     def get_queryset(self):
@@ -121,6 +122,16 @@ class SearchProfile(viewsets.ModelViewSet):
     uses for search engine for the application
     """
 
+    search_fields = [
+        "title",
+        "location",
+        "salary",
+        "postcode",
+        "description",
+        "state",
+        "city",
+        "local_goverment_zone",
+    ]
     queryset = RunnerProfile.objects.all()
     serializer_class = UserProfileSearchSerializer
     filter_backends = [
@@ -138,9 +149,7 @@ class SearchProfile(viewsets.ModelViewSet):
         "city",
         "local_goverment_zone",
     ]
-    search_fields = [
-        "id",
-    ]
+
     ordering_fields = "__all__"
 
 
@@ -173,3 +182,13 @@ class UserSearchDetails(viewsets.ViewSet):
         profile = get_object_or_404(queryset, author=pk)
         serializer = UserSearchDetialSerializer(profile)
         return Response(serializer.data)
+
+
+class TestView(viewsets.ModelViewSet):
+
+    """
+    uses to add review to profile
+    """
+
+    queryset = RunnerProfile.objects.all()
+    serializer_class = UserProfileSearchSerializer

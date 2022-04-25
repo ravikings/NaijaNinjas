@@ -23,21 +23,19 @@ class IpModel(models.Model):
         return self.ip
 
 
-class RunnerResume(models.Model):
+class Review(models.Model):
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
     )
-    headline = models.CharField(max_length=255, blank=True, db_index=True)
-    skills = models.TextField(null=True, db_index=True)
-    employment = models.TextField(null=True, db_index=True)
-    education = models.TextField(null=True, db_index=True)
-    projects = models.TextField(null=True, db_index=True)
-    profile_summary = models.CharField(max_length=255, blank=True, db_index=True)
-    accomplishment = models.CharField(max_length=55, blank=True, db_index=True)
-    career_profile = models.CharField(max_length=255, blank=True, db_index=True)
-    postcode = models.CharField(max_length=55, blank=True, db_index=True)
-    description = models.TextField(null=True, db_index=True)
-    attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
+    body = RichTextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+
+    class Meta:
+        ordering = ("created",)
 
 
 class RunnerProfile(models.Model):
@@ -65,9 +63,10 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
-    resumes = models.ManyToManyField(
-        RunnerResume, related_name="user_resume", blank=True
-    )
+    reviews = models.ManyToManyField(Review, related_name="buyers_review", blank=True)
+    # resumes = models.ManyToManyField(
+    #     RunnerResume, related_name="user_resume", blank=True
+    # )
 
     def __str__(self):
         return self.first_name
@@ -94,6 +93,26 @@ class Review(models.Model):
 
     class Meta:
         ordering = ("created",)
+
+
+class RunnerResume(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"
+    )
+    profile = models.ManyToManyField(
+        RunnerProfile, related_name="user_profile", blank=True
+    )
+    headline = models.CharField(max_length=255, blank=True, db_index=True)
+    skills = models.TextField(null=True, db_index=True, blank=True)
+    employment = models.TextField(null=True, db_index=True, blank=True)
+    education = models.TextField(null=True, db_index=True, blank=True)
+    projects = models.TextField(null=True, db_index=True, blank=True)
+    profile_summary = models.CharField(max_length=255, blank=True, db_index=True)
+    accomplishment = models.CharField(max_length=55, blank=True, db_index=True)
+    career_profile = models.CharField(max_length=255, blank=True, db_index=True)
+    postcode = models.CharField(max_length=55, blank=True, db_index=True)
+    description = models.TextField(null=True, db_index=True)
+    attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
 
 
 class Photo(models.Model):

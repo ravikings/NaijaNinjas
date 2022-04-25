@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()  # take environment variables from .env.
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "channels",
     "ckeditor",
+    "django_filters",
     # "hitcount",
     # Local
     "forum",
@@ -204,7 +207,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Africa/Lagos"
 
 USE_I18N = True
 
@@ -231,7 +234,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {"google": {}, "facebook": {}}
 # LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = "accounts.AccountUser"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -246,7 +249,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-import os
 
 LOGGING = {
     "version": 1,
@@ -271,3 +273,13 @@ LOGGING = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 ASGI_APPLICATION = "server.asgi.application"
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')

@@ -17,23 +17,25 @@ class Forum(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-
     class Meta:
         ordering = ("created",)
 
 
 class Comment(models.Model):
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="author_comment"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="author_comment",
     )
     body = RichTextField()
     votes = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="votes_forum"
+        settings.AUTH_USER_MODEL, related_name="votes_forum", blank=True
     )
-    forum = models.ForeignKey(Forum,on_delete=models.CASCADE, related_name="forum_comment")
+    forum = models.ForeignKey(
+        Forum, on_delete=models.CASCADE, related_name="forum_comment"
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
 
     class Meta:
         ordering = ("created",)

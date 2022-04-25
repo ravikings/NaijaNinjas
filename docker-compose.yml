@@ -1,48 +1,30 @@
-# version: '3'
-
-# services:
-
-#   backend:
-#     build: ./server
-#     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-#     volumes:
-#       - ./server:/server/accounts/
-#       - /server/server/accounts
-#     ports:
-#       - "8000:8000"
-
-
-
-
-
-#   # frontend:
-#   #   build: ./frontend
-#   #   depends_on:
-#   #     - backend
-#   #   command: ["npm", "start"]
-#   #   volumes:
-#   #     - ./frontend:/app/frontend
-#   #     - /app/frontend/node_modules
-#   #   ports:
-#   #     - "3000:3000"
-#   #   environment:
-#   #     - CHOKIDAR_USEPOLLING=true
-
-# volumes:
-#   backend:
-
 
 version: '3'
 
 services:
 
   backend:
+  
     build: ./server
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
       - ./server:/server/accounts/
     ports:
       - "8000:8000"
+
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - '.:/frontend/app'
+  #     - '/frontend/app/node_modules'
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+
 
   # redis:
   #   image: "redis:alpine"
