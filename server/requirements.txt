@@ -18,3 +18,4 @@ pytz
 black
 PyJWT==2.3.0
 python-dotenv
+djangorestframework-simplejwt==5.1.0

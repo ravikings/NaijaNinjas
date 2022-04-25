@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.contrib import messages
-from .utils import generate_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -15,6 +14,11 @@ from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from history.signals import history_tracker
+from django.utils.encoding import force_bytes, force_str
+import jwt
+from .utilis import send_verify_email, generate_token
+from rest_framework import status
+from django.conf import settings
 from .models import (
     AccountUser,
     Photo,
@@ -205,20 +209,20 @@ class TestView(viewsets.ModelViewSet):
 
 class ActivateAccountView(APIView):
     def get(self, request, uidb64, token):
+
         try:
+            payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
+            user = AccountUser.objects.get(id=payload['user_id'])
+            if not user.is_email_verified:
+                user.is_email_verified = True
+                user.save()
+            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError as identifier:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = AccountUser.objects.get(pk=uid)
-
-        except Exception as identifier:
-            user = None
-
-        if user.is_email_verified:
-            
-            return redirect('/')
-
-        if user is not None and generate_token.check_token(user, token):
-            user.is_email_verified = True
-            user.save()
-            messages.add_message(request, messages.SUCCESS,'account activated successfully')
-            return Response({"message": "login success"}, status=200)
-        return Response({"error": "verfication unsuccesful"}, status=401)
+            if not user.is_email_verified:
+                current_site = get_current_site(request)
+                send_verify_email(user, current_site, user.email, uid)
+            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as identifier:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)

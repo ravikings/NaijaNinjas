@@ -57,14 +57,14 @@ function RegisterPage(){
                                                 onClick={()=>formik.setFieldValue('is_a_runner', false)}
                                                 variant={!formik.values.is_a_runner?'contained':'outlined'}
                                             >
-                                                Freelancer
+                                                Employer
                                             </RunnerButton>
                                             <RunnerButton
                                                 startIcon={<BusinessCenterOutlinedIcon/>}
                                                 onClick={()=>formik.setFieldValue('is_a_runner', true)}
                                                 variant={formik.values.is_a_runner?'contained':'outlined'}
                                             >
-                                                Employer
+                                                Freelancer
                                             </RunnerButton>
                                         </div>
                                         <div style={{marginBottom:15}} className="form-group">

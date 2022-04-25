@@ -28,7 +28,7 @@ SECRET_KEY = "h@e3z6yev#04x)$kdhp5!+y=q0t2-&)q-#wvbt-h@%dwem=8s#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["http://localhost:8000","http://127.0.0.1:8000", "localhost", ]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "channels",
     "ckeditor",
     "django_filters",
+    'rest_framework_simplejwt',
     # "hitcount",
     # Local
     "forum",
@@ -72,6 +73,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",  # new
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,

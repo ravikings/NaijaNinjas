@@ -21,12 +21,13 @@ from .models import IpModel, RunnerProfile, Review
 from django.core.mail import send_mail, send_mass_mail
 from django.conf import settings
 
-send_mass_mail(
-    "email_subject",
-    "message",
-    settings.EMAIL_HOST_USER,
-    ["sr.rabiu@gmail.com"],
-    fail_silently=False,
-)
+import jwt
+
+token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTE4ODQ1LCJpYXQiOjE2NTA5MTg1NDUsImp0aSI6IjVhODg4ZTkxMTBlOTQwMzdhZDUzNDIxN2ZmYTVhMDM4IiwidXNlcl9pZCI6MTl9.5wFhw1f-SmAmW2MJPqLKhd_YTyMccRKafn-0WAHNFFY"
+
+payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+
 print("hey im printing covid")
 print("email sent")
+
+print(payload)

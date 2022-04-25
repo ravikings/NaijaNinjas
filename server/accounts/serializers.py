@@ -1,6 +1,5 @@
 from django.db import transaction
 from django.conf import settings
-from django.core.mail import EmailMessage, send_mail, send_mass_mail
 from rest_framework import serializers
 from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
@@ -9,7 +8,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
-from .utils import generate_token
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
 from django.db.models import Avg, F, Count
@@ -21,8 +19,8 @@ from accounts.models import (
     Vidoe,
     Review,
 )
-
 from .models import IpModel, RunnerProfile, Review
+from .utilis import send_verify_email
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -49,23 +47,10 @@ class CustomRegisterSerializer(RegisterSerializer):
 
             raise e("error: sorry phone number already exist")
 
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
         current_site = get_current_site(request)
-        email_subject = 'Active your Account'
-        message = render_to_string('auth/activate.html',
-                                   {
-                                       'user': user,
-                                       'domain': current_site.domain,
-                                       'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                                       'token': generate_token.make_token(user)
-                                   }
-                                   )
-
-        send_mail(
-            email_subject,
-            message,
-            settings.EMAIL_HOST_USER,
-            [str(email)]
-        )
+        user = AccountUser.objects.get(email=str(email))
+        send_verify_email(user, current_site, email, uid)
 
         return user
 
