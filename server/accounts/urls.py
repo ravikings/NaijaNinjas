@@ -9,6 +9,7 @@ from accounts.views import (
     ReviewView,
     UserSearchDetails,
     DashboardResume,
+    ActivateAccountView,
     TestView,
 )
 
@@ -28,4 +29,6 @@ router.register(
 
 urlpatterns = [
     path("account/", include(router.urls)),
+    path('activate/<uidb64>/<token>',
+        ActivateAccountView.as_view(), name='activate'),
 ]

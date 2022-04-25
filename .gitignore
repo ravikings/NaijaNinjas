@@ -30,3 +30,5 @@ server/db.sqlite3
 *.pyc
 server/db.sqlite3
 server/.env
+*.pyc
+*.pyc

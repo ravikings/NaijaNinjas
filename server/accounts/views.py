@@ -1,4 +1,13 @@
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.contrib import messages
+from .utils import generate_token
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -192,3 +201,24 @@ class TestView(viewsets.ModelViewSet):
 
     queryset = RunnerProfile.objects.all()
     serializer_class = UserProfileSearchSerializer
+
+
+class ActivateAccountView(APIView):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = AccountUser.objects.get(pk=uid)
+
+        except Exception as identifier:
+            user = None
+
+        if user.is_email_verified:
+            
+            return redirect('/')
+
+        if user is not None and generate_token.check_token(user, token):
+            user.is_email_verified = True
+            user.save()
+            messages.add_message(request, messages.SUCCESS,'account activated successfully')
+            return Response({"message": "login success"}, status=200)
+        return Response({"error": "verfication unsuccesful"}, status=401)

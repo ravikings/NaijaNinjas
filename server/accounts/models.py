@@ -11,6 +11,8 @@ class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
+    is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
+    is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
@@ -73,26 +75,6 @@ class RunnerProfile(models.Model):
 
     def total_views(self):
         return self.views.count()
-
-
-class Review(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="author_reviewer",
-    )
-    profile = models.ForeignKey(
-        RunnerProfile, on_delete=models.CASCADE, related_name="reviwer_profile"
-    )
-    body = RichTextField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    rating = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
-
-    class Meta:
-        ordering = ("created",)
 
 
 class RunnerResume(models.Model):

@@ -18,10 +18,15 @@ from accounts.models import (
 )
 
 from .models import IpModel, RunnerProfile, Review
+from django.core.mail import send_mail, send_mass_mail
+from django.conf import settings
 
-
-#def get_total_reviews():
-instance = Review.objects.get(profile_id=1)
-#x = instance.objects.annotate(Count('rating'))
+send_mass_mail(
+    "email_subject",
+    "message",
+    settings.EMAIL_HOST_USER,
+    ["sr.rabiu@gmail.com"],
+    fail_silently=False,
+)
 print("hey im printing covid")
-print(instance)
+print("email sent")

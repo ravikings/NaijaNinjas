@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.conf import settings
-from django.core.mail import send_mass_mail
+from django.core.mail import EmailMessage, send_mail, send_mass_mail
 from rest_framework import serializers
 from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
@@ -8,7 +8,7 @@ from rest_framework.validators import UniqueValidator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from .utils import generate_token
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
@@ -60,11 +60,11 @@ class CustomRegisterSerializer(RegisterSerializer):
                                    }
                                    )
 
-        send_mass_mail(
+        send_mail(
             email_subject,
             message,
             settings.EMAIL_HOST_USER,
-            [email]
+            [str(email)]
         )
 
         return user
