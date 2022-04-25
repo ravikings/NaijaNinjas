@@ -1,8 +1,15 @@
 from django.db import transaction
+from django.conf import settings
+from django.core.mail import send_mass_mail
 from rest_framework import serializers
 from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from .utils import generate_token
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
 from django.db.models import Avg, F, Count
@@ -36,10 +43,29 @@ class CustomRegisterSerializer(RegisterSerializer):
         try:
             user.phone_number = self.data.get("phone_number")
             user.is_a_runner = self.data.get("is_a_runner")
+            email = self.data.get("email")
             user.save()
         except IntegrityError as e:
 
             raise e("error: sorry phone number already exist")
+
+        current_site = get_current_site(request)
+        email_subject = 'Active your Account'
+        message = render_to_string('auth/activate.html',
+                                   {
+                                       'user': user,
+                                       'domain': current_site.domain,
+                                       'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                       'token': generate_token.make_token(user)
+                                   }
+                                   )
+
+        send_mass_mail(
+            email_subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [email]
+        )
 
         return user
 
