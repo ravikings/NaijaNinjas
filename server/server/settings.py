@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "channels",
     "ckeditor",
     "django_filters",
+    'rest_framework_simplejwt',
     # "hitcount",
     # Local
     "forum",
@@ -72,6 +73,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",  # new
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
@@ -156,7 +158,7 @@ ROOT_URLCONF = "server.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR,'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -274,12 +276,13 @@ LOGGING = {
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 ASGI_APPLICATION = "server.asgi.application"
 
-EMAIL_HOST = 'smtp.gmail.com'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
+EMAIL_HOST_PASSWORD = '123Amina4@'

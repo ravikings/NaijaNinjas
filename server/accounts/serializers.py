@@ -1,10 +1,20 @@
 from django.db import transaction
+from django.conf import settings
 from rest_framework import serializers
 from django.db.models import Avg, F
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
+from django.db.models import Avg, F, Count
+import jwt
+from rest_framework import status
+from rest_framework.response import Response
 from accounts.models import (
     AccountUser,
     RunnerProfile,
@@ -13,8 +23,8 @@ from accounts.models import (
     Vidoe,
     Review,
 )
-
-from .models import IpModel, RunnerProfile
+from .models import IpModel, RunnerProfile, Review
+from .utilis import send_verify_email
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -35,10 +45,16 @@ class CustomRegisterSerializer(RegisterSerializer):
         try:
             user.phone_number = self.data.get("phone_number")
             user.is_a_runner = self.data.get("is_a_runner")
-            user.save()
+            email = self.data.get("email")
+            user.save()   
         except IntegrityError as e:
 
             raise e("error: sorry phone number already exist")
+ 
+        current_site = get_current_site(request)
+        user = AccountUser.objects.get(email=str(email))
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        send_verify_email(user, current_site, email, uid)
 
         return user
 
@@ -99,19 +115,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     Review serializers use profile for picture uploads and retrieve
     """
 
-    # total_reviews = serializers.SerializerMethodField()
-
     class Meta:
         model = Review
         fields = "__all__"
-
-    # def get_total_reviews(self, instance, pk=None):
-    # return Review.objects.get(author=pk).aggregate(total_ratings=Avg("rating"))
-    # return instance.body
-
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     return mark_safe(representation)
 
 
 class RunnerProfileSerializer(serializers.ModelSerializer):
@@ -181,11 +187,31 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
             "photo",
             "salary",
             "total_reviews",
-            "total_views",
+            #"total_views",     
         )
 
-    def get_total_views(self, instance):
-        return instance.total_views()
+    # def get_total_views(self, instance):
+    #     return instance.total_views()
 
-    def get_total_reviews(self, instance):
-        return instance.total_reviews()
+    def get_total_reviews(self, pk=None):
+
+        return Review.objects.filter(profile_id=pk).aggregate(Avg("rating"))
+
+
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(min_length=6)
+
+    redirect_url = serializers.CharField(max_length=500, required=False)
+
+    class Meta:
+        fields = ['email']
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    password1 = serializers.CharField(
+        min_length=6, max_length=68)
+    password2 = serializers.CharField(
+        min_length=6, max_length=68)
+    token = serializers.CharField(
+        min_length=15)
+    class Meta:
+        fields = ['password1','password2', 'token']

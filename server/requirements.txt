@@ -12,7 +12,10 @@ django-ckeditor==6.2.0
 channels==3.0.4
 django-filter==21.1
 django-redis
+PyJWT==2.3.0
+six==1.16.0
 pytz
 black
 PyJWT==2.3.0
 python-dotenv
+djangorestframework-simplejwt==5.1.0

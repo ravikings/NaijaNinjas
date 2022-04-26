@@ -2,7 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Avg, F
+from django.db.models import Avg, F, Count
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
 
@@ -11,6 +11,8 @@ class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
+    is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
+    is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
@@ -73,10 +75,6 @@ class RunnerProfile(models.Model):
 
     def total_views(self):
         return self.views.count()
-
-    def total_reviews(self):
-        # return self.reviews.aggregate(total_ratings=Avg("rating"))
-        return self.reviews.count()
 
 
 class RunnerResume(models.Model):
