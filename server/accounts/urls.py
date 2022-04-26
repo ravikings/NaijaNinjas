@@ -10,6 +10,7 @@ from accounts.views import (
     UserSearchDetails,
     DashboardResume,
     ActivateAccountView,
+    ChangePasswordAccountView,
     TestView,
 )
 
@@ -31,4 +32,5 @@ urlpatterns = [
     path("account/", include(router.urls)),
     path('activate/<uidb64>/<token>',
         ActivateAccountView.as_view(), name='activate'),
+    path("account/reset_password/", ChangePasswordAccountView.as_view(), name="reset_password")
 ]

@@ -19,6 +19,7 @@ import jwt
 from .utilis import send_verify_email, generate_token
 from rest_framework import status
 from django.conf import settings
+from django.contrib.auth import authenticate
 from .models import (
     AccountUser,
     Photo,
@@ -226,3 +227,23 @@ class ActivateAccountView(APIView):
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePasswordAccountView(APIView):
+    def get(self, request):
+        try:
+            email = request.user.email
+            user = authenticate(email=email, password="admin")
+            password1 = request.query_params.get('password1') 
+            password2 = request.query_params.get('password2') 
+            if user is not None and (password1 == password2):
+
+                user = AccountUser.objects.get(email=email)
+                user.set_password(password1)
+                user.save()
+
+            else:
+                return Response({'error': 'old password Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            raise e
+        return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
