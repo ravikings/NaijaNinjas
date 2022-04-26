@@ -231,9 +231,16 @@ class ActivateAccountView(APIView):
 
 class ChangePasswordAccountView(APIView):
     def get(self, request):
+        """
+        use to reset password, are passed as query parameters
+        keys:
+            - old_password
+            - password1
+            - password2
+        """
         try:
             email = request.user.email
-            user = authenticate(email=email, password="admin")
+            user = authenticate(email=email, password=request.query_params.get('old_password'))
             password1 = request.query_params.get('password1') 
             password2 = request.query_params.get('password2') 
             if user is not None and (password1 == password2):
