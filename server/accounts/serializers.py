@@ -213,7 +213,5 @@ class SetNewPasswordSerializer(serializers.Serializer):
         min_length=6, max_length=68)
     token = serializers.CharField(
         min_length=15)
-    # uidb64 = serializers.CharField(
-    #     min_length=1)
     class Meta:
         fields = ['password1','password2', 'token']
