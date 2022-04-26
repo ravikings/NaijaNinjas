@@ -32,3 +32,4 @@ server/db.sqlite3
 server/.env
 *.pyc
 *.pyc
+*.sqlite3

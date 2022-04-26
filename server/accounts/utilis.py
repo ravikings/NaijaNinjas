@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage, send_mail, send_mass_mail
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
+from django.urls import reverse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import six
 
@@ -13,7 +14,6 @@ def send_verify_email(user, current_site, email, uid):
     message = render_to_string('auth/activate.html',
                                 {
                                     'user': user,
-                                    'uid': uid,
                                     'domain': current_site.domain,
                                     'token': token
                                 }
@@ -26,6 +26,43 @@ def send_verify_email(user, current_site, email, uid):
         [str(email)]
     )
 
+
+def send_reset_password_email(user, current_site, email, uid):
+    token = RefreshToken.for_user(user).access_token
+    email_subject = 'Please Reset Your Password'
+    message = render_to_string('auth/request-reset-email.html',
+                                {
+                                    'user': user,
+                                    'domain': current_site.domain,
+                                    'token': token
+                                }
+                                )
+
+    send_mail(
+        email_subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [str(email)]
+    )
+
+
+
+def send_successfully_change_password_email(user, email, uid):
+    email_subject = 'Your password Was Succesfully changed!'
+    message = render_to_string('auth/success-email-changes.html',
+                                {
+                                    'user': user,
+                                    
+
+                                }
+                                )
+
+    send_mail(
+        email_subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [str(email)]
+    )
 
 
 class TokenGenerator(PasswordResetTokenGenerator):

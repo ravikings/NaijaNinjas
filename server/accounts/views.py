@@ -1,22 +1,22 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404, reverse
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from history.signals import history_tracker
-from django.utils.encoding import force_bytes, force_str
+from django.utils.encoding import force_bytes, force_str, smart_bytes
+from rest_framework.renderers import TemplateHTMLRenderer
 import jwt
-from .utilis import send_verify_email, generate_token
+from .utilis import send_verify_email,send_reset_password_email, send_successfully_change_password_email, generate_token
 from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -39,6 +39,8 @@ from .serializers import (
     ReviewSerializer,
     UserSearchDetialSerializer,
     UserResumeSerializer,
+    ResetPasswordEmailRequestSerializer,
+    SetNewPasswordSerializer
 )
 
 
@@ -209,7 +211,7 @@ class TestView(viewsets.ModelViewSet):
 
 
 class ActivateAccountView(APIView):
-    def get(self, request, uidb64, token):
+    def get(self, request, token):
 
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
@@ -219,17 +221,20 @@ class ActivateAccountView(APIView):
                 user.save()
             return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
         except jwt.ExpiredSignatureError as identifier:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = AccountUser.objects.get(pk=uid)
+
+            user = AccountUser.objects.get(pk=payload['user_id'])
             if not user.is_email_verified:
                 current_site = get_current_site(request)
-                send_verify_email(user, current_site, user.email, uid)
+                send_verify_email(user, current_site, user.email)
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordAccountView(APIView):
+
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request):
         """
         use to reset password, are passed as query parameters
@@ -254,3 +259,90 @@ class ChangePasswordAccountView(APIView):
         except Exception as e:
             raise e
         return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
+
+
+class RequestPasswordResetEmail(generics.GenericAPIView):
+    serializer_class = ResetPasswordEmailRequestSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+
+        email = request.data.get('email', '')
+
+        if AccountUser.objects.filter(email=email).exists():
+            user = AccountUser.objects.get(email=email)
+            uid = urlsafe_base64_encode(force_bytes(user.id))
+
+            current_site = get_current_site(request)
+            send_reset_password_email(user, current_site, user.email, uid)
+
+        return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
+
+class SetProfilePassword(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'auth/set-profile-password.html'
+
+    def get(self, request):
+
+        return Response({'message': 'change password now'}, status=status.HTTP_200_OK)
+
+class ChangeProfilePassword(generics.GenericAPIView):
+
+    serializer_class = SetNewPasswordSerializer
+
+    def post(self, request):
+        try:
+            
+            serializer = self.serializer_class(data=request.data)
+            password1 = request.data.get('password1', '')
+            password2 = request.data.get('password2', '')
+            token = request.data.get('token', '')
+            payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
+            user = AccountUser.objects.get(id=payload['user_id'])
+   
+        except jwt.ExpiredSignatureError as identifier:
+
+            user = AccountUser.objects.get(pk=payload['user_id'])
+            if user.is_active:
+                current_site = get_current_site(request)
+                send_reset_password_email(user, current_site, user.email)
+            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except jwt.exceptions.DecodeError as identifier:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            raise e({"error":"token expired"})
+         
+        if user is not None and (password1 == password2):
+
+            user.set_password(password1)
+            user.save()            
+            return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({'error': 'Error occur while changing password, please try again!'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SetNewPasswordAPIView(APIView):
+
+    def get(self, request, token):
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
+
+            data = f"?token={token}"
+            return redirect(reverse('user-reset-password') + data)
+
+        except jwt.ExpiredSignatureError as identifier:
+            
+            user = AccountUser.objects.get(pk=payload['user_id'])
+            if user.is_active:
+                current_site = get_current_site(request)
+                send_reset_password_email(user, current_site, user.email)
+            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as identifier:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
