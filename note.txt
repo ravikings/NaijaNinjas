@@ -3,7 +3,8 @@ https://www.rootstrap.com/blog/registration-and-authentication-in-django-apps-wi
 # Us this method to migrate each app
 python3 manage.pyakemigrations accounts  
 
-
+#use to install react
+npm install react-script
 
 #npm nosw with doccker
 "start": "export SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",

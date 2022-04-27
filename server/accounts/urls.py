@@ -34,13 +34,13 @@ router.register(
 
 urlpatterns = [
     path("account/", include(router.urls)),
-    path('activate/<token>',
+    path('activate/<uid>/<token>',
         ActivateAccountView.as_view(), name='activate'),
-    path('email-reset-password/<token>',
+    path('email-reset-password/<uid>/<token>',
         SetNewPasswordAPIView.as_view(), name='email-reset-password'),
     path('set-password/',
         ChangeProfilePassword.as_view(), name='set-password'),
     path("account/reset_password/", ChangePasswordAccountView.as_view(), name="reset_password"),
-    path('request-reset-email/', RequestPasswordResetEmail.as_view(), name="request_reset_email"),
+    path('request-reset-email/', RequestPasswordResetEmail.as_view(), name="request-reset-email"),
     path('user-reset-password/', SetProfilePassword.as_view(), name="user-reset-password"),
 ]

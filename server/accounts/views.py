@@ -2,6 +2,7 @@ from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, get_object_or_404, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
@@ -211,7 +212,7 @@ class TestView(viewsets.ModelViewSet):
 
 
 class ActivateAccountView(APIView):
-    def get(self, request, token):
+    def get(self, request, uid, token):
 
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
@@ -219,14 +220,20 @@ class ActivateAccountView(APIView):
             if not user.is_email_verified:
                 user.is_email_verified = True
                 user.save()
-            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+                return redirect("http://127.0.0.1:3000/react/demo/")
+            return redirect("http://127.0.0.1:3000/react/demo/")
         except jwt.ExpiredSignatureError as identifier:
+            id = (urlsafe_base64_decode(uid))
+            user = AccountUser.objects.get(pk=id)
 
-            user = AccountUser.objects.get(pk=payload['user_id'])
             if not user.is_email_verified:
                 current_site = get_current_site(request)
                 send_verify_email(user, current_site, user.email)
-            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+                return redirect("http://127.0.0.1:3000/react/demo/")
+
+            else:
+                return redirect("http://127.0.0.1:3000/react/demo/")
+
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -288,25 +295,31 @@ class SetProfilePassword(generics.GenericAPIView):
         return Response({'message': 'change password now'}, status=status.HTTP_200_OK)
 
 class ChangeProfilePassword(generics.GenericAPIView):
-
+    """
+    Use for changing password for request made via email,
+    last stage for password chane for request made vie email.
+    """
     serializer_class = SetNewPasswordSerializer
 
     def post(self, request):
+        password1 = request.data.get('password1', '')
+        password2 = request.data.get('password2', '')
+        token = request.data.get('token', '')
+        uid = request.data.get('uid', '')
         try:
             
             serializer = self.serializer_class(data=request.data)
-            password1 = request.data.get('password1', '')
-            password2 = request.data.get('password2', '')
-            token = request.data.get('token', '')
+
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
             user = AccountUser.objects.get(id=payload['user_id'])
    
         except jwt.ExpiredSignatureError as identifier:
 
-            user = AccountUser.objects.get(pk=payload['user_id'])
+            id = (urlsafe_base64_decode(uid))
+            user = AccountUser.objects.get(pk=id)
             if user.is_active:
                 current_site = get_current_site(request)
-                send_reset_password_email(user, current_site, user.email)
+                send_reset_password_email(user, current_site, user.email, uid)
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         
         except jwt.exceptions.DecodeError as identifier:
@@ -327,7 +340,7 @@ class ChangeProfilePassword(generics.GenericAPIView):
 
 class SetNewPasswordAPIView(APIView):
 
-    def get(self, request, token):
+    def get(self, request, uid, token):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
 
@@ -336,13 +349,14 @@ class SetNewPasswordAPIView(APIView):
 
         except jwt.ExpiredSignatureError as identifier:
             
-            user = AccountUser.objects.get(pk=payload['user_id'])
+            id = (urlsafe_base64_decode(uid))
+            user = AccountUser.objects.get(pk=id)
             if user.is_active:
                 current_site = get_current_site(request)
-                send_reset_password_email(user, current_site, user.email)
-            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+                send_reset_password_email(user, current_site, user.email, uid)
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/")
+
         except jwt.exceptions.DecodeError as identifier:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
-
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/")
 
