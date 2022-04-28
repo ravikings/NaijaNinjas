@@ -142,7 +142,7 @@ function ResetPassword(props) {
                                 <div className="logo">
                                     <Link to={"./"}>
                                         <img
-                                            src={require("../../../images/logo-white2.png")}
+                                            src='assets/logo.png'
                                             alt=""
                                         />
                                     </Link>
