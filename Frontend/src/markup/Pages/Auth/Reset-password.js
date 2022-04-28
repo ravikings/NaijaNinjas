@@ -1,6 +1,6 @@
 import React from 'react';
 import {useFormik} from "formik";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import createRequest from "../../../utils/axios";
 import {useLocation} from "react-router-dom";
@@ -14,6 +14,7 @@ function useQuery() {
 
 function ResetPassword(props) {
     let query = useQuery();
+    const history = useHistory();
 
     const resetPassword = async (values) => {
         try {
@@ -26,6 +27,7 @@ function ResetPassword(props) {
                 }
             })
             toast.success(data?.message);
+            history.push("/login");
         } catch (e) {
             toast.error(e?.response?.data?.message || "Unknown Error");
         }
