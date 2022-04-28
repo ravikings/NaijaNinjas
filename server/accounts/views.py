@@ -349,6 +349,7 @@ class ChangeProfilePassword(generics.GenericAPIView):
             use res style to send messages accros for notification
             """
             res = HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+            #todo: use this headers to pass notification messages
             res.headers['message'] = 120
             return res
       

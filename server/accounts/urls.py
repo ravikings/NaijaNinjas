@@ -29,7 +29,7 @@ router.register(r"user-status", AccountStatus, basename="user-status")
 router.register(r"user-review", ReviewView, basename="user-review")
 router.register(r"test", TestView, basename="test-view")
 router.register(
-    r"user-search-detials/", UserSearchDetails, basename="user-search-detials"
+    r"user-search-detials", UserSearchDetails, basename="user-search-detials"
 )
 
 urlpatterns = [

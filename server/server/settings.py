@@ -246,7 +246,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {"google": {}, "facebook": {}}
 # LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = "accounts.AccountUser"
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -288,11 +288,11 @@ ASGI_APPLICATION = "server.asgi.application"
 
 
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
 # # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 # # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
-EMAIL_HOST_PASSWORD = '123Amina4@'
+# EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
+# EMAIL_HOST_PASSWORD = '123Amina4@'

@@ -174,7 +174,7 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
 class UserSearchDetialSerializer(serializers.ModelSerializer):
 
-    total_reviews = serializers.SerializerMethodField()
+    #total_reviews = serializers.SerializerMethodField()
     total_views = serializers.SerializerMethodField()
 
     class Meta:
@@ -187,7 +187,7 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
             "photo",
             "salary",
             "total_reviews",
-            #"total_views",     
+            "total_views",     
         )
 
     # def get_total_views(self, instance):
@@ -195,7 +195,7 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
 
     def get_total_reviews(self, pk=None):
 
-        return Review.objects.filter(profile_id=pk).aggregate(Avg("rating"))
+        return Review.objects.filter(author=pk).aggregate(Avg("rating"))
 
 
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):
