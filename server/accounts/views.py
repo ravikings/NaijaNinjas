@@ -280,7 +280,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
 
         email = request.query_params.get('email')
-        
+
         if AccountUser.objects.filter(email=email).exists() and email:
             user = AccountUser.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
@@ -375,8 +375,7 @@ class SetNewPasswordAPIView(APIView):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
             response = redirect(reverse('user-reset-password') + data)
-            request.session['usersToken'] = token
-            request.session['usersUid'] = uid
+
             return response
 
         except jwt.ExpiredSignatureError as identifier:
