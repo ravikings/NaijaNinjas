@@ -187,7 +187,7 @@ class UserSearchDetails(viewsets.ViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = UserSearchDetialSerializer
+    serializer_class = UserProfileSearchSerializer
 
     def retrieve(self, request, pk=None):
 
@@ -199,10 +199,10 @@ class UserSearchDetails(viewsets.ViewSet):
         else:
             IpModel.objects.create(ip=ip)
             profile.views.add(IpModel.objects.get(ip=ip))
-        #queryset = RunnerProfile.objects.all()
-        #profile = get_object_or_404(queryset, author=pk)
-        #serializer = UserSearchDetialSerializer(profile)
-        return Response()
+        
+        queryset = RunnerProfile.objects.get(author_id=pk)
+        serializer = UserProfileSearchSerializer(queryset)
+        return Response(serializer.data)
 
 
 class TestView(viewsets.ModelViewSet):

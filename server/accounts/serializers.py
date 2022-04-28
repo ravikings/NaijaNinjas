@@ -1,3 +1,4 @@
+from asyncore import read
 from django.db import transaction
 from django.conf import settings
 from rest_framework import serializers
@@ -142,19 +143,9 @@ class UserResumeSerializer(serializers.ModelSerializer):
 
 class UserProfileSearchSerializer(serializers.ModelSerializer):
 
-    user_profile = UserResumeSerializer(read_only=True, many=True)
 
     class Meta:
         model = RunnerProfile
-        # fields = (
-        #     "author",
-        #     "first_name",
-        #     "title",
-        #     "location",
-        #     "salary",
-        #     "user_profile",
-
-        # )
         fields = "__all__"
 
 
@@ -175,7 +166,7 @@ class UserAccountSerializer(serializers.ModelSerializer):
 class UserSearchDetialSerializer(serializers.ModelSerializer):
 
     total_reviews = serializers.SerializerMethodField()
-    #total_views = serializers.SerializerMethodField()
+    total_views = serializers.SerializerMethodField()
 
     class Meta:
         model = RunnerProfile
@@ -187,11 +178,11 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
             "photo",
             "salary",
             "total_reviews",
-            #"total_views",     
+            "total_views", 
         )
 
-    # def get_total_views(self, instance):
-    #     return instance.total_views()
+    def get_total_views(self, instance):
+        return instance.total_views()
 
     def get_total_reviews(self, pk=None):
 

@@ -70,9 +70,6 @@ class RunnerProfile(models.Model):
     #     RunnerResume, related_name="user_resume", blank=True
     # )
 
-    def __str__(self):
-        return self.first_name
-
     def total_views(self):
         return self.views.count()
 
@@ -107,8 +104,6 @@ class Photo(models.Model):
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
-    def __str__(self):
-        return self.description
 
 
 class Vidoe(models.Model):
@@ -120,6 +115,3 @@ class Vidoe(models.Model):
     video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
-
-    def __str__(self):
-        return self.description
