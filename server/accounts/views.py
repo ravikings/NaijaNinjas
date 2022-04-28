@@ -322,8 +322,8 @@ class ChangeProfilePassword(generics.GenericAPIView):
 
         password1 = request.GET.get('password1')
         password2 = request.GET.get('password2')
-        token = request.session.get('usersToken')
-        uid = request.session.get('usersUid')
+        token = request.GET.get('token')
+        uid = request.GET.get('uid')
 
         try:
             
