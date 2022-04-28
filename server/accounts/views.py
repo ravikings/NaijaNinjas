@@ -267,10 +267,11 @@ class ChangePasswordAccountView(APIView):
                     user.save() 
                     return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
 
-            else:
-                return Response({'error': 'old password Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({'error': 'password doesnt match!'}, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
-            raise e
+            return Response({'error': f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
