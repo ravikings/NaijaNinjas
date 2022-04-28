@@ -288,8 +288,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             current_site = get_current_site(request)
             send_reset_password_email(user, current_site, user.email, uid)
 
-            return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
-            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+            #return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
 
         else:
             return Response({'message': 'User doesnot exist!'}, status=status.HTTP_400_BAD_REQUEST)
@@ -297,16 +297,20 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
 class SetProfilePassword(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'auth/set-profile-password.html'
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = 'auth/set-profile-password.html'
 
     def get(self, request):
         """
         TODO: Use the new link from UI team to redirect to where user can change password
         """
-        # response = HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
-        # return response
-        return Response({'message': 'Activation done'}, status=status.HTTP_200_OK)
+        token=request.query_params.get('token')
+        uid=request.query_params.get('uid')
+        data = f"?token={token}&uid={uid}"
+
+        response = HttpResponseRedirect("http://127.0.0.1:3000/react/demo/reset-password" + data)
+        return response
+        #return Response({'message': 'Activation done'}, status=status.HTTP_200_OK)
 class ChangeProfilePassword(generics.GenericAPIView):
     """
     Use for changing password for request made via email,
