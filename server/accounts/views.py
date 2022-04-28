@@ -281,7 +281,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
         email = request.query_params.get('email')
 
-        if AccountUser.objects.filter(email=email).exists():
+        if AccountUser.objects.filter(email=email).exists() and email is not None:
             user = AccountUser.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
 
@@ -289,7 +289,6 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             send_reset_password_email(user, current_site, user.email, uid)
 
             return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
-
 
         else:
             return Response({'message': 'User doesnot exist!'}, status=status.HTTP_400_BAD_REQUEST)
