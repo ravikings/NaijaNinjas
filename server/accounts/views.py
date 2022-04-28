@@ -259,11 +259,12 @@ class ChangePasswordAccountView(APIView):
             user = authenticate(email=email, password=request.query_params.get('old_password'))
             password1 = request.query_params.get('password1') 
             password2 = request.query_params.get('password2') 
-            if user is not None and (password1 == password2):
+            if user and password1 and password2:
 
-                user = AccountUser.objects.get(email=email)
-                user.set_password(password1)
-                user.save()
+                if password1 == password2:
+                    user = AccountUser.objects.get(email=email)
+                    user.set_password(password1)
+                    user.save()
 
             else:
                 return Response({'error': 'old password Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
@@ -354,8 +355,7 @@ class ChangeProfilePassword(generics.GenericAPIView):
             user.set_password(password1)
             
             user.save()
-            del request.session['usersToken']
-            del request.session['usersUid'] 
+
             """
             use res style to send messages accros for notification
             """
