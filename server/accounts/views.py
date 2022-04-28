@@ -264,14 +264,14 @@ class ChangePasswordAccountView(APIView):
                 if password1 == password2:
                     user = AccountUser.objects.get(email=email)
                     user.set_password(password1)
-                    user.save()
+                    user.save() 
+                    return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
 
             else:
                 return Response({'error': 'old password Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             raise e
 
-        return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
 
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
