@@ -366,10 +366,10 @@ class ChangeProfilePassword(generics.GenericAPIView):
 class SetNewPasswordAPIView(APIView):
 
     def get(self, request, uid, token):
+
+        data = f"?token={token}&uid={uid}"
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
-
-            data = f"?token={token}&uid={uid}"
             response = redirect(reverse('user-reset-password') + data)
             request.session['usersToken'] = token
             request.session['usersUid'] = uid
@@ -382,7 +382,7 @@ class SetNewPasswordAPIView(APIView):
             if user.is_active:
                 current_site = get_current_site(request)
                 send_reset_password_email(user, current_site, user.email, uid)
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/")
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/reset" + data)
 
         except jwt.exceptions.DecodeError as identifier:
 
