@@ -1,3 +1,4 @@
+from signal import strsignal
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
@@ -265,16 +266,17 @@ class ChangePasswordAccountView(APIView):
                 return Response({'error': 'old password Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             raise e
+
         return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
 
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordEmailRequestSerializer
 
-    def post(self, request):
+    def get(self, request):
         serializer = self.serializer_class(data=request.data)
 
-        email = request.data.get('email', '')
+        email = request.query_params.get('email')
 
         if AccountUser.objects.filter(email=email).exists():
             user = AccountUser.objects.get(email=email)
@@ -283,7 +285,10 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             current_site = get_current_site(request)
             send_reset_password_email(user, current_site, user.email, uid)
 
-        return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+
+        else:
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
 
 class SetProfilePassword(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
@@ -291,9 +296,12 @@ class SetProfilePassword(generics.GenericAPIView):
     template_name = 'auth/set-profile-password.html'
 
     def get(self, request):
-
-        return Response({'message': 'change password now'}, status=status.HTTP_200_OK)
-
+        """
+        TODO: Use the new link from UI team to redirect to where user can change password
+        """
+        # response = HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+        # return response
+        return Response({'message': 'Activation done'}, status=status.HTTP_200_OK)
 class ChangeProfilePassword(generics.GenericAPIView):
     """
     Use for changing password for request made via email,
@@ -301,11 +309,13 @@ class ChangeProfilePassword(generics.GenericAPIView):
     """
     serializer_class = SetNewPasswordSerializer
 
-    def post(self, request):
-        password1 = request.data.get('password1', '')
-        password2 = request.data.get('password2', '')
-        token = request.data.get('token', '')
-        uid = request.data.get('uid', '')
+    def get(self, request):
+
+        password1 = request.GET.get('password1')
+        password2 = request.GET.get('password2')
+        token = request.session.get('usersToken')
+        uid = request.session.get('usersUid')
+
         try:
             
             serializer = self.serializer_class(data=request.data)
@@ -320,10 +330,10 @@ class ChangeProfilePassword(generics.GenericAPIView):
             if user.is_active:
                 current_site = get_current_site(request)
                 send_reset_password_email(user, current_site, user.email, uid)
-            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
         
         except jwt.exceptions.DecodeError as identifier:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
 
         except Exception as e:
             raise e({"error":"token expired"})
@@ -331,11 +341,15 @@ class ChangeProfilePassword(generics.GenericAPIView):
         if user is not None and (password1 == password2):
 
             user.set_password(password1)
-            user.save()            
-            return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
-
+            
+            user.save()
+            del request.session['usersToken']
+            del request.session['usersUid'] 
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+      
+        
         else:
-            return Response({'error': 'Error occur while changing password, please try again!'}, status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/")
 
 
 class SetNewPasswordAPIView(APIView):
@@ -344,8 +358,11 @@ class SetNewPasswordAPIView(APIView):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
 
-            data = f"?token={token}"
-            return redirect(reverse('user-reset-password') + data)
+            data = f"?token={token}&uid={uid}"
+            response = redirect(reverse('user-reset-password') + data)
+            request.session['usersToken'] = token
+            request.session['usersUid'] = uid
+            return response
 
         except jwt.ExpiredSignatureError as identifier:
             

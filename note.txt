@@ -19,3 +19,5 @@ minikube service flask-test-service
 
 
 docker-compose up -d --build
+
+"kasun:2{c%v~TtV?_SFCer"
