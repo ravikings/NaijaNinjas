@@ -288,12 +288,12 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             current_site = get_current_site(request)
             send_reset_password_email(user, current_site, user.email, uid)
 
-            #return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+            return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
+
 
         else:
             return Response({'message': 'User doesnot exist!'}, status=status.HTTP_400_BAD_REQUEST)
-            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+
 
 class SetProfilePassword(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
@@ -339,13 +339,16 @@ class ChangeProfilePassword(generics.GenericAPIView):
             if user.is_active:
                 current_site = get_current_site(request)
                 send_reset_password_email(user, current_site, user.email, uid)
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            return Response({'message': 'check email for new link!'}, status=status.HTTP_400_BAD_REQUEST)
         
         except jwt.exceptions.DecodeError as identifier:
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            return Response({'message': 'token invalid!'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            raise e({"error":"token expired"})
+            #raise e({"error":"token expired"})
+            return Response({'message': 'token expired!'}, status=status.HTTP_400_BAD_REQUEST)
          
         if user is not None and (password1 == password2):
 
