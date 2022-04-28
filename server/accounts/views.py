@@ -345,7 +345,12 @@ class ChangeProfilePassword(generics.GenericAPIView):
             user.save()
             del request.session['usersToken']
             del request.session['usersUid'] 
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+            """
+            use res style to send messages accros for notification
+            """
+            res = HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+            res.headers['message'] = 120
+            return res
       
         
         else:
