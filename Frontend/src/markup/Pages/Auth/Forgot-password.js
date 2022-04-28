@@ -1,39 +1,28 @@
-import React from "react";
+import React from 'react';
+import {useFormik} from "formik";
 import {Link, useHistory} from "react-router-dom";
-import {useUser} from "../../Context/AuthContext";
+import Button from "@material-ui/core/Button";
 import createRequest from "../../../utils/axios";
 import {toast} from "react-toastify";
-import {useFormik} from "formik";
-import {GoogleLoginButton, FacebookLoginButton} from "./components";
-import Button from "@material-ui/core/Button";
 
-function LoginPage() {
-    const userDetails = useUser();
+function ForgotPassword(props) {
     const history = useHistory();
 
-    const login = (loginDetails) => {
-        createRequest()
-            .post("/dj-rest-auth/login/", loginDetails)
-            .then((res) => {
-                localStorage.setItem("userID", res?.data?.user?.pk);
-                localStorage.setItem("access_token", res?.data?.access_token);
-                userDetails.signIn(res?.data?.user);
-                history.push("/");
-            })
-            .catch((e) => {
-                if (e.response?.status === 400) {
-                    toast.error(e?.response?.data?.non_field_errors[0]);
-                } else {
-                    toast.error("Unknown Error");
-                }
-            });
-    };
+    const sentResetEmail = async (values) => {
+        try {
+            const {data} = await createRequest().get("/api/v1/request-reset-email/", {params: {email: values.email}})
+            toast.success(data?.message);
+            history.push("/login");
+        } catch (e) {
+            toast.error(e?.response?.data?.message);
+        }
+    }
 
     const formik = useFormik({
-        initialValues: {email: "", password: ""},
+        initialValues: {email: ""},
         enableReinitialize: true,
-        onSubmit: (values, {resetForm}) => {
-            login(values);
+        onSubmit: async (values, {resetForm}) => {
+            await sentResetEmail(values);
         },
     });
 
@@ -55,13 +44,13 @@ function LoginPage() {
                                         style={{width: "310px"}}
                                     >
                                         <p className="font-weight-bold text-center text-dark h4">
-                                            We're glad to see you again!
+                                            Reset password
                                         </p>
                                         <p className="font-weight-600 text-center">
                                             Don't have an account?
-                                            <Link to="register" className="text-primary">
+                                            <Link to="/login" className="text-primary">
                                                 {" "}
-                                                Sign Up
+                                                Sign In
                                             </Link>
                                         </p>
                                         <div className="form-group">
@@ -76,19 +65,6 @@ function LoginPage() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="form-group">
-                                            <label>Password *</label>
-                                            <div className="input-group">
-                                                <input
-                                                    name="password"
-                                                    onChange={formik.handleChange}
-                                                    value={formik.values.password}
-                                                    type="password"
-                                                    className="form-control"
-                                                    placeholder="password"
-                                                />
-                                            </div>
-                                        </div>
                                         <div className="text-left">
                                             <Button
                                                 fullWidth
@@ -97,30 +73,9 @@ function LoginPage() {
                                                 type={"submit"}
                                                 className="site-button"
                                             >
-                                                login
+                                                Send password reset email
                                             </Button>
                                         </div>
-                                        <div className="text-center">
-                                            <Link data-toggle="tab" to="/forgot-password"
-                                                  className="site-button-link forget-pass m-t15"><i
-                                                className="fa fa-unlock-alt"></i> Forgot Password</Link>
-                                        </div>
-                                        <div className={"separator"}>
-                                            <span>or</span>
-                                        </div>
-                                        <FacebookLoginButton
-                                            startIcon={<i className="fa fa-facebook"></i>}
-                                            fullWidth
-                                        >
-                                            Login via Faceboook
-                                        </FacebookLoginButton>
-                                        <GoogleLoginButton
-                                            className={"mt-3"}
-                                            startIcon={<i className="fa fa-google-plus"></i>}
-                                            fullWidth
-                                        >
-                                            Login via Google+
-                                        </GoogleLoginButton>
                                     </form>
                                     <form
                                         id="forgot-password"
@@ -221,4 +176,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default ForgotPassword;

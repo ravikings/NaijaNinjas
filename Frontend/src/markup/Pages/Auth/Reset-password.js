@@ -1,39 +1,41 @@
-import React from "react";
-import {Link, useHistory} from "react-router-dom";
-import {useUser} from "../../Context/AuthContext";
-import createRequest from "../../../utils/axios";
-import {toast} from "react-toastify";
+import React from 'react';
 import {useFormik} from "formik";
-import {GoogleLoginButton, FacebookLoginButton} from "./components";
+import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import createRequest from "../../../utils/axios";
+import {useLocation} from "react-router-dom";
+import {toast} from "react-toastify";
 
-function LoginPage() {
-    const userDetails = useUser();
-    const history = useHistory();
+function useQuery() {
+    const {search} = useLocation();
 
-    const login = (loginDetails) => {
-        createRequest()
-            .post("/dj-rest-auth/login/", loginDetails)
-            .then((res) => {
-                localStorage.setItem("userID", res?.data?.user?.pk);
-                localStorage.setItem("access_token", res?.data?.access_token);
-                userDetails.signIn(res?.data?.user);
-                history.push("/");
-            })
-            .catch((e) => {
-                if (e.response?.status === 400) {
-                    toast.error(e?.response?.data?.non_field_errors[0]);
-                } else {
-                    toast.error("Unknown Error");
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
+function ResetPassword(props) {
+    let query = useQuery();
+
+    const resetPassword = async (values) => {
+        try {
+            const {data} = await createRequest().get("/api/v1/set-password/", {
+                params: {
+                    password1: values.password1,
+                    password2: values.password2,
+                    token: query.get("token"),
+                    uid: query.get("uid")
                 }
-            });
-    };
+            })
+            toast.success(data?.message);
+        } catch (e) {
+            toast.error(e?.response?.data?.message || "Unknown Error");
+        }
+    }
 
     const formik = useFormik({
-        initialValues: {email: "", password: ""},
+        initialValues: {password1: "", password2: ""},
         enableReinitialize: true,
-        onSubmit: (values, {resetForm}) => {
-            login(values);
+        onSubmit: async (values, {resetForm}) => {
+            await resetPassword(values);
         },
     });
 
@@ -55,37 +57,38 @@ function LoginPage() {
                                         style={{width: "310px"}}
                                     >
                                         <p className="font-weight-bold text-center text-dark h4">
-                                            We're glad to see you again!
+                                            Reset password
                                         </p>
                                         <p className="font-weight-600 text-center">
                                             Don't have an account?
-                                            <Link to="register" className="text-primary">
+                                            <Link to="/login" className="text-primary">
                                                 {" "}
-                                                Sign Up
+                                                Sign In
                                             </Link>
                                         </p>
                                         <div className="form-group">
-                                            <label>E-Mail Address*</label>
+                                            <label>Password*</label>
                                             <div className="input-group">
                                                 <input
-                                                    name="email"
+                                                    name="password1"
                                                     onChange={formik.handleChange}
-                                                    value={formik.values.email}
+                                                    value={formik.values.password1}
+                                                    type='password'
                                                     className="form-control"
-                                                    placeholder="email"
+                                                    placeholder="password"
                                                 />
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                            <label>Password *</label>
+                                            <label>Confirm Password*</label>
                                             <div className="input-group">
                                                 <input
-                                                    name="password"
+                                                    name="password2"
                                                     onChange={formik.handleChange}
-                                                    value={formik.values.password}
-                                                    type="password"
+                                                    value={formik.values.password2}
                                                     className="form-control"
-                                                    placeholder="password"
+                                                    type='password'
+                                                    placeholder="confirm password"
                                                 />
                                             </div>
                                         </div>
@@ -97,30 +100,9 @@ function LoginPage() {
                                                 type={"submit"}
                                                 className="site-button"
                                             >
-                                                login
+                                                Send password reset email
                                             </Button>
                                         </div>
-                                        <div className="text-center">
-                                            <Link data-toggle="tab" to="/forgot-password"
-                                                  className="site-button-link forget-pass m-t15"><i
-                                                className="fa fa-unlock-alt"></i> Forgot Password</Link>
-                                        </div>
-                                        <div className={"separator"}>
-                                            <span>or</span>
-                                        </div>
-                                        <FacebookLoginButton
-                                            startIcon={<i className="fa fa-facebook"></i>}
-                                            fullWidth
-                                        >
-                                            Login via Faceboook
-                                        </FacebookLoginButton>
-                                        <GoogleLoginButton
-                                            className={"mt-3"}
-                                            startIcon={<i className="fa fa-google-plus"></i>}
-                                            fullWidth
-                                        >
-                                            Login via Google+
-                                        </GoogleLoginButton>
                                     </form>
                                     <form
                                         id="forgot-password"
@@ -219,6 +201,7 @@ function LoginPage() {
             </footer>
         </div>
     );
+
 }
 
-export default LoginPage;
+export default ResetPassword;
