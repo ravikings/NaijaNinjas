@@ -280,8 +280,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
 
         email = request.query_params.get('email')
-
-        if AccountUser.objects.filter(email=email).exists() and email is not None:
+        
+        if AccountUser.objects.filter(email=email).exists() and email:
             user = AccountUser.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
 
