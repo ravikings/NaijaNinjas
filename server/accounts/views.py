@@ -354,8 +354,7 @@ class ChangeProfilePassword(generics.GenericAPIView):
             user.set_password(password1)
             
             user.save()
-            del request.session['usersToken']
-            del request.session['usersUid'] 
+
             """
             use res style to send messages accros for notification
             """
