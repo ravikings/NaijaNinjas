@@ -186,6 +186,9 @@ class UserSearchDetails(viewsets.ViewSet):
     which include view count for each unique ip
     """
 
+    queryset = RunnerProfile.objects.all()
+    serializer_class = UserSearchDetialSerializer
+
     def retrieve(self, request, pk=None):
 
         ip = get_client_ip(request)
@@ -196,10 +199,10 @@ class UserSearchDetails(viewsets.ViewSet):
         else:
             IpModel.objects.create(ip=ip)
             profile.views.add(IpModel.objects.get(ip=ip))
-        queryset = RunnerProfile.objects.all()
-        profile = get_object_or_404(queryset, author=pk)
-        serializer = UserSearchDetialSerializer(profile)
-        return Response(serializer.data)
+        #queryset = RunnerProfile.objects.all()
+        #profile = get_object_or_404(queryset, author=pk)
+        #serializer = UserSearchDetialSerializer(profile)
+        return Response()
 
 
 class TestView(viewsets.ModelViewSet):
@@ -285,10 +288,12 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             current_site = get_current_site(request)
             send_reset_password_email(user, current_site, user.email, uid)
 
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
+            return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
+            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/login")
 
         else:
-            return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            return Response({'message': 'User doesnot exist!'}, status=status.HTTP_400_BAD_REQUEST)
+            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
 
 class SetProfilePassword(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer

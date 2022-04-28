@@ -174,8 +174,8 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
 class UserSearchDetialSerializer(serializers.ModelSerializer):
 
-    #total_reviews = serializers.SerializerMethodField()
-    total_views = serializers.SerializerMethodField()
+    total_reviews = serializers.SerializerMethodField()
+    #total_views = serializers.SerializerMethodField()
 
     class Meta:
         model = RunnerProfile
@@ -187,7 +187,7 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
             "photo",
             "salary",
             "total_reviews",
-            "total_views",     
+            #"total_views",     
         )
 
     # def get_total_views(self, instance):
