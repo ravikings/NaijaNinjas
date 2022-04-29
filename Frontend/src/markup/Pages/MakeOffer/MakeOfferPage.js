@@ -12,6 +12,7 @@ import SocialMedia from "./components/SocialMedia";
 import Skills from "./components/Skills";
 import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
+import { useLocation } from "react-router-dom";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -32,15 +33,17 @@ const blogGrid = [
 
 function MakeOfferPage() {
   const classes = useStyles();
+  const location = useLocation();
+  console.log(location);
   return (
     <>
       <Header />
-      <div className="page-content bg-white">
+      <div className='page-content bg-white'>
         <div
-          className="dez-bnr-inr d-flex align-items-center"
+          className='dez-bnr-inr d-flex align-items-center'
           style={{ backgroundImage: "url(" + bnr + ")" }}
         >
-          <div className="">
+          <div className=''>
             <Grid container spacing={2} className={classes.headerGrid}>
               <Grid item>
                 <Avatar
@@ -56,8 +59,8 @@ function MakeOfferPage() {
               <Grid item>
                 <Grid
                   container
-                  direction="column"
-                  justifyContent="space-between"
+                  direction='column'
+                  justifyContent='space-between'
                   style={{ height: "100%", padding: "5px 0px" }}
                 >
                   <Grid item>
