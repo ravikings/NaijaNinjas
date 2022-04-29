@@ -76,7 +76,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,
+    "PAGE_SIZE": 10,
     "ORDERING_PARAM": "ordering",
 }
 
@@ -190,7 +190,7 @@ DATABASES = {
         'NAME': 'gigxnow', 
         'USER': 'postgres', 
         'PASSWORD': '2{c%v~TtV?_SFCer',
-        'HOST': 'database-1.cluster-cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
+        'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
         'PORT': '5432',
     }
 }
