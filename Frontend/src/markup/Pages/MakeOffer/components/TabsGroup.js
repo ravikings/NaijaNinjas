@@ -16,7 +16,7 @@ function TabsGroup(props) {
   const renderSelectedTab = () => {
     switch (value) {
       case 0:
-        return <AboutMe />;
+        return <AboutMe data = {props.data} />;
       case 1:
         return <Services />;
       case 2:

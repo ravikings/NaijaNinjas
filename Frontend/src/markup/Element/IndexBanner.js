@@ -58,7 +58,7 @@ function IndexBanner() {
             </h2>
             <form className='dezPlaceAni'>
               <div className='row'>
-                <div className='col-lg-4 col-md-6'>
+                <div className='col-lg-6 col-md-6'>
                   <div className='form-group'>
                     <label>Job Title, Keywords, or Phrase</label>
                     <div className='input-group'>
@@ -77,24 +77,7 @@ function IndexBanner() {
                     </div>
                   </div>
                 </div>
-                <div className='col-lg-3 col-md-6'>
-                  <div className='form-group'>
-                    <label>Email address</label>
-                    <div className='input-group'>
-                      <input
-                        type='text'
-                        className='form-control'
-                        placeholder=''
-                      />
-                      <div className='input-group-append'>
-                        <span className='input-group-text'>
-                          <i className='fa fa-map-marker'></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className='col-lg-3 col-md-6'>
+                <div className='col-lg-4 col-md-6'>
                   <div className='form-group'>
                     <Form.Control as='select' custom className='select-btn'>
                       <option>Select Sector</option>
