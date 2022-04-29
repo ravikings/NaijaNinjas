@@ -68,8 +68,30 @@ def load_runner():
 
 
     RunnerProfile.objects.bulk_create(load_data)
-    print(load_data)
     print("create completed!")
 
+
+def load_resume():
+    
+    load_data = []
+    #try:
+    with open('templates/mock_resume_data.csv') as file:
+        data = file.readlines()
+
+        
+        content = data[1:]
+        for x in content:
+
+            i = x.split(",")
+            load_data.append(RunnerResume(headline=i[1],skills=i[2], employment=i[3],projects=i[4],profile_summary=i[5],accomplishment=i[7], author_id=int(i[0])))
+
+
+
+    RunnerResume.objects.bulk_create(load_data)
+    print("create completed!")
+
+
+# To load data uncomment below
 #laod_user()
-load_runner()
+#load_runner()
+#load_resume()
