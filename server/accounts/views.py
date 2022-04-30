@@ -22,6 +22,7 @@ from .utilis import send_verify_email,send_reset_password_email, send_successful
 from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
+from asgiref.sync import async_to_sync
 from .models import (
     AccountUser,
     Photo,
@@ -42,7 +43,8 @@ from .serializers import (
     UserSearchDetialSerializer,
     UserResumeSerializer,
     ResetPasswordEmailRequestSerializer,
-    SetNewPasswordSerializer
+    SetNewPasswordSerializer,
+    UserOnlineSerializer,
 )
 
 
@@ -88,8 +90,15 @@ class AccountStatus(viewsets.ModelViewSet):
     uses to upload pictures to ui dashboard
     """
 
-    queryset = AccountUser.objects.all()
-    serializer_class = UserAccountSerializer
+    serializer_class = UserOnlineSerializer
+
+    @async_to_sync
+    async def get_queryset(self):
+        """
+        Return a list of all users.
+        """
+
+        return AccountUser.objects.all()
 
 
 class PhotoUpload(viewsets.ModelViewSet):

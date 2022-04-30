@@ -11,6 +11,7 @@ class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
+    is_online = models.BooleanField(default=False, verbose_name="is_online")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
 
@@ -70,8 +71,9 @@ class RunnerProfile(models.Model):
     #     RunnerResume, related_name="user_resume", blank=True
     # )
 
-    def total_views(self):
-        return self.views.count()
+    # def total_views(self):
+    #     return self.views.count()
+
 
 
 class RunnerResume(models.Model):
