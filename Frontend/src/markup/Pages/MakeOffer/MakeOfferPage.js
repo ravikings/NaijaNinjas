@@ -14,6 +14,7 @@ import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
 import { useLocation } from "react-router-dom";
 import createRequest from "../../../utils/axios";
+import { Spinner } from "react-bootstrap";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -35,7 +36,7 @@ const blogGrid = [
 function MakeOfferPage() {
   const classes = useStyles();
   const location = useLocation();
-  const [user, setUser] = React.useState({});
+  const [user, setUser] = React.useState(null);
   const id = location.state.id ? location.state.id : "";
 
   useEffect(() => {
@@ -54,7 +55,7 @@ function MakeOfferPage() {
   return (
     <>
       <Header />
-      {user && (
+      {user ? (
         <div className='page-content bg-white'>
           <div
             className='dez-bnr-inr d-flex align-items-center'
@@ -103,7 +104,7 @@ function MakeOfferPage() {
           <div className={classes.main}>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12} md={7} lg={8}>
-                <TabsGroup data = {user.description} />
+                <TabsGroup data={user.description} />
                 <Feedback />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
@@ -120,6 +121,10 @@ function MakeOfferPage() {
             </Grid>
           </div>
         </div>
+      ) : (
+        <Spinner animation='border' role='status'>
+          <span className='visually-hidden'>Loading...</span>
+        </Spinner>
       )}
       <Footer />
     </>

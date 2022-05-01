@@ -1,21 +1,24 @@
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Form } from "react-bootstrap";
+import { Alert, Form } from "react-bootstrap";
 
 var bnr1 = require("./../../images/main-slider/slide2.jpg");
 
 function IndexBanner() {
   const [title, setTitle] = React.useState("");
   const history = useHistory();
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title) {
+      alert("Please enter title");
+      return;
+    }
     history.push({
       pathname: "/browse-candidates",
       state: {
         title: title,
       },
-    })
-    
+    });
   };
 
   useEffect(() => {

@@ -15,6 +15,13 @@ function Browsecandidates() {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
 
+  const [userStatus, setUserStatus] = useState(null);
+  const [userNext, setUserNext] = useState(null);
+  const [userPrevious, setUserPrevious] = useState(null);
+
+  const [keyword, setKeyword] = useState("");
+  const [keyLoad, setKeyLoad] = useState(false);
+
   const [next, setNext] = useState(null);
   const [previous, setPrevious] = useState(null);
   const [count, setCount] = useState(null);
@@ -22,10 +29,25 @@ function Browsecandidates() {
 
   const { state } = useLocation();
 
-  const title = state ? state.title : "";
-
-  const handleRequest = async () => {
+  const checkOnline = async (req = "/api/v1/account/user-status/") => {
+    setLoading(true);
     try {
+      const { data } = await createRequest().get(req);
+      data.next ? setUserNext(data.next) : setUserNext(null);
+      data.previous ? setUserPrevious(data.previous) : setUserPrevious(null);
+      setUserStatus(data);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
+  const handleRequest = async (title) => {
+    setLoading(true);
+    setKeyLoad(true);
+    try {
+      console.log(title);
       const params = {
         search: title,
       };
@@ -38,18 +60,17 @@ function Browsecandidates() {
         data.previous ? setPrevious(data.previous) : setPrevious(null);
         const pgs = Math.ceil(data.count / 10);
         data.count && setCount(pgs);
-        console.log(data);
+        setLoading(false);
+        setKeyLoad(false);
+        console.log(data, "data");
       } else {
         setError("No results found");
       }
     } catch (error) {
       setError("Something went wrong");
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    console.log(count);
-  }, [count]);
 
   const handleClick = async (e, req, forNext) => {
     if (!req) {
@@ -58,9 +79,16 @@ function Browsecandidates() {
 
     e.preventDefault();
     setLoading(true);
+    setKeyLoad(true);
     console.log("cliked");
     try {
       const { data } = await createRequest().get(req);
+      if (forNext) {
+        console.log("next Called");
+        checkOnline(userNext);
+      } else {
+        checkOnline(userPrevious);
+      }
       if (data.results) {
         setResults(data.results);
         data.previous ? setPrevious(data.previous) : setPrevious(null);
@@ -83,9 +111,17 @@ function Browsecandidates() {
   };
 
   useEffect(() => {
-    handleRequest();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title]);
+    handleRequest(state.title);
+    checkOnline();
+  }, []);
+
+  const handleKeyword = () => {
+    if (!keyword) {
+      return alert("Please enter a keyword");
+    }
+    handleRequest(keyword);
+    checkOnline();
+  };
 
   return (
     <>
@@ -97,21 +133,21 @@ function Browsecandidates() {
         >
           <PageTitle motherName='Home' activeName='Browse Candidates' />
         </div>
-        <Jobfindbox />
+        {/* <Jobfindbox /> */}
         <div className='content-block'>
           <div className='section-full bg-white browse-job p-b50'>
             <div className='container'>
-              <div className='row'>
+              <div className='row mt-4'>
                 <div className='col-xl-9 col-lg-8'>
-                  <div className='m-b30'>
+                  {/* <div className='m-b30'>
                     <input
                       type='text'
                       className='form-control'
                       placeholder='Search freelancer services'
                     />
-                  </div>
+                  </div> */}
                   <ul className='post-job-bx'>
-                    {results && !loading ? (
+                    {results && !keyLoad && !loading ? (
                       results.map((item, index) => (
                         <li key={index}>
                           <div className='post-bx'>
@@ -137,28 +173,37 @@ function Browsecandidates() {
                                   </Link>
                                 </h4>
                                 {/* <i class='fa fa-solid fa-circle circle'></i> */}
-                                <div className='d-flex mb-1'>
-                                  <i
-                                    class='fa fa-check-circle circle align-self-center'
-                                    aria-hidden='true'
-                                  ></i>
-                                  {/* <span className='badge badge-success ml-1'>
-                                    Online
-                                  </span> */}
-                                  <span className='  ml-1'>Online Now</span>
-                                </div>
+                                {userStatus &&
+                                  userStatus.results.map((user) =>
+                                    // user.id === 1 && item.first_name === "Wayne" && true ? (
+                                    user.id === item.id && user.online ? (
+                                      <div className='d-flex mb-1'>
+                                        <i
+                                          className='fa fa-check-circle circle align-self-center'
+                                          aria-hidden='true'
+                                        ></i>
+
+                                        <span className='  ml-1'>
+                                          Online Now
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <></>
+                                    )
+                                  )}
                                 <div>
-                                  <i class='fa fa-money money' ></i>
+                                  <i className='fa fa-money money'></i>
                                   <span className='ml-1'>
-                                    {/* {item.salary} */}
-                                    $ 500,000
+                                    {/* {item.salary} */}$ 500,000
                                   </span>
                                 </div>
 
                                 <ul>
                                   <li>
                                     <i className='fa fa-map-marker '></i>{" "}
-                                    {item.location}, {item.city} {item.country}
+                                    {item.location}{" "}
+                                    {item.city && ", " + item.city}{" "}
+                                    {item.city && item.country}
                                   </li>
                                   <li>
                                     <i className='fa fa-usd'></i> Full Time
@@ -190,8 +235,8 @@ function Browsecandidates() {
                                     },
                                   }}
                                 >
-                                  <Button variant='primary' size='sm'>
-                                    View Profile
+                                  <Button variant='primary' size='md'>
+                                    <b className='fw8'>View Profile</b>
                                   </Button>
                                 </Link>
                               </div>
@@ -209,7 +254,7 @@ function Browsecandidates() {
                       <p>Loading...</p>
                     )}
                   </ul>
-                  {results && !loading && (
+                  {results && !keyLoad && !loading && (
                     <div className='pagination-bx m-t30'>
                       <ul className='pagination'>
                         <li className='previous'>
@@ -226,7 +271,6 @@ function Browsecandidates() {
                           </Link>
                         </li>
                         {Array.from(Array(count), (e, i) => {
-                          console.log(i, page);
                           return (
                             <li
                               key={i}
@@ -266,37 +310,39 @@ function Browsecandidates() {
                       <div className=''>
                         <input
                           type='text'
+                          value={keyword}
+                          onChange={(e) => setKeyword(e.target.value)}
                           className='form-control'
                           placeholder='Search'
                         />
                       </div>
                     </div>
-                    <div className='clearfix m-b10'>
-                      <h5 className='widget-title font-weight-700 m-t0 text-uppercase'>
-                        Location
-                      </h5>
-                      <input
-                        type='text'
-                        className='form-control m-b30'
-                        placeholder='Location'
-                      />
-                      <div className='input-group m-b20'>
+                    {/* <div className='clearfix m-b10'>
+                        <h5 className='widget-title font-weight-700 m-t0 text-uppercase'>
+                          Location
+                        </h5>
                         <input
                           type='text'
-                          className='form-control'
-                          placeholder='120'
+                          className='form-control m-b30'
+                          placeholder='Location'
                         />
-                        <Form.Control
-                          as='select'
-                          custom
-                          className='btn dropdown-toggle text-left btn-default'
-                        >
-                          <option>Km</option>
-                          <option>miles</option>
-                        </Form.Control>
-                      </div>
-                    </div>
-                    <div className='clearfix m-b30'>
+                        <div className='input-group m-b20'>
+                          <input
+                            type='text'
+                            className='form-control'
+                            placeholder='120'
+                          />
+                          <Form.Control
+                            as='select'
+                            custom
+                            className='btn dropdown-toggle text-left btn-default'
+                          >
+                            <option>Km</option>
+                            <option>miles</option>
+                          </Form.Control>
+                        </div>
+                      </div> */}
+                    {/* <div className='clearfix m-b30'>
                       <h5 className='widget-title font-weight-700 text-uppercase'>
                         Job type
                       </h5>
@@ -450,7 +496,7 @@ function Browsecandidates() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className='clearfix .browse-job'>
                       <h5 className='widget-title font-weight-700 text-uppercase'>
                         Category
@@ -466,6 +512,15 @@ function Browsecandidates() {
                         <option>Design, Art & Multimedia</option>
                         <option>Food Services</option>
                       </Form.Control>
+                    </div>
+                    <div className='clearfix .browse-job mt-4'>
+                      <Button
+                        variant='primary'
+                        onClick={handleKeyword}
+                        className='w-100'
+                      >
+                        <b className='fw8'>FIND JOB</b>
+                      </Button>
                     </div>
                   </div>
                 </div>
