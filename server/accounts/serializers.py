@@ -23,6 +23,7 @@ from accounts.models import (
     Photo,
     Vidoe,
     Review,
+    Service,
 )
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
@@ -154,6 +155,12 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+
+class ServiceSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Service
+        fields = "__all__"
 
 class UserOnlineSerializer(serializers.ModelSerializer):
     

@@ -18,6 +18,7 @@ from history.signals import history_tracker
 from django.utils.encoding import force_bytes, force_str, smart_bytes
 from rest_framework.renderers import TemplateHTMLRenderer
 import jwt
+from accounts.permissions import IsOwner
 from .utilis import send_verify_email,send_reset_password_email, send_successfully_change_password_email, generate_token
 from rest_framework import status
 from django.conf import settings
@@ -31,6 +32,7 @@ from .models import (
     RunnerResume,
     Review,
     IpModel,
+    Service,
 )
 from .serializers import (
     PhotosSerializer,
@@ -45,6 +47,7 @@ from .serializers import (
     ResetPasswordEmailRequestSerializer,
     SetNewPasswordSerializer,
     UserOnlineSerializer,
+    ServiceSerializer
 )
 
 
@@ -212,6 +215,20 @@ class UserSearchDetails(viewsets.ModelViewSet):
         #queryset = RunnerProfile.objects.get(author_id=pk)
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
+
+
+class ServiceView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = ServiceSerializer
+    permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        return Service.objects.filter(author=self.request.user.id)
 
 
 class TestView(viewsets.ModelViewSet):
