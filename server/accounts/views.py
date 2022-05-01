@@ -18,10 +18,12 @@ from history.signals import history_tracker
 from django.utils.encoding import force_bytes, force_str, smart_bytes
 from rest_framework.renderers import TemplateHTMLRenderer
 import jwt
+from accounts.permissions import IsOwner
 from .utilis import send_verify_email,send_reset_password_email, send_successfully_change_password_email, generate_token
 from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
+from asgiref.sync import async_to_sync
 from .models import (
     AccountUser,
     Photo,
@@ -30,6 +32,7 @@ from .models import (
     RunnerResume,
     Review,
     IpModel,
+    Service,
 )
 from .serializers import (
     PhotosSerializer,
@@ -42,7 +45,9 @@ from .serializers import (
     UserSearchDetialSerializer,
     UserResumeSerializer,
     ResetPasswordEmailRequestSerializer,
-    SetNewPasswordSerializer
+    SetNewPasswordSerializer,
+    UserOnlineSerializer,
+    ServiceSerializer
 )
 
 
@@ -88,8 +93,15 @@ class AccountStatus(viewsets.ModelViewSet):
     uses to upload pictures to ui dashboard
     """
 
-    queryset = AccountUser.objects.all()
-    serializer_class = UserAccountSerializer
+    serializer_class = UserOnlineSerializer
+
+    @async_to_sync
+    async def get_queryset(self):
+        """
+        Return a list of all users.
+        """
+
+        return AccountUser.objects.all()
 
 
 class PhotoUpload(viewsets.ModelViewSet):
@@ -180,7 +192,7 @@ def get_client_ip(request):
     return ip
 
 
-class UserSearchDetails(viewsets.ViewSet):
+class UserSearchDetails(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
     which include view count for each unique ip
@@ -200,9 +212,23 @@ class UserSearchDetails(viewsets.ViewSet):
             IpModel.objects.create(ip=ip)
             profile.views.add(IpModel.objects.get(ip=ip))
         
-        queryset = RunnerProfile.objects.get(author_id=pk)
-        serializer = UserProfileSearchSerializer(queryset)
+        #queryset = RunnerProfile.objects.get(author_id=pk)
+        serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
+
+
+class ServiceView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = ServiceSerializer
+    permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        return Service.objects.filter(author=self.request.user.id)
 
 
 class TestView(viewsets.ModelViewSet):

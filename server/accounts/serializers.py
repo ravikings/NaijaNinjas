@@ -23,9 +23,11 @@ from accounts.models import (
     Photo,
     Vidoe,
     Review,
+    Service,
 )
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
+import arrow
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -135,32 +137,62 @@ class UserResumeSerializer(serializers.ModelSerializer):
     """
     resume search serializers use for entry data for resume from ui
     """
-
     class Meta:
         model = RunnerResume
         fields = "__all__"
 
+class UserAccountSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AccountUser
+        fields = ("id", "email", "phone_number", "is_a_runner")
+        read_only_fields = ("id", "email", "phone_number", "is_a_runner")
+
 
 class UserProfileSearchSerializer(serializers.ModelSerializer):
-
 
     class Meta:
         model = RunnerProfile
         fields = "__all__"
 
 
-class UserAccountSerializer(serializers.ModelSerializer):
+class ServiceSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Service
+        fields = "__all__"
 
-    online = serializers.SerializerMethodField()
+class UserOnlineSerializer(serializers.ModelSerializer):
+    
+    online_status = serializers.SerializerMethodField()
 
     class Meta:
         model = AccountUser
-        fields = ("id", "email", "phone_number", "is_a_runner", "online")
-        read_only_fields = ("id", "email", "phone_number", "is_a_runner", "online")
+        fields = ("id", "online_status")
+        read_only_fields = ("id","online")
 
-    def get_online(self, instance):
 
-        return self.context["request"].user.is_authenticated
+    def get_online_status(self, instance):
+    
+        #data = instance.objects.get(id=pk)
+        
+        x = instance.last_login
+        if x:
+
+            user_last_login = arrow.get(x)
+            now = arrow.utcnow()
+            current_time = now.replace(tzinfo='Africa/Lagos')
+
+            minutes = current_time-user_last_login
+
+            difference = minutes.total_seconds()
+            time = difference // (60)
+            print("checking if user is online")
+            if time < 1:
+                print({"status":"online"})
+                return "online"
+        print({"status":"offline"})
+        return "offline"
 
 
 class UserSearchDetialSerializer(serializers.ModelSerializer):

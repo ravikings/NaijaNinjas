@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from ckeditor.fields import RichTextField
+from accounts.models import IpModel
 
 # Create your models here.
 
@@ -16,6 +17,7 @@ class Forum(models.Model):
     attachment = models.FileField(upload_to="forum/documents/%Y/%m/%d/", blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    views = models.ManyToManyField(IpModel, related_name="forum_views", blank=True)
 
     class Meta:
         ordering = ("created",)

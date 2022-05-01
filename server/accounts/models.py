@@ -11,6 +11,7 @@ class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
+    is_online = models.BooleanField(default=False, verbose_name="is_online")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
 
@@ -58,6 +59,8 @@ class RunnerProfile(models.Model):
         null=True,
     )
     postcode = models.CharField(max_length=55, blank=True, null=True, db_index=True)
+    sector = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    department = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     description = models.TextField(null=True, blank=True, db_index=True)
     state = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     city = models.CharField(max_length=55, blank=True, null=True, db_index=True)
@@ -66,12 +69,6 @@ class RunnerProfile(models.Model):
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
     reviews = models.ManyToManyField(Review, related_name="buyers_review", blank=True)
-    # resumes = models.ManyToManyField(
-    #     RunnerResume, related_name="user_resume", blank=True
-    # )
-
-    def total_views(self):
-        return self.views.count()
 
 
 class RunnerResume(models.Model):
@@ -105,7 +102,6 @@ class Photo(models.Model):
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
 
-
 class Vidoe(models.Model):
 
     author = models.ForeignKey(
@@ -115,3 +111,13 @@ class Vidoe(models.Model):
     video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
+
+class Service(models.Model):
+    
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
+    )
+    description = models.CharField(max_length=250, null=True, db_index=True)
+    display = models.FileField(upload_to="documents/user/service/photo/%Y/%m/%d/", blank=True)
+
+    amount = models.CharField(max_length=250, null=True)

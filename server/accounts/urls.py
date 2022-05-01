@@ -15,6 +15,7 @@ from accounts.views import (
     SetNewPasswordAPIView,
     SetProfilePassword,
     ChangeProfilePassword,
+    ServiceView,
     TestView,
 )
 
@@ -30,6 +31,9 @@ router.register(r"user-review", ReviewView, basename="user-review")
 router.register(r"test", TestView, basename="test-view")
 router.register(
     r"user-search-detials", UserSearchDetails, basename="user-search-detials"
+)
+router.register(
+    r"professional-services", ServiceView, basename="professional-services"
 )
 
 urlpatterns = [
