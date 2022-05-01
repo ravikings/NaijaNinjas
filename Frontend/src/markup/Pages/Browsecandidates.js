@@ -1,19 +1,27 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Header from "./../Layout/Header";
 import Footer from "./../Layout/Footer";
 import PageTitle from "./../Layout/PageTitle";
 import Jobfindbox from "./../Element/Jobfindbox";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import createRequest from "../../utils/axios";
 
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 function Browsecandidates() {
+  const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+
   const [next, setNext] = useState(null);
+  const [previous, setPrevious] = useState(null);
+  const [count, setCount] = useState(null);
+  const [page, setPage] = useState(0);
+
   const { state } = useLocation();
+
   const title = state ? state.title : "";
 
   const handleRequest = async () => {
@@ -26,13 +34,51 @@ function Browsecandidates() {
       });
       if (data.results) {
         setResults(data.results);
-        data.next && setNext(data.next);
+        data.next ? setNext(data.next) : setNext(null);
+        data.previous ? setPrevious(data.previous) : setPrevious(null);
+        const pgs = Math.ceil(data.count / 10);
+        data.count && setCount(pgs);
         console.log(data);
       } else {
         setError("No results found");
       }
     } catch (error) {
       setError("Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    console.log(count);
+  }, [count]);
+
+  const handleClick = async (e, req, forNext) => {
+    if (!req) {
+      return e.preventDefault();
+    }
+
+    e.preventDefault();
+    setLoading(true);
+    console.log("cliked");
+    try {
+      const { data } = await createRequest().get(req);
+      if (data.results) {
+        setResults(data.results);
+        data.previous ? setPrevious(data.previous) : setPrevious(null);
+        data.next ? setNext(data.next) : setNext(null);
+        setLoading(false);
+        if (forNext) {
+          setPage(page + 1);
+        } else {
+          setPage(page - 1);
+        }
+
+        console.log(data, "new data");
+      } else {
+        setError("No results found");
+      }
+    } catch (error) {
+      setError("Something went wrong");
+      setLoading(true);
     }
   };
 
@@ -65,7 +111,7 @@ function Browsecandidates() {
                     />
                   </div>
                   <ul className='post-job-bx'>
-                    {results ? (
+                    {results && !loading ? (
                       results.map((item, index) => (
                         <li key={index}>
                           <div className='post-bx'>
@@ -90,10 +136,29 @@ function Browsecandidates() {
                                     {item.first_name} {item.last_name}
                                   </Link>
                                 </h4>
+                                {/* <i class='fa fa-solid fa-circle circle'></i> */}
+                                <div className='d-flex mb-1'>
+                                  <i
+                                    class='fa fa-check-circle circle align-self-center'
+                                    aria-hidden='true'
+                                  ></i>
+                                  {/* <span className='badge badge-success ml-1'>
+                                    Online
+                                  </span> */}
+                                  <span className='  ml-1'>Online Now</span>
+                                </div>
+                                <div>
+                                  <i class='fa fa-money money' ></i>
+                                  <span className='ml-1'>
+                                    {/* {item.salary} */}
+                                    $ 500,000
+                                  </span>
+                                </div>
+
                                 <ul>
                                   <li>
-                                    <i className='fa fa-map-marker'></i>{" "}
-                                    {item.city}
+                                    <i className='fa fa-map-marker '></i>{" "}
+                                    {item.location}, {item.city} {item.country}
                                   </li>
                                   <li>
                                     <i className='fa fa-usd'></i> Full Time
@@ -106,13 +171,29 @@ function Browsecandidates() {
                               </div>
                             </div>
                             <div className='d-flex'>
-                              <div className='job-time mr-auto'>
-                                <Link to={""} className='mr-1'>
-                                  <span>{item.title}</span>
-                                </Link>
+                              <div style={{ width: "65px" }}></div>
+                              <div className='job-time mr-4'>
+                                <span>{item.description}</span>
                               </div>
+                              {item.salary && (
+                                <div className='salary-bx'>
+                                  <span>{item.salary}</span>
+                                </div>
+                              )}
+
                               <div className='salary-bx'>
-                                <span>$45 Per Hour</span>
+                                <Link
+                                  to={{
+                                    pathname: "/make-offer",
+                                    state: {
+                                      id: item.id,
+                                    },
+                                  }}
+                                >
+                                  <Button variant='primary' size='sm'>
+                                    View Profile
+                                  </Button>
+                                </Link>
                               </div>
                             </div>
                             <label className='like-btn'>
@@ -128,26 +209,47 @@ function Browsecandidates() {
                       <p>Loading...</p>
                     )}
                   </ul>
-                  {results && (
+                  {results && !loading && (
                     <div className='pagination-bx m-t30'>
                       <ul className='pagination'>
                         <li className='previous'>
-                          <Link to={""}>
+                          <Link
+                            to={""}
+                            className={!previous && "disabledCursor"}
+                            onClick={(e) =>
+                              previous
+                                ? handleClick(e, previous)
+                                : handleClick(e)
+                            }
+                          >
                             <i className='ti-arrow-left'></i> Prev
                           </Link>
                         </li>
-                        <li className='active'>
-                          <Link to={""}>1</Link>
-                        </li>
-                        {next && (
-                          <li>
-                            <Link to={""} disabled>
-                              2
-                            </Link>
-                          </li>
-                        )}
+                        {Array.from(Array(count), (e, i) => {
+                          console.log(i, page);
+                          return (
+                            <li
+                              key={i}
+                              className={
+                                i === page ? "activeNumber " : "notActive"
+                              }
+                            >
+                              <Link to='' onClick={(e) => handleClick(e)}>
+                                {i + 1}
+                              </Link>
+                            </li>
+                          );
+                        })}
                         <li className='next'>
-                          <Link to={""}>
+                          <Link
+                            to={""}
+                            className={!next && "disabledCursor"}
+                            onClick={(e) =>
+                              next
+                                ? handleClick(e, next, "forNext")
+                                : handleClick(e)
+                            }
+                          >
                             Next <i className='ti-arrow-right'></i>
                           </Link>
                         </li>
