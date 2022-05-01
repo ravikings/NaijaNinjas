@@ -189,7 +189,7 @@ def get_client_ip(request):
     return ip
 
 
-class UserSearchDetails(viewsets.ViewSet):
+class UserSearchDetails(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
     which include view count for each unique ip
@@ -209,8 +209,8 @@ class UserSearchDetails(viewsets.ViewSet):
             IpModel.objects.create(ip=ip)
             profile.views.add(IpModel.objects.get(ip=ip))
         
-        queryset = RunnerProfile.objects.get(author_id=pk)
-        serializer = UserProfileSearchSerializer(queryset)
+        #queryset = RunnerProfile.objects.get(author_id=pk)
+        serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 
 

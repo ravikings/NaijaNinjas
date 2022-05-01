@@ -104,13 +104,13 @@ import pytz
 
 #loc_dt = datetime(2022, 4, 29, 21, 30, 19, 328196, tzinfo=ZoneInfo("America/Los_Angeles"))
 
-user_last_login = arrow.get("2022-04-30T03:02:11.424073Z")
-now = arrow.utcnow()
-current_time = now.replace(tzinfo='Africa/Lagos')
+# user_last_login = arrow.get("2022-04-30T03:02:11.424073Z")
+# now = arrow.utcnow()
+# current_time = now.replace(tzinfo='Africa/Lagos')
 
-minutes = current_time-user_last_login
+# minutes = current_time-user_last_login
 
-difference = minutes.total_seconds()
-time = difference // (60)
-if time > 5:
-    print({"status":"offline"})
+# difference = minutes.total_seconds()
+# time = difference // (60)
+# if time > 5:
+#     print({"status":"offline"})
