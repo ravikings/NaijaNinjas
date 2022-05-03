@@ -153,7 +153,7 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RunnerProfile
-        fields = "__all__"
+        exclude = ("address",)
 
 
 class ServiceSerializer(serializers.ModelSerializer):

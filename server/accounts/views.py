@@ -141,9 +141,12 @@ class ReviewView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    #permissions_classes = [IsAuthenticated]
+    permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        return Review.objects.filter(profile=self.request.user.id)
 
 
 class SearchProfile(viewsets.ModelViewSet):
@@ -212,7 +215,6 @@ class UserSearchDetails(viewsets.ModelViewSet):
             IpModel.objects.create(ip=ip)
             profile.views.add(IpModel.objects.get(ip=ip))
         
-        #queryset = RunnerProfile.objects.get(author_id=pk)
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 

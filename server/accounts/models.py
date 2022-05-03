@@ -26,20 +26,6 @@ class IpModel(models.Model):
         return self.ip
 
 
-class Review(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
-    )
-    body = RichTextField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    rating = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
-
-    class Meta:
-        ordering = ("created",)
-
 
 class RunnerProfile(models.Model):
     author = models.OneToOneField(
@@ -68,7 +54,6 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
-    reviews = models.ManyToManyField(Review, related_name="buyers_review", blank=True)
 
 
 class RunnerResume(models.Model):
@@ -90,7 +75,21 @@ class RunnerResume(models.Model):
     description = models.TextField(null=True, db_index=True)
     attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
 
-
+class Review(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
+    )
+    body = RichTextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    profile = models.ForeignKey(
+        RunnerProfile, on_delete=models.CASCADE, related_name="profile_review", default=False
+    )
+    class Meta:
+        ordering = ("created",)
 class Photo(models.Model):
 
     author = models.ForeignKey(
