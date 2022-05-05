@@ -1,39 +1,20 @@
 import React from "react";
 import {Link, useHistory} from "react-router-dom";
-import {useUser} from "../../Context/AuthContext";
-import createRequest from "../../../utils/axios";
-import {toast} from "react-toastify";
 import {useFormik} from "formik";
 import {GoogleLoginButton, FacebookLoginButton} from "./components";
 import Button from "@material-ui/core/Button";
+import {login} from "./Redux/AuthActions";
+import {useDispatch} from "react-redux";
 
 function LoginPage() {
-    const userDetails = useUser();
     const history = useHistory();
-
-    const login = (loginDetails) => {
-        createRequest()
-            .post("/dj-rest-auth/login/", loginDetails)
-            .then((res) => {
-                localStorage.setItem("userID", res?.data?.user?.pk);
-                localStorage.setItem("access_token", res?.data?.access_token);
-                userDetails.signIn(res?.data?.user);
-                history.push("/");
-            })
-            .catch((e) => {
-                if (e.response?.status === 400) {
-                    toast.error(e?.response?.data?.non_field_errors[0]);
-                } else {
-                    toast.error("Unknown Error");
-                }
-            });
-    };
+    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {email: "", password: ""},
         enableReinitialize: true,
         onSubmit: (values, {resetForm}) => {
-            login(values);
+            dispatch(login(history,values));
         },
     });
 

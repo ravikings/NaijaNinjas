@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, useHistory} from 'react-router-dom';
-import {useUser} from "../../Context/AuthContext";
 import createRequest from "../../../utils/axios";
 import {toast} from "react-toastify";
 import {useFormik} from "formik";
@@ -8,20 +7,22 @@ import {GoogleLoginButton, FacebookLoginButton, RunnerButton} from './components
 import Button from "@material-ui/core/Button";
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import BusinessCenterOutlinedIcon from '@material-ui/icons/BusinessCenterOutlined';
+import {useDispatch} from "react-redux";
+import {getCurrentUser} from "./Redux/AuthActions";
 
 function RegisterPage() {
-    const userDetails = useUser();
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const register = (loginDetails) => {
         createRequest().post('/dj-rest-auth/registration/', {...loginDetails, password2: loginDetails.password1})
             .then((res) => {
-                userDetails.signIn(res?.data?.user);
+                dispatch(getCurrentUser())
                 history.push('/')
             })
             .catch((e) => {
                 if (e.response?.status === 400) {
-                    toast.error("Unknown Error");
+                    toast.error(e?.response?.data?.message);
                 } else {
                     toast.error("Unknown Error");
                 }

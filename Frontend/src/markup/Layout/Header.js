@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useUser } from "../Context/AuthContext";
 import logo2 from "./../../images/logo.png";
 import AuthState from "./AuthState";
 import LoginDialog from "./LoginDialog";
-
-var bnr3 = require("./../../images/background/bg3.jpg");
+import {useSelector} from "react-redux";
 
 function Header() {
-  const userDetails = useUser();
+  const userDetails = useSelector((state) => state.authReducer.currentUser);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   const handleClose = () => {
