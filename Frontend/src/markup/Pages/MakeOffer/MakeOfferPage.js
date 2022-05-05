@@ -14,7 +14,7 @@ import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
 import { useLocation } from "react-router-dom";
 import createRequest from "../../../utils/axios";
-import { Spinner } from "react-bootstrap";
+import ClipLoader from "react-spinners/ClipLoader";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -44,6 +44,7 @@ function MakeOfferPage() {
   }, [location]);
 
   const handleRequest = async () => {
+    console.log(id, "item");
     const res = await createRequest().get(
       `/api/v1/account/user-search-detials/${id}/`
     );
@@ -122,9 +123,9 @@ function MakeOfferPage() {
           </div>
         </div>
       ) : (
-        <Spinner animation='border' role='status'>
-          <span className='visually-hidden'>Loading...</span>
-        </Spinner>
+        <div className='loader'>
+          <ClipLoader color={"#2e55fa"} loading={true} size={150} />
+        </div>
       )}
       <Footer />
     </>
