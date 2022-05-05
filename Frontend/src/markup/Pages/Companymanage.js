@@ -20,7 +20,7 @@ function Companymanage() {
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title  clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        Manage jobs
+                        Manage tasks
                       </h5>
                       <div className="float-right">
                         <span className="select-title">Sort by freshness</span>

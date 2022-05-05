@@ -43,7 +43,7 @@ function Companyprofile(){
 													<span>Transactions</span></Link></li>
 												<li><Link to={"/company-manage-job"}>
 													<i className="fa fa-briefcase" aria-hidden="true"></i> 
-													<span>Manage jobs</span></Link></li>
+													<span>Manage tasks</span></Link></li>
 												<li><Link to={"/company-resume"}>
 													<i className="fa fa-id-card-o" aria-hidden="true"></i>
 													<span>Resume</span></Link></li>
