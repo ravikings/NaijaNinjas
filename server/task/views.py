@@ -8,6 +8,7 @@ from task.models import Task, TaskBidder
 from history.signals import history_tracker
 from accounts.views import get_client_ip
 from accounts.models import IpModel
+from rest_framework import status
 
 # Create your views here.
 
@@ -49,3 +50,15 @@ class TaskBidderView(viewsets.ModelViewSet):
         serializer = TaskBidderSerializer(data)
         return Response(serializer.data)
 
+    def create(self, request, pk=None):
+
+        task_id = request.query_params.get('task_id')
+        offer = request.query_params.get('offer')
+        bid_queryset = Task.objects.filter(author=pk, post_status="Open")
+        if bid_queryset.exists():
+            placement_bid = TaskBidder.objects.create(bidder=request.user.id, 
+                                            task=task_id, 
+                                            offer=offer)
+            return Response({"message": "You request was successfully processed"})
+
+        return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)

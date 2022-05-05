@@ -8,14 +8,14 @@
 # from django.db import IntegrityError
 # from django.utils.safestring import mark_safe
 # from django.db.models import Avg, F, Count
-# from accounts.models import (
-#     AccountUser,
-#     RunnerProfile,
-#     RunnerResume,
-#     Photo,
-#     Vidoe,
-#     Review,
-# )
+from accounts.models import (
+    AccountUser,
+    RunnerProfile,
+    RunnerResume,
+    Photo,
+    Vidoe,
+    Review,
+)
 
 # from .models import IpModel, RunnerProfile, Review
 # from django.core.mail import send_mail, send_mass_mail
@@ -95,22 +95,3 @@
 # #laod_user()
 # #load_runner()
 # #load_resume()
-
-
-from datetime import datetime   
-import arrow
-import pytz
-
-
-#loc_dt = datetime(2022, 4, 29, 21, 30, 19, 328196, tzinfo=ZoneInfo("America/Los_Angeles"))
-
-# user_last_login = arrow.get("2022-04-30T03:02:11.424073Z")
-# now = arrow.utcnow()
-# current_time = now.replace(tzinfo='Africa/Lagos')
-
-# minutes = current_time-user_last_login
-
-# difference = minutes.total_seconds()
-# time = difference // (60)
-# if time > 5:
-#     print({"status":"offline"})

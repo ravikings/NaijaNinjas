@@ -57,16 +57,20 @@ class DashboardProfile(viewsets.ModelViewSet):
     dashboard serializers use for entry data for getting data to the ui
     """
 
+    queryset = RunnerProfile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated and IsRunner]
+    #permission_classes = [IsAuthenticated and IsRunner]
 
-    def get_queryset(self):
+    def retrieve(self, request, pk=None):
 
-        return RunnerProfile.objects.filter(author=self.request.user.id)
+        data =  get_object_or_404(RunnerProfile, author_id=pk)
+        #return RunnerProfile.objects.filter(author_id=37)#self.request.user.id)
+        serializer = ProfileSerializer(data)
 
-    def perform_create(self, serializer):
+        return Response(serializer.data)
+    # def perform_create(self, serializer):
 
-        serializer.save(author=self.request.user.id)
+    #     serializer.save(author=self.request.user.id)
 
 
 class DashboardResume(viewsets.ModelViewSet):

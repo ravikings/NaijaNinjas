@@ -56,6 +56,10 @@ class CustomRegisterSerializer(RegisterSerializer):
  
         current_site = get_current_site(request)
         user = AccountUser.objects.get(email=str(email))
+        #todo add pre save create profile, change to celery and function
+        print("creating user profile")
+        RunnerProfile.objects.create(author_id=user.pk)
+        print("user profile creation completed!")
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         send_verify_email(user, current_site, email, uid)
 
