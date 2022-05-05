@@ -3,7 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useUser } from "../../Context/AuthContext";
 import createRequest from "../../../utils/axios";
 import { toast } from "react-toastify";
-import { useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { GoogleLoginButton, FacebookLoginButton } from "./components";
 import Button from "@material-ui/core/Button";
 import {
@@ -13,14 +14,24 @@ import {
 } from "react-simple-captcha";
 import { Input } from "@material-ui/core";
 
+const SignInSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Please enter valid email.")
+    .required("Email is required"),
 
+  password: Yup.string().required("Password is required"),
+  // .min(4, "Password is too short - should be 4 chars minimum"),
+});
+
+const initialValues = {
+  email: "",
+  password: "",
+};
 
 function LoginPage() {
   const userDetails = useUser();
   const history = useHistory();
   const [value, setValue] = useState("");
-
-
 
   const checkCaptcha = () => {
     const isValid = validateCaptcha(value);
@@ -51,22 +62,18 @@ function LoginPage() {
       });
   };
 
-  const formik = useFormik({
-    initialValues: { email: "", password: "" },
-    enableReinitialize: true,
-    onSubmit: (values, { resetForm }) => {
-      if (checkCaptcha()) {
-        login(values);
-      } else if (!value) {
-        toast.error("Please enter captcha to verify");
-      } else if (value.length < 6) {
-        toast.error("Make sure Captcha is 6 characters long");
-      } else {
-        toast.error("Please enter correct captcha");
-        setValue("");
-      }
-    },
-  });
+  const handleSubmit = (values) => {
+    if (checkCaptcha()) {
+      login(values);
+    } else if (!value) {
+      toast.error("Please enter captcha to verify");
+    } else if (value.length < 6) {
+      toast.error("Make sure Captcha is 6 characters long");
+    } else {
+      toast.error("Please enter correct captcha");
+      setValue("");
+    }
+  };
 
   return (
     <div className='page-content bg-gray login-form-bx browse-job login-style2'>
@@ -79,106 +86,135 @@ function LoginPage() {
                 data-wow-delay='0.8s'
               >
                 <div className='tab-content nav'>
-                  <form
-                    onSubmit={formik.handleSubmit}
-                    id='login'
-                    className='tab-pane active col-12 p-a0 '
-                    style={{ width: "310px" }}
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={SignInSchema}
+                    onSubmit={(values) => {
+                      handleSubmit(values);
+                    }}
                   >
-                    <p className='font-weight-bold text-center text-dark h4'>
-                      We're glad to see you again!
-                    </p>
-                    <p className='font-weight-600 text-center'>
-                      Don't have an account?
-                      <Link to='register' className='text-primary'>
-                        {" "}
-                        Sign Up
-                      </Link>
-                    </p>
-                    <div className='form-group'>
-                      <label>E-Mail Address*</label>
-                      <div className='input-group'>
-                        <input
-                          name='email'
-                          onChange={formik.handleChange}
-                          value={formik.values.email}
-                          className='form-control'
-                          placeholder='email'
-                        />
-                      </div>
-                      <div>
-                        <span className='text-danger'>
-                          {formik.errors.email && formik.touched.email
-                            ? formik.errors.email
-                            : null}
-                        </span>
-                      </div>
-                    </div>
-                    <div className='form-group'>
-                      <label>Password *</label>
-                      <div className='input-group'>
-                        <input
-                          name='password'
-                          onChange={formik.handleChange}
-                          value={formik.values.password}
-                          type='password'
-                          className='form-control'
-                          placeholder='password'
-                        />
-                      </div>
-                    </div>
-                    <div className='form-group'>
-                      <label>Verify *</label>
-                      <LoadCanvasTemplateNoReload />
-                      <div className='input-group mb-4'>
-                        <input
-                          name='text'
-                          onChange={(e) => setValue(e.target.value)}
-                          maxLength='6'
-                          value={value}
-                          type='text'
-                          placeholder='Enter above text'
-                          className='form-control'
-                        />
-                      </div>
-                    </div>
-                    <div className='text-left'>
-                      <Button
-                        fullWidth
-                        variant={"contained"}
-                        color={"primary"}
-                        type={"submit"}
-                        className='site-button'
-                      >
-                        login
-                      </Button>
-                    </div>
-                    <div className='text-center'>
-                      <Link
-                        data-toggle='tab'
-                        to='/forgot-password'
-                        className='site-button-link forget-pass m-t15'
-                      >
-                        <i className='fa fa-unlock-alt'></i> Forgot Password
-                      </Link>
-                    </div>
-                    <div className={"separator"}>
-                      <span>or</span>
-                    </div>
-                    <FacebookLoginButton
-                      startIcon={<i className='fa fa-facebook'></i>}
-                      fullWidth
-                    >
-                      Login via Faceboook
-                    </FacebookLoginButton>
-                    <GoogleLoginButton
-                      className={"mt-3"}
-                      startIcon={<i className='fa fa-google-plus'></i>}
-                      fullWidth
-                    >
-                      Login via Google+
-                    </GoogleLoginButton>
-                  </form>
+                    {(formik) => {
+                      const { errors, touched, isValid, dirty } = formik;
+                      return (
+                        <div
+                          className='tab-pane active col-12 p-a0 '
+                          style={{ width: "310px" }}
+                          id='login'
+                        >
+                          <p className='font-weight-bold text-center text-dark h4'>
+                            We're glad to see you again!
+                          </p>
+                          <p className='font-weight-600 text-center'>
+                            Don't have an account?
+                            <Link to='register' className='text-primary'>
+                              {" "}
+                              Sign Up
+                            </Link>
+                          </p>
+                          <Form>
+                            <div className='form-group'>
+                              <label>E-Mail Address*</label>
+                              <div className='input-group'>
+                                <Field
+                                  type='email'
+                                  name='email'
+                                  id='email'
+                                  className={
+                                    errors.email && touched.email
+                                      ? "input-error form-control border-danger "
+                                      : "form-control"
+                                  }
+                                />
+                              </div>
+                              <ErrorMessage
+                                name='email'
+                                component='div'
+                                className='error text-danger'
+                              />
+                            </div>
+                            <div className='form-group'>
+                              <label>Password *</label>
+                              <div className='input-group'>
+                                <Field
+                                  type='password'
+                                  name='password'
+                                  id='password'
+                                  className={
+                                    errors.password && touched.password
+                                      ? "input-error form-control border-danger"
+                                      : "form-control"
+                                  }
+                                />
+                              </div>
+                              <ErrorMessage
+                                name='password'
+                                component='span'
+                                className='error text-danger'
+                              />
+                            </div>
+                            <div className='form-group'>
+                              <label>Verify *</label>
+                              <LoadCanvasTemplateNoReload />
+                              <div className='input-group mb-4'>
+                                <input
+                                  name='text'
+                                  onChange={(e) => setValue(e.target.value)}
+                                  maxLength='6'
+                                  value={value}
+                                  type='text'
+                                  placeholder='Enter above text'
+                                  className='form-control'
+                                />
+                              </div>
+                            </div>
+                            <div className='text-left'>
+                              <Button
+                                fullWidth
+                                variant={"contained"}
+                                color={"primary"}
+                                type={"submit"}
+                                className={
+                                  !(dirty && isValid)
+                                    ? "disabled-btn"
+                                    : "site-button"
+                                }
+                                disabled={!(dirty && isValid)}
+                                // className='site-button'
+                              >
+                                login
+                              </Button>
+                            </div>
+                          </Form>
+                          <div className='text-center'>
+                            <Link
+                              data-toggle='tab'
+                              to='/forgot-password'
+                              className='site-button-link forget-pass m-t15'
+                            >
+                              <i className='fa fa-unlock-alt'></i> Forgot
+                              Password
+                            </Link>
+                          </div>
+                          <div className={"separator"}>
+                            <span>or</span>
+                          </div>
+                          <FacebookLoginButton
+                            startIcon={<i className='fa fa-facebook'></i>}
+                            fullWidth
+                          >
+                            Login via Faceboook
+                          </FacebookLoginButton>
+                          <GoogleLoginButton
+                            className={"mt-3"}
+                            startIcon={<i className='fa fa-google-plus'></i>}
+                            fullWidth
+                          >
+                            Login via Google+
+                          </GoogleLoginButton>
+                        </div>
+                      );
+                    }}
+                  </Formik>
                   <form
                     id='forgot-password'
                     className='tab-pane fade col-12 p-a0'

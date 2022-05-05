@@ -1543,6 +1543,12 @@
 	min-height:100vh;
 	position:relative;
 }
+.signup{
+	min-height:116vh !important;
+}
+.skew-signup{
+	min-height:116vh !important;
+}
 .login-form-bx .box-skew1:after{
 	content: "";
 	background-image: url(../images/background/bg6.jpg);
@@ -2300,3 +2306,12 @@
 		border-width: 0 0 2px 0;
 		border-color: #2e55fa;
 	}
+
+.loader {
+	display: flex;
+	height: 50vh;
+}
+
+.css-g9znw6{
+	margin: auto;
+}
