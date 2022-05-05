@@ -50,7 +50,7 @@ class TaskBidderView(viewsets.ModelViewSet):
         serializer = TaskBidderSerializer(data)
         return Response(serializer.data)
 
-    def create(self, request, pk=None):
+    def post(self, request, pk=None):
 
         task_id = request.query_params.get('task_id')
         offer = request.query_params.get('offer')

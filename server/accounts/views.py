@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -63,15 +64,33 @@ class DashboardProfile(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
 
-        data =  get_object_or_404(RunnerProfile, author_id=pk)
-        #return RunnerProfile.objects.filter(author_id=37)#self.request.user.id)
+        data =  get_object_or_404(RunnerProfile, author=pk)
         serializer = ProfileSerializer(data)
 
         return Response(serializer.data)
-    # def perform_create(self, serializer):
 
-    #     serializer.save(author=self.request.user.id)
 
+def save_user_profile(profile, request):
+    serializer = ProfileSerializer(instance=profile, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response({"message": f"profile updated"})
+
+
+@api_view(["POST", "PATCH"])
+def taskUpdate(request, pk):
+    profile =  RunnerProfile.objects.filter(author_id=pk)
+    if profile.exists():
+        print("found user, updating profile")
+        save_user_profile(profile, request)
+
+    else:
+        print("profile not found, creating new user")
+        profile = RunnerProfile.objects.create(author_id=pk)
+        save_user_profile(profile, request)
+
+    return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
 class DashboardResume(viewsets.ModelViewSet):
 
@@ -122,7 +141,7 @@ class PhotoUpload(viewsets.ModelViewSet):
         if self.request.method == "GET":
             return Photo.objects.all()
         else:
-            return Photo.objects.filter(author=self.request.user)
+            return Photo.objects.filter(author=self.request.user.id)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

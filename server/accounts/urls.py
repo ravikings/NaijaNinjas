@@ -16,6 +16,7 @@ from accounts.views import (
     SetProfilePassword,
     ChangeProfilePassword,
     ServiceView,
+    taskUpdate,
     TestView,
 )
 
@@ -47,4 +48,5 @@ urlpatterns = [
     path("account/reset_password/", ChangePasswordAccountView.as_view(), name="reset_password"),
     path('request-reset-email/', RequestPasswordResetEmail.as_view(), name="request-reset-email"),
     path('user-reset-password/', SetProfilePassword.as_view(), name="user-reset-password"),
+    path('user-profile-update/<str:pk>/', taskUpdate, name="user-profile-update"),
 ]
