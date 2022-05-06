@@ -78,7 +78,7 @@ function ProfileSidebar({ active, showManageProp = false }) {
                   }
                   aria-hidden="true"
                 ></i>
-                <span>Manage jobs</span>
+                <span>Tasks</span>
               </Link>
             </li>
             <Collapse in={showManage}>
@@ -88,16 +88,16 @@ function ProfileSidebar({ active, showManageProp = false }) {
                   to={"/company-post-jobs"}
                 >
                   <i className="fa fa-briefcase" aria-hidden="true"></i>
-                  <span>Post a job</span>
+                  <span>Post a task</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  className={active === "Manage jobs" ? "active ml-4" : "ml-4"}
+                  className={active === "Task" ? "active ml-4" : "ml-4"}
                   to={"/company-manage-job"}
                 >
                   <i className="fa fa-briefcase" aria-hidden="true"></i>
-                  <span>Manage jobs</span>
+                  <span>Manage tasks</span>
                 </Link>
               </li>
               <li>
@@ -106,7 +106,7 @@ function ProfileSidebar({ active, showManageProp = false }) {
                   to={"/company-resume"}
                 >
                   <i className="fa fa-briefcase" aria-hidden="true"></i>
-                  <span>Favorite</span>
+                  <span>Favorite tasks</span>
                 </Link>
               </li>
             </Collapse>
@@ -117,7 +117,7 @@ function ProfileSidebar({ active, showManageProp = false }) {
                 to={"/jobs-applied-job"}
               >
                 <i className="fa fa-briefcase" aria-hidden="true"></i>
-                <span>Applied Jobs</span>
+                <span>Upcoming tasks</span>
               </Link>
             </li>
             <li>
@@ -126,18 +126,10 @@ function ProfileSidebar({ active, showManageProp = false }) {
                 to={"/jobs-alerts"}
               >
                 <i className="fa fa-bell-o" aria-hidden="true"></i>
-                <span>Job Alerts</span>
+                <span>Alerts</span>
               </Link>
             </li>
-            <li>
-              <Link
-                className={active === "CV Manager" ? "active" : ""}
-                to={"/jobs-cv-manager"}
-              >
-                <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                <span>CV Manager</span>
-              </Link>
-            </li>
+
             {/* start ask question start */}
             <li onClick={() => setShowQuestion(!showQuestion)}>
               <Link to={"#"}  className={active === "question" ? "active" : ""}>

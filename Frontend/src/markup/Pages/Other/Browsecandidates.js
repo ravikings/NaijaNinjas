@@ -5,6 +5,8 @@ import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
 import PageTitle from "../../Layout/PageTitle";
 import Jobfindbox from "../../Element/Jobfindbox";
+import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
 import createRequest from "../../../utils/axios";
 
@@ -117,7 +119,15 @@ function Browsecandidates() {
 
   const handleKeyword = () => {
     if (!keyword) {
-      return alert("Please enter a keyword");
+      return toast.error("Please enter a Keyword.", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
     handleRequest(keyword);
     checkOnline();
@@ -165,7 +175,7 @@ function Browsecandidates() {
                                     to={{
                                       pathname: "/make-offer",
                                       state: {
-                                        id: item.id,
+                                        id: item.author,
                                       },
                                     }}
                                   >
@@ -227,17 +237,24 @@ function Browsecandidates() {
                               )}
 
                               <div className='salary-bx'>
+                                {console.log(item, "item")}
                                 <Link
+                                  onClick={() =>
+                                    console.log(item.author, "item")
+                                  }
                                   to={{
                                     pathname: "/make-offer",
                                     state: {
-                                      id: item.id,
+                                      id: item.author,
                                     },
                                   }}
                                 >
-                                  <Button variant='primary' size='md'>
+                                  <button className='site-button btn-block'>
+                                    View Profile
+                                  </button>
+                                  {/* <Button variant='primary' size='md'>
                                     <b className='fw8'>View Profile</b>
-                                  </Button>
+                                  </Button> */}
                                 </Link>
                               </div>
                             </div>
@@ -251,7 +268,13 @@ function Browsecandidates() {
                     ) : error ? (
                       <p>{error}</p>
                     ) : (
-                      <p>Loading...</p>
+                      <div className='loader'>
+                        <ClipLoader
+                          color={"#2e55fa"}
+                          loading={true}
+                          size={150}
+                        />
+                      </div>
                     )}
                   </ul>
                   {results && !keyLoad && !loading && (
@@ -514,13 +537,12 @@ function Browsecandidates() {
                       </Form.Control>
                     </div>
                     <div className='clearfix .browse-job mt-4'>
-                      <Button
-                        variant='primary'
+                      <button
                         onClick={handleKeyword}
-                        className='w-100'
+                        className='site-button btn-block'
                       >
-                        <b className='fw8'>FIND JOB</b>
-                      </Button>
+                        Find Job
+                      </button>
                     </div>
                   </div>
                 </div>
