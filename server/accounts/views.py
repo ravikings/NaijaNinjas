@@ -60,7 +60,6 @@ class DashboardProfile(viewsets.ModelViewSet):
 
     queryset = RunnerProfile.objects.all()
     serializer_class = ProfileSerializer
-    #permission_classes = [IsAuthenticated and IsRunner]
 
     def retrieve(self, request, pk=None):
 
@@ -98,16 +97,40 @@ class DashboardResume(viewsets.ModelViewSet):
     uses to update resume for only runner dashboard
     """
 
+    queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
-    permissions_classes = [IsAuthenticated and IsRunner]
+    #TODO: uncomment below
+    #permissions_classes = [IsAuthenticated and IsRunner]
 
-    def get_queryset(self):
+    def retrieve(self, request, pk=None):
+    
+        data =  get_object_or_404(RunnerResume, author=pk)
+        serializer = UserResumeSerializer(data)
 
-        return RunnerResume.objects.filter(author=self.request.user)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
 
-        serializer.save(author=self.request.user)
+def save_profile_resume(resume, request):
+    serializer = UserResumeSerializer(instance=resume, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response({"message": f"resume updated"})
+
+
+@api_view(["POST", "PATCH"])
+def resumeUpdate(request, pk):
+    resume =  RunnerResume.objects.filter(author_id=pk)
+    if resume.exists():
+        print("found user, updating resume")
+        save_profile_resume(resume, request)
+
+    else:
+        print("resume not found, creating resume for profile")
+        resume = RunnerResume.objects.create(author_id=pk)
+        save_profile_resume(resume, request)
+
+    return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountStatus(viewsets.ModelViewSet):
