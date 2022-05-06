@@ -20,7 +20,7 @@ class TaskView(viewsets.ModelViewSet):
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permissions_classes = [IsAuthenticated and IsOwner]
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
     def retrieve(self, request, pk=None):
         ip = get_client_ip(request)
@@ -42,7 +42,7 @@ class TaskBidderView(viewsets.ModelViewSet):
     """
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
-    permissions_classes = [IsAuthenticated and IsOwner]
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
     def retrieve(self, request, pk=None):
 
