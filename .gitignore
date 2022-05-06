@@ -2,6 +2,8 @@
 
 # dependencies
 /Frontend/node_modules
+/Frontend/.idea
+/.idea
 
 /.pnp
 .pnp.js
@@ -31,3 +33,5 @@ server/db.sqlite3
 server/db.sqlite3
 server/.env
 
+*.pyc
+*.pyc

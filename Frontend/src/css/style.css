@@ -13156,4 +13156,50 @@ ol.commentlist li .star-rating {
 /* Support and Buy Button END */
 
 
+.disabledCursor {
+    cursor: default;
+border : 1px solid #efefef;
 
+}
+
+.activeNumber a {
+    background-color: #1d46f5 !important;
+    color: #fff !important;
+    border-radius: 5%;
+}
+
+.notActive a {
+    cursor: default;
+    background-color: #fff !important;
+    border : 1px solid #efefef !important;
+    color : #767676 !important;
+    border-radius: 5%;
+}
+
+.disabledCursor:hover {
+    cursor: default;
+    border : 1px solid #efefef !important;
+    color : #767676 !important;
+    background-color: #fff !important;
+}
+
+.disabledCursor:focus {
+    cursor: default;
+    border: 1px solid #efefef !important;
+    color: #767676 !important;
+    background-color: #fff !important;
+}
+
+.circle {
+    font-size: 20px;
+    color: #31a24c !important;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: .4;
+    animation:  2.5s linear 0s infinite;
+}
+
+.money {
+    font-size: 20px;
+    color: #31a24c !important;
+}

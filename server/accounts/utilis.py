@@ -15,6 +15,7 @@ def send_verify_email(user, current_site, email, uid):
                                 {
                                     'user': user,
                                     'domain': current_site.domain,
+                                    'uid': uid,
                                     'token': token
                                 }
                                 )
@@ -34,6 +35,7 @@ def send_reset_password_email(user, current_site, email, uid):
                                 {
                                     'user': user,
                                     'domain': current_site.domain,
+                                    'uid': uid,
                                     'token': token
                                 }
                                 )

@@ -63,7 +63,9 @@ INSTALLED_APPS = [
     "history",
     "chatserver",
     "accounts",
+    "task",
     "debug_toolbar",
+
 ]
 
 REST_FRAMEWORK = {
@@ -76,7 +78,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,
+    "PAGE_SIZE": 10,
     "ORDERING_PARAM": "ordering",
 }
 
@@ -184,6 +186,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'gigxnow', 
+#         'USER': 'postgres', 
+#         'PASSWORD': '2{c%v~TtV?_SFCer',
+#         'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -236,7 +248,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {"google": {}, "facebook": {}}
 # LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = "accounts.AccountUser"
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -278,11 +290,11 @@ ASGI_APPLICATION = "server.asgi.application"
 
 
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
 # # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 # # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
-EMAIL_HOST_PASSWORD = '123Amina4@'
+# EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
+# EMAIL_HOST_PASSWORD = '123Amina4@'

@@ -11,6 +11,7 @@ class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
+    is_online = models.BooleanField(default=False, verbose_name="is_online")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
 
@@ -24,20 +25,6 @@ class IpModel(models.Model):
     def __str__(self):
         return self.ip
 
-
-class Review(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
-    )
-    body = RichTextField()
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    rating = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
-
-    class Meta:
-        ordering = ("created",)
 
 
 class RunnerProfile(models.Model):
@@ -58,6 +45,8 @@ class RunnerProfile(models.Model):
         null=True,
     )
     postcode = models.CharField(max_length=55, blank=True, null=True, db_index=True)
+    sector = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    department = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     description = models.TextField(null=True, blank=True, db_index=True)
     state = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     city = models.CharField(max_length=55, blank=True, null=True, db_index=True)
@@ -65,16 +54,6 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
-    reviews = models.ManyToManyField(Review, related_name="buyers_review", blank=True)
-    # resumes = models.ManyToManyField(
-    #     RunnerResume, related_name="user_resume", blank=True
-    # )
-
-    def __str__(self):
-        return self.first_name
-
-    def total_views(self):
-        return self.views.count()
 
 
 class RunnerResume(models.Model):
@@ -90,13 +69,27 @@ class RunnerResume(models.Model):
     education = models.TextField(null=True, db_index=True, blank=True)
     projects = models.TextField(null=True, db_index=True, blank=True)
     profile_summary = models.CharField(max_length=255, blank=True, db_index=True)
-    accomplishment = models.CharField(max_length=55, blank=True, db_index=True)
-    career_profile = models.CharField(max_length=255, blank=True, db_index=True)
+    accomplishment = models.TextField(null=True, db_index=True, blank=True)
+    career_profile = models.TextField(null=True, db_index=True, blank=True)
     postcode = models.CharField(max_length=55, blank=True, db_index=True)
     description = models.TextField(null=True, db_index=True)
     attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
 
-
+class Review(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
+    )
+    body = RichTextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    profile = models.ForeignKey(
+        RunnerProfile, on_delete=models.CASCADE, related_name="profile_review", default=False
+    )
+    class Meta:
+        ordering = ("created",)
 class Photo(models.Model):
 
     author = models.ForeignKey(
@@ -106,9 +99,6 @@ class Photo(models.Model):
     image = models.ImageField(upload_to="users/%Y/%m/%d/")
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
-
-    def __str__(self):
-        return self.description
 
 
 class Vidoe(models.Model):
@@ -121,5 +111,12 @@ class Vidoe(models.Model):
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
-    def __str__(self):
-        return self.description
+class Service(models.Model):
+    
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
+    )
+    description = models.CharField(max_length=250, null=True, db_index=True)
+    display = models.FileField(upload_to="documents/user/service/photo/%Y/%m/%d/", blank=True)
+
+    amount = models.CharField(max_length=250, null=True)

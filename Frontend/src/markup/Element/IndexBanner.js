@@ -1,11 +1,34 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Form } from "react-bootstrap";
+import { Alert, Form } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 var bnr1 = require("./../../images/main-slider/slide2.jpg");
 
 function IndexBanner() {
+  const [title, setTitle] = React.useState("");
   const history = useHistory();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title) {
+      toast.error("Please enter title.", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+    history.push({
+      pathname: "/browse-candidates",
+      state: {
+        title: title,
+      },
+    });
+  };
 
   useEffect(() => {
     var i = 0;
@@ -32,58 +55,43 @@ function IndexBanner() {
 
   return (
     <div
-      className="dez-bnr-inr dez-bnr-inr-md"
+      className='dez-bnr-inr dez-bnr-inr-md'
       style={{ backgroundImage: "url(" + bnr1 + ")" }}
     >
-      <div className="container">
-        <div className="dez-bnr-inr-entry align-m">
-          <div className="find-job-bx">
-            <Link to={"/browse-job"} className="site-button button-sm">
+      <div className='container'>
+        <div className='dez-bnr-inr-entry align-m'>
+          <div className='find-job-bx'>
+            <Link to={"/browse-job"} className='site-button button-sm'>
               Find Jobs, Employment & Career Opportunities
             </Link>
             <h2>
               Search Between More Then <br />{" "}
-              <span className="text-primary">50,000</span> Open Jobs.
+              <span className='text-primary'>50,000</span> Open Jobs.
             </h2>
-            <form className="dezPlaceAni">
-              <div className="row">
-                <div className="col-lg-4 col-md-6">
-                  <div className="form-group">
+            <form className='dezPlaceAni'>
+              <div className='row'>
+                <div className='col-lg-6 col-md-6'>
+                  <div className='form-group'>
                     <label>Job Title, Keywords, or Phrase</label>
-                    <div className="input-group">
+                    <div className='input-group'>
                       <input
-                        type="text"
-                        className="form-control"
-                        placeholder=""
+                        type='text'
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className='form-control'
+                        placeholder=''
                       />
-                      <div className="input-group-append">
-                        <span className="input-group-text">
-                          <i className="fa fa-search"></i>
+                      <div className='input-group-append'>
+                        <span className='input-group-text'>
+                          <i className='fa fa-search'></i>
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-3 col-md-6">
-                  <div className="form-group">
-                    <label>Email address</label>
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder=""
-                      />
-                      <div className="input-group-append">
-                        <span className="input-group-text">
-                          <i className="fa fa-map-marker"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-3 col-md-6">
-                  <div className="form-group">
-                    <Form.Control as="select" custom className="select-btn">
+                <div className='col-lg-4 col-md-6'>
+                  <div className='form-group'>
+                    <Form.Control as='select' custom className='select-btn'>
                       <option>Select Sector</option>
                       <option>Construction</option>
                       <option>Corodinator</option>
@@ -99,10 +107,10 @@ function IndexBanner() {
                     </Form.Control>
                   </div>
                 </div>
-                <div className="col-lg-2 col-md-6">
+                <div className='col-lg-2 col-md-6'>
                   <button
-                    onClick={() => history.push("/browse-candidates")}
-                    className="site-button btn-block"
+                    onClick={handleSubmit}
+                    className='site-button btn-block'
                   >
                     Find Job
                   </button>

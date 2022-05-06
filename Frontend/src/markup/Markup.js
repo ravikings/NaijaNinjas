@@ -55,6 +55,8 @@ import Blogdetail from "./Pages/Blogdetail";
 import ScrollToTop from "./Element/ScrollToTop";
 import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage";
 import MessagesPage from "./Pages/Messages/MessagesPage";
+import ForgotPassword from "./Pages/Auth/Forgot-password";
+import ResetPassword from "./Pages/Auth/Reset-password";
 
 class Markup extends Component {
   render() {
@@ -143,7 +145,11 @@ class Markup extends Component {
             <Route path="/portfolio-grid-2" exact component={Portfoliogrid2} />
 
             <Route path="/login" exact component={LoginPage} />
+
             <Route path="/register" exact component={RegisterPage} />
+            <Route path="/forgot-password" exact component={ForgotPassword} />
+            <Route path="/reset-password" exact component={ResetPassword} />
+
 
             <Route path="/error-404" exact component={Error404} />
 

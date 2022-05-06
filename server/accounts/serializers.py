@@ -1,3 +1,4 @@
+from asyncore import read
 from django.db import transaction
 from django.conf import settings
 from rest_framework import serializers
@@ -22,9 +23,11 @@ from accounts.models import (
     Photo,
     Vidoe,
     Review,
+    Service,
 )
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
+import arrow
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -53,6 +56,11 @@ class CustomRegisterSerializer(RegisterSerializer):
  
         current_site = get_current_site(request)
         user = AccountUser.objects.get(email=str(email))
+        #todo add pre save create profile, change to celery and function and expection handling
+        print("creating user profile")
+        RunnerProfile.objects.create(author_id=user.pk)
+        RunnerResume.objects.create(author_id=user.pk)
+        print("user profile creation completed!")
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         send_verify_email(user, current_site, email, uid)
 
@@ -134,42 +142,62 @@ class UserResumeSerializer(serializers.ModelSerializer):
     """
     resume search serializers use for entry data for resume from ui
     """
-
     class Meta:
         model = RunnerResume
         fields = "__all__"
 
-
-class UserProfileSearchSerializer(serializers.ModelSerializer):
-
-    user_profile = UserResumeSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = RunnerProfile
-        # fields = (
-        #     "author",
-        #     "first_name",
-        #     "title",
-        #     "location",
-        #     "salary",
-        #     "user_profile",
-
-        # )
-        fields = "__all__"
-
-
 class UserAccountSerializer(serializers.ModelSerializer):
-
-    online = serializers.SerializerMethodField()
 
     class Meta:
         model = AccountUser
-        fields = ("id", "email", "phone_number", "is_a_runner", "online")
-        read_only_fields = ("id", "email", "phone_number", "is_a_runner", "online")
+        fields = ("id", "email", "phone_number", "is_a_runner")
+        read_only_fields = ("id", "email", "phone_number", "is_a_runner")
 
-    def get_online(self, instance):
 
-        return self.context["request"].user.is_authenticated
+class UserProfileSearchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RunnerProfile
+        exclude = ("address",)
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Service
+        fields = "__all__"
+
+class UserOnlineSerializer(serializers.ModelSerializer):
+    
+    online_status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AccountUser
+        fields = ("id", "online_status")
+        read_only_fields = ("id","online")
+
+
+    def get_online_status(self, instance):
+    
+        #data = instance.objects.get(id=pk)
+        
+        x = instance.last_login
+        if x:
+
+            user_last_login = arrow.get(x)
+            now = arrow.utcnow()
+            current_time = now.replace(tzinfo='Africa/Lagos')
+
+            minutes = current_time-user_last_login
+
+            difference = minutes.total_seconds()
+            time = difference // (60)
+            print("checking if user is online")
+            if time < 1:
+                print({"status":"online"})
+                return "online"
+        print({"status":"offline"})
+        return "offline"
 
 
 class UserSearchDetialSerializer(serializers.ModelSerializer):
@@ -187,15 +215,15 @@ class UserSearchDetialSerializer(serializers.ModelSerializer):
             "photo",
             "salary",
             "total_reviews",
-            #"total_views",     
+            "total_views", 
         )
 
-    # def get_total_views(self, instance):
-    #     return instance.total_views()
+    def get_total_views(self, instance):
+        return instance.total_views()
 
     def get_total_reviews(self, pk=None):
 
-        return Review.objects.filter(profile_id=pk).aggregate(Avg("rating"))
+        return Review.objects.filter(author=pk).aggregate(Avg("rating"))
 
 
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):

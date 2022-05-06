@@ -2,6 +2,7 @@ import React from "react";
 import Rating from "@material-ui/lab/Rating";
 
 function Ratings(props) {
+  
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <div
