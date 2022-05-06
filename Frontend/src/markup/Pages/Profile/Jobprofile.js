@@ -10,6 +10,14 @@ import SingleInputField from "./SingleInputField";
 import {toast} from "react-toastify";
 import {Autocomplete} from "@material-ui/lab";
 import {styled, TextField} from "@material-ui/core";
+import {sectors} from "../../../helper/sectors";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+    root: {
+        height:'13px'
+    },
+});
 
 const CssTextField = styled(TextField)({
     '& label.Mui-focused': {
@@ -33,19 +41,18 @@ const CssTextField = styled(TextField)({
 });
 
 function Jobprofile() {
-
+    const classes = useStyles();
     const {currentUser} = useSelector((state) => state.authReducer);
     const [userDetails, setUserDetails] = useState(null)
 
     useEffect(() => {
         if (currentUser) {
-           // getUserDetails();
+           getUserDetails();
         }
     }, [currentUser])
 
-    const getUserDetails = (values) => {
+    const getUserDetails = () => {
         createRequest().get(`/api/v1/account/profile/${currentUser?.pk}/`).then(({data}) => {
-            console.log(data)
             setUserDetails(data)
         }).catch(e => {
             toast.error(e.response?.data?.message || "Unknown Error");
@@ -54,30 +61,30 @@ function Jobprofile() {
     }
 
     const editUserDetails = (values) => {
-        createRequest().post(`/api/v1/account/profile/${currentUser?.pk}/`, values).then(({data}) => {
-            console.log(data)
+        createRequest().patch(`/api/v1/account/profile/${currentUser?.pk}/`, values).then(({data}) => {
+            toast.success( "Profile updated successfully");
+            getUserDetails()
         }).catch(e => {
             toast.error(e.response?.data?.message || "Unknown Error");
-            console.log(e)
         })
     }
 
 
     const initialValues = {
         first_name: userDetails?.first_name || '',
-        last_name: '',
-        title: '',
-        language: '',
-        salary: '',
-        country: '',
-        address: '',
-        postcode: '',
-        sector: '',
-        department: '',
-        description: '',
-        state: '',
-        city: '',
-        local_goverment_zone: '',
+        last_name: userDetails?.last_name || '',
+        title: userDetails?.title || '',
+        language: userDetails?.language || '',
+        salary: userDetails?.salary || '',
+        country: userDetails?.country || '',
+        address: userDetails?.address || '',
+        postcode: userDetails?.postcode || '',
+        sector: userDetails?.sector || '',
+        department: userDetails?.department || '',
+        description: userDetails?.description || '',
+        state: userDetails?.state || '',
+        city: userDetails?.city || '',
+        local_goverment_zone: userDetails?.local_goverment_zone || '',
         author: currentUser?.pk,
     };
 
@@ -86,7 +93,6 @@ function Jobprofile() {
         //validationSchema: validationSchema,
         onSubmit: (values) => {
             editUserDetails(values)
-            console.log(values);
         },
         enableReinitialize: true
     });
@@ -120,7 +126,8 @@ function Jobprofile() {
                                                 <SingleInputField formik={formik} title='Title:' id={'title'}/>
                                                 <SingleInputField formik={formik} title='Language:' id={'language'}/>
                                                 <SingleInputField formik={formik} title='Salary($):' id={'salary'}/>
-                                                <SingleInputField formik={formik} title='Sector:' id={'sector'}/>
+
+                                                <div className="col-lg-6 col-md-6"/>
 
                                                 <div className="col-lg-6 col-md-6">
                                                     <div className="form-group">
@@ -128,23 +135,52 @@ function Jobprofile() {
                                                         <Autocomplete
                                                             fullWidth
                                                             freeSolo
-                                                            options={['abcd,', 'efg']}
+                                                            autoSelect
+                                                            classes={{input:classes.root}}
+                                                            value={formik.values.sector}
+                                                           onChange={(e,value)=> {
+                                                                formik.setFieldValue('sector',value)
+                                                            }}
+                                                            options={Object.keys(sectors)}
                                                             renderInput={(params) =>
-                                                                <CssTextField {...params} variant='outlined'/>}/>
+                                                                <CssTextField {...params} variant='outlined'/>}
+                                                        />
                                                     </div>
                                                 </div>
 
-
-                                                <SingleInputField formik={formik} title='Department:'
-                                                                  id={'department'}/>
+                                                <div className="col-lg-6 col-md-6">
+                                                    <div className="form-group">
+                                                        <label>Sector:</label>
+                                                        <Autocomplete
+                                                            fullWidth
+                                                            freeSolo
+                                                            autoSelect
+                                                            classes={{input:classes.root}}
+                                                            value={formik.values.department}
+                                                            onChange={(e,value)=> {
+                                                                formik.setFieldValue('department',value)
+                                                            }}
+                                                            options={
+                                                                sectors[formik.values.sector]?sectors[formik.values.sector]:[]
+                                                            }
+                                                            renderInput={(params) =>
+                                                                <CssTextField {...params} variant='outlined'/>}
+                                                        />
+                                                    </div>
+                                                </div>
 
                                                 <div className="col-lg-12 col-md-12">
                                                     <div className="form-group">
                                                         <label>Description:</label>
-                                                        <textarea id='description'
-                                                                  value={formik.values['description']}
-                                                                  onChange={formik.handleChange}
-                                                                  className="form-control"></textarea>
+                                                        <textarea
+                                                            id='description'
+
+                                                            value={formik.values['description']}
+
+                                                            onChange={formik.handleChange}
+
+                                                            className="form-control"/>
+
                                                     </div>
                                                 </div>
                                             </div>

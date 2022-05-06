@@ -34,6 +34,7 @@ function AuthState({ userDetails }) {
 
   const signOut = () => {
       dispatch(logout(handleClose))
+      history.push("/")
   };
 
   return (
