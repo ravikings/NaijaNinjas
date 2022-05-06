@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Alert, Form } from "react-bootstrap";
-import { toast } from "react-toastify";
 
 var bnr1 = require("./../../images/main-slider/slide2.jpg");
 
@@ -11,15 +10,7 @@ function IndexBanner() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title) {
-      toast.error("Please enter title.", {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      alert("Please enter title");
       return;
     }
     history.push({

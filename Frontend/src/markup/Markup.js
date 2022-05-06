@@ -1,62 +1,63 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Homepage from "./Pages/Other/Homepage1";
-import Homepage2 from "./Pages/Other/Homepage2";
+import Homepage from "./Pages/Homepage1";
+import Homepage2 from "./Pages/Homepage2";
 
-import AskQuestion from "./Pages/Other/AskQuestion";
-import AllQuestion from "./Pages/Other/AllQuestion";
-import Jobprofile from "./Pages/Profile/Jobprofile";
-import Jobmyresume from "./Pages/Other/Jobmyresume";
-import Jobsappliedjob from "./Pages/Other/Jobsappliedjob";
-import Jobsalert from "./Pages/Other/Jobsalert";
-import Jobsavedjobs from "./Pages/Other/Jobsavedjobs";
-import Jobcvmanager from "./Pages/Other/Jobcvmanager";
-import Changepasswordpage from "./Pages/Other/Changepasswordpage";
+import AskQuestion from "./Pages/AskQuestion";
+import AllQuestion from "./Pages/AllQuestion";
+import Jobprofile from "./Pages/Jobprofile";
+import Jobmyresume from "./Pages/Jobmyresume";
+import Jobsappliedjob from "./Pages/Jobsappliedjob";
+import Jobsalert from "./Pages/Jobsalert";
+import Jobsavedjobs from "./Pages/Jobsavedjobs";
+import Jobcvmanager from "./Pages/Jobcvmanager";
+import Changepasswordpage from "./Pages/Changepasswordpage";
 
-import Companyprofile from "./Pages/Other/Companyprofile";
-import Companyresume from "./Pages/Other/Companyresume";
-import Componypostjobs from "./Pages/Other/Componypostjobs";
-import Companymanage from "./Pages/Other/Companymanage";
-import Companytransactions from "./Pages/Other/Companytransactions";
-import Browsecandidates from "./Pages/Other/Browsecandidates";
+import Companyprofile from "./Pages/Companyprofile";
+import Companyresume from "./Pages/Companyresume";
+import Componypostjobs from "./Pages/Componypostjobs";
+import Companymanage from "./Pages/Companymanage";
+import Companytransactions from "./Pages/Companytransactions";
+import Browsecandidates from "./Pages/Browsecandidates";
 
-import Aboutus from "./Pages/Other/Aboutus";
-import Jobdetail from "./Pages/Other/Jobdetail";
-import Companies from "./Pages/Other/Companies";
-import Freejobalerts from "./Pages/Other/Freejobalerts";
-import Browsejoblist from "./Pages/Other/Browsejoblist";
-import Browsejobgrid from "./Pages/Other/Browsejobgrid";
-import Browsejobfilterlist from "./Pages/Other/Browsejobfilterlist";
-import Browsejobfiltergrid from "./Pages/Other/Browsejobfiltergrid";
+import Aboutus from "./Pages/Aboutus";
+import Jobdetail from "./Pages/Jobdetail";
+import Companies from "./Pages/Companies";
+import Freejobalerts from "./Pages/Freejobalerts";
+import Browsejoblist from "./Pages/Browsejoblist";
+import Browsejobgrid from "./Pages/Browsejobgrid";
+import Browsejobfilterlist from "./Pages/Browsejobfilterlist";
+import Browsejobfiltergrid from "./Pages/Browsejobfiltergrid";
 
-import Categoryalljob from "./Pages/Other/Categoryalljob";
-import Categorycompanyjob from "./Pages/Other/Categorycompanyjob";
-import Categorydesignationsjob from "./Pages/Other/Categorydesignationsjob";
-import Categoryjobs from "./Pages/Other/Categoryjobs";
-import Categorylocationjobs from "./Pages/Other/Categorylocationjobs";
-import Categoryskilljobs from "./Pages/Other/Categoryskilljobs";
+import Categoryalljob from "./Pages/Categoryalljob";
+import Categorycompanyjob from "./Pages/Categorycompanyjob";
+import Categorydesignationsjob from "./Pages/Categorydesignationsjob";
+import Categoryjobs from "./Pages/Categoryjobs";
+import Categorylocationjobs from "./Pages/Categorylocationjobs";
+import Categoryskilljobs from "./Pages/Categoryskilljobs";
 
-import Portfoliogrid2 from "./Pages/Other/Portfoliogrid2";
+import Portfoliogrid2 from "./Pages/Portfoliogrid2";
 
 import LoginPage from "./Pages/Auth/LoginPage";
 import RegisterPage from "./Pages/Auth/RegisterPage";
 
-import Error404 from "./Pages/Other/Error404";
+import Error404 from "./Pages/Error404";
 
-import Contact from "./Pages/Other/Contact";
+import Contact from "./Pages/Contact";
 
-import Blogclassic from "./Pages/Other/Blogclassic";
-import Blogclassicsidebar from "./Pages/Other/Blogclassicsidebar";
-import Blogdetailgrid from "./Pages/Other/Blogdetailgrid";
-import Blogdetailgridsidebar from "./Pages/Other/Blogdetailgridsidebar";
-import Blogleftimg from "./Pages/Other/Blogleftimg";
-import Blogdetail from "./Pages/Other/Blogdetail";
+import Blogclassic from "./Pages/Blogclassic";
+import Blogclassicsidebar from "./Pages/Blogclassicsidebar";
+import Blogdetailgrid from "./Pages/Blogdetailgrid";
+import Blogdetailgridsidebar from "./Pages/Blogdetailgridsidebar";
+import Blogleftimg from "./Pages/Blogleftimg";
+import Blogdetail from "./Pages/Blogdetail";
 import ScrollToTop from "./Element/ScrollToTop";
 import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage";
 import MessagesPage from "./Pages/Messages/MessagesPage";
 import ForgotPassword from "./Pages/Auth/Forgot-password";
 import ResetPassword from "./Pages/Auth/Reset-password";
+import Search from "./Pages/Search";
 
 class Markup extends Component {
   render() {
@@ -172,7 +173,8 @@ class Markup extends Component {
               component={Blogdetailgridsidebar}
             />
             <Route path="/blog-left-img" exact component={Blogleftimg} />
-            <Route path="/blog-details" exact component={Blogdetail} />
+            <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
+            <Route path="/search/:query" exact component={Search} />
           </Switch>
         </div>
         <ScrollToTop />

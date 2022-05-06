@@ -1,5 +1,6 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React,{useState , useEffect } from 'react';
+import {Link,useHistory} from 'react-router-dom';
+import createRequest from "../../utils/axios";
 
 const widgetPost=[
 	{ image: require('./../../images/blog/recent-blog/pic1.jpg'),
@@ -22,12 +23,44 @@ const dzPost=[
 ]
 
 function Sidebar(){
+	const history = useHistory();
+	const [data,setData]= useState([])
+	// geting data from api for fourm start
+	const ForumData = () => {
+		createRequest()
+		  .get("forum/list/")
+		  .then((res) => {
+				
+				setData(res.data.results)
+			
+			
+		
+		  })
+		  .catch((e) => {
+			if (e.response?.status === 400) {
+			console.log(e?.response?.data?.non_field_errors[0]);
+			} else {
+			  console.log("Unknown Error");
+			}
+		  });
+	  };
+	const SearchBar=(e)=>{
+		e.preventDefault();
+		
+		history.push(`/search/${e.target[0].value}`);
+	}
+	// geting data from api for fourm end
+	// effect start
+	useEffect(()=>{
+		ForumData()
+	},[data.length])
+	// effect end
 	return(
 		<aside  className="side-bar">
 			<div className="widget">
 				<h6 className="widget-title style-1">Search</h6>
 				<div className="search-bx style-1">
-					<form role="search" method="post">
+					<form role="search" onSubmit={SearchBar}>
 						<div className="input-group">
 							<input name="text" className="form-control" placeholder="Enter your keywords..." type="text" />
 							<span className="input-group-btn">
@@ -40,19 +73,19 @@ function Sidebar(){
 			<div className="widget recent-posts-entry">
 				<h6 className="widget-title style-1">Recent Posts</h6>
 				<div className="widget-post-bx">
-					{widgetPost.map((item,index)=>(	
+					{data.map((item,index)=>(	
 						<div className="widget-post clearfix" key={index}>
 							<div className="dez-post-media"> 
-								<img src={item.image} width="200" height="143" alt="" /> 
+								<img src={item.attachment} width="200" height="143" alt="" /> 
 							</div>
 							<div className="dez-post-info">
 								<div className="dez-post-header">
-									<h6 className="post-title"><Link to={"/blog-details"}></Link>{item.title}</h6>
+									<h6 className="post-title"><Link to={`/blog-details/${item.id}/${item.title}`}>{item.title}</Link></h6>
 								</div>
 								<div className="dez-post-meta">
 									<ul className="d-flex align-items-center">
-										<li className="post-date"><i className="fa fa-calendar"></i>Sep 18, 2017</li>
-										<li className="post-comment"><Link to={'#'}><i className="fa fa-comments-o"></i>5k</Link> </li>
+										<li className="post-date"><i className="fa fa-calendar"></i>{item.time_created?.Created}</li>
+										<li className="post-comment"><Link to={'#'}><i className="fa fa-comments-o"></i>{item.forum_comment.length}</Link> </li>
 									</ul>
 								</div>
 							</div>
