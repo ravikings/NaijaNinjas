@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useUser } from "../../Context/AuthContext";
 import createRequest from "../../../utils/axios";
 import { toast } from "react-toastify";
-import { useFormik } from "formik";
 import {
   GoogleLoginButton,
   FacebookLoginButton,
   RunnerButton,
 } from "./components";
 import Button from "@material-ui/core/Button";
+import {useDispatch} from "react-redux";
+import {getCurrentUser} from "./Redux/AuthActions";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
 import {
@@ -46,8 +46,8 @@ const initialValues = {
 };
 
 function RegisterPage() {
-  const userDetails = useUser();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [value, setValue] = useState("");
 
@@ -55,17 +55,19 @@ function RegisterPage() {
     const isValid = validateCaptcha(value);
     return isValid;
   };
+
   useEffect(() => {
     loadCaptchaEnginge(6, "black", "white");
   }, []);
+
   const register = (loginDetails) => {
     createRequest()
       .post("/dj-rest-auth/registration/", {
         ...loginDetails,
       })
       .then((res) => {
-        userDetails.signIn(res?.data?.user);
-        history.push("/");
+        dispatch(getCurrentUser())
+        history.push('/')
       })
       .catch((e) => {
         console.log(e);

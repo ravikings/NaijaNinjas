@@ -1,6 +1,7 @@
+import {Link, useHistory} from "react-router-dom";
+import {authActionTypes} from "./Redux/AuthActions";
+import {useDispatch} from "react-redux";
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { useUser } from "../../Context/AuthContext";
 import createRequest from "../../../utils/axios";
 import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -12,7 +13,6 @@ import {
   LoadCanvasTemplateNoReload,
   validateCaptcha,
 } from "react-simple-captcha";
-import { Input } from "@material-ui/core";
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,8 +29,9 @@ const initialValues = {
 };
 
 function LoginPage() {
-  const userDetails = useUser();
+  //const userDetails = useUser();
   const history = useHistory();
+  const dispatch = useDispatch();
   const [value, setValue] = useState("");
 
   const checkCaptcha = () => {
@@ -48,7 +49,7 @@ function LoginPage() {
       .then((res) => {
         localStorage.setItem("userID", res?.data?.user?.pk);
         localStorage.setItem("access_token", res?.data?.access_token);
-        userDetails.signIn(res?.data?.user);
+        dispatch({ type: authActionTypes.LOGIN_SUCCESS, user:res?.data?.user })
         history.push("/");
       })
       .catch((e) => {

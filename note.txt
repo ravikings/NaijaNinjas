@@ -13,6 +13,7 @@ npm install react-script
 
 "start": "react-scripts start",
 "build": "react-scripts build",
+npm install --save redux react-redux
 
 react local docker run: docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true sample:react
 minikube service flask-test-service
