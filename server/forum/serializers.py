@@ -94,6 +94,26 @@ class ForumSerializer(serializers.ModelSerializer):
 
 
 class SimpleForum(serializers.ModelSerializer):
+
+    total_comments = serializers.SerializerMethodField()
+    time_created = serializers.SerializerMethodField()
+
     class Meta:
         model = Forum
-        fields = "__all__"
+        fields = ("id", "total_comments", "title", "time_created")
+
+    def get_total_comments(self, instance):
+        return Comment.objects.filter(forum=instance.id).count()
+
+    def get_time_created(self, instance):
+        dateTimeObj = instance.created
+        timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
+        time_difference = instance.updated - dateTimeObj
+        data = {"Created": "","Updated": ""}
+        if int(time_difference.seconds) >= 1:
+            data["Updated"] = timestampStr
+
+        else:
+            data["Created"] = timestampStr
+
+        return data
