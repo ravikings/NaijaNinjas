@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "chatserver",
     "accounts",
     "debug_toolbar",
+    "task",
 ]
 
 REST_FRAMEWORK = {
