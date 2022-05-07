@@ -135,21 +135,28 @@ function Blogdetail(){
 					<div className="container">
 						<div className="row">
 							<div className="col-lg-8 col-md-7 m-b10">
+								<div className="col-12 text-right">
+
+					   <Link to="/ask-questions" className="site-button"> <i className="fa fa-question" aria-hidden="true"></i> Ask Question</Link>
+								</div>
 								<div className="blog-post blog-single blog-style-1">
+								<div className="dez-post-title">
+										<h4 className="post-title m-t0 mb-3"><Link to={"/blog-details"}>{data[0]?.title}</Link></h4>
+									</div>
 									<div className="dez-post-meta">
 										<ul className="d-flex align-items-center">
-											<li className="post-date"><i className="fa fa-calendar"></i>{data[0]?.time_created?.Created}</li>
-											<li className="post-author"><i className="fa fa-user"></i>By <Link to={"#"}>
+											<li className="post-date"><i className="fa fa-calendar"></i>Asked {data[0]?.time_created?.Created}</li>
+										
+											<li className="post-author"><i className="fa fa-user"></i>Ask By <Link to={"#"}>
 												{data[0]?.author_name[0]?.first_name +" "+data[0]?.author_name[0]?.last_name} 
 												
 											
 											</Link> </li>
-											<li className="post-comment"><i className="fa fa-comments-o"></i><Link to={"#"}>{data[0]?.forum_comment?.length}</Link> </li>
+											<li className="post-comment"><i className="fa fa-comments-o"></i> Anwsers <Link to={"#"}>{data[0]?.forum_comment?.length}</Link> </li>
+											<li className="post-comment"><i className="fa fa-eye"></i>Views <Link to={"#"}>{data[0]?.views?.length}</Link> </li>
 										</ul>
 									</div>
-									<div className="dez-post-title">
-										<h4 className="post-title m-t0"><Link to={"/blog-details"}>{data[0]?.title}</Link></h4>
-									</div>
+									
 								
 									<div className="dez-post-text"  dangerouslySetInnerHTML={{__html:data[0]?.body}}/>
 									<div className="dez-post-media dez-img-effect zoom-slow m-t20"> 
