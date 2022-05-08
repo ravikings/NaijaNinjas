@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework import viewsets
 from rest_framework.response import Response
-from forum.serializers import CommentSerializer, ForumSerializer, SimpleForum
+from forum.serializers import CommentSerializer, ForumSerializer, SimpleForum, ForumHomeSerializer
 from forum.models import Forum, Comment
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
@@ -51,6 +51,16 @@ class ForumView(viewsets.ModelViewSet):
     def get_queryset(self):
 
         return Forum.objects.filter(author=self.request.user.id)
+
+
+class ForumHomeView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    queryset = Forum.objects.all()
+    serializer_class = ForumHomeSerializer
 
 
 class CommentView(viewsets.ModelViewSet):
