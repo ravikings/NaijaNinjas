@@ -209,7 +209,7 @@ function Blogdetail(){
 																{/* <cite className="fn">{e?.author_name} </cite> */}
 																 <span className="says">says: </span> 
 														<div className="vote text-center">
-														{!e.votes.includes(parseInt(localStorage.getItem('userID'))) ? <bi.BiUpArrow className="thumb"  onClick={()=>voteAnswer(e.id)}/> : null }
+														{!e?.votes?.includes(parseInt(localStorage.getItem('userID'))) ? <bi.BiUpArrow className="thumb"  onClick={()=>voteAnswer(e.id)}/> : null }
 														<p>{e.total_votes}</p>
 														<bi.BiDownArrow className="thumb" onClick={()=>voteAnswer(e.id)}/>
 
