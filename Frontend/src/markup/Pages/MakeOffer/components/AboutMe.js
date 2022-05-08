@@ -2,7 +2,7 @@ import React from "react";
 
 function AboutMe(props) {
   return (
-    <div>
+    <div className="mt-4" >
       <div>
         <p>{props.data}</p>
         <p>
@@ -16,7 +16,7 @@ function AboutMe(props) {
           sit, totam ullam unde. Ab, natus velit?
         </p>
       </div>
-      <div className='actions'>
+      {/* <div className='actions'>
         <button className='site-button'>
           {" "}
           <i className='fa fa-comments-o  mr-2'></i> Message
@@ -24,7 +24,7 @@ function AboutMe(props) {
         <button className='site-button btn-outlined ml-4'>
           <i className='fa fa-phone mr-2'></i> Request a Call
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -2315,3 +2315,153 @@
 .css-g9znw6{
 	margin: auto;
 }
+
+.value-button {
+	display: inline-block;
+	border: 1px solid #ddd;
+	margin: 0px;
+	width: 40px;
+	height: 30px;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 18px;
+	padding: 1px 0;
+	background: #eee;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.value-button:hover {
+	cursor: pointer;
+}
+
+ #decrease {
+	margin-right: -4px;
+	border-radius: 5px 0 0 5px;
+}
+
+ #increase {
+	margin-left: -4px;
+	border-radius: 0 5px 5px 0;
+}
+
+ #input-wrap {
+	margin: 0px;
+	padding: 0px;
+}
+
+input#number {
+	text-align: center;
+	border: none;
+	margin: 0px;
+	width: 60px;
+	height: 40px;
+}
+
+input#number:focus {
+	outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.qtyBtns {
+	background-color: #eee;
+}
+
+.qtyDiv{
+	background: white;
+		border-radius: 8px;
+		padding: 4px 12px;
+}
+
+.left-side{
+	flex : 0.5;
+}
+
+.right-side{
+	max-width: 35%;
+	flex: 1;
+		display: flex;
+		align-items: center;
+}
+
+.salary-box{
+	border-radius: 4px;
+		box-shadow: 0 3px 8px rgb(0 0 0 / 8%);
+		background-color: #fff;
+		display: inline-block;
+		padding: 20px 25px;
+		margin-left: auto;
+}
+
+.salary-type{
+	color: #888;
+		line-height: 20px;
+		margin: 3px 0 8px 0;
+}
+
+.salary-amount{
+		color: #333;
+			font-size: 28px;
+			line-height: 36px;
+			font-weight: 300;
+}
+
+.dashboard-task-info li{
+		display: inline-block;
+			border-right: 1px solid #d0d0d0;
+			padding-right: 22px;
+			margin-right: 22px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+}
+
+.dashboard-task-info li strong{
+			display: block;
+				font-size: 16px;
+				font-weight: 600;
+				color: #333;
+				line-height: 22px;}
+
+								.dashboard-task-info li span{
+									display: block;
+										font-size: 14px;
+										color: #888;
+										line-height: 20px;
+								}
+
+.dashboard-task-info li:last-child{
+		border-right: none;
+		padding-right: 0;
+		margin-right: 0;
+}
+
+.dashboard-task-info{
+		list-style: none;
+			margin: 0;
+			background-color: #f4f4f4;
+			text-align: center;
+			border-radius: 4px;
+			padding: 14px 25px !important;
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+			align-self: flex-end;
+			position: absolute;
+			right: 30px;
+			top: 50%;
+			transform: translateY(-50%);
+			transition: 0.3s;
+			justify-content: center;
+}

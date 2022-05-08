@@ -239,9 +239,6 @@ function Browsecandidates() {
                               <div className='salary-bx'>
                                 {console.log(item, "item")}
                                 <Link
-                                  onClick={() =>
-                                    console.log(item.author, "item")
-                                  }
                                   to={{
                                     pathname: "/make-offer",
                                     state: {

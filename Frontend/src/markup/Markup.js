@@ -57,6 +57,7 @@ import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage";
 import MessagesPage from "./Pages/Messages/MessagesPage";
 import ForgotPassword from "./Pages/Auth/Forgot-password";
 import ResetPassword from "./Pages/Auth/Reset-password";
+import CompanyManageBids from "./Pages/Other/CompanyManageBids";
 
 class Markup extends Component {
   render() {
@@ -90,6 +91,7 @@ class Markup extends Component {
               component={Componypostjobs}
             />
             <Route path="/company-manage-job" exact component={Companymanage} />
+            <Route path="/company-manage-bids" exact component={CompanyManageBids} />
             <Route
               path="/company-transactions"
               exact
