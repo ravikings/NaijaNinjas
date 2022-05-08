@@ -13,7 +13,7 @@ const ForumAnwser = ({item , key}) => {
         <div className="col-md-12 col-sm-6 col-6">
         <div className="caption-box">
         <div class="count-box">{item.total_comments}</div>
-        <span class="caption-label">Votes</span>
+        <span class="caption-label">Anwser</span>
       </div>
         </div>
         <div className="col-md-12 col-sm-6 col-6 mt-2">
@@ -22,7 +22,7 @@ const ForumAnwser = ({item , key}) => {
   return accumulator + object.total_votes;
 }, 0)}</div>
       
-        <span className="caption-label">Anwser</span>
+        <span className="caption-label">Votes</span>
       </div>
         </div>
       </div>
