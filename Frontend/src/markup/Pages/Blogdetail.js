@@ -156,7 +156,7 @@ function Blogdetail(){
 											
 											</Link> </li>
 											<li className="post-comment"><i className="fa fa-comments-o"></i> Anwsers <Link to={"#"}>{data?.forum_comment?.length}</Link> </li>
-											<li className="post-comment"><i className="fa fa-eye"></i>Views <Link to={"#"}>{data?.views?.length}</Link> </li>
+											<li className="post-comment"><i className="fa fa-eye"></i>Views  <Link to={"#"}>{data?.total_views}</Link> </li>
 										</ul>
 									</div>
 									
@@ -222,7 +222,7 @@ function Blogdetail(){
 														<p dangerouslySetInnerHTML={{__html:e.body}}/>
 															<div className="reply">
 																	{/* share social network start */}
-													<div className="social-share">
+													{/* <div className="social-share">
         <label className="toggle" htmlFor="toggle">
           <input type="checkbox" id="toggle" />
           <div className="sbtn" onClick={()=>setShowIcon(!showIcon)}>
@@ -240,7 +240,7 @@ function Blogdetail(){
             </div>
           </div>
         </label>
-      </div>
+      </div> */}
 
 													{/* share social network end */}
 															
