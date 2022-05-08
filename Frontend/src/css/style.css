@@ -1291,9 +1291,9 @@ dl dd {
 .bg-transparent {
     background-color: transparent;
 }
-.bg-primary {
+/* .bg-primary {
     background-color: ;
-}
+} */
 .bg-white {
     background-color: #FFF;
 }
@@ -11184,7 +11184,7 @@ footer.footer-white .footer-bottom a {
     padding-bottom: 50px;
 }
 .content-area {
-    padding-top: 60px;
+    padding-top: 30px;
 }
 .section-full {
     position: relative;

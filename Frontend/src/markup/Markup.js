@@ -57,6 +57,7 @@ import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage";
 import MessagesPage from "./Pages/Messages/MessagesPage";
 import ForgotPassword from "./Pages/Auth/Forgot-password";
 import ResetPassword from "./Pages/Auth/Reset-password";
+import Search from "./Pages/Search";
 
 class Markup extends Component {
   render() {
@@ -172,7 +173,8 @@ class Markup extends Component {
               component={Blogdetailgridsidebar}
             />
             <Route path="/blog-left-img" exact component={Blogleftimg} />
-            <Route path="/blog-details" exact component={Blogdetail} />
+            <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
+            <Route path="/search/:query" exact component={Search} />
           </Switch>
         </div>
         <ScrollToTop />

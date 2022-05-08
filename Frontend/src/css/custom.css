@@ -405,3 +405,37 @@ input[type="checkbox"] {
     font-size: 18px;
    }
 /* Service Card End*/
+
+
+/* forum post card start */
+.caption-box{
+   border: 1px solid #cdbfbf;
+    padding: 5px;
+    text-align: center;
+    width: 75%;
+    margin: 0 auto;
+}
+.caption-box .count-box{
+  font-family: 'Segoe UI';
+  
+  font-size: 17px;
+  font-weight:bold;
+}
+.anwser-box{
+  color:#fff;
+  background-color: #1d46f5;
+}
+.question-mark{
+  color:#0a95ff;
+  font-size:18px;
+  font-weight: 400;
+}
+.simple-anwser{
+  color:#232629;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  text-align: justify;
+
+}
+/* forum post end */
