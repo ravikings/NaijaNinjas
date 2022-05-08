@@ -18,9 +18,9 @@ const ForumAnwser = ({item , key}) => {
         </div>
         <div className="col-md-12 col-sm-6 col-6 mt-2">
         <div className="caption-box anwser-box">
-        <div className="count-box">{item?.forum_comment.reduce((accumulator, object) => {
+        {/* <div className="count-box">{item?.forum_comment.reduce((accumulator, object) => {
   return accumulator + object.total_votes;
-}, 0)}</div>
+}, 0)}</div> */}
         {/* <div className="count-box">{item?.forum_comment.sum('total_votes')}</div> */}
         <span className="caption-label">Anwser</span>
       </div>
