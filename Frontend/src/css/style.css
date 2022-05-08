@@ -1291,9 +1291,9 @@ dl dd {
 .bg-transparent {
     background-color: transparent;
 }
-.bg-primary {
+/* .bg-primary {
     background-color: ;
-}
+} */
 .bg-white {
     background-color: #FFF;
 }

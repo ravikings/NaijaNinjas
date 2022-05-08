@@ -28,7 +28,7 @@ function Sidebar(){
 	// geting data from api for fourm start
 	const ForumData = () => {
 		createRequest()
-		  .get("forum/list/")
+		  .get("/forum/recent/")
 		  .then((res) => {
 				
 				setData(res.data.results)
@@ -53,7 +53,7 @@ function Sidebar(){
 	// effect start
 	useEffect(()=>{
 		ForumData()
-	},[data.length])
+	},[])
 	// effect end
 	return(
 		<aside  className="side-bar">
@@ -82,8 +82,8 @@ function Sidebar(){
 								</div>
 								<div className="dez-post-meta">
 									<ul className="d-flex align-items-center">
-										<li className="post-date"><i className="fa fa-calendar"></i>{item.time_created?.Created}</li>
-										<li className="post-comment"><Link to={'#'}><i className="fa fa-comments-o"></i>{item.forum_comment.length}</Link> </li>
+										<li className="post-date"><i className="fa fa-calendar"></i>{item?.Created || item?.updated}</li>
+										<li className="post-comment"><Link to={'#'}><i className="fa fa-comments-o"></i>66</Link> </li>
 									</ul>
 								</div>
 							</div>

@@ -51,7 +51,7 @@ function Blogdetailgridsidebar(){
 	// effect start
 	useEffect(()=>{
 		ForumData()
-	},[data.length])
+	},[])
 	// effect end
 	return(
 		<>

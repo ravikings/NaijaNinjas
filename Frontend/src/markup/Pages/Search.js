@@ -5,6 +5,7 @@ import Footer from './../Layout/Footer';
 import PageTitle from './../Layout/PageTitle';
 import Sidebar from './../Element/Sidebar';
 import createRequest from "../../utils/axios";
+import ForumAnwser from './components/ForumAnwser';
 var bnr = require('./../../images/banner/bnr1.jpg');
 
 const blogGride = [
@@ -40,7 +41,7 @@ function Search(){
 	// effect start
 	useEffect(()=>{
 		ForumData()
-	},[data.length , location.key])
+	},[location.key])
 	// effect end
 	return(
 		<>
@@ -53,31 +54,9 @@ function Search(){
 							<div className="col-lg-8 col-md-7 col-sm-12">							
 								<div id="masonry" className="dez-blog-grid-3 row">
 								{data.map((item, index)=>(
-									<div className="post card-container col-lg-6 col-md-6 col-sm-6" key={index}>
-										<div className="blog-post blog-grid blog-style-1">
-											<div className="dez-post-media dez-img-effect radius-sm"> 
-												<Link to={`/blog-details/${item.id}/${item.title}`}><img src={item.attachment} alt="" /></Link> 
-											</div>
-											<div className="dez-info">
-												 <div className="dez-post-meta">
-													<ul className="d-flex align-items-center">
-														<li className="post-date"><i className="fa fa-calendar"></i>{item.created}</li>
-														<li className="post-comment"><i className="fa fa-comments-o"></i><Link to={""}>{item.forum_comment.length}</Link> </li>
-													</ul>
-												</div>
-												<div className="dez-post-title ">
-													<h5 className="post-title font-20"><Link to={`/blog-details/${item.id}/${item.title}`}>{item.title}</Link></h5>
-												</div>
-												<div className="dez-post-text">
-													<p className="text-justify" dangerouslySetInnerHTML={{__html:item.body.slice(0,185)}}/>
-												</div>
-												<div className="dez-post-readmore blog-share"> 
-													<Link to={`/blog-details/${item.id}/${item.title}`} title="READ MORE" rel="bookmark" className="site-button-link"><span className="fw6">READ MORE</span></Link>
-												</div>
-											</div>
-										</div>
-									</div>
-								))}
+								
+								<ForumAnwser item={item} key={index} />
+								 ))}
 								</div>
 								<div className="pagination-bx clearfix text-center">
 									<ul className="pagination">

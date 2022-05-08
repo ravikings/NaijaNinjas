@@ -50,25 +50,25 @@ function Blogdetail(){
 
 	// geting data from api for fourm start
 
-	const ForumData = () => {
-		createRequest()
-		  .get("forum/list/")
+	const ForumData = async () => {
+		await createRequest()
+		  .get(`/forum/list/${id}/`)
 		  .then((res) => {
 			  
-			 const filterData= res.data.results.filter((e)=>{
-				 return e.id == id
-			 })
-			 console.log(filterData);
-				setData(filterData)
+			//  const filterData= res.data.results.filter((e)=>{
+			// 	 return e.id == id
+			//  })
+			 console.log("yo "+res.data.tags);
+				setData(res.data)
 			    var mytags=[]
-				if(filterData[0].tags.includes(',')){
-					{filterData[0].tags.split(',').map((e)=>(
+				if(res.data.tags.includes(',')){
+					{res.data.tags.split(',').map((e)=>(
 						mytags.push(e)
 					))}
 					setTags(mytags)
 				}
 				else{
-					mytags.push(filterData[0].tags)
+					mytags.push(res.data.tags)
 					setTags(mytags)
 				}
 		
@@ -120,9 +120,9 @@ function Blogdetail(){
 		// effect start
 		useEffect(()=>{
 			
-		
+		  
 			ForumData()
-		},[data.length , location.key])
+		},[location.key])
 		
 		// effect end
 	// single data fatch end
@@ -141,26 +141,29 @@ function Blogdetail(){
 								</div>
 								<div className="blog-post blog-single blog-style-1">
 								<div className="dez-post-title">
-										<h4 className="post-title m-t0 mb-3"><Link to={"/blog-details"}>{data[0]?.title}</Link></h4>
+										<h4 className="post-title m-t0 mb-3"><Link to={"/blog-details"}>{data?.title}</Link></h4>
 									</div>
 									<div className="dez-post-meta">
 										<ul className="d-flex align-items-center">
-											<li className="post-date"><i className="fa fa-calendar"></i>Asked {data[0]?.time_created?.Created}</li>
+											<li className="post-date"><i className="fa fa-calendar"></i>Asked {data?.time_created?.Created || data?.time_created?.Updated}</li>
 										
 											<li className="post-author"><i className="fa fa-user"></i>Ask By <Link to={"#"}>
-												{data[0]?.author_name[0]?.first_name +" "+data[0]?.author_name[0]?.last_name} 
+												{/* {data?.author_name[0]?.first_name +" "+data?.author_name[0]?.last_name}  */}
+												{data?.author_name?.map((e)=>(
+													e.first_name +" "+ e.last_name
+												))}
 												
 											
 											</Link> </li>
-											<li className="post-comment"><i className="fa fa-comments-o"></i> Anwsers <Link to={"#"}>{data[0]?.forum_comment?.length}</Link> </li>
-											<li className="post-comment"><i className="fa fa-eye"></i>Views <Link to={"#"}>{data[0]?.views?.length}</Link> </li>
+											<li className="post-comment"><i className="fa fa-comments-o"></i> Anwsers <Link to={"#"}>{data?.forum_comment?.length}</Link> </li>
+											<li className="post-comment"><i className="fa fa-eye"></i>Views <Link to={"#"}>{data?.views?.length}</Link> </li>
 										</ul>
 									</div>
 									
 								
-									<div className="dez-post-text"  dangerouslySetInnerHTML={{__html:data[0]?.body}}/>
+									<div className="dez-post-text"  dangerouslySetInnerHTML={{__html:data?.body}}/>
 									<div className="dez-post-media dez-img-effect zoom-slow m-t20"> 
-										{data[0]?.attachment ? <a href={data[0]?.attachment}>Download Attachment</a> : null}
+										{data?.attachment ? <a href={data?.attachment}>Download Attachment</a> : null}
 									</div>	
 									
 									<div className="dez-post-tags clear">
@@ -192,11 +195,11 @@ function Blogdetail(){
 								</div>
 								<div className="clear" id="comment-list">
 									<div className="comments-area" id="comments">
-										<h2 className="comments-title">{data[0]?.forum_comment?.length} Answers</h2>
+										<h2 className="comments-title">{data?.forum_comment?.length} Answers</h2>
 										<div className="clearfix m-b20">
 											
 											<ol className="comment-list">
-												{data[0]?.forum_comment?.map((e)=>(
+												{data?.forum_comment?.map((e)=>(
 													<li className="comment">
 													<div className="comment-body">
 														
