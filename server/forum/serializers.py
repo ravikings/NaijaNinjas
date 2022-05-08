@@ -19,7 +19,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        exclude = ("updated", "created")
+        exclude = ("updated", "created", "votes")
 
     def get_total_votes(self, instance):
         return instance.number_of_votes()
@@ -113,7 +113,7 @@ class ForumHomeSerializer(serializers.ModelSerializer):
     #TODO: USE THIS IN THE FUTURE
     #forum_comment = CommentSerializer(read_only=True, many=True)
     #similar_posts = serializers.SerializerMethodField()
-    total_comments = serializers.SerializerMethodField()
+    total_info = serializers.SerializerMethodField()
     author_name = serializers.SerializerMethodField()
     time_created = serializers.SerializerMethodField()
     total_views = serializers.SerializerMethodField()
@@ -123,8 +123,12 @@ class ForumHomeSerializer(serializers.ModelSerializer):
         model = Forum
         exclude = ("updated", "created", "views", "category", "attachment")
 
-    def get_total_comments(self, instance):
-        return Comment.objects.filter(forum=instance.id).count()
+    def get_total_info(self, instance):
+        data = {}
+        query = Comment.objects.filter(forum=instance.id)
+        data["total_comments"] = query.count()
+        data["total_votes"] = query.values("votes").count()
+        return data
 
     def get_total_views(self, instance):
         return instance.number_of_views()
