@@ -155,8 +155,8 @@ function Blogdetail(){
 												
 											
 											</Link> </li>
-											<li className="post-comment"><i className="fa fa-comments-o"></i> Anwsers <Link to={"#"}>{data?.forum_comment?.length}</Link> </li>
-											<li className="post-comment"><i className="fa fa-eye"></i>Views  <Link to={"#"}>{data?.total_views}</Link> </li>
+											<li className="post-comment"><i className="fa fa-comments-o"></i> <Link to={"#"}>{data?.forum_comment?.length} Anwsers </Link> </li>
+											<li className="post-comment"><i className="fa fa-eye"></i><Link to={"#"}>{data?.total_views} Views </Link> </li>
 										</ul>
 									</div>
 									
