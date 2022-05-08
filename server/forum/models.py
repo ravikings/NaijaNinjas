@@ -22,6 +22,9 @@ class Forum(models.Model):
     class Meta:
         ordering = ("created",)
 
+    def number_of_views(self):
+        return self.views.count()
+
 
 class Comment(models.Model):
     author = models.ForeignKey(
