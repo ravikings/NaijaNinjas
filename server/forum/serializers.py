@@ -52,18 +52,24 @@ class ForumSerializer(serializers.ModelSerializer):
     Profile serializers use profile for picture uploads and retrieve
     """
 
-    forum_comment = CommentSerializer(read_only=True, many=True)
+    #TODO: USE THIS IN THE FUTURE
+    #forum_comment = CommentSerializer(read_only=True, many=True)
+    #similar_posts = serializers.SerializerMethodField()
     total_comments = serializers.SerializerMethodField()
     author_name = serializers.SerializerMethodField()
     time_created = serializers.SerializerMethodField()
-    #similar_posts = serializers.SerializerMethodField()
+    total_views = serializers.SerializerMethodField()
+    
 
     class Meta:
         model = Forum
-        exclude = ("updated", "created")
+        exclude = ("updated", "created", "views")
 
     def get_total_comments(self, instance):
         return Comment.objects.filter(forum=instance.id).count()
+
+    def get_total_views(self, instance):
+        return instance.number_of_views()
 
     #TOD0: Change this to individual api for ui to use.
     # def get_similar_posts(self, instance, pk=None):
