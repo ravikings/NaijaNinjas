@@ -1,11 +1,8 @@
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import createRequest from "../../utils/axios";
 import Badge from "@material-ui/core/Badge";
 import MailOutlineOutlinedIcon from "@material-ui/icons/MailOutlineOutlined";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
@@ -14,11 +11,14 @@ import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined";
 import { useStyles } from "./LayoutStyles";
-import { toast } from "react-toastify";
+import {useDispatch} from "react-redux";
+import {logout} from "../Pages/Auth/Redux/AuthActions";
 
-function AuthState({ userDetails, handleShow }) {
+function AuthState({ userDetails }) {
   const classes = useStyles();
   const history = useHistory();
+    const dispatch = useDispatch();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [onlineState, setOnlineState] = React.useState("Online");
   const handleClick = (event) => {
@@ -33,20 +33,13 @@ function AuthState({ userDetails, handleShow }) {
   const id = open ? "simple-popover" : undefined;
 
   const signOut = () => {
-    createRequest()
-      .post("/dj-rest-auth/logout/")
-      .then((res) => {
-        handleClose();
-        userDetails.signOut();
-      })
-      .catch((e) => {
-        toast.error("Error Logout");
-      });
+      dispatch(logout(handleClose))
+      history.push("/")
   };
 
   return (
     <div>
-      {userDetails.isAuthenticated ? (
+      {userDetails ? (
         <div
           className="extra-nav d-flex align-items-center justify-content-between"
           style={{ padding: "10px 0px", width: 200 }}
@@ -83,20 +76,10 @@ function AuthState({ userDetails, handleShow }) {
           </div>
         </div>
       ) : (
-        /*<div className="extra-nav">
-          <div>
-            <Link to={"/register"} className="site-button">
-              <i className="fa fa-user"></i> Sign Up
-            </Link>
-            <Link to={"/login"} title="READ MORE" className="site-button">
-              <i className="fa fa-lock"></i> login{" "}
-            </Link>
-          </div>
-        </div>*/
         <Hidden xsDown>
           <div
             className="extra-nav d-flex align-items-center justify-content-end"
-            style={{ padding: "20px 0px", width: 200 }}
+            style={{ padding: "20px 0px", width: 220 }}
           >
             <Link to={"/register"} className="site-button">
               <i className="fa fa-user"></i> Sign Up

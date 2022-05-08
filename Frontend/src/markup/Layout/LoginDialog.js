@@ -3,30 +3,15 @@ import {Modal} from "react-bootstrap";
 import bnr3 from "./../../images/background/bg3.jpg";
 import {Link} from "react-router-dom";
 import {useFormik} from "formik";
-import createRequest from "../../utils/axios";
 import {useHistory} from 'react-router-dom';
-import {toast } from 'react-toastify';
-import {useUser} from "../Context/AuthContext";
+import {useDispatch} from "react-redux";
 
 function LoginDialog({showLoginDialog,handleClose}) {
-    const userDetails = useUser();
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const login = (loginDetails) => {
-        createRequest().post('/dj-rest-auth/login/', loginDetails)
-            .then((res) => {
-                console.log(res)
-                userDetails.signIn(res?.data?.user);
-                handleClose()
-                console.log(res.headers)
-            })
-            .catch((e) => {
-                if(e.response?.status===400){
-                    toast.error(e?.response?.data?.non_field_errors[0]);
-                }else{
-                    toast.error("Unknown Error");
-                }
-            });
+        dispatch(login(history,loginDetails));
     };
 
     const formik = useFormik({
