@@ -30,7 +30,7 @@ function Blogdetailgridsidebar(){
 	// geting data from api for fourm start
 	const ForumData = () => {
 		createRequest()
-		  .get("forum/list/")
+		  .get("forum/home/")
 		  .then((res) => {
 				
 				setData(res.data.results)

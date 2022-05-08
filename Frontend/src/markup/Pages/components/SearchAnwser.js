@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Modal,Form} from "react-bootstrap";
 
-const ForumAnwser = ({item , key}) => {
+const SearchAnwser = ({item , key}) => {
   return (
     <div className="container">
     <div className="row mt-4 mb-4">
@@ -12,14 +12,16 @@ const ForumAnwser = ({item , key}) => {
       <div className="row">
         <div className="col-md-12 col-sm-6 col-6">
         <div className="caption-box">
-        <div class="count-box">{item?.total_info?.total_comments }</div>
+        <div class="count-box">{item?.total_comments}</div>
         <span class="caption-label">Anwser</span>
       </div>
         </div>
         <div className="col-md-12 col-sm-6 col-6 mt-2">
         <div className="caption-box anwser-box">
         <div className="count-box">
-        {item?.total_info?.total_votes}
+        {item?.forum_comment?.reduce((accumulator, object) => {
+  return accumulator + object.total_votes;
+}, 0) }
         {/* {item?.forum_comment.reduce((accumulator, object) => {
   return accumulator + object.total_votes;
 }, 0)}        */}
@@ -53,4 +55,4 @@ const ForumAnwser = ({item , key}) => {
 
 
 
-export default ForumAnwser;
+export default SearchAnwser;

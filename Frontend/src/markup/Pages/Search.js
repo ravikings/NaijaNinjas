@@ -5,7 +5,8 @@ import Footer from './../Layout/Footer';
 import PageTitle from './../Layout/PageTitle';
 import Sidebar from './../Element/Sidebar';
 import createRequest from "../../utils/axios";
-import ForumAnwser from './components/ForumAnwser';
+
+import SearchAnwser from './components/SearchAnwser';
 var bnr = require('./../../images/banner/bnr1.jpg');
 
 const blogGride = [
@@ -55,7 +56,7 @@ function Search(){
 								<div id="masonry" className="dez-blog-grid-3 row">
 								{data.map((item, index)=>(
 								
-								<ForumAnwser item={item} key={index} />
+								<SearchAnwser item={item} key={index} />
 								 ))}
 								</div>
 								<div className="pagination-bx clearfix text-center">
