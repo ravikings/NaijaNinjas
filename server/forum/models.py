@@ -15,8 +15,8 @@ class Forum(models.Model):
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
     attachment = models.FileField(upload_to="forum/documents/%Y/%m/%d/", blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated = models.DateTimeField(auto_now=True, db_index=True)
     views = models.ManyToManyField(IpModel, related_name="forum_views", blank=True)
 
     class Meta:
@@ -34,13 +34,13 @@ class Comment(models.Model):
     )
     body = RichTextField()
     votes = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="votes_forum", blank=True
+        settings.AUTH_USER_MODEL, related_name="votes_forum", blank=True, 
     )
     forum = models.ForeignKey(
         Forum, on_delete=models.CASCADE, related_name="forum_comment"
     )
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated = models.DateTimeField(auto_now=True, db_index=True)
 
     class Meta:
         ordering = ("created",)

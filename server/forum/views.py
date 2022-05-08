@@ -56,7 +56,7 @@ class ForumView(viewsets.ModelViewSet):
 class ForumHomeView(viewsets.ModelViewSet):
     
     """
-    uses to add review to profile
+    uses to view forum home view
     """
 
     queryset = Forum.objects.all()
