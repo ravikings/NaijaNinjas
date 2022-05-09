@@ -27,6 +27,7 @@ function Blogdetail(){
 	// single data fatch start
 	const [data,setData]= useState([])
 	const [tags,setTags]= useState([])
+	const [commentId,setCommentId]= useState(null)
 	
 	// vote function start here
 	const voteAnswer=(id)=>{
@@ -81,7 +82,7 @@ function Blogdetail(){
 			}
 		  });
 	  }
-
+   // Add Anwser Start
 	const SubmitAnwser = (e)=>{
 		
 		e.preventDefault();
@@ -107,7 +108,7 @@ function Blogdetail(){
 			  
 			  if(response.statusText =="Created"){
 				ForumData();
-				e.target.reset();
+				setDetailsValue("");
 				
 			  }
 			  //console.log(response.data);
@@ -117,6 +118,47 @@ function Blogdetail(){
 			});
 
 	}
+
+	// Add Anwser End
+   // Edit Anwser Start
+	const updateComment = (e)=>{
+		
+		e.preventDefault();
+	
+		
+		var formdata = new FormData();
+	
+		formdata.append("body", detailsValue);
+		formdata.append("forum", id);
+		formdata.append("author", userId);
+		axios({
+			method: 'PUT',
+			url: `${baseURL}forum/comment/${commentId}/`,
+			data: formdata,
+			headers: {
+	  
+			  Authorization: token,
+	  
+			},
+		  })
+			.then((response) => {
+				console.log(response.data.author)
+				if(response.data.author){
+					
+					ForumData();
+					setDetailsValue("");
+					setCommentId(null);
+				}
+			
+			  //console.log(response.data);
+			}, (error) => {
+			  console.log(error);
+			
+			});
+
+	}
+
+	// Add Anwser End
 		// effect start
 		useEffect(()=>{
 			
@@ -209,7 +251,7 @@ function Blogdetail(){
 																{/* <cite className="fn">{e?.author_name} </cite> */}
 																 <span className="says">says: </span> 
 														<div className="vote text-center">
-														{!e?.votes?.includes(parseInt(localStorage.getItem('userID'))) ? <bi.BiUpArrow className="thumb"  onClick={()=>voteAnswer(e.id)}/> : null }
+														{!e?.votes?.includes(userId) ? <bi.BiUpArrow className="thumb"  onClick={()=>voteAnswer(e.id)}/> : null }
 														<p>{e.total_votes}</p>
 														<bi.BiDownArrow className="thumb" onClick={()=>voteAnswer(e.id)}/>
 
@@ -217,7 +259,14 @@ function Blogdetail(){
 														</div>
 														</div>
 														
-														<div className="comment-meta"> <span className="mr-3"></span>  <Link to={"#"}>{e.time_created?.Updated ||e.time_created.Created}</Link> </div>
+														<div className="comment-meta">
+															 <span className="mr-3"></span>  <Link to={"#"}>{e.time_created?.Updated ||e.time_created.Created}</Link>
+															{e?.author == userId ?
+															<span> <span className="mr-3"></span>  <Link className="text-primary" onClick={()=>{setCommentId(e.id); setDetailsValue(e.body)}}>Edit Anwser</Link>
+															
+																		</span> : null }
+															
+															  </div>
 
 														<p dangerouslySetInnerHTML={{__html:e.body}}/>
 															<div className="reply">
@@ -256,7 +305,7 @@ function Blogdetail(){
 										
 											<div className="comment-respond" id="respond">
 												<h4 className="comment-reply-title" id="reply-title">Your Answer <small> <Link to={""} style={{display:"none"}} id="cancel-comment-reply-link" rel="nofollow">Cancel reply</Link> </small> </h4>
-												<form className="comment-form" id="commentform" onSubmit={SubmitAnwser}>
+												<form className="comment-form" id="commentform" onSubmit={commentId != null ? updateComment : SubmitAnwser}>
 													
 													
 													<p className="comment-form-comment">
@@ -266,7 +315,10 @@ function Blogdetail(){
 								
 													</p>
 													<p className="form-submit">
-														<input type="submit" defaultValue="Post Comment" className="submit site-button" id="submit" name="submit" />
+														<button type="submit" className="submit site-button">
+														{commentId != null ? "Update" : "Submit"}
+														</button>
+														{/* <input type="submit" defaultValue={commentId != null ? "Submit" : "Update"} className="submit site-button" id="submit" name="submit" /> */}
 													</p>
 												</form>
 											</div>
