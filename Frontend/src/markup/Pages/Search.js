@@ -60,13 +60,7 @@ function Search(){
 								 ))}
 								</div>
 								<div className="pagination-bx clearfix text-center">
-									<ul className="pagination">
-										<li className="previous"><Link to={""}><i className="ti-arrow-left"></i> Prev</Link></li>
-										<li className="active"><Link to={"#"}>1</Link></li>
-										<li><Link to={""}>2</Link></li>
-										<li><Link to={""}>3</Link></li>
-										<li className="next"><Link to={""}>Next <i className="ti-arrow-right"></i></Link></li>
-									</ul>
+									{/* pagination place */}
 								</div>
 							</div>
 							<div className="col-lg-4 col-md-5 col-sm-12 sticky-top">
