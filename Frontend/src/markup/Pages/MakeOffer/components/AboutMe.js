@@ -15,6 +15,7 @@ function AboutMe(props) {
           laudantium natus numquam odio omnis quae quo quod reiciendis similique
           sit, totam ullam unde. Ab, natus velit?
         </p>
+        
       </div>
       {/* <div className='actions'>
         <button className='site-button'>

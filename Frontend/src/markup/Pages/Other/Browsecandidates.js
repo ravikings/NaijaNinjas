@@ -137,12 +137,12 @@ function Browsecandidates() {
     <>
       <Header />
       <div className='page-content bg-white'>
-        <div
+        {/* <div
           className='dez-bnr-inr overlay-black-middle'
           style={{ backgroundImage: "url(" + bnr + ")" }}
         >
           <PageTitle motherName='Home' activeName='Browse Candidates' />
-        </div>
+        </div> */}
         {/* <Jobfindbox /> */}
         <div className='content-block'>
           <div className='section-full bg-white browse-job p-b50'>

@@ -13203,3 +13203,30 @@ border : 1px solid #efefef;
     font-size: 20px;
     color: #31a24c !important;
 }
+
+.badge-div{
+        margin: 23px 0 3px 0;
+}
+
+.badge{
+        transition: 0.3s !important;
+            font-size: 14.7px !important;
+            border-radius: 4px !important;
+            background-color: rgba(102, 103, 107, .07) !important;
+            color: #66676b !important;
+            display: inline-block !important;
+            padding: 6px 15px !important;
+            font-weight: normal;
+            margin: 5px 3px !important;
+            line-height: 24px !important;
+}
+
+/* .badge{
+    background-color: rgba(42, 65, 232, .07) !important;
+    padding: 15px !important;
+    font-size: 12px !important;
+    color: #31a24c !important;
+    font-weight: bold !important;
+    margin-right: 5px !important;
+
+} */

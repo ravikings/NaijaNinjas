@@ -58,123 +58,132 @@ import MessagesPage from "./Pages/Messages/MessagesPage";
 import ForgotPassword from "./Pages/Auth/Forgot-password";
 import ResetPassword from "./Pages/Auth/Reset-password";
 import CompanyManageBids from "./Pages/Other/CompanyManageBids";
+import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask";
 
 class Markup extends Component {
   render() {
     return (
-      <BrowserRouter basename="/react/demo">
-        <div className="page-wraper">
+      <BrowserRouter basename='/react/demo'>
+        <div className='page-wraper'>
           <Switch>
-            <Route path="/" exact component={Homepage} />
-            <Route path="/index-2" exact component={Homepage2} />
-            <Route path="/messages" exact component={MessagesPage} />
+            <Route path='/' exact component={Homepage} />
+            <Route path='/index-2' exact component={Homepage2} />
+            <Route path='/messages' exact component={MessagesPage} />
 
-            <Route path="/jobs-profile" exact component={Jobprofile} />
-            <Route path="/ask-questions" exact component={AskQuestion} />
-            <Route path="/all-questions" exact component={AllQuestion} />
-            <Route path="/jobs-my-resume" exact component={Jobmyresume} />
-            <Route path="/jobs-applied-job" exact component={Jobsappliedjob} />
-            <Route path="/jobs-alerts" exact component={Jobsalert} />
-            <Route path="/jobs-saved-jobs" exact component={Jobsavedjobs} />
-            <Route path="/jobs-cv-manager" exact component={Jobcvmanager} />
+            <Route path='/jobs-profile' exact component={Jobprofile} />
+            <Route path='/ask-questions' exact component={AskQuestion} />
+            <Route path='/all-questions' exact component={AllQuestion} />
+            <Route path='/jobs-my-resume' exact component={Jobmyresume} />
+            <Route path='/jobs-applied-job' exact component={Jobsappliedjob} />
+            <Route path='/jobs-alerts' exact component={Jobsalert} />
+            <Route path='/jobs-saved-jobs' exact component={Jobsavedjobs} />
+            <Route path='/jobs-cv-manager' exact component={Jobcvmanager} />
             <Route
-              path="/jobs-change-password"
+              path='/jobs-change-password'
               exact
               component={Changepasswordpage}
             />
 
-            <Route path="/company-profile" exact component={Companyprofile} />
-            <Route path="/company-resume" exact component={Companyresume} />
+            <Route path='/company-profile' exact component={Companyprofile} />
+            <Route path='/company-resume' exact component={Companyresume} />
             <Route
-              path="/company-post-jobs"
+              path='/company-post-jobs'
               exact
               component={Componypostjobs}
             />
-            <Route path="/company-manage-job" exact component={Companymanage} />
-            <Route path="/company-manage-bids" exact component={CompanyManageBids} />
+            <Route path='/company-manage-job' exact component={Companymanage} />
             <Route
-              path="/company-transactions"
+              path='/company-manage-bids'
+              exact
+              component={CompanyManageBids}
+            />
+            <Route
+              path='/company-transactions'
               exact
               component={Companytransactions}
             />
             <Route
-              path="/browse-candidates"
+              path='/browse-candidates'
               exact
               component={Browsecandidates}
             />
 
-            <Route path="/about-us" exact component={Aboutus} />
-            <Route path="/job-detail" exact component={Jobdetail} />
-            <Route path="/make-offer" exact component={MakeOfferPage} />
-            <Route path="/companies" exact component={Companies} />
-            <Route path="/free-job-alerts" exact component={Freejobalerts} />
-            <Route path="/browse-job-list" exact component={Browsejoblist} />
-            <Route path="/browse-job-grid" exact component={Browsejobgrid} />
+            <Route path='/about-us' exact component={Aboutus} />
+            <Route path='/job-detail' exact component={Jobdetail} />
             <Route
-              path="/browse-job-filter-list"
+              path='/make-offer-task'
+              exact
+              component={MakeOfferTaskPage}
+            />
+            <Route path='/make-offer' exact component={MakeOfferPage} />
+            <Route path='/companies' exact component={Companies} />
+            <Route path='/free-job-alerts' exact component={Freejobalerts} />
+            <Route path='/browse-job-list' exact component={Browsejoblist} />
+            <Route path='/browse-job-grid' exact component={Browsejobgrid} />
+            <Route
+              path='/browse-job-filter-list'
               exact
               component={Browsejobfilterlist}
             />
             <Route
-              path="/browse-job-filter-grid"
+              path='/browse-job-filter-grid'
               exact
               component={Browsejobfiltergrid}
             />
 
-            <Route path="/category-all-jobs" exact component={Categoryalljob} />
+            <Route path='/category-all-jobs' exact component={Categoryalljob} />
             <Route
-              path="/category-company-jobs"
+              path='/category-company-jobs'
               exact
               component={Categorycompanyjob}
             />
             <Route
-              path="/category-designations-jobs"
+              path='/category-designations-jobs'
               exact
               component={Categorydesignationsjob}
             />
-            <Route path="/category-jobs" exact component={Categoryjobs} />
+            <Route path='/category-jobs' exact component={Categoryjobs} />
             <Route
-              path="/category-location-jobs"
+              path='/category-location-jobs'
               exact
               component={Categorylocationjobs}
             />
             <Route
-              path="/category-skill-jobs"
+              path='/category-skill-jobs'
               exact
               component={Categoryskilljobs}
             />
 
-            <Route path="/portfolio-grid-2" exact component={Portfoliogrid2} />
+            <Route path='/portfolio-grid-2' exact component={Portfoliogrid2} />
 
-            <Route path="/login" exact component={LoginPage} />
+            <Route path='/login' exact component={LoginPage} />
 
-            <Route path="/register" exact component={RegisterPage} />
-            <Route path="/forgot-password" exact component={ForgotPassword} />
-            <Route path="/reset-password" exact component={ResetPassword} />
+            <Route path='/register' exact component={RegisterPage} />
+            <Route path='/forgot-password' exact component={ForgotPassword} />
+            <Route path='/reset-password' exact component={ResetPassword} />
 
+            <Route path='/error-404' exact component={Error404} />
 
-            <Route path="/error-404" exact component={Error404} />
+            <Route path='/contact' exact component={Contact} />
 
-            <Route path="/contact" exact component={Contact} />
-
-            <Route path="/blog-classic" exact component={Blogclassic} />
+            <Route path='/blog-classic' exact component={Blogclassic} />
             <Route
-              path="/blog-classic-sidebar"
+              path='/blog-classic-sidebar'
               exact
               component={Blogclassicsidebar}
             />
             <Route
-              path="/blog-detailed-grid"
+              path='/blog-detailed-grid'
               exact
               component={Blogdetailgrid}
             />
             <Route
-              path="/blog-detailed-grid-sidebar"
+              path='/blog-detailed-grid-sidebar'
               exact
               component={Blogdetailgridsidebar}
             />
-            <Route path="/blog-left-img" exact component={Blogleftimg} />
-            <Route path="/blog-details" exact component={Blogdetail} />
+            <Route path='/blog-left-img' exact component={Blogleftimg} />
+            <Route path='/blog-details' exact component={Blogdetail} />
           </Switch>
         </div>
         <ScrollToTop />

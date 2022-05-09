@@ -5,6 +5,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { Divider, Grid, Hidden } from "@material-ui/core";
 import { useStyles } from "./MakeOfferStyles";
 import Ratings from "./components/Ratings";
+import Feedback from "./components/Feedback";
 import HourlyRate from "./components/HourlyRate";
 import MakeOfferForm from "./components/MakeOfferForm";
 import SocialMedia from "./components/SocialMedia";
@@ -14,44 +15,41 @@ import TabsGroup from "./components/TabsGroup";
 import { useLocation } from "react-router-dom";
 import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
-import { BsBuilding } from "react-icons/bs";
-import { Alert } from "react-bootstrap";
-import { AboutMe } from "./components";
-import RelatedJobs from "./components/RelatedJobs";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
-// const blogGrid = [
-//   {
-//     image: require("../../../images/blog/grid/pic1.jpg"),
-//   },
-//   {
-//     image: require("../../../images/blog/grid/pic2.jpg"),
-//   },
-//   {
-//     image: require("../../../images/blog/grid/pic3.jpg"),
-//   },
-//   {
-//     image: require("../../../images/blog/grid/pic4.jpg"),
-//   },
-// ];
+const blogGrid = [
+  {
+    image: require("../../../images/blog/grid/pic1.jpg"),
+  },
+  {
+    image: require("../../../images/blog/grid/pic2.jpg"),
+  },
+  {
+    image: require("../../../images/blog/grid/pic3.jpg"),
+  },
+  {
+    image: require("../../../images/blog/grid/pic4.jpg"),
+  },
+];
 
 function MakeOfferPage() {
   const classes = useStyles();
   const location = useLocation();
   const [user, setUser] = React.useState(null);
-  const id = location.state && location.state.id ? location.state.id : "10";
+  const id = location.state.id ? location.state.id : "";
 
   useEffect(() => {
     handleRequest();
   }, [location]);
 
   const handleRequest = async () => {
+    console.log(id, "item");
     const res = await createRequest().get(
       `/api/v1/account/user-search-detials/${id}/`
     );
     setUser(res.data);
-    console.log(res.data, "DATA");
+    console.log(res.data);
   };
 
   console.log(location);
@@ -61,12 +59,10 @@ function MakeOfferPage() {
       {user ? (
         <div className='page-content bg-white'>
           <div
-            className='dez-bnr-inr d-flex align-items-center flex-wrap '
-            style={{
-              backgroundImage: "url(" + bnr + ")",
-            }}
+            className='dez-bnr-inr d-flex align-items-center'
+            style={{ backgroundImage: "url(" + bnr + ")" }}
           >
-            <div className='left-side'>
+            <div className=''>
               <Grid container spacing={2} className={classes.headerGrid}>
                 <Grid item>
                   <Avatar
@@ -91,17 +87,9 @@ function MakeOfferPage() {
                       <h5 style={{ color: "gray" }}>iOS Expert + Node Dev</h5>
                     </Grid>
                     <Hidden xsDown>
-                      <div className='d-flex'>
-                        {user.location && (
-                          <span>
-                            <BsBuilding size={26} />
-                            <span className='align-top mx-2'>
-                              {user.location}
-                            </span>
-                          </span>
-                        )}
+                      <Grid item>
                         <Ratings />
-                      </div>
+                      </Grid>
                     </Hidden>
                   </Grid>
                 </Grid>
@@ -112,34 +100,24 @@ function MakeOfferPage() {
                 </Hidden>
               </Grid>
             </div>
-            <div className='right-side'>
-              <div className='salary-box'>
-                <div className='salary-type'>Project Budget</div>
-                <div className='salary-amount'>$2,500 - $4,500</div>
-              </div>
-            </div>
           </div>
 
           <div className={classes.main}>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12} md={7} lg={8}>
-                <AboutMe data={user.description} />
-                {/* <TabsGroup data={user.description} /> */}
-                <RelatedJobs />
+                <TabsGroup data={user.description} />
+                <Feedback />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
-                {/* <HourlyRate /> */}
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                <Alert variant={"success"} className='text-center mt-5'>
-                  6 days, 23 hours left
-                </Alert>
+                <HourlyRate />
+                <Divider style={{ margin: "30px 0px" }} />
                 <MakeOfferForm />
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                {/* <SocialMedia /> */}
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                {/* <Skills /> */}
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                {/* <Attachments /> */}
+                <Divider style={{ margin: "30px 0px" }} />
+                <SocialMedia />
+                <Divider style={{ margin: "30px 0px" }} />
+                <Skills />
+                <Divider style={{ margin: "30px 0px" }} />
+                <Attachments />
               </Grid>
             </Grid>
           </div>

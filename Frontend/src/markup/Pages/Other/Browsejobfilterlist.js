@@ -8,6 +8,7 @@ import Accordsidebar from "../../Element/Accordsidebar";
 
 //Images
 import logo from "../../../images/logo/icon1.png";
+import { Badge } from "react-bootstrap";
 var bnr = require("../../../images/banner/bnr1.jpg");
 
 const postBox = [
@@ -109,11 +110,17 @@ function Browsejobfilterlist() {
                                   See more
                                 </Link>
                               </p>
-
+                              <div className='d-flex badge-div '>
+                                <Badge>iOS</Badge>
+                                <Badge>Android</Badge>
+                                <Badge>Mobile apps</Badge>
+                                <Badge>Python</Badge>
+                              </div>
                               {/* <Link to={""}>
                                 <span>Full Time</span>
                               </Link> */}
                             </div>
+
                             <div className='salary-bx d-flex flex-column'>
                               <span>$1200 - $ 2500</span>
                               {/* <small class='text-muted'>Per hour</small> */}
@@ -121,9 +128,9 @@ function Browsejobfilterlist() {
                               <p className='text-muted text-capitalize'>
                                 per month
                               </p>
-                              <Link to={"/make-offer"}>
+                              <Link to={"/make-offer-task"}>
                                 <button className='site-button btn-block '>
-                                  Bid Now
+                                  Show Interest
                                 </button>
                               </Link>
                             </div>
