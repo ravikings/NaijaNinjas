@@ -73,8 +73,20 @@ const currentData = useMemo(() => {
 		   
 			   <div className="content-area">
 				   <div className="container">
+					   
 					   <div className="row">
-						   <div className="col-lg-8 col-md-7 col-sm-12">							
+						   <div className="col-lg-8 col-md-7 col-sm-12">
+							   <h1>All Questions</h1>							
+						   <div className="row">
+							   <div className="col-6 text-left">
+								   <h2>{data.length} Questions</h2>
+							   </div>
+							   
+<div className="col-6 text-right">
+
+<Link to="/ask-questions" className="site-button"> <i className="fa fa-question" aria-hidden="true"></i> Ask Question</Link>
+</div>
+		 </div>
 							   <div id="masonry" className="dez-blog-grid-3 row">
 							   {currentData.map((item, index)=>(
 							   

@@ -5,6 +5,7 @@ import Homepage from "./Pages/Other/Homepage1";
 import Homepage2 from "./Pages/Other/Homepage2";
 
 import AskQuestion from "./Pages/Other/AskQuestion";
+import UpdateQuestion from "./Pages/Other/UpdateQuestion";
 import AllQuestion from "./Pages/Other/AllQuestion";
 import Jobprofile from "./Pages/Profile/Jobprofile";
 import Jobmyresume from "./Pages/Other/Jobmyresume";
@@ -71,6 +72,7 @@ class Markup extends Component {
 
             <Route path="/jobs-profile" exact component={Jobprofile} />
             <Route path="/ask-questions" exact component={AskQuestion} />
+            <Route path="/update-questions" exact component={UpdateQuestion} />
             <Route path="/all-questions" exact component={AllQuestion} />
             <Route path="/jobs-my-resume" exact component={Jobmyresume} />
             <Route path="/jobs-applied-job" exact component={Jobsappliedjob} />
