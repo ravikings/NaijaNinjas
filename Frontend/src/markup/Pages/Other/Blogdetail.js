@@ -10,6 +10,11 @@ import 'react-quill/dist/quill.snow.css';
 import createRequest from "../../../utils/axios";
 import * as share from "react-share";
 import axios from 'axios'
+
+import Swiper from 'react-id-swiper';
+import 'swiper/css';
+
+
 //Images
 var bnr = require('../../../images/banner/bnr1.jpg');
 
@@ -27,6 +32,7 @@ function Blogdetail(){
 	// single data fatch start
 	const [data,setData]= useState([])
 	const [tags,setTags]= useState([])
+	const [commentId,setCommentId]= useState(null)
 	
 	// vote function start here
 	const voteAnswer=(id)=>{
@@ -81,7 +87,7 @@ function Blogdetail(){
 			}
 		  });
 	  }
-
+   // Add Anwser Start
 	const SubmitAnwser = (e)=>{
 		
 		e.preventDefault();
@@ -107,7 +113,7 @@ function Blogdetail(){
 			  
 			  if(response.statusText =="Created"){
 				ForumData();
-				e.target.reset();
+				setDetailsValue("");
 				
 			  }
 			  //console.log(response.data);
@@ -117,6 +123,59 @@ function Blogdetail(){
 			});
 
 	}
+
+	// Add Anwser End
+   // Edit Anwser Start
+	const updateComment = (e)=>{
+		
+		e.preventDefault();
+	
+		
+		var formdata = new FormData();
+	
+		formdata.append("body", detailsValue);
+		formdata.append("forum", id);
+		formdata.append("author", userId);
+		axios({
+			method: 'PUT',
+			url: `${baseURL}forum/comment/${commentId}/`,
+			data: formdata,
+			headers: {
+	  
+			  Authorization: token,
+	  
+			},
+		  })
+			.then((response) => {
+				console.log(response.data.author)
+				if(response.data.author){
+					
+					ForumData();
+					setDetailsValue("");
+					setCommentId(null);
+				}
+			
+			  //console.log(response.data);
+			}, (error) => {
+			  console.log(error);
+			
+			});
+
+	}
+
+	// Add Anwser End
+
+	// Attachment slider start
+	const params = {
+		slidesPerView: 3,
+		spaceBetween: 30,
+		freeMode: true,
+		pagination: {
+		  el: '.swiper-pagination',
+		  clickable: true,
+		}
+	  }
+	// Attachment slider end
 		// effect start
 		useEffect(()=>{
 			
@@ -162,10 +221,26 @@ function Blogdetail(){
 									
 								
 									<div className="dez-post-text"  dangerouslySetInnerHTML={{__html:data?.body}}/>
-									<div className="dez-post-media dez-img-effect zoom-slow m-t20"> 
-										{data?.attachment ? <a href={data?.attachment}>Download Attachment</a> : null}
+									<div className="dez-post-media dez-img-effect  m-t20 m-b20">
+									<h2>Attachments</h2> 
+									<Swiper {...params}>
+        <div><img src={data?.attachment}/></div>
+        <div><img src={data?.attachment}/></div>
+        <div><img src={data?.attachment}/></div>
+        <div><img src={data?.attachment}/></div>
+        <div><img src={data?.attachment}/></div>
+        
+      </Swiper>
+										{/* {data?.attachment ? <a href={data?.attachment}>Download Attachment</a> : null} */}
 									</div>	
-									
+									{/* attachment slider start */}
+				
+									{/* attachment slider end */}
+									<div className="col-12 text-right">
+{data.author === userId ?
+<Link to={{ pathname: '/update-questions', state:data }} className="site-button"> <i className="fa fa-pencil" aria-hidden="true"></i> Edit Question</Link>
+: null }
+		 </div>
 									<div className="dez-post-tags clear">
 										<div className="post-tags">
 											{tags.map((e)=>(
@@ -174,7 +249,9 @@ function Blogdetail(){
 											))}
 											
 										</div>
+										
 									</div>
+									
 									<div className="dez-divider bg-gray-dark op4"><i className="icon-dot c-square"></i></div>
 									<div className="share-details-btn">
 										<ul>
@@ -209,7 +286,7 @@ function Blogdetail(){
 																{/* <cite className="fn">{e?.author_name} </cite> */}
 																 <span className="says">says: </span> 
 														<div className="vote text-center">
-														{!e?.votes?.includes(parseInt(localStorage.getItem('userID'))) ? <bi.BiUpArrow className="thumb"  onClick={()=>voteAnswer(e.id)}/> : null }
+														{!e?.votes?.includes(userId) ? <bi.BiUpArrow className="thumb"  onClick={()=>voteAnswer(e.id)}/> : null }
 														<p>{e.total_votes}</p>
 														<bi.BiDownArrow className="thumb" onClick={()=>voteAnswer(e.id)}/>
 
@@ -217,7 +294,14 @@ function Blogdetail(){
 														</div>
 														</div>
 														
-														<div className="comment-meta"> <span className="mr-3"></span>  <Link to={"#"}>{e.time_created?.Updated ||e.time_created.Created}</Link> </div>
+														<div className="comment-meta">
+															 <span className="mr-3"></span>  <Link to={"#"}>{e.time_created?.Updated ||e.time_created.Created}</Link>
+															{e?.author === userId ?
+															<span> <span className="mr-3"></span> <i className="fa fa-pencil"></i>  <a href="#anwser" className="text-primary" onClick={()=>{setCommentId(e.id); setDetailsValue(e.body);}}>Edit Anwser</a>
+															
+																		</span> : null }
+															
+															  </div>
 
 														<p dangerouslySetInnerHTML={{__html:e.body}}/>
 															<div className="reply">
@@ -254,9 +338,10 @@ function Blogdetail(){
 											
 											</ol>
 										
+	  												<div id="anwser"></div>
 											<div className="comment-respond" id="respond">
 												<h4 className="comment-reply-title" id="reply-title">Your Answer <small> <Link to={""} style={{display:"none"}} id="cancel-comment-reply-link" rel="nofollow">Cancel reply</Link> </small> </h4>
-												<form className="comment-form" id="commentform" onSubmit={SubmitAnwser}>
+												<form className="comment-form" id="commentform" onSubmit={commentId != null ? updateComment : SubmitAnwser}>
 													
 													
 													<p className="comment-form-comment">
@@ -266,7 +351,10 @@ function Blogdetail(){
 								
 													</p>
 													<p className="form-submit">
-														<input type="submit" defaultValue="Post Comment" className="submit site-button" id="submit" name="submit" />
+														<button type="submit" className="submit site-button">
+														{commentId != null ? "Update" : "Submit"}
+														</button>
+														{/* <input type="submit" defaultValue={commentId != null ? "Submit" : "Update"} className="submit site-button" id="submit" name="submit" /> */}
 													</p>
 												</form>
 											</div>

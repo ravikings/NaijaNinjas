@@ -1,11 +1,11 @@
-import React,{ useEffect, useState} from 'react';
+import React,{ useEffect, useState, useMemo} from 'react';
 import {Link,useParams,useLocation} from 'react-router-dom'; 
 import Header from './../Layout/Header';
 import Footer from './../Layout/Footer';
 import PageTitle from './../Layout/PageTitle';
 import Sidebar from './../Element/Sidebar';
 import createRequest from "../../utils/axios";
-
+import Pagination from './components/Pagination';
 import SearchAnwser from './components/SearchAnwser';
 var bnr = require('./../../images/banner/bnr1.jpg');
 
@@ -15,6 +15,8 @@ const blogGride = [
 ]
 
 function Search(){
+	let PageSize = 8;
+	const [currentPage, setCurrentPage] = useState(1);
 	const location = useLocation();
     let { query } = useParams();
      const [data,setData]= useState([])
@@ -41,9 +43,18 @@ function Search(){
 	// geting data from api for fourm end
 	// effect start
 	useEffect(()=>{
+		setCurrentPage(1);
 		ForumData()
 	},[location.key])
 	// effect end
+	//   paganition setup start
+const currentData = useMemo(() => {
+	
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return data.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage , data.length]);
+//   paganition setup end
 	return(
 		<>
 			<Header />
@@ -54,19 +65,20 @@ function Search(){
 						<div className="row">
 							<div className="col-lg-8 col-md-7 col-sm-12">							
 								<div id="masonry" className="dez-blog-grid-3 row">
-								{data.map((item, index)=>(
+								{currentData.map((item, index)=>(
 								
 								<SearchAnwser item={item} key={index} />
 								 ))}
 								</div>
 								<div className="pagination-bx clearfix text-center">
-									<ul className="pagination">
-										<li className="previous"><Link to={""}><i className="ti-arrow-left"></i> Prev</Link></li>
-										<li className="active"><Link to={"#"}>1</Link></li>
-										<li><Link to={""}>2</Link></li>
-										<li><Link to={""}>3</Link></li>
-										<li className="next"><Link to={""}>Next <i className="ti-arrow-right"></i></Link></li>
-									</ul>
+									{/* pagination place */}
+									<Pagination
+        className="pagination-bar"
+        currentPage={currentPage}
+        totalCount={data.length}
+        pageSize={PageSize}
+        onPageChange={page => setCurrentPage(page)}
+      />
 								</div>
 							</div>
 							<div className="col-lg-4 col-md-5 col-sm-12 sticky-top">

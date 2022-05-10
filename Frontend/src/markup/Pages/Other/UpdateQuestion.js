@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {Link,useHistory} from 'react-router-dom';
+import React,{useState,useEffect} from 'react';
+import {Link,useHistory,useLocation} from 'react-router-dom';
 import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
 import {Form}  from 'react-bootstrap';  
@@ -10,47 +10,52 @@ import axios from 'axios';
 
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
+
 const postBlog = [
 	{ title: 'PHP Web Developer', },
 	{ title: 'Software Developer', },
 	{ title: 'Branch Credit Manager', },
 ]
 
-function AskQuestion (){
+function UpdateQuestion (){
+	const stateData = useLocation();
+	const data = stateData.state;
+	const [title,setTitle]= useState(data.title);
+	const [id,setId]= useState(data.id);
+	const [tags,setTags]= useState(data.tags);
+	const [category,setCategory]= useState(data.category);
+	const [detailsValue,setDetailsValue]= useState(data.body);
+	const [attachment,setAttachment]= useState(data.attachment);
 	const history = useHistory();
 	const baseURL= `http://127.0.0.1:8000/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
-	const [detailsValue,setDetailsValue]= useState();
 	const [attachFile,setAttachFile]= useState(null);
 
-		// upload image start
-		const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
+	// upload image start
+	const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
   
-		// called every time a file's `status` changes
-		const handleChangeStatus = ({ meta, file }, status) => {
-			setAttachFile(file);
-			}
-		
-// upload image end	
-	const SubmitQuestion = (e)=>{
+	// called every time a file's `status` changes
+	const handleChangeStatus = ({ meta, file }, status) => { console.log(file) }
+	
+
+	// upload image end
+	const UpdateQuestion = (e)=>{
 		e.preventDefault();
-		console.log("woow"+e.target[0].value);
-		console.log("woow"+e.target[1].value);
-		console.log("woow"+e.target[2].value);
+		
 	
 		console.log("image "+attachFile);
 		
 		var formdata = new FormData();
-		formdata.append("title", e.target[0].value);
+		formdata.append("title", title);
 		formdata.append("body", detailsValue);
-		formdata.append("tags", e.target[1].value);
-		formdata.append("category", e.target[2].value);
-		formdata.append("attachment", attachFile);
+		formdata.append("tags", tags);
+		formdata.append("category",category);
+		//formdata.append("attachment", attachFile);
 		formdata.append("author", userId);
 		axios({
-			method: 'POST',
-			url: `${baseURL}forum/list/`,
+			method: 'PUT',
+			url: `${baseURL}forum/list/${id}/`,
 			data: formdata,
 			headers: {
 	  
@@ -61,7 +66,7 @@ function AskQuestion (){
 			.then((response) => {
 			  console.log("the response is ", response)
 			  
-			  if(response.statusText =="Created"){
+			  if(response.statusText =="Created" || response.statusText=="OK"){
 				history.push(`/blog-details/${response.data.id}/${response.data.title}`) 
 				
 				
@@ -73,6 +78,9 @@ function AskQuestion (){
 			});
 
 	}
+	useEffect(()=>{
+		console.log(data);
+	},[])
 	return(
 		<>
 			<Header2 />
@@ -84,12 +92,12 @@ function AskQuestion (){
 							<ProfileSidebar active={"question"} />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 								<div className="job-bx-title  clearfix">
-										<h5 className="font-weight-700 pull-left text-uppercase">Ask a Question</h5>
+										<h5 className="font-weight-700 pull-left text-uppercase">Update a Question</h5>
 										<div className="float-right">
 													<Link to="all-questions" className="btn btn-primary">Previous Question</Link>
 													</div>
 									</div>
-								<form onSubmit={SubmitQuestion} enctype="multipart/form-data">
+								<form onSubmit={UpdateQuestion} enctype="multipart/form-data">
 								
 											<div className="row">
 												<div className="col-lg-12 col-md-12">
@@ -97,7 +105,7 @@ function AskQuestion (){
 														<label>Question Title</label>
 														<input type="text" 
 														name="QuestionTitle"
-														className="form-control" placeholder="Enter Job Title" />
+														className="form-control" placeholder="Enter Job Title" onChange={(e)=>setTitle(e.target.value)} value={title} />
 													</div>
 													
 												</div>
@@ -107,21 +115,24 @@ function AskQuestion (){
 														<label>Question Tags</label>
 														<input type="text" 
 														name="tag"
-														className="form-control tags_input" />
+														className="form-control tags_input"
+														onChange={(e)=>setTags(e.target.value)} value={tags}
+														/>
 														
 													</div>
 												</div>
 												<div className="col-lg-12 col-md-12">
 													<div className="form-group">
 														<label>Question Category</label>
-														<Form.Control as="select" custom 
-														name="category"
+														<select 
+														name="category" onChange={(e)=>setCategory(e.target.value)} value={category}
 														className="custom-select">
-															<option>Communcation</option>
-															<option>Company</option>
-															<option>Language</option>
-															<option>Freelance</option>
-														</Form.Control>
+														
+															<option value="Communcation">Communcation</option>
+															<option value="Company">Company</option>
+															<option value="Language">Language</option>
+															<option value="Freelance">Freelance</option>
+														</select>
 													</div>
 												</div>
 										
@@ -144,10 +155,23 @@ function AskQuestion (){
      
       accept="image/*"
     />
-													
+													<div className="form-group">
+														<label>Upload File</label>
+														<div className="custom-file">
+															<p className="m-a0">
+																<i className="fa fa-upload"></i>
+																Upload File
+															</p>
+															<input type="file" 
+															name="attachment"
+															
+        						  onChange={(e)=>setAttachFile(e.target.files[0])}
+															className="site-button form-control" id="customFile" />
+														</div>
+													</div>
 												</div>
 											</div>
-											<button type="submit" className="site-button m-b30">Publish</button>
+											<button type="submit" className="site-button m-b30">Update</button>
 										</form>
 								</div>
 							</div>
@@ -159,4 +183,4 @@ function AskQuestion (){
 		</>
 	)
 }
-export default AskQuestion; 
+export default UpdateQuestion; 
