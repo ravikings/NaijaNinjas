@@ -85,7 +85,7 @@ function AuthState({ userDetails }) {
               fontSize: "22px",
               fontWeight: "bold",
             }}
-            variant='outline-warning'
+            variant='warning'
             size='lg'
           >
             <i class='fa-solid fa-hand-holding-dollar'></i>
@@ -111,8 +111,9 @@ function AuthState({ userDetails }) {
                 padding: "17px 50px",
                 fontSize: "22px",
                 fontWeight: "bold",
+                color: "white",
               }}
-              variant='outline-warning'
+              variant='warning'
               size='lg'
             >
               <i class='fa-solid fa-hand-holding-dollar'></i>

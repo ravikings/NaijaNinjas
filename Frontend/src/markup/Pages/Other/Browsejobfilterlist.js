@@ -42,23 +42,7 @@ function Browsejobfilterlist() {
                     <h5 className='font-weight-700 pull-left text-uppercase'>
                       2269 Jobs Found
                     </h5>
-                    <div className='float-right'>
-                      <span className='select-title'>Sort by freshness</span>
-                      <select className='custom-btn'>
-                        <option>Last 2 Months</option>
-                        <option>Last Months</option>
-                        <option>Last Weeks</option>
-                        <option>Last 3 Days</option>
-                      </select>
-                      <div className='float-right p-tb5 p-r10'>
-                        <Link to={"/browse-job-filter-list"} className='p-lr5'>
-                          <i className='fa fa-th-list'></i>
-                        </Link>
-                        <Link to={"/browse-job-filter-grid"} className='p-lr5'>
-                          <i className='fa fa-th'></i>
-                        </Link>
-                      </div>
-                    </div>
+                  
                   </div>
                   <ul className='post-job-bx'>
                     {postBox.map((item, index) => (
