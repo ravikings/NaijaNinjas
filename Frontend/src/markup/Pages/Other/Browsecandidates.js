@@ -65,12 +65,12 @@ function Browsecandidates() {
         data.previous ? setPrevious(data.previous) : setPrevious(null);
         const pgs = Math.ceil(data.count / 10);
         data.count && setCount(pgs);
-        setLoading(false);
         setKeyLoad(false);
         console.log(data, "data");
       } else {
         setError("No results found");
       }
+      setLoading(false);
     } catch (error) {
       setError("Something went wrong");
       setLoading(false);
@@ -98,17 +98,18 @@ function Browsecandidates() {
         setResults(data.results);
         data.previous ? setPrevious(data.previous) : setPrevious(null);
         data.next ? setNext(data.next) : setNext(null);
-        setLoading(false);
         if (forNext) {
           setPage(page + 1);
         } else {
           setPage(page - 1);
         }
-
+        setLoading(false);
+        setKeyLoad(false);
         console.log(data, "new data");
       } else {
         setError("No results found");
       }
+      setLoading(false);
     } catch (error) {
       setError("Something went wrong");
       setLoading(true);
