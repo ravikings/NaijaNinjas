@@ -10,11 +10,6 @@ const style = {
   position: "absolute",
   top: "129px",
   right: "75px",
-  "@media screen and (max-width: 480px)": {
-    position: "relative",
-    top: "129px",
-    right: "75px",
-  },
 };
 
 function IndexBanner() {

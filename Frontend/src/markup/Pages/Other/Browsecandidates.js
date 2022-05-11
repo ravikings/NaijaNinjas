@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
-import PageTitle from "../../Layout/PageTitle";
 import Jobfindbox from "../../Element/Jobfindbox";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
 import createRequest from "../../../utils/axios";
+import Pagination from "../components/Pagination";
 
 var bnr = require("../../../images/banner/bnr1.jpg");
 
@@ -29,6 +29,7 @@ function Browsecandidates() {
   const [previous, setPrevious] = useState(null);
   const [count, setCount] = useState(null);
   const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { state } = useLocation();
 
@@ -281,11 +282,15 @@ function Browsecandidates() {
                   </ul>
                   {results && !keyLoad && !loading && (
                     <div className='pagination-bx m-t30'>
-                      <ul className='pagination'>
-                        <li className='previous'>
+                      <ul className='pagination '>
+                        <li className='previous mx-2'>
                           <Link
                             to={""}
-                            className={!previous && "disabledCursor"}
+                            className={
+                              !previous
+                                ? "disabledCursor item-link"
+                                : "item-link"
+                            }
                             onClick={(e) =>
                               previous
                                 ? handleClick(e, previous)
@@ -300,7 +305,9 @@ function Browsecandidates() {
                             <li
                               key={i}
                               className={
-                                i === page ? "activeNumber " : "notActive"
+                                i === page
+                                  ? "activeNumber dots "
+                                  : "notActive dots"
                               }
                             >
                               <Link to='' onClick={(e) => handleClick(e)}>
@@ -309,10 +316,12 @@ function Browsecandidates() {
                             </li>
                           );
                         })}
-                        <li className='next'>
+                        <li className='next mx-2'>
                           <Link
                             to={""}
-                            className={!next && "disabledCursor"}
+                            className={
+                              !next ? "disabledCursor item-link" : "item-link"
+                            }
                             onClick={(e) =>
                               next
                                 ? handleClick(e, next, "forNext")
@@ -323,8 +332,22 @@ function Browsecandidates() {
                           </Link>
                         </li>
                       </ul>
+                      <Pagination
+                        className='pagination-bar'
+                        currentPage={1}
+                        totalCount={7}
+                        pageSize={8}
+                        onPageChange={(page) => setCurrentPage(page)}
+                      />
                     </div>
                   )}
+                  {/* <Pagination
+                    className='pagination-bar'
+                    currentPage={currentPage}
+                    totalCount={results.length}
+                    pageSize={8}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  /> */}
                 </div>
                 <div className='col-xl-3 col-lg-4'>
                   <div className='sticky-top browse-candidates'>
