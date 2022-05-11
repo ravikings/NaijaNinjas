@@ -31,13 +31,7 @@ function Browsejobfilterlist() {
     <>
       <Header />
       <div className='page-content bg-white'>
-        <div
-          className='dez-bnr-inr overlay-black-middle'
-          style={{ backgroundImage: "url(" + bnr + ")" }}
-        >
-          <PageTitle motherName='Home' activeName='Browse Job Filter Grid' />
-        </div>
-        <Jobfindbox />
+        <Jobfindbox style={{ marginTop: "80px" }} />
         <div className='content-block'>
           <div className='section-full browse-job p-b50'>
             <div className='container'>

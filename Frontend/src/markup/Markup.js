@@ -59,6 +59,7 @@ import ForgotPassword from "./Pages/Auth/Forgot-password";
 import ResetPassword from "./Pages/Auth/Reset-password";
 import CompanyManageBids from "./Pages/Other/CompanyManageBids";
 import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask";
+import Header from "./Layout/Header";
 
 class Markup extends Component {
   render() {

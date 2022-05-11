@@ -11,13 +11,14 @@ import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined";
 import { useStyles } from "./LayoutStyles";
-import {useDispatch} from "react-redux";
-import {logout} from "../Pages/Auth/Redux/AuthActions";
+import { useDispatch } from "react-redux";
+import { logout } from "../Pages/Auth/Redux/AuthActions";
+import ReactButton from "react-bootstrap/Button";
 
 function AuthState({ userDetails }) {
   const classes = useStyles();
   const history = useHistory();
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [onlineState, setOnlineState] = React.useState("Online");
@@ -33,34 +34,34 @@ function AuthState({ userDetails }) {
   const id = open ? "simple-popover" : undefined;
 
   const signOut = () => {
-      dispatch(logout(handleClose))
-      history.push("/")
+    dispatch(logout(handleClose));
+    history.push("/");
   };
 
   return (
     <div>
       {userDetails ? (
         <div
-          className="extra-nav d-flex align-items-center justify-content-between"
-          style={{ padding: "10px 0px", width: 200 }}
+          className='extra-nav d-flex align-items-center justify-content-between'
+          style={{ padding: "10px 0px", width: 480 }}
         >
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation='vertical' flexItem />
           <div>
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={4} color='primary'>
               <Link
                 to={"/messages"}
                 style={{ display: "flex", alignItems: "center" }}
               >
-                <MailOutlineOutlinedIcon color="action" />
+                <MailOutlineOutlinedIcon color='action' />
               </Link>
             </Badge>
           </div>
           <div>
-            <Badge badgeContent={8} color="primary">
-              <NotificationsNoneOutlinedIcon color="action" />
+            <Badge badgeContent={8} color='primary'>
+              <NotificationsNoneOutlinedIcon color='action' />
             </Badge>
           </div>
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation='vertical' flexItem />
           <div>
             <Avatar
               aria-describedby={id}
@@ -74,19 +75,49 @@ function AuthState({ userDetails }) {
               K
             </Avatar>
           </div>
+          <Divider orientation='vertical' flexItem />
+
+          <ReactButton
+            style={{
+              borderRadius: "2px",
+              marginLeft: 10,
+              padding: "17px 50px",
+              fontSize: "22px",
+              fontWeight: "bold",
+            }}
+            variant='outline-warning'
+            size='lg'
+          >
+            <i class='fa-solid fa-hand-holding-dollar'></i>
+            Sell Here!
+          </ReactButton>
         </div>
       ) : (
         <Hidden xsDown>
           <div
-            className="extra-nav d-flex align-items-center justify-content-end"
-            style={{ padding: "20px 0px", width: 220 }}
+            className='extra-nav d-flex align-items-center justify-content-end'
+            style={{ padding: "20px 0px", width: 500 }}
           >
-            <Link to={"/register"} className="site-button">
-              <i className="fa fa-user"></i> Sign Up
+            <Link to={"/register"} className='site-button'>
+              <i className='fa fa-user'></i> SIGNUP
             </Link>
-            <Link to={"/login"} title="READ MORE" className="site-button">
-              <i className="fa fa-lock"></i> login{" "}
+            <Link to={"/login"} title='READ MORE' className='site-button'>
+              <i className='fa fa-lock'></i> LOGIN{" "}
             </Link>
+            <ReactButton
+              style={{
+                borderRadius: "2px",
+                marginLeft: 10,
+                padding: "17px 50px",
+                fontSize: "22px",
+                fontWeight: "bold",
+              }}
+              variant='outline-warning'
+              size='lg'
+            >
+              <i class='fa-solid fa-hand-holding-dollar'></i>
+              Sell Here!
+            </ReactButton>
           </div>
         </Hidden>
       )}
@@ -118,7 +149,7 @@ function AuthState({ userDetails }) {
                 ? classes.onlineSelected
                 : classes.onlineInvisButtonNotSelected
             }
-            color="primary"
+            color='primary'
             onClick={() => setOnlineState("Online")}
           >
             Online
@@ -135,7 +166,7 @@ function AuthState({ userDetails }) {
                 ? classes.invisibleSelected
                 : classes.onlineInvisButtonNotSelected
             }
-            color="primary"
+            color='primary'
             onClick={() => setOnlineState("Invisible")}
           >
             Invisible

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo2 from "./../../images/logo.png";
 import AuthState from "./AuthState";
 import LoginDialog from "./LoginDialog";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 function Header() {
   const userDetails = useSelector((state) => state.authReducer.currentUser);
@@ -59,7 +59,7 @@ function Header() {
       >
         <div className='sticky-header main-bar-wraper navbar-expand-lg'>
           <div className='main-bar clearfix'>
-            <div className='container clearfix'>
+            <div className='px-5 clearfix'>
               <div className='logo-header mostion'>
                 <Link to={"/"}>
                   <img src={logo2} className='logo' alt='img' />

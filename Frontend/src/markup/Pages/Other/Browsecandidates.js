@@ -15,6 +15,7 @@ var bnr = require("../../../images/banner/bnr1.jpg");
 function Browsecandidates() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
+  const [totalResults, setTotalResults] = useState(null);
   const [error, setError] = useState(null);
 
   const [userStatus, setUserStatus] = useState(null);
@@ -57,6 +58,7 @@ function Browsecandidates() {
         params,
       });
       if (data.results) {
+        setTotalResults(data.count);
         setResults(data.results);
         data.next ? setNext(data.next) : setNext(null);
         data.previous ? setPrevious(data.previous) : setPrevious(null);
@@ -147,8 +149,11 @@ function Browsecandidates() {
         <div className='content-block'>
           <div className='section-full bg-white browse-job p-b50'>
             <div className='container'>
-              <div className='row mt-4'>
+              <div className='row'>
                 <div className='col-xl-9 col-lg-8'>
+                  <h5 className='font-weight-700 pull-left text-uppercase '>
+                    {totalResults && totalResults + " Professionals"}
+                  </h5>
                   {/* <div className='m-b30'>
                     <input
                       type='text'
@@ -156,7 +161,7 @@ function Browsecandidates() {
                       placeholder='Search freelancer services'
                     />
                   </div> */}
-                  <ul className='post-job-bx'>
+                  <ul className='post-job-bx mt-5'>
                     {results && !keyLoad && !loading ? (
                       results.map((item, index) => (
                         <li key={index}>

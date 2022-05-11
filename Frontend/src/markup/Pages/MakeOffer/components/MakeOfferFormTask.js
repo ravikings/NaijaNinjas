@@ -30,6 +30,11 @@ function MakeOfferFormTask(props) {
     setSubmitted(true);
   };
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    props.modal();
+  };
+
   return (
     <div
       style={{
@@ -110,7 +115,11 @@ function MakeOfferFormTask(props) {
       <hr />
       <p className='text-secondary text-center pb-3'>
         Doesn't have an account?{" "}
-        <Link to={"/signup"} className='text-primary'>
+        <Link
+          to={"/signup"}
+          onClick={(e) => handleClick(e)}
+          className='text-primary'
+        >
           Sign Up
         </Link>
       </p>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
 import Avatar from "@material-ui/core/Avatar";
-import { Divider, Grid, Hidden } from "@material-ui/core";
+import { Box, Divider, Grid, Hidden, Modal } from "@material-ui/core";
 import { useStyles } from "./MakeOfferStyles";
 import Ratings from "./components/Ratings";
 import HourlyRate from "./components/HourlyRate";
@@ -15,16 +15,33 @@ import { useLocation } from "react-router-dom";
 import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { BsBuilding } from "react-icons/bs";
-import { Alert } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { AboutMe } from "./components";
 import RelatedJobs from "./components/RelatedJobs";
 import { Badge } from "react-bootstrap";
 import Carousel from "carousel-react-rcdev";
 import ShortImages from "./components/ShortImageGallery";
+import RegisterPageModal from "../Auth/RegisterPageModal";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  overflow: "auto",
+  height: "80%",
+  width: 800,
+  bgcolor: "background.paper",
+  borderRadius: "5px",
+  boxShadow: 24,
+  p: 4,
+};
+
 function MakeOfferPage() {
+  const [show, setShow] = React.useState(false);
+
   const classes = useStyles();
   const location = useLocation();
   const [user, setUser] = React.useState(null);
@@ -43,8 +60,25 @@ function MakeOfferPage() {
   };
 
   console.log(location);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
-    <>
+    <div>
+      <Modal
+        open={show}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+        style={{
+          overflow: "scroll",
+        }}
+      >
+        <Box sx={style}>
+          <RegisterPageModal />
+        </Box>
+      </Modal>
       <Header />
       {user ? (
         <div className='page-content bg-white'>
@@ -156,7 +190,7 @@ function MakeOfferPage() {
                 <Alert variant={"success"} className='text-center mt-5'>
                   6 days, 23 hours left
                 </Alert>
-                <MakeOfferForm />
+                <MakeOfferForm modal={handleShow} />
                 {/* <Divider style={{ margin: "30px 0px" }} /> */}
                 {/* <SocialMedia /> */}
                 {/* <Divider style={{ margin: "30px 0px" }} /> */}
@@ -172,8 +206,9 @@ function MakeOfferPage() {
           <ClipLoader color={"#2e55fa"} loading={true} size={150} />
         </div>
       )}
+
       <Footer />
-    </>
+    </div>
   );
 }
 export default MakeOfferPage;
