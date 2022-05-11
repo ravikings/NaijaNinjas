@@ -53,7 +53,7 @@ class ForumView(viewsets.ModelViewSet):
         return Forum.objects.filter(author=self.request.user.id)
 
 
-class ForumHomeView(viewsets.ModelViewSet):
+class ForumHomeView(viewsets.ReadOnlyModelViewSet):
     
     """
     uses to view forum home view
@@ -71,7 +71,7 @@ class CommentView(viewsets.ModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permissions_classes = [IsAuthenticated]
+    permissions_classes = [IsAuthenticated and IsOwner]
 
 
 class CommentVotes(viewsets.ViewSet):
@@ -115,7 +115,7 @@ class SearchForum(viewsets.ModelViewSet):
     ]
 
 
-class RecentForum(viewsets.ModelViewSet):
+class RecentForum(viewsets.ReadOnlyModelViewSet):
 
     serializer_class = SimpleForum
 
