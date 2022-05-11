@@ -1,9 +1,12 @@
-import React from 'react';
+import React,{useState,useEffect, useMemo} from 'react';
 import {Link} from 'react-router-dom'; 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import PageTitle from '../../Layout/PageTitle';
 import Sidebar from '../../Element/Sidebar';
+import ForumAnwser from '../components/ForumAnwser';
+import createRequest from "../../../utils/axios";
+import Pagination from '../components/Pagination';
 
 var bnr = require('../../../images/banner/bnr1.jpg');
 
@@ -23,62 +26,95 @@ const blogGride = [
 ]
 
 function Blogdetailgridsidebar(){
-	return(
-		<>
-			<Header />
-			<div className="page-content bg-white">
-			
-				<div className="content-area">
-					<div className="container">
-						<div className="row">
-							<div className="col-lg-8 col-md-7 col-sm-12">							
-								<div id="masonry" className="dez-blog-grid-3 row">
-								{blogGride.map((item, index)=>(
-									<div className="post card-container col-lg-6 col-md-6 col-sm-6" key={index}>
-										<div className="blog-post blog-grid blog-style-1">
-											<div className="dez-post-media dez-img-effect radius-sm"> 
-												<Link to={"/blog-details"}><img src={item.image} alt="" /></Link> 
-											</div>
-											<div className="dez-info">
-												 <div className="dez-post-meta">
-													<ul className="d-flex align-items-center">
-														<li className="post-date"><i className="fa fa-calendar"></i>September 18, 2017</li>
-														<li className="post-comment"><i className="fa fa-comments-o"></i><Link to={""}>5k</Link> </li>
-													</ul>
-												</div>
-												<div className="dez-post-title ">
-													<h5 className="post-title font-20"><Link to={"/blog-details"}>Do you have a job that the average person doesnӴ even know exists?</Link></h5>
-												</div>
-												<div className="dez-post-text">
-													<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.</p>
-												</div>
-												<div className="dez-post-readmore blog-share"> 
-													<Link to={"/blog-details"} title="READ MORE" rel="bookmark" className="site-button-link"><span className="fw6">READ MORE</span></Link>
-												</div>
-											</div>
-										</div>
-									</div>
-								))}
-								</div>
-								<div className="pagination-bx clearfix text-center">
-									<ul className="pagination">
-										<li className="previous"><Link to={""}><i className="ti-arrow-left"></i> Prev</Link></li>
-										<li className="active"><Link to={"#"}>1</Link></li>
-										<li><Link to={""}>2</Link></li>
-										<li><Link to={""}>3</Link></li>
-										<li className="next"><Link to={""}>Next <i className="ti-arrow-right"></i></Link></li>
-									</ul>
-								</div>
-							</div>
-							<div className="col-lg-4 col-md-5 col-sm-12 sticky-top">
-								<Sidebar />
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<Footer />
-		</>
-	)
+	let PageSize = 8;
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const [data,setData]= useState([])
+   // geting data from api for fourm start
+   const ForumData = () => {
+	   createRequest()
+		 .get("forum/home/")
+		 .then((res) => {
+			   
+			   setData(res.data.results)
+			   console.log("beta done",res)
+		   
+	   
+		 })
+		 .catch((e) => {
+		   if (e.response?.status === 400) {
+		   console.log(e?.response?.data?.non_field_errors[0]);
+		   } else {
+			 console.log("Unknown Error");
+		   }
+		 });
+	 };
+   
+   // geting data from api for fourm end
+   // effect start
+   useEffect(()=>{
+	   ForumData()
+	   
+   },[])
+   // effect end
+
+//   paganition setup start
+const currentData = useMemo(() => {
+	
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return data.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage , data.length]);
+//   paganition setup end
+   return(
+	   <>
+		   <Header />
+		   <div className="page-content bg-white">
+		   
+			   <div className="content-area">
+				   <div className="container">
+					   
+					   <div className="row">
+						   <div className="col-lg-8 col-md-7 col-sm-12">
+							   <h1>All Questions</h1>							
+						   <div className="row">
+							   <div className="col-6 text-left">
+								   <h2>{data.length} Questions</h2>
+							   </div>
+							   
+<div className="col-6 text-right">
+
+<Link to="/ask-questions" className="site-button"> <i className="fa fa-question" aria-hidden="true"></i> Ask Question</Link>
+</div>
+		 </div>
+							   <div id="masonry" className="dez-blog-grid-3 row">
+							   {currentData.map((item, index)=>(
+							   
+							  <ForumAnwser item={item} key={index} />
+							   ))}
+							   </div>
+						   {/* pagination place start */}
+						   <div className="mx-auto text-center m-t30">
+						   <Pagination
+        className="pagination-bar"
+        currentPage={currentPage}
+        totalCount={data.length}
+        pageSize={PageSize}
+        onPageChange={page => setCurrentPage(page)}
+      />
+                  </div>
+						  
+						   {/* pagination place end */}
+						   </div>
+						   <div className="col-lg-4 col-md-5 col-sm-12 sticky-top">
+							   <Sidebar />
+						   </div>
+					   </div>
+				   </div>
+			   </div>
+		   </div>
+		   <Footer />
+	   </>
+   )
 }
 export default Blogdetailgridsidebar;

@@ -5,6 +5,7 @@ import Homepage from "./Pages/Other/Homepage1";
 import Homepage2 from "./Pages/Other/Homepage2";
 
 import AskQuestion from "./Pages/Other/AskQuestion";
+import UpdateQuestion from "./Pages/Other/UpdateQuestion";
 import AllQuestion from "./Pages/Other/AllQuestion";
 import Jobprofile from "./Pages/Profile/Jobprofile";
 import Jobmyresume from "./Pages/Other/Jobmyresume";
@@ -60,6 +61,7 @@ import ResetPassword from "./Pages/Auth/Reset-password";
 import CompanyManageBids from "./Pages/Other/CompanyManageBids";
 import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask";
 import Header from "./Layout/Header";
+import Search from "./Pages/Search";
 
 class Markup extends Component {
   render() {
@@ -79,6 +81,19 @@ class Markup extends Component {
             <Route path='/jobs-alerts' exact component={Jobsalert} />
             <Route path='/jobs-saved-jobs' exact component={Jobsavedjobs} />
             <Route path='/jobs-cv-manager' exact component={Jobcvmanager} />
+            <Route path="/" exact component={Homepage} />
+            <Route path="/index-2" exact component={Homepage2} />
+            <Route path="/messages" exact component={MessagesPage} />
+
+            <Route path="/jobs-profile" exact component={Jobprofile} />
+            <Route path="/ask-questions" exact component={AskQuestion} />
+            <Route path="/update-questions" exact component={UpdateQuestion} />
+            <Route path="/all-questions" exact component={AllQuestion} />
+            <Route path="/jobs-my-resume" exact component={Jobmyresume} />
+            <Route path="/jobs-applied-job" exact component={Jobsappliedjob} />
+            <Route path="/jobs-alerts" exact component={Jobsalert} />
+            <Route path="/jobs-saved-jobs" exact component={Jobsavedjobs} />
+            <Route path="/jobs-cv-manager" exact component={Jobcvmanager} />
             <Route
               path='/jobs-change-password'
               exact
@@ -185,6 +200,9 @@ class Markup extends Component {
             />
             <Route path='/blog-left-img' exact component={Blogleftimg} />
             <Route path='/blog-details' exact component={Blogdetail} />
+            <Route path="/blog-left-img" exact component={Blogleftimg} />
+            <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
+            <Route path="/search/:query" exact component={Search} />
           </Switch>
         </div>
         <ScrollToTop />

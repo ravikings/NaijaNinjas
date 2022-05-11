@@ -1291,9 +1291,9 @@ dl dd {
 .bg-transparent {
     background-color: transparent;
 }
-.bg-primary {
+/* .bg-primary {
     background-color: ;
-}
+} */
 .bg-white {
     background-color: #FFF;
 }
@@ -5506,7 +5506,7 @@ ol.comment-list li .children li {
     display: none;
 }
 .comments-area .comment-form p {
-    width: 33.333%;
+    width: 100%;
     float: left;
     padding: 0 15px;
     margin-bottom: 30px;
@@ -11184,7 +11184,7 @@ footer.footer-white .footer-bottom a {
     padding-bottom: 50px;
 }
 .content-area {
-    padding-top: 60px;
+    padding-top: 30px;
 }
 .section-full {
     position: relative;
