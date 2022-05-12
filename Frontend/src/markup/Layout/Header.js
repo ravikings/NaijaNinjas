@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo2 from "./../../images/logo.png";
 import AuthState from "./AuthState";
 import LoginDialog from "./LoginDialog";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 function Header() {
   const userDetails = useSelector((state) => state.authReducer.currentUser);
@@ -54,26 +54,26 @@ function Header() {
   return (
     <>
       <header
-        className="site-header mo-left header fullwidth"
+        className='site-header mo-left header fullwidth'
         style={{ position: "sticky", top: 0 }}
       >
-        <div className="sticky-header main-bar-wraper navbar-expand-lg">
-          <div className="main-bar clearfix">
-            <div className="container clearfix">
-              <div className="logo-header mostion">
+        <div className='sticky-header main-bar-wraper navbar-expand-lg'>
+          <div className='main-bar clearfix'>
+            <div className='px-5 clearfix'>
+              <div className='logo-header mostion'>
                 <Link to={"/"}>
-                  <img src={logo2} className="logo" alt="img" />
+                  <img src={logo2} className='logo' alt='img' />
                 </Link>
               </div>
 
               <button
-                className="navbar-toggler collapsed navicon  justify-content-end"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
+                className='navbar-toggler collapsed navicon  justify-content-end'
+                type='button'
+                data-toggle='collapse'
+                data-target='#navbarNavDropdown'
+                aria-controls='navbarNavDropdown'
+                aria-expanded='false'
+                aria-label='Toggle navigation'
               >
                 <span></span>
                 <span></span>
@@ -81,17 +81,20 @@ function Header() {
               </button>
               <AuthState userDetails={userDetails} handleShow={handleShow} />
               <div
-                className="header-nav navbar-collapse collapse myNavbar justify-content-start"
-                id="navbarNavDropdown"
+                className='header-nav navbar-collapse collapse myNavbar justify-content-start'
+                id='navbarNavDropdown'
               >
-                <div className="logo-header mostion d-md-block d-lg-none">
-                  <Link to={"/"} className="dez-page">
-                    <img src={logo2} alt="" />
+                <div className='logo-header mostion d-md-block d-lg-none'>
+                  <Link to={"/"} className='dez-page'>
+                    <img src={logo2} alt='' />
                   </Link>
                 </div>
-                <ul className="nav navbar-nav">
-                  <li className="">
+                <ul className='nav navbar-nav'>
+                  <li className=''>
                     <Link to={"/"}>Home</Link>
+                  </li>
+                  <li>
+                    <Link to={"/browse-job-filter-list"}>tasks</Link>
                   </li>
                   <li>
                     <Link to={"/browse-job-filter-list"}>marketplace</Link>

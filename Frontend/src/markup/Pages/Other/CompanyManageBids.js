@@ -4,9 +4,29 @@ import Header2 from "../../Layout/Header2";
 import Footer from "../../Layout/Footer";
 import { Modal } from "react-bootstrap";
 import ProfileSidebar from "../../Element/Profilesidebar";
+import DeleteIcon from "@material-ui/icons/Delete";
+import logo from "../../../images/logo/icon1.png";
+import Ratings from "../MakeOffer/components/Ratings";
+import { Button, IconButton } from "@material-ui/core";
 
-function Companymanage() {
+const postBox = [
+  { image: logo },
+  { image: logo },
+  { image: logo },
+  { image: logo },
+  { image: logo },
+  { image: logo },
+];
+
+function CompanyManageBids() {
   const [company, setCompany] = useState(false);
+
+  const dummyText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Mauris eget nulla eu nunc efficitur tincidunt.
+    Nulla euismod, urna eu aliquet aliquet,
+    nisi nunc ultricies nisi, euismod ornare nisl nunc euismod nisl.
+    Mauris eget nulla eu nunc efficitur tincidunt.`;
+
   return (
     <>
       <Header2 />
@@ -20,7 +40,7 @@ function Companymanage() {
                   <div className='job-bx browse-job clearfix'>
                     <div className='job-bx-title  clearfix'>
                       <h5 className='font-weight-700 pull-left text-uppercase'>
-                        Manage tasks
+                        Manage Bids
                       </h5>
                       <div className='float-right'>
                         <span className='select-title'>Sort by freshness</span>
@@ -34,7 +54,94 @@ function Companymanage() {
                         </select>
                       </div>
                     </div>
-                    <table className='table-job-bx cv-manager company-manage-job'>
+                    <ul className='post-job-bx'>
+                      {postBox.map((item, index) => (
+                        <li key={index}>
+                          <div className='post-bx'>
+                            <div className='d-flex m-b30'>
+                              <div className='job-post-company'>
+                                <Link to={""}>
+                                  <span style={{ borderRadius: "50%" }}>
+                                    <img
+                                      alt=''
+                                      src={require("./../../../images/team/pic1.jpg")}
+                                    />
+                                  </span>
+                                </Link>
+                              </div>
+                              <div className='job-post-info'>
+                                <h4>
+                                  <Link to={"/make-offer"}>David Peterson</Link>
+                                </h4>
+                                <ul>
+                                  <li>
+                                    <i className='fa fa-envelope mb-2'></i>{" "}
+                                    david@example.com
+                                  </li>
+                                </ul>
+                                <Ratings />
+                                <div className='mt-3'>
+                                  <Button
+                                    style={{
+                                      backgroundColor: "#2e55fa",
+                                      color: "white",
+                                    }}
+                                    variant='outlined'
+                                    startIcon={<i className='fa fa-check'></i>}
+                                  >
+                                    Accept offer
+                                  </Button>
+                                  <Button
+                                    style={{
+                                      backgroundColor: "#333333",
+                                      color: "white",
+                                    }}
+                                    className='ml-2'
+                                    variant='outlined'
+                                    startIcon={
+                                      <i className='fa fa-envelope'></i>
+                                    }
+                                  >
+                                    Send message
+                                  </Button>
+                                  <IconButton
+                                    className='ml-2'
+                                    style={{
+                                      backgroundColor: "#eeeeee",
+                                      borderRadius: "10px",
+                                      height: "40px",
+                                      width: "40px",
+                                    }}
+                                    aria-label='delete'
+                                    size='large'
+                                  >
+                                    <i className='fa fa-trash'></i>
+                                  </IconButton>
+                                </div>
+                              </div>
+                              <div className='rates'>
+                                <ul class='dashboard-task-info bid-info'>
+                                  <li>
+                                    <strong>$3,200</strong>
+                                    <span>Fixed Price</span>
+                                  </li>
+                                  <li>
+                                    <strong>14 Days</strong>
+                                    <span>Delivery Time</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+
+                            {/* <label className='like-btn'>
+                              <input type='checkbox' />
+                              <span className='checkmark'></span>
+                            </label> */}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    {/* <table className='table-job-bx cv-manager company-manage-job'>
                       <thead>
                         <tr>
                           <th className='feature'>
@@ -74,9 +181,7 @@ function Companymanage() {
                             </div>
                           </td>
                           <td className='job-name'>
-                            <Link to={"/company-manage-bids"}>
-                              Social Media Expert
-                            </Link>
+                            <Link to={""}>Social Media Expert</Link>
                             <ul className='job-post-info'>
                               <li>
                                 <i className='fa fa-map-marker'></i> Sacramento,
@@ -491,7 +596,7 @@ function Companymanage() {
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> */}
                     <div className='pagination-bx m-t30 float-right'>
                       <ul className='pagination'>
                         <li className='previous'>
@@ -582,4 +687,4 @@ function Companymanage() {
     </>
   );
 }
-export default Companymanage;
+export default CompanyManageBids;

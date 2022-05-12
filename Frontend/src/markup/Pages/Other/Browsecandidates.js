@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
-import PageTitle from "../../Layout/PageTitle";
 import Jobfindbox from "../../Element/Jobfindbox";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
 import createRequest from "../../../utils/axios";
+import Pagination from "../components/Pagination";
 
 var bnr = require("../../../images/banner/bnr1.jpg");
 
 function Browsecandidates() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
+  const [totalResults, setTotalResults] = useState(null);
   const [error, setError] = useState(null);
 
   const [userStatus, setUserStatus] = useState(null);
@@ -28,6 +29,7 @@ function Browsecandidates() {
   const [previous, setPrevious] = useState(null);
   const [count, setCount] = useState(null);
   const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { state } = useLocation();
 
@@ -57,17 +59,18 @@ function Browsecandidates() {
         params,
       });
       if (data.results) {
+        setTotalResults(data.count);
         setResults(data.results);
         data.next ? setNext(data.next) : setNext(null);
         data.previous ? setPrevious(data.previous) : setPrevious(null);
         const pgs = Math.ceil(data.count / 10);
         data.count && setCount(pgs);
-        setLoading(false);
         setKeyLoad(false);
         console.log(data, "data");
       } else {
         setError("No results found");
       }
+      setLoading(false);
     } catch (error) {
       setError("Something went wrong");
       setLoading(false);
@@ -95,17 +98,18 @@ function Browsecandidates() {
         setResults(data.results);
         data.previous ? setPrevious(data.previous) : setPrevious(null);
         data.next ? setNext(data.next) : setNext(null);
-        setLoading(false);
         if (forNext) {
           setPage(page + 1);
         } else {
           setPage(page - 1);
         }
-
+        setLoading(false);
+        setKeyLoad(false);
         console.log(data, "new data");
       } else {
         setError("No results found");
       }
+      setLoading(false);
     } catch (error) {
       setError("Something went wrong");
       setLoading(true);
@@ -137,18 +141,21 @@ function Browsecandidates() {
     <>
       <Header />
       <div className='page-content bg-white'>
-        <div
+        {/* <div
           className='dez-bnr-inr overlay-black-middle'
           style={{ backgroundImage: "url(" + bnr + ")" }}
         >
           <PageTitle motherName='Home' activeName='Browse Candidates' />
-        </div>
+        </div> */}
         {/* <Jobfindbox /> */}
         <div className='content-block'>
           <div className='section-full bg-white browse-job p-b50'>
             <div className='container'>
-              <div className='row mt-4'>
+              <div className='row'>
                 <div className='col-xl-9 col-lg-8'>
+                  <h5 className='font-weight-700 pull-left text-uppercase '>
+                    {totalResults && totalResults + " Professionals"}
+                  </h5>
                   {/* <div className='m-b30'>
                     <input
                       type='text'
@@ -156,7 +163,7 @@ function Browsecandidates() {
                       placeholder='Search freelancer services'
                     />
                   </div> */}
-                  <ul className='post-job-bx'>
+                  <ul className='post-job-bx mt-5'>
                     {results && !keyLoad && !loading ? (
                       results.map((item, index) => (
                         <li key={index}>
@@ -239,9 +246,6 @@ function Browsecandidates() {
                               <div className='salary-bx'>
                                 {console.log(item, "item")}
                                 <Link
-                                  onClick={() =>
-                                    console.log(item.author, "item")
-                                  }
                                   to={{
                                     pathname: "/make-offer",
                                     state: {
@@ -279,11 +283,15 @@ function Browsecandidates() {
                   </ul>
                   {results && !keyLoad && !loading && (
                     <div className='pagination-bx m-t30'>
-                      <ul className='pagination'>
-                        <li className='previous'>
+                      <ul className='pagination '>
+                        <li className='previous mx-2'>
                           <Link
                             to={""}
-                            className={!previous && "disabledCursor"}
+                            className={
+                              !previous
+                                ? "disabledCursor item-link"
+                                : "item-link"
+                            }
                             onClick={(e) =>
                               previous
                                 ? handleClick(e, previous)
@@ -298,7 +306,9 @@ function Browsecandidates() {
                             <li
                               key={i}
                               className={
-                                i === page ? "activeNumber " : "notActive"
+                                i === page
+                                  ? "activeNumber dots "
+                                  : "notActive dots"
                               }
                             >
                               <Link to='' onClick={(e) => handleClick(e)}>
@@ -307,10 +317,12 @@ function Browsecandidates() {
                             </li>
                           );
                         })}
-                        <li className='next'>
+                        <li className='next mx-2'>
                           <Link
                             to={""}
-                            className={!next && "disabledCursor"}
+                            className={
+                              !next ? "disabledCursor item-link" : "item-link"
+                            }
                             onClick={(e) =>
                               next
                                 ? handleClick(e, next, "forNext")
@@ -321,8 +333,22 @@ function Browsecandidates() {
                           </Link>
                         </li>
                       </ul>
+                      <Pagination
+                        className='pagination-bar'
+                        currentPage={1}
+                        totalCount={7}
+                        pageSize={8}
+                        onPageChange={(page) => setCurrentPage(page)}
+                      />
                     </div>
                   )}
+                  {/* <Pagination
+                    className='pagination-bar'
+                    currentPage={currentPage}
+                    totalCount={results.length}
+                    pageSize={8}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  /> */}
                 </div>
                 <div className='col-xl-3 col-lg-4'>
                   <div className='sticky-top browse-candidates'>
