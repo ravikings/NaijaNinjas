@@ -1,7 +1,9 @@
+import os
 from django.db import models
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from accounts.models import IpModel
+from django.utils import timezone
 
 # Create your models here.
 
@@ -24,6 +26,21 @@ class Forum(models.Model):
 
     def number_of_views(self):
         return self.views.count()
+
+
+def upload_to(instance, filename):
+    now = timezone.now()
+    base, extension = os.path.splitext(filename.lower())
+    milliseconds = now.microsecond // 1000
+    return f"users/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
+
+class Photo(models.Model):
+    
+    forum = models.ForeignKey(
+        Forum, on_delete=models.CASCADE, related_name="forum_photos"
+    )
+
+    image = models.ImageField(upload_to=upload_to)
 
 
 class Comment(models.Model):

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework import viewsets
 from rest_framework.response import Response
-from forum.serializers import CommentSerializer, ForumSerializer, SimpleForum, ForumHomeSerializer
+from forum.serializers import CommentSerializer, ForumSerializer, SimpleForum, ForumHomeSerializer, ForumImageSerializer
 from forum.models import Forum, Comment
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
@@ -11,7 +11,10 @@ from history.signals import history_tracker
 from accounts.views import get_client_ip
 from accounts.models import IpModel
 from django.db.models import Count
-
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from forum.models import Photo
+from rest_framework.views import APIView
 
 # Create your views here.
 
@@ -125,3 +128,29 @@ class RecentForum(viewsets.ModelViewSet):
         self.queryset = similar_posts.order_by("-view_counts", "-created")[:5]
         
         return self.queryset
+
+
+class ImageAPIView(viewsets.ModelViewSet):
+    queryset = Photo.objects.all()
+    serializer_class = ForumImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def create(self, request, pk=None):
+        property_id = request.data['forum']
+        form_data = {}
+        form_data['forum']= property_id
+        success = True
+        response = []
+
+        for images in request.FILES.getlist('image'):
+            form_data['image']=images   
+            serializer = ForumImageSerializer(data=form_data)
+            if serializer.is_valid():
+                serializer.save()
+                response.append(serializer.data)
+            else:
+                success = False
+        if success:
+            return Response(response, status=status.HTTP_201_CREATED)
+            
+        return Response(response,status=status.HTTP_400_BAD_REQUEST)
