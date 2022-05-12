@@ -89,7 +89,7 @@ function AuthState({ userDetails }) {
             size='lg'
           >
             <i class='fa-solid fa-hand-holding-dollar'></i>
-            Sell Here!
+            Sell On Here!
           </ReactButton>
         </div>
       ) : (
@@ -117,7 +117,7 @@ function AuthState({ userDetails }) {
               size='lg'
             >
               <i class='fa-solid fa-hand-holding-dollar'></i>
-              Sell Here!
+              Sell On Here!
             </ReactButton>
           </div>
         </Hidden>
