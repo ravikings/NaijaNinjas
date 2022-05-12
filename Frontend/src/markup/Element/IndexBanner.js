@@ -8,8 +8,8 @@ var bnr1 = require("./../../images/main-slider/slide2.jpg");
 const style = {
   margin: "0 auto",
   position: "absolute",
-  top: "129px",
-  right: "75px",
+  top: "125px",
+  right: "25px",
 };
 
 function IndexBanner() {
@@ -130,19 +130,20 @@ function IndexBanner() {
         </div>
       </div>
       <div style={style}>
-        <Card>
-          <Card.Img
+        <Card >
+          {/* <Card.Img
             variant='top'
             src='https://image-placeholder.com/images/actual-size/75x75.png'
-            style={{ height: "110px" }}
-          />
+            style={{ height: "50px", width: "100px"}}
+          /> */}
           <Card.Body>
-            <Card.Title>Cafe Figma</Card.Title>
+            
+            <Card.Title>Reach your target customers</Card.Title>
             <Card.Text>
-              lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            marketing expert for anyone!. 
             </Card.Text>
             <button className='site-button btn-block' variant='primary'>
-              Open
+              Post Ads for Free!
             </button>
           </Card.Body>
         </Card>
