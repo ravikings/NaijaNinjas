@@ -385,61 +385,58 @@ input[type="checkbox"] {
 /* Gallery Grid  End */
 
 /* Service Card Start */
-   .service-bx{
-     background-color: #f9f9f9;
-     padding:10px;
-     border-radius: 5px;
-     margin:10px 0px;
-   }
-   .service-bx .service-details{
-     margin: 10px 0px;
-   }
-   .service-bx .service-details h5{
-     font-size: 16px;
-     line-height: 20px;
-     font-weight: 600;
-   }
+.service-bx {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0px;
+}
+.service-bx .service-details {
+  margin: 10px 0px;
+}
+.service-bx .service-details h5 {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+}
 
-   .service-bx .service-details span{
-    font-weight: 700;
-    font-size: 18px;
-   }
+.service-bx .service-details span {
+  font-weight: 700;
+  font-size: 18px;
+}
 /* Service Card End*/
 
-
 /* forum post card start */
-.caption-box{
-   border: 1px solid #cdbfbf;
-    padding: 5px;
-    text-align: center;
-    width: 75%;
-    margin: 0 auto;
+.caption-box {
+  border: 1px solid #cdbfbf;
+  padding: 5px;
+  text-align: center;
+  width: 75%;
+  margin: 0 auto;
 }
-.caption-box .count-box{
-  font-family: 'Segoe UI';
-  
+.caption-box .count-box {
+  font-family: "Segoe UI";
+
   font-size: 17px;
-  font-weight:bold;
+  font-weight: bold;
 }
-.anwser-box{
-  color:#fff;
+.anwser-box {
+  color: #fff;
   background-color: #1d46f5;
 }
-.question-mark{
-  color:#0a95ff;
-  font-size:18px;
+.question-mark {
+  color: #0a95ff;
+  font-size: 18px;
   font-weight: 400;
 }
-.simple-anwser{
-  color:#232629;
+.simple-anwser {
+  color: #232629;
   font-size: 13px;
   line-height: 18px;
   font-weight: 400;
   text-align: justify;
-
 }
 /* forum post end */
-
 
 /* custom pagation start */
 .pagination-container {
@@ -471,14 +468,14 @@ input[type="checkbox"] {
 }
 .pagination-container .pagination-item.selected {
   background-color: #1d46f5;
-  color:#fff;
+  color: #fff;
 }
 .pagination-container .pagination-item .arrow::before {
   position: relative;
- /* top: 3pt;
+  /* top: 3pt;
   Uncomment this to lower the icons as requested in comments*/
-  content: '';
- /* By using an em scale, the arrows will size with the font */
+  content: "";
+  /* By using an em scale, the arrows will size with the font */
   display: inline-block;
   width: 0.4em;
   height: 0.4em;
@@ -501,6 +498,16 @@ input[type="checkbox"] {
 .pagination-container .pagination-item.disabled:hover {
   background-color: transparent;
   cursor: default;
+}
+
+.item-link {
+  border: none !important;
+}
+
+.item-link:hover {
+  border: none !important;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* custom pagation end */
