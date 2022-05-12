@@ -43,7 +43,7 @@ function MakeOfferFormTask(props) {
       }}
     >
       <div style={{ backgroundColor: "#f0f0f0" }} className='w-100 p-2'>
-        <h5 style={{ textAlign: "center" }}>Bid On this Job!</h5>
+        <h5 style={{ textAlign: "center" }}>Can you get tasks done? </h5>
       </div>
       <div className='p-4'>
         {submitted ? (
@@ -58,7 +58,7 @@ function MakeOfferFormTask(props) {
                 }}
               ></i>
             </div>
-            Thanks for Showing Your Interest.
+            Thanks for Showing Your Interest! client has been notified
           </Alert>
         ) : (
           <Formik
@@ -78,13 +78,13 @@ function MakeOfferFormTask(props) {
                     name='introduction'
                     as={TextField}
                     rows={4}
-                    placeholder={"Add Introduction note."}
+                    placeholder={"Profesionals with introduction note, earn more!"}
                     className={
                       errors.password && touched.password
                         ? "input-error form-control border-danger"
                         : "form-control"
                     }
-                    label={"Introduction"}
+                    label={"kindly introduce yourself"}
                     fullWidth
                     style={{ marginTop: 20 }}
                   />
