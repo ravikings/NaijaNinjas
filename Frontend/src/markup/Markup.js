@@ -59,6 +59,7 @@ import MessagesPage from "./Pages/Messages/MessagesPage";
 import ForgotPassword from "./Pages/Auth/Forgot-password";
 import ResetPassword from "./Pages/Auth/Reset-password";
 import Search from "./Pages/Search";
+import BrowseAdsgrid from "./Pages/Other/BrowseAdsgrid";
 
 class Markup extends Component {
   render() {
@@ -177,6 +178,13 @@ class Markup extends Component {
             <Route path="/blog-left-img" exact component={Blogleftimg} />
             <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
             <Route path="/search/:query" exact component={Search} />
+
+
+            <Route
+              path="/browse-ads-grid"
+              exact
+              component={BrowseAdsgrid}
+            />
           </Switch>
         </div>
         <ScrollToTop />
