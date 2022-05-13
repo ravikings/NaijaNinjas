@@ -39,7 +39,7 @@ function TabsGroup(props) {
           <Tab className={classes.tab} label="About Me" />
           <Tab className={classes.tab} label="Services" />
           <Tab className={classes.tab} label="Resume" />
-          <Tab className={classes.tab} label="Gallery" />
+          <Tab className={classes.tab} label="Projects" />
         </Tabs>
       </div>
       {renderSelectedTab()}
