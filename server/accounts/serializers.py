@@ -13,7 +13,6 @@ from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeErr
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
 from django.db.models import Avg, F, Count
-import jwt
 from rest_framework import status
 from rest_framework.response import Response
 from accounts.models import (
