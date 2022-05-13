@@ -73,8 +73,8 @@ function IndexBanner() {
                 Find Jobs, Employment & Career Opportunities
               </Link>
               <h2>
-                Search Between More Then <br />{" "}
-                <span className='text-primary'>50,000</span> Open Jobs.
+                Search and Hire More Than <br />{" "}
+                <span className='text-primary'>50,000</span> Open Professionals.
               </h2>
               <form className='dezPlaceAni'>
                 <div className='row'>

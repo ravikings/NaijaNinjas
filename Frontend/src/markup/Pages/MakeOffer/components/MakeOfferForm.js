@@ -1,9 +1,14 @@
 import React from "react";
 import { Button, TextField } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function MakeOfferForm(props) {
   const history = useHistory();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    props.modal();
+  };
   return (
     <div>
       <h5 style={{ textAlign: "center" }}>Discuss your project with David</h5>
@@ -36,6 +41,17 @@ function MakeOfferForm(props) {
       >
         Make an Offer
       </Button>
+      <hr />
+      <p className='text-secondary text-center pb-3'>
+        Doesn't have an account?{" "}
+        <Link
+          to={"/signup"}
+          onClick={(e) => handleClick(e)}
+          className='text-primary'
+        >
+          Sign Up
+        </Link>
+      </p>
     </div>
   );
 }
