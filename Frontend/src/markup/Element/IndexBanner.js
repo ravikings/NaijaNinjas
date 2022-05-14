@@ -9,7 +9,7 @@ const style = {
   margin: "0 auto",
   position: "absolute",
   top: "125px",
-  right: "25px",
+  right: "50px",
 };
 
 function IndexBanner() {

@@ -51,5 +51,5 @@ urlpatterns = [
     path('user-reset-password/', SetProfilePassword.as_view(), name="user-reset-password"),
     path('user-profile-update/<str:pk>/', taskUpdate, name="user-profile-update"),
     path('user-resume-update/<str:pk>/', resumeUpdate, name="user-resume-update"),
-    #he abdul
+
 ]

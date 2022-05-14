@@ -1,4 +1,6 @@
 # models.py in the users Django app
+import os
+from django.utils import timezone
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -18,14 +20,11 @@ class AccountUser(AbstractUser):
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
-
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)
 
     def __str__(self):
         return self.ip
-
-
 
 class RunnerProfile(models.Model):
     author = models.OneToOneField(
@@ -90,6 +89,7 @@ class Review(models.Model):
     )
     class Meta:
         ordering = ("created",)
+        
 class Photo(models.Model):
 
     author = models.ForeignKey(
@@ -111,12 +111,17 @@ class Vidoe(models.Model):
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
+
+def upload_to(instance, filename):
+    now = timezone.now()
+    base, extension = os.path.splitext(filename.lower())
+    milliseconds = now.microsecond // 1000
+    return f"documents/user/service/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
 class Service(models.Model):
     
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    display = models.FileField(upload_to="documents/user/service/photo/%Y/%m/%d/", blank=True)
-
+    display = models.ImageField(upload_to=upload_to, blank=True)
     amount = models.CharField(max_length=250, null=True)
