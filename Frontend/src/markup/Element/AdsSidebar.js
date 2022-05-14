@@ -95,34 +95,28 @@ function AdsSidebar(){
 						<Accordion.Toggle as={Card} eventKey="1">
 							<div className="acod-head">
 								<h6 className="acod-title"> 
-									<Link data-toggle="collapse" to="#companies">Price Range</Link>
-								</h6>	
+									<a data-toggle="collapse"  href="javascript:void(0)" className="collapsed" >
+										Price 
+									</a>
+								</h6>
 							</div>
 						</Accordion.Toggle>
-						
 						<Accordion.Collapse eventKey="1">
-							<div id="companies" className="acod-body collapse show">
+							<div id="salary" className="acod-body collapse show">
 								<div className="acod-content">
-									<div className="custom-control custom-checkbox">
-										<input className="custom-control-input" id="companies1" type="checkbox" name="checkbox-companies" />
-										<label className="custom-control-label" htmlFor="companies1">Job Mirror Consultancy <span>(50)</span> </label>
+									<div className="custom-control custom-radio">
+										<input className="custom-control-input" id="salary-op1" type="radio" name="radio-currency" />
+										<label className="custom-control-label" htmlFor="salary-op1">50$-100$ <span> (120)</span> </label>
 									</div>
-									<div className="custom-control custom-checkbox">
-										<input className="custom-control-input" id="companies2" type="checkbox" name="checkbox-companies" />
-										<label className="custom-control-label" htmlFor="companies2">Engineering Group <span>(80)</span> </label>
+									<div className="custom-control custom-radio">
+										<input className="custom-control-input" id="salary-op2" type="radio" name="radio-currency" />
+										<label className="custom-control-label" htmlFor="salary-op2">100$-200$ <span>(300)</span> </label>
 									</div>
-									<div className="custom-control custom-checkbox">
-										<input className="custom-control-input" id="companies3" type="checkbox" name="checkbox-companies" />
-										<label className="custom-control-label" htmlFor="companies3">Electric Co. <span>(235)</span> </label>
+									<div className="custom-control custom-radio">
+										<input className="custom-control-input" id="salary-op3" type="radio" name="radio-currency" />
+										<label className="custom-control-label" htmlFor="salary-op3">200$-300$ <span>(235)</span> </label>
 									</div>
-									<div className="custom-control custom-checkbox">
-										<input className="custom-control-input" id="companies4" type="checkbox" name="checkbox-companies" />
-										<label className="custom-control-label" htmlFor="companies4">Telecom industry <span>(568)</span></label>
-									</div>
-									<div className="custom-control custom-checkbox">
-										<input className="custom-control-input" id="companies5" type="checkbox" name="checkbox-companies" />
-										<label className="custom-control-label" htmlFor="companies5">Safety/ Health <span>(798)</span></label>
-									</div>
+									
 								</div>
 							</div>
 						</Accordion.Collapse>

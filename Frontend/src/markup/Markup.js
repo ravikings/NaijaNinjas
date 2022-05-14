@@ -63,6 +63,7 @@ import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask";
 import Header from "./Layout/Header";
 import Search from "./Pages/Search";
 import BrowseAdsgrid from "./Pages/Other/BrowseAdsgrid";
+import BrowseAdsgridDetails from "./Pages/Other/BrowseAdsgridDetails";
 
 class Markup extends Component {
   render() {
@@ -205,11 +206,15 @@ class Markup extends Component {
             <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
             <Route path="/search/:query" exact component={Search} />
 
-
             <Route
               path="/browse-ads-grid"
               exact
               component={BrowseAdsgrid}
+            />
+             <Route
+              path="/ads-details"
+              exact
+              component={BrowseAdsgridDetails}
             />
           </Switch>
         </div>
