@@ -9,7 +9,7 @@ const style = {
   margin: "0 auto",
   position: "absolute",
   top: "125px",
-  right: "25px",
+  right: "50px",
 };
 
 function IndexBanner() {
@@ -73,8 +73,8 @@ function IndexBanner() {
                 Find Jobs, Employment & Career Opportunities
               </Link>
               <h2>
-                Search Between More Then <br />{" "}
-                <span className='text-primary'>50,000</span> Open Jobs.
+                Search and Hire More Than <br />{" "}
+                <span className='text-primary'>50,000</span> Open Professionals.
               </h2>
               <form className='dezPlaceAni'>
                 <div className='row'>

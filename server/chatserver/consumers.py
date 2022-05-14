@@ -48,24 +48,24 @@ class ChatConsumer(WebsocketConsumer):
         sender = self.scope["user"]
 
         # Attachment
-        if attachment:
-            file_str, file_ext = attachment["data"], attachment["format"]
+        #if attachment:
+            # file_str, file_ext = attachment["data"], attachment["format"]
 
-            file_data = ContentFile(
-                base64.b64decode(file_str), name=f"{secrets.token_hex(8)}.{file_ext}"
-            )
-            _message = Message.objects.create(
-                sender=sender,
-                attachment=file_data,
-                text=message,
-                conversation_id=conversation,
-            )
-        else:
-            _message = Message.objects.create(
-                sender=sender,
-                text=message,
-                conversation_id=conversation,
-            )
+            # file_data = ContentFile(
+            #     base64.b64decode(file_str), name=f"{secrets.token_hex(8)}.{file_ext}"
+            # )
+        _message = Message.objects.create(
+            sender=sender,
+            attachment=attachment,
+            text=message,
+            conversation_id=conversation,
+        )
+        # else:
+        #     _message = Message.objects.create(
+        #         sender=sender,
+        #         text=message,
+        #         conversation_id=conversation,
+        #     )
         # Send message to room group
         chat_type = {"type": "chat_message"}
         message_serializer = dict(MessageSerializer(instance=_message).data)

@@ -62,10 +62,9 @@ class DashboardProfile(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
     def retrieve(self, request, pk=None):
-
-        data =  get_object_or_404(RunnerProfile, author=pk)
-        serializer = ProfileSerializer(data)
-
+        
+        data = RunnerProfile.objects.get_or_create(author_id=pk)
+        serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
 
@@ -104,10 +103,10 @@ class DashboardResume(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
     
-        data =  get_object_or_404(RunnerResume, author=pk)
-        serializer = UserResumeSerializer(data)
-
+        data = RunnerResume.objects.get_or_create(author_id=pk)
+        serializer = UserResumeSerializer(data[0])
         return Response(serializer.data)
+
 
 
 def save_profile_resume(resume, request):
@@ -287,6 +286,12 @@ class TestView(viewsets.ModelViewSet):
 
     queryset = RunnerProfile.objects.all()
     serializer_class = UserProfileSearchSerializer
+    
+    def retrieve(self, request, pk=None):
+
+        data = RunnerProfile.objects.get_or_create(author_id=pk)
+        serializer = UserProfileSearchSerializer(data[0])
+        return Response(serializer.data)
 
 
 class ActivateAccountView(APIView):

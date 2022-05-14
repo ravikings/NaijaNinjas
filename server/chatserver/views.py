@@ -2,35 +2,39 @@ from django.shortcuts import render
 from .models import Conversation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from accounts.models import AccountUser as User
+from accounts.models import AccountUser
 from .serializers import ConversationListSerializer, ConversationSerializer
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
 
 
 # Create your views here.
-@api_view(["POST"])
+@api_view(["POST", "GET"])
 def start_convo(
     request,
 ):
     data = request.data
-    id = data.pop("id")
-    try:
-        participant = User.objects.get(id=id)
-    except User.DoesNotExist:
-        return Response({"message": "You cannot chat with a non existent user"})
+    id = data.get("id")
 
+    try:
+        participant = AccountUser.objects.get(id=id)
+    except AccountUser.DoesNotExist:
+        return Response({"message": "You cannot chat with a non existent user"})
+ 
     conversation = Conversation.objects.filter(
-        Q(initiator=request.user, receiver=participant)
-        | Q(initiator=participant, receiver=request.user)
+        Q(initiator=1, receiver=participant)
+        | Q(initiator=participant, receiver=id)
     )
+
     if conversation.exists():
         return redirect(reverse("get_conversation", args=(conversation[0].id,)))
     else:
+        initiator = AccountUser.objects.get(id=1)
         conversation = Conversation.objects.create(
-            initiator=request.user, receiver=participant
+            initiator=initiator, receiver=participant
         )
-        return Response(ConversationSerializer(instance=conversation).data)
+        serializer = ConversationSerializer(conversation)
+        return Response(serializer.data)
 
 
 @api_view(["GET"])

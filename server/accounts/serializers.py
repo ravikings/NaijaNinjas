@@ -13,7 +13,6 @@ from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeErr
 from django.db import IntegrityError
 from django.utils.safestring import mark_safe
 from django.db.models import Avg, F, Count
-import jwt
 from rest_framework import status
 from rest_framework.response import Response
 from accounts.models import (
@@ -56,11 +55,6 @@ class CustomRegisterSerializer(RegisterSerializer):
  
         current_site = get_current_site(request)
         user = AccountUser.objects.get(email=str(email))
-        #todo add pre save create profile, change to celery and function and expection handling
-        print("creating user profile")
-        RunnerProfile.objects.create(author_id=user.pk)
-        RunnerResume.objects.create(author_id=user.pk)
-        print("user profile creation completed!")
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         send_verify_email(user, current_site, email, uid)
 
@@ -173,8 +167,8 @@ class UserOnlineSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountUser
-        fields = ("id", "online_status")
-        read_only_fields = ("id","online")
+        fields = ("id", "online_status", "is_a_runner")
+        read_only_fields = ("id","online", "is_a_runner")
 
 
     def get_online_status(self, instance):
