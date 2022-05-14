@@ -21,3 +21,4 @@ python-dotenv
 djangorestframework-simplejwt==5.1.0
 psycopg2-binary==2.9.3
 Arrow
+django-storages==1.12.3
