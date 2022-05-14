@@ -167,8 +167,8 @@ class UserOnlineSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountUser
-        fields = ("id", "online_status")
-        read_only_fields = ("id","online")
+        fields = ("id", "online_status", "is_a_runner")
+        read_only_fields = ("id","online", "is_a_runner")
 
 
     def get_online_status(self, instance):

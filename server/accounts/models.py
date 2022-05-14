@@ -20,14 +20,11 @@ class AccountUser(AbstractUser):
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
-
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)
 
     def __str__(self):
         return self.ip
-
-
 
 class RunnerProfile(models.Model):
     author = models.OneToOneField(
@@ -92,6 +89,7 @@ class Review(models.Model):
     )
     class Meta:
         ordering = ("created",)
+        
 class Photo(models.Model):
 
     author = models.ForeignKey(
