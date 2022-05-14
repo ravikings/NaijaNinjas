@@ -1,7 +1,7 @@
 import re
 import json
 from rest_framework import serializers
-from forum.models import Forum, Comment
+from forum.models import Forum, Comment, Photo
 from accounts.models import RunnerProfile, AccountUser
 import datetime
 from django.db.models import Count
@@ -188,3 +188,12 @@ class SimpleForum(serializers.ModelSerializer):
             data["Created"] = timestampStr
 
         return data
+
+
+class ForumImageSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use forum picture uploads and retrieve
+    """
+    class Meta:
+        model = Photo
+        fields = "__all__"
