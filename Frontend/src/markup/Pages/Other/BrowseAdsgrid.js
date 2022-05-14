@@ -81,13 +81,13 @@ function BrowseAdsgrid(){
 		   <div className="page-content bg-white">
 		   
 			   <div className="content-area">
-				   <div className="container">
+				   <div className="container-fluid">
 					   
 					   <div className="row">
-                       <div className="col-lg-3 col-md-5 col-sm-12 sticky-top">
+                       <div className="col-lg-2 col-md-5 col-sm-12 sticky-top">
 							   <AdsSidebar />
 						   </div>
-						   <div className="col-lg-9 col-md-7 col-sm-12">
+						   <div className="col-lg-10 col-md-7 col-sm-12">
 							   <h1>Fresh recommendations</h1>
 						   	
 							   <div id="masonry" >
