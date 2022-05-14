@@ -62,10 +62,9 @@ class DashboardProfile(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
     def retrieve(self, request, pk=None):
-
-        data =  get_object_or_404(RunnerProfile, author=pk)
-        serializer = ProfileSerializer(data)
-
+        
+        data = RunnerProfile.objects.get_or_create(author_id=pk)
+        serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
 
