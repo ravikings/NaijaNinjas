@@ -20,7 +20,7 @@ const imageRenderer = ({ index, left, top, key, photo }) => (
   return (
    <>
     
-    <Gallery photos={data} renderImage={imageRenderer}></Gallery>
+    <Gallery photos={data} renderImage={imageRenderer} ></Gallery>
         
     
    </>
