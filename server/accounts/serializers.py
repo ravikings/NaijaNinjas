@@ -27,7 +27,7 @@ from accounts.models import (
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
 import arrow
-import datetime
+
 
 class CustomRegisterSerializer(RegisterSerializer):
 
@@ -156,25 +156,10 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-
-    time_created = serializers.SerializerMethodField()
     
     class Meta:
         model = Service
         fields = "__all__"
-
-    def get_time_created(self, instance):
-        datetimeobj = instance.created
-        timestampStr = datetimeobj.strftime("%b-%d-%Y %I:%M%p")
-        time_difference = instance.updated - datetimeobj
-        data = {"Created": "","Updated": ""}
-        if int(time_difference.seconds) >= 1:
-            data["Updated"] = timestampStr
-
-        else:
-            data["Created"] = timestampStr
-
-        return data
 
 class UserOnlineSerializer(serializers.ModelSerializer):
     
