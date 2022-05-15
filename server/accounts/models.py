@@ -125,3 +125,6 @@ class Service(models.Model):
     description = models.CharField(max_length=250, null=True, db_index=True)
     display = models.ImageField(upload_to=upload_to, blank=True)
     amount = models.CharField(max_length=250, null=True)
+    tag = models.CharField(max_length=250, null=True, db_index=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
