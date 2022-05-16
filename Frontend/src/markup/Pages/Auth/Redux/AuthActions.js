@@ -7,6 +7,7 @@ export const authActionTypes = {
     LOGOUT_SUCCESS: 'loan-agents/auth/logout_success',
     LOGOUT_FAILED: 'loan-agents/auth/logout_failed',
 
+    GETTING_CURRENT_USER: 'loan-agents/auth/getting_current_user',
     GET_CURRENT_USER: 'loan-agents/auth/get_current_user',
     GET_CURRENT_SUCCESS: 'loan-agents/auth/get_current_user_success',
     GET_CURRENT_FAILED: 'loan-agents/auth/get_current_user_failed',

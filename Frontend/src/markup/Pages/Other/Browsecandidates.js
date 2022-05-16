@@ -121,6 +121,14 @@ function Browsecandidates() {
     checkOnline();
   }, []);
 
+  useEffect(() => {
+    console.log("running effect");
+
+    return () => {
+      console.log("clearing effect");
+    };
+  }, []);
+
   const handleKeyword = () => {
     if (!keyword) {
       return toast.error("Please enter a Keyword.", {
