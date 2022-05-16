@@ -183,6 +183,17 @@ function AuthState({ userDetails }) {
             <div>Dashboard</div>
           </div>
           <div
+            onClick={signOut}
+            className={classes.listItem}
+            style={{
+              marginTop: 12,
+            }}
+          >
+            <PowerSettingsNewOutlinedIcon style={{ marginRight: 8 }} />
+
+            Explore
+          </div>
+          <div
             style={{
               marginTop: 12,
             }}
@@ -201,6 +212,7 @@ function AuthState({ userDetails }) {
             <PowerSettingsNewOutlinedIcon style={{ marginRight: 8 }} />
             Logout
           </div>
+          
         </div>
       </Popover>
     </div>
