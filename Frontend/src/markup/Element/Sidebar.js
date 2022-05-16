@@ -73,12 +73,12 @@ function Sidebar(){
 			<div className="widget recent-posts-entry">
 				<h6 className="widget-title style-1">Recent Questions</h6>
 				<div className="widget-post-bx">
-					{data.map((item,index)=>(	
+					{data?.map((item,index)=>(	
 						<div className="widget-post clearfix mt-2 mb-2" key={index}>
 							
 							<div className="dez-post-info">
 								<div className="dez-post-header">
-									<h6 className="post-title"><Link to={`/blog-details/${item.id}/${item.title}`}>Q: {item.title}</Link></h6>
+									<h6 className="post-title"><Link to={`/blog-details/${item?.id}/${item?.title}`}>Q: {item.title}</Link></h6>
 								</div>
 								<div className="dez-post-meta">
 									<ul className="d-flex align-items-center">

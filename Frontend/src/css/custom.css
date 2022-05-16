@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,600,600italic,700,700italic,900italic,900,300,300italic);
+@import url(http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic);
 ul li {
   list-style: none;
 }
@@ -700,3 +702,294 @@ border-top-left-radius: 20px;
     max-height: 100vh;
 }
 /* Ads Gird end */
+/* Contract Page start */
+.content-area{
+  padding:0 160px;
+}
+.contract-title{
+  font-size:26px;
+  line-height: 32px;
+Color:#222222;
+}
+.container-data{
+ 
+  background:#ffffff;
+  border: 1px solid #cfcfcf;
+  font-family: "Rubik", sans-serif;
+  color:#000;
+}
+.contract-header{
+  border-bottom: 1px solid #cfcfcf;
+  padding: 11px 30px;
+
+
+}
+.contract-header h2{
+  font-size:20px;
+  line-height: 36px;
+}
+.contract-section{
+  border-bottom: 1px solid #cfcfcf;
+  padding: 11px 30px;
+}
+.contract-form  label{
+   font-weight: normal;
+}
+.required-label{
+  font-size: 12px;
+  margin-left: 12px;
+  color: #ad9e9e;
+}
+.contract-amount{
+  font-size:15px;
+}
+.contract-amount-caption{
+  font-size:13px;
+}
+/* Contract Page end */
+
+/* Ads Post start*/
+
+.ads-sidebar {
+  overflow: hidden;
+  position: relative;
+  border-color: #eeeeee;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+  background-color: #fff;
+  border: 1px solid #ddd9d9;
+}
+.ads-sidebar-heading {
+  background-color: #fff;
+  border-color: #eeeeee;
+  border-bottom-color: #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  border-radius: 0;
+  color: #232323;
+  padding: 0;
+}
+.ads-sidebar-heading .panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: inherit;
+}
+.ads-sidebar-content {
+  border-top-color: #eeeeee;
+  background-color: #fff;
+  padding: 20px 25px;
+  overflow: hidden;
+}
+.lead {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.4;
+  font-family: "Rubik", sans-serif;
+}
+
+.ads-sidebar-content ol li {
+  margin-bottom: 10px;
+  padding-left: 10px;
+  position: relative;
+}
+.post-ads-block .post-ads-title h1{
+  font-size:25px;
+  padding-bottom:15px;
+  border-bottom: 2px solid #1d46f5;
+  float:left;
+  
+} 
+.postdetails label {
+  color: #232323;
+  font-size: 16px;
+  font-weight: 600;
+}
+.submit-form{
+  font-family: 'Source Sans Pro', sans-serif;
+}
+.submit-form label {
+	color: #18293b;
+}
+.submit-form .row {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.submit-form .skin-minimal ul.list li {
+	margin-top: 10px;
+}
+.submit-form label {
+	display: inline-block;
+	font-weight: 600;
+	margin-bottom: 5px;
+	max-width: 100%;
+	font-size: 16px;
+}
+.submit-form small {
+	color: gray;
+	padding-left: 10px;
+}
+.submit-form .form-control {
+	background-image: none;
+	border: 1px solid #eceff2;
+	border-radius: 0;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	color: #656565;
+	display: block;
+	font-size: 14px;
+	line-height: 1.42857;
+	width: 100%;
+}
+
+
+.post-ads-tag .tags-input {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  min-height: 48px;
+  width: 100%;
+  padding: 0 8px;
+  border: 1px solid #d6d8da;
+  border-radius: 6px;
+}
+.post-ads-tag .tags-input:focus-within {
+  border: 1px solid #0052cc;
+}
+.post-ads-tag .tags-input input {
+  flex: 1;
+  border: none;
+  height: 46px;
+  font-size: 14px;
+  padding: 4px 0 0 0;
+}
+.post-ads-tag .tags-input input:focus {
+  outline: transparent;
+}
+
+.post-ads-tag #tags {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+
+.post-ads-tag .tag {
+  width: auto;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 0 8px;
+  font-size: 14px;
+  list-style: none;
+  border-radius: 6px;
+  margin: 0 8px 8px 0;
+  background: #0052cc;
+}
+.post-ads-tag .tag .tag-title {
+  margin-top: 3px;
+}
+.post-ads-tag .tag .tag-close-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 14px;
+  margin-left: 8px;
+  color: #0052cc;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 567px) {
+  .post-ads-tag  .tags-input {
+    width: calc(100vw - 32px);
+  }
+}
+
+.pricing-list {
+	background-color: #ffffff;
+	padding: 15px 20px;
+	position: relative;
+	border: 1px solid #eceff2;
+	border-radius: 0;
+	margin-bottom: 20px;
+}
+.pricing-list h3 {
+	font-size: 16px;
+	margin: 0;
+	padding: 10px 0;
+	color: #232323;
+}
+.pricing-list h4 {
+	padding: 10px 0;
+}
+.pricing-list h4 {
+	line-height: 1;
+	margin: 10px 0 0;
+	font-size: 24px;
+	color: #232323;
+}
+.select-package .row {
+	margin: 0;
+}
+.select-package h3 {
+	color: #232323;
+	font-weight: 600;
+}
+.pricing-list-price .btn {
+	font-size: 13px;
+	line-height: 1;
+	padding: 6px;
+	text-transform: capitalize;
+}
+.submit-form .select-package p {
+	font-size: 14px;
+}
+.postdetails .form-group {
+	margin-bottom: 40px;
+	position: relative;
+	overflow: hidden;
+}
+.selected-product {
+	border-bottom: 1px solid #f2f2f2;
+	padding: 10px 0 20px;
+}
+.postdetails label {
+	color: #232323;
+	font-size: 16px;
+	font-weight: 600;
+}
+.postdetails label span {
+	font-size: 14px;
+	color: #777;
+}
+.postdetails .skin-minimal ul.list li {
+	float: left;
+	padding-right: 30px;
+}
+.required {
+	color: #ed1c24;
+}
+.package-accordion-item{
+  border: 1px solid #d9d3d3;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.package-accordion-header {
+  background-image: linear-gradient(to right top, #0056b3, #0154ae, #0253a9, #0451a4, #064f9f);
+ cursor:pointer;
+}
+.package-accordion-header  .acod-title  {
+  color:#fff;
+}
+.package-accordion-body{
+  padding: 6px 15px 5px 15px;
+
+}
+  /* Ads Post end*/

@@ -97,7 +97,7 @@ function Header() {
                     <Link to={"/browse-job-filter-list"}>tasks</Link>
                   </li>
                   <li>
-                    <Link to={"/browse-job-filter-list"}>marketplace</Link>
+                    <Link to={"/browse-ads-grid"}>marketplace</Link>
                   </li>
                   {/* <li>
                     <Link to={"/browse-candidates"}>Explore</Link>

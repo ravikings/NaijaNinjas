@@ -80,7 +80,7 @@ function BrowseAdsgrid(){
 		   <Header />
 		   <div className="page-content bg-white">
 		   
-			   <div className="content-area">
+			   <div className="">
 				   <div className="container-fluid">
 					   
 					   <div className="row">

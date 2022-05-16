@@ -77,7 +77,7 @@ function Blogdetail(){
 					setTags(mytags)
 				}
 				else{
-					mytags.push(res.data.tags)
+					mytags.push(res?.data?.tags)
 					setTags(mytags)
 				}
 				setLoading(false);

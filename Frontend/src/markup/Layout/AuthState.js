@@ -85,6 +85,8 @@ function AuthState({ userDetails }) {
               fontSize: "22px",
               fontWeight: "bold",
             }}
+           
+            onClick={()=>history.push('/post-ads')}
             variant='warning'
             size='lg'
           >
@@ -115,6 +117,8 @@ function AuthState({ userDetails }) {
               }}
               variant='warning'
               size='lg'
+              onClick={()=>history.push('/post-ads')}
+              to="/post-ads"
             >
               <i class='fa-solid fa-hand-holding-dollar'></i>
               Sell On Here!

@@ -64,6 +64,8 @@ import Header from "./Layout/Header";
 import Search from "./Pages/Search";
 import BrowseAdsgrid from "./Pages/Other/BrowseAdsgrid";
 import BrowseAdsgridDetails from "./Pages/Other/BrowseAdsgridDetails";
+import ContractProposal from "./Pages/Other/ContractProposal";
+import PostAds from "./Pages/Other/PostAds";
 
 class Markup extends Component {
   render() {
@@ -215,6 +217,16 @@ class Markup extends Component {
               path="/ads-details"
               exact
               component={BrowseAdsgridDetails}
+            />
+             <Route
+              path="/contract-proposal"
+              exact
+              component={ContractProposal}
+            />
+             <Route
+              path="/post-ads"
+              exact
+              component={PostAds}
             />
           </Switch>
         </div>

@@ -24,9 +24,9 @@ function Blogdetailgridsidebar(){
 	   createRequest()
 		 .get(`forum/home/?page=${page}`)
 		 .then((res) => {
-			setTotalCount(res.data.count)
+			setTotalCount(res?.data?.count)
 			   setData(res.data.results)
-			   console.log("beta done",res)
+			 
 		   
 			setLoading(false);
 		 })
@@ -78,7 +78,7 @@ function Blogdetailgridsidebar(){
 									 
 							   <div id="masonry" className="dez-blog-grid-3 row">
 							 
-							   {data.map((item, index)=>(
+							   {data?.map((item, index)=>(
 							   
 							  <ForumAnwser item={item} key={index} />
 							   ))} 
