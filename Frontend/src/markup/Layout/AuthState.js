@@ -10,6 +10,7 @@ import { Divider, Hidden } from "@material-ui/core";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined";
+import FolderSpecialOutlinedIcon from '@material-ui/icons//FolderSpecialOutlined';
 import { useStyles } from "./LayoutStyles";
 import { useDispatch } from "react-redux";
 import { logout } from "../Pages/Auth/Redux/AuthActions";
@@ -205,6 +206,16 @@ function AuthState({ userDetails }) {
           >
             <SettingsOutlinedIcon style={{ marginRight: 8 }} />
             Settings
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+            }}
+            className={classes.listItem}
+            onClick={()=>history.push('/contract-proposal')}
+          >
+            <FolderSpecialOutlinedIcon style={{ marginRight: 8 }} />
+            Contract/Order
           </div>
           <div
             onClick={signOut}

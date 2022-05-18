@@ -61,8 +61,8 @@ function ContractProposal(){
 			<Header />
 			<div className="page-content bg-white">
 				
-				<div className="content-area">
-					<div className="container">
+				<div className="container">
+					<div >
 						<h1 className="contract-title">Propose new contract</h1>
 						<form className="contract-form">
 						{/* contract Client Requirements start */}
@@ -166,7 +166,7 @@ function ContractProposal(){
 						{/* contract section start */}
 						<div className="contract-section col-md-7">
 						<button type="button" className="btn btn-outline-primary ml-4">Cancel</button>
-						<button type="button" className="btn btn-primary ml-4">Send to Client</button>
+						<button type="button" className="site-button ml-4">Send to Client</button>
 						</div>
 						{/* contract section start */}
 					</div>

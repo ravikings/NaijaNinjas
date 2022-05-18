@@ -192,7 +192,7 @@ function PostAds(){
             <div className="m-t10 col-md-3 col-sm-3 col-xs-12">
               <div className="pricing-list-price text-center">
                 <h4>$0.00</h4>
-                <a href="#submit" className="btn btn-primary btn-sm btn-block">Select</a>
+                <a href="#submit" className="site-button btn-sm btn-block">Select</a>
               </div>
             </div>
             {/* end col */}
@@ -217,7 +217,7 @@ function PostAds(){
             <div className="m-t10 col-md-3 col-sm-3 col-xs-12">
               <div className="pricing-list-price text-center">
                 <h4>$10.00</h4>
-                <a href="#submit" className="btn btn-primary btn-sm btn-block">Select</a>
+                <a href="#submit" className="site-button btn-sm btn-block">Select</a>
               </div>
             </div>
             {/* end col */}
@@ -242,7 +242,7 @@ function PostAds(){
             <div className="m-t10 col-md-3 col-sm-3 col-xs-12">
               <div className="pricing-list-price text-center">
                 <h4>$40.00</h4>
-                <a href="#submit" className="btn btn-primary btn-sm btn-block">Select</a>
+                <a href="#submit" className="site-button btn-sm btn-block">Select</a>
               </div>
             </div>
             {/* end col */}
@@ -291,7 +291,7 @@ function PostAds(){
         </div>
       </div>
 	  {/* payment end */}
-    <button class="btn btn-primary pull-right">Publish My Ad</button>
+    <button class="site-button pull-right">Publish My Ad</button>
 				</form>
 				</div>
 

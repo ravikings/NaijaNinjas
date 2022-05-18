@@ -219,7 +219,7 @@ function BrowseAdsgridDetails(){
      
       </div>
                 
-     <div className="mt-4 mb-5">
+     <div className="mt-4 text-black mb-5">
        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, quod fugiat numquam quam nobis eum neque minus iusto. Consequatur dolores molestias ad blanditiis rerum molestiae aspernatur eum nisi iste praesentium?</p>
      </div>
      <div className="mt-5">
@@ -232,7 +232,7 @@ function BrowseAdsgridDetails(){
                            <div className="col-lg-3 col-md-5 col-sm-12 sticky-top">
 						             <div className="price-tag m-t70 border-top-bottom bg-white p-2">
                               <h1>$700,000</h1>
-                           <a class="btn btn-outline-primary btn-block" href="#">Request Call Back</a>   
+                           <a class="btn site-button button-outline btn-block" href="#">Request Call Back</a>   
                          </div>
 						             <div className=" m-t10 border-top-bottom ads-owner-info">
                               <div className="owner-img float-left">
@@ -243,8 +243,8 @@ function BrowseAdsgridDetails(){
                                <p className="onwer-state"><i className="fa fa-envelope-o "></i>Take Time to Response</p>
                                </div>
                                <div className="owner-contact text-center">
-                                 <a className="btn btn-primary btn-block " href="#"><i className="fa fa-phone ml-1"></i> Show Contact</a>
-                                 <a className="btn btn-outline-primary btn-block" href="#"><i className="fa fa-comments ml-1"></i> Start Chat</a>
+                                 <a className="site-button btn-block " href="#"><i className="fa fa-phone ml-1"></i> Show Contact</a>
+                                 <a className="btn site-button button-outline btn-block btn-block" href="#"><i className="fa fa-comments ml-1"></i> Start Chat</a>
                                </div>
                                
                          </div>
@@ -262,7 +262,7 @@ function BrowseAdsgridDetails(){
                 </div>
                          </div>
                          <div className="border-top-bottom">
-                           <a href="#" className="btn btn-outline-primary btn-block">Post Ads Like This</a>
+                           <a href="#" className="btn site-button button-outline btn-block btn-block">Post Ads Like This</a>
                          </div>
 						   </div>
 					   </div>
