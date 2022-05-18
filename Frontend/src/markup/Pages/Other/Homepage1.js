@@ -46,7 +46,7 @@ function Homepage() {
                 <h6 className='fw3'>Freelancers</h6>
               </div>
             </div>
-      
+
             <Jobcategories />
           </div>
         </div>

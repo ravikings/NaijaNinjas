@@ -31,7 +31,8 @@ function Browsecandidates() {
   const [page, setPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { state } = useLocation();
+  const { search } = useLocation();
+  const title = search.split("=")[1];
 
   const checkOnline = async (req = "/api/v1/account/user-status/") => {
     setLoading(true);
@@ -117,8 +118,16 @@ function Browsecandidates() {
   };
 
   useEffect(() => {
-    handleRequest(state.title);
+    handleRequest(title);
     checkOnline();
+  }, []);
+
+  useEffect(() => {
+    console.log("running effect");
+
+    return () => {
+      console.log("clearing effect");
+    };
   }, []);
 
   const handleKeyword = () => {
@@ -180,7 +189,7 @@ function Browsecandidates() {
                                 <h4>
                                   <Link
                                     to={{
-                                      pathname: "/make-offer",
+                                      pathname: `/make-offer/${item.id}`,
                                       state: {
                                         id: item.author,
                                       },

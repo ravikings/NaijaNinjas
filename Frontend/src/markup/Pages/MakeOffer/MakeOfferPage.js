@@ -12,7 +12,7 @@ import SocialMedia from "./components/SocialMedia";
 import Skills from "./components/Skills";
 import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -35,13 +35,12 @@ const blogGrid = [
 
 function MakeOfferPage() {
   const classes = useStyles();
-  const location = useLocation();
+  const { id } = useParams();
   const [user, setUser] = React.useState(null);
-  const id = location.state.id ? location.state.id : "";
 
   useEffect(() => {
     handleRequest();
-  }, [location]);
+  }, [id]);
 
   const handleRequest = async () => {
     console.log(id, "item");
@@ -52,7 +51,6 @@ function MakeOfferPage() {
     console.log(res.data);
   };
 
-  console.log(location);
   return (
     <>
       <Header />

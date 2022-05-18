@@ -2303,6 +2303,11 @@
   border-color: #2e55fa;
 }
 
+.loaderHome {
+  display: flex;
+  height: 100vh;
+}
+
 .loader {
   display: flex;
   height: 50vh;
