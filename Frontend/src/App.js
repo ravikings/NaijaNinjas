@@ -10,35 +10,61 @@ import "./plugins/slick/slick-theme.min.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser } from "./markup/Pages/Auth/Redux/AuthActions";
-import ClipLoader from "react-spinners/ClipLoader";
+import {
+  authActionTypes,
+  verifyToken,
+} from "./markup/Pages/Auth/Redux/AuthActions";
+import Cookies from "js-cookie";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import Loader from "./markup/Element/Loader";
 
 function App() {
+  const refreshToken = Cookies.get("refresh_token");
+  const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer);
-  let times = 0;
 
   useEffect(() => {
-    console.log(user);
-    console.log(++times);
-  }, [user]);
-
-  useEffect(() => {
-    dispatch(getCurrentUser());
+    if (refreshToken) {
+      console.log("First firsrt");
+      dispatch(verifyToken(refreshToken));
+    }
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getUser = async () => {
+      dispatch({ type: authActionTypes.GETTING_CURRENT_USER });
+      try {
+        const { data } = await axiosPrivate.get("/dj-rest-auth/user/", {
+          signal: controller.signal,
+        });
+        console.log(data, "userData");
+        isMounted &&
+          dispatch({ type: authActionTypes.GET_CURRENT_SUCCESS, user: data });
+      } catch (e) {
+        dispatch({ type: authActionTypes.GET_CURRENT_FAILED });
+        console.log(e, "userData");
+      }
+    };
+
+    if (user.isVerified) {
+      getUser();
+    }
+  }, [user.isVerified]);
 
   return (
     <div className='App'>
-        {user.loading ? (
-          <div className='loaderHome'>
-            <ClipLoader color={"#2e55fa"} loading={true} size={150} />
-          </div>
-        ) : (
-          <>
-            <Markup />
-            <ToastContainer />
-          </>
-        )}
+      {user.loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Markup />
+          <ToastContainer />
+        </>
+      )}
       {/* <Markup />
       <ToastContainer /> */}
     </div>

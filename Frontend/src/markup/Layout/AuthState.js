@@ -88,7 +88,7 @@ function AuthState({ userDetails }) {
             variant='warning'
             size='lg'
           >
-            <i class='fa-solid fa-hand-holding-dollar'></i>
+            <i className='fa-solid fa-hand-holding-dollar'></i>
             Sell On Here!
           </ReactButton>
         </div>
@@ -190,7 +190,6 @@ function AuthState({ userDetails }) {
             }}
           >
             <PowerSettingsNewOutlinedIcon style={{ marginRight: 8 }} />
-
             Explore
           </div>
           <div
@@ -212,7 +211,6 @@ function AuthState({ userDetails }) {
             <PowerSettingsNewOutlinedIcon style={{ marginRight: 8 }} />
             Logout
           </div>
-          
         </div>
       </Popover>
     </div>
