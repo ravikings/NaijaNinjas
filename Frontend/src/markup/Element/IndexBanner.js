@@ -31,6 +31,7 @@ function IndexBanner() {
     }
     history.push({
       pathname: "/browse-candidates",
+      search: `?title=${title}`,
       state: {
         title: title,
       },
@@ -130,18 +131,15 @@ function IndexBanner() {
         </div>
       </div>
       <div style={style}>
-        <Card >
+        <Card>
           {/* <Card.Img
             variant='top'
             src='https://image-placeholder.com/images/actual-size/75x75.png'
             style={{ height: "50px", width: "100px"}}
           /> */}
           <Card.Body>
-            
             <Card.Title>Reach your target customers</Card.Title>
-            <Card.Text>
-            marketing expert for anyone!. 
-            </Card.Text>
+            <Card.Text>marketing expert for anyone!.</Card.Text>
             <button className='site-button btn-block' variant='primary'>
               Post Ads for Free!
             </button>

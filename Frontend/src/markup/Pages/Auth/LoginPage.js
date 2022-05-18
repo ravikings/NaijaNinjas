@@ -1,6 +1,6 @@
-import {Link, useHistory} from "react-router-dom";
-import {authActionTypes} from "./Redux/AuthActions";
-import {useDispatch} from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { authActionTypes } from "./Redux/AuthActions";
+import { useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
 import createRequest from "../../../utils/axios";
 import { toast } from "react-toastify";
@@ -13,6 +13,7 @@ import {
   LoadCanvasTemplateNoReload,
   validateCaptcha,
 } from "react-simple-captcha";
+import Cookies from "js-cookie";
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -48,8 +49,16 @@ function LoginPage() {
       .post("/dj-rest-auth/login/", loginDetails)
       .then((res) => {
         localStorage.setItem("userID", res?.data?.user?.pk);
-        localStorage.setItem("access_token", res?.data?.access_token);
-        dispatch({ type: authActionTypes.LOGIN_SUCCESS, user:res?.data?.user })
+        Cookies.set("refresh_token", res?.data?.refresh_token, { expires: 1 });
+        const inFiveMinutes = new Date(new Date().getTime() + 5 * 60 * 1000);
+        Cookies.set("access_token", res?.data?.access_token, {
+          expires: inFiveMinutes,
+        });
+        dispatch({
+          type: authActionTypes.LOGIN_SUCCESS,
+          user: res?.data?.user,
+          accessToken: res?.data?.access_token,
+        });
         history.push("/");
       })
       .catch((e) => {

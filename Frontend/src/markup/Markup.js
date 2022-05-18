@@ -66,6 +66,8 @@ import BrowseAdsgrid from "./Pages/Other/BrowseAdsgrid";
 import BrowseAdsgridDetails from "./Pages/Other/BrowseAdsgridDetails";
 import ContractProposal from "./Pages/Other/ContractProposal";
 import PostAds from "./Pages/Other/PostAds";
+import PrivateRoute from "./PrivateRoutes";
+import ProtectedRoute from "./ProtectedRoute";
 
 class Markup extends Component {
   render() {
@@ -76,8 +78,8 @@ class Markup extends Component {
             <Route path='/' exact component={Homepage} />
             <Route path='/index-2' exact component={Homepage2} />
             <Route path='/messages' exact component={MessagesPage} />
+            <PrivateRoute path='/jobs-profile' component={Jobprofile} />
 
-            <Route path='/jobs-profile' exact component={Jobprofile} />
             <Route path='/ask-questions' exact component={AskQuestion} />
             <Route path='/all-questions' exact component={AllQuestion} />
             <Route path='/jobs-my-resume' exact component={Jobmyresume} />
@@ -85,19 +87,18 @@ class Markup extends Component {
             <Route path='/jobs-alerts' exact component={Jobsalert} />
             <Route path='/jobs-saved-jobs' exact component={Jobsavedjobs} />
             <Route path='/jobs-cv-manager' exact component={Jobcvmanager} />
-            <Route path="/" exact component={Homepage} />
-            <Route path="/index-2" exact component={Homepage2} />
-            <Route path="/messages" exact component={MessagesPage} />
+            <Route path='/' exact component={Homepage} />
+            <Route path='/index-2' exact component={Homepage2} />
+            <Route path='/messages' exact component={MessagesPage} />
 
-            <Route path="/jobs-profile" exact component={Jobprofile} />
-            <Route path="/ask-questions" exact component={AskQuestion} />
-            <Route path="/update-questions" exact component={UpdateQuestion} />
-            <Route path="/all-questions" exact component={AllQuestion} />
-            <Route path="/jobs-my-resume" exact component={Jobmyresume} />
-            <Route path="/jobs-applied-job" exact component={Jobsappliedjob} />
-            <Route path="/jobs-alerts" exact component={Jobsalert} />
-            <Route path="/jobs-saved-jobs" exact component={Jobsavedjobs} />
-            <Route path="/jobs-cv-manager" exact component={Jobcvmanager} />
+            <Route path='/ask-questions' exact component={AskQuestion} />
+            <Route path='/update-questions' exact component={UpdateQuestion} />
+            <Route path='/all-questions' exact component={AllQuestion} />
+            <Route path='/jobs-my-resume' exact component={Jobmyresume} />
+            <Route path='/jobs-applied-job' exact component={Jobsappliedjob} />
+            <Route path='/jobs-alerts' exact component={Jobsalert} />
+            <Route path='/jobs-saved-jobs' exact component={Jobsavedjobs} />
+            <Route path='/jobs-cv-manager' exact component={Jobcvmanager} />
             <Route
               path='/jobs-change-password'
               exact
@@ -135,7 +136,7 @@ class Markup extends Component {
               exact
               component={MakeOfferTaskPage}
             />
-            <Route path='/make-offer' exact component={MakeOfferPage} />
+            <Route path='/make-offer/:id' exact component={MakeOfferPage} />
             <Route path='/companies' exact component={Companies} />
             <Route path='/free-job-alerts' exact component={Freejobalerts} />
             <Route path='/browse-job-list' exact component={Browsejoblist} />
@@ -175,12 +176,19 @@ class Markup extends Component {
             />
 
             <Route path='/portfolio-grid-2' exact component={Portfoliogrid2} />
+            <ProtectedRoute path='/login' component={LoginPage} />
 
-            <Route path='/login' exact component={LoginPage} />
-
-            <Route path='/register' exact component={RegisterPage} />
-            <Route path='/forgot-password' exact component={ForgotPassword} />
-            <Route path='/reset-password' exact component={ResetPassword} />
+            <ProtectedRoute path='/register' exact component={RegisterPage} />
+            <ProtectedRoute
+              path='/forgot-password'
+              exact
+              component={ForgotPassword}
+            />
+            <ProtectedRoute
+              path='/reset-password'
+              exact
+              component={ResetPassword}
+            />
 
             <Route path='/error-404' exact component={Error404} />
 
@@ -202,9 +210,9 @@ class Markup extends Component {
               exact
               component={Blogdetailgridsidebar}
             />
+           
+          
             <Route path='/blog-left-img' exact component={Blogleftimg} />
-            <Route path='/blog-details' exact component={Blogdetail} />
-            <Route path="/blog-left-img" exact component={Blogleftimg} />
             <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
             <Route path="/search/:query" exact component={Search} />
 
