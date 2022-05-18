@@ -810,7 +810,7 @@ Color:#222222;
   font-family: "Lato", sans-serif;
 }
 .submit-form label {
-	color: #18293b;
+	color: #000;
 }
 .submit-form .row {
 	margin-top: 25px;
@@ -820,7 +820,7 @@ Color:#222222;
 	margin-top: 10px;
 }
 .submit-form label {
-	display: inline-block;
+
 	font-weight: 600;
 	margin-bottom: 5px;
 	max-width: 100%;
@@ -1003,3 +1003,6 @@ Color:#222222;
   color: #fff;
 }
   /* Ads Post end*/
+.dzu-inputLabel {
+  color:#000 !important;
+}

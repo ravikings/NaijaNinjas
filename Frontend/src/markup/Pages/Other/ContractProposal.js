@@ -4,11 +4,11 @@ import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import ClipLoader from "react-spinners/ClipLoader";
 
-import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone from 'react-dropzone-uploader'
+
 import createRequest from "../../../utils/axios";
 import axios from 'axios'
-
+import 'react-dropzone-uploader/dist/styles.css'
+import Dropzone from 'react-dropzone-uploader'
 
 
 function ContractProposal(){
@@ -62,7 +62,8 @@ function ContractProposal(){
 			<div className="page-content bg-white">
 				
 				<div className="container">
-					<div >
+				<div className="row">
+				<div className="col-md-9  m-t40">
 						<h1 className="contract-title">Propose new contract</h1>
 						<form className="contract-form">
 						{/* contract Client Requirements start */}
@@ -89,12 +90,12 @@ function ContractProposal(){
 			  </textarea> 					
 	  <span className="required-label"><i className="fa fa-exclamation-circle mr-1"></i> Description is required</span>
 	  </div>
-	  <div className="form-group">
+	  <div className="col-lg-12 col-md-12">
 		  <label>Attach File</label>
 		  <Dropzone
       getUploadParams={getUploadParams}
       onChangeStatus={handleChangeStatus}
-     
+      className="text-black"
       accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.webm"
     />
 	  </div> 
@@ -173,6 +174,30 @@ function ContractProposal(){
 					{/* contract send button end */}
 					</form>
 					</div>
+					<div className="col-md-3 m-t40">
+				  <div className="">
+        <div className="ads-sidebar-heading">
+          <h4 className="panel-title"><a>Saftey Tips </a></h4>
+        </div>
+        <div className="ads-sidebar-content">
+          <p className="lead">Posting an ad on <a href="#">GigxNow</a> is free! However, all ads must follow our rules:
+          </p>
+          <ol>
+            <li>Make sure you post in the correct category.</li>
+            <li>Do not post the same ad more than once or repost an ad within 48 hours.</li>
+            <li>Do not upload pictures with watermarks.</li>
+            <li>Do not post ads containing multiple items unless it's a package deal.</li>
+            <li>Do not put your email or phone numbers in the title or description.</li>
+            <li>Make sure you post in the correct category.</li>
+            <li>Do not post the same ad more than once or repost an ad within 48 hours.</li>
+            <li>Do not upload pictures with watermarks.</li>
+            <li>Do not post ads containing multiple items unless it's a package deal.</li>
+          </ol>
+        </div>
+      </div>
+
+				  </div>
+				</div>
 				</div>
 			</div>	
 			 

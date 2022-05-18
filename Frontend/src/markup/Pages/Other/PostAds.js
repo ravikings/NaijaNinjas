@@ -5,14 +5,14 @@ import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import ClipLoader from "react-spinners/ClipLoader";
 import Select from 'react-select'
-import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone from 'react-dropzone-uploader'
+
 import createRequest from "../../../utils/axios";
 import axios from 'axios'
 import ReactQuill from 'react-quill'; 
 import 'react-quill/dist/quill.snow.css';
 import TagsInput from '../components/TagsInput';
-
+import 'react-dropzone-uploader/dist/styles.css'
+import Dropzone from 'react-dropzone-uploader'
 
 function PostAds(){
 	const [detailsValue,setDetailsValue]= useState();
@@ -78,7 +78,7 @@ function PostAds(){
 		  <Dropzone
       getUploadParams={getUploadParams}
       onChangeStatus={handleChangeStatus}
-     
+       className="text-center"
       accept="image/*"
     />
         </div>
