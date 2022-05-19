@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useMemo} from 'react';
+import React,{useState,useEffect} from 'react';
 import {Link} from 'react-router-dom'; 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
@@ -6,40 +6,29 @@ import PageTitle from '../../Layout/PageTitle';
 import Sidebar from '../../Element/Sidebar';
 import ForumAnwser from '../components/ForumAnwser';
 import createRequest from "../../../utils/axios";
-import Pagination from '../components/Pagination';
+import ClipLoader from "react-spinners/ClipLoader";
+import Pagination from "react-js-pagination";
 
 var bnr = require('../../../images/banner/bnr1.jpg');
 
-const blogGride = [
-	{ image: require('../../../images/blog/grid/pic4.jpg'), },
-	{ image: require('../../../images/blog/grid/pic3.jpg'), },
-	{ image: require('../../../images/blog/grid/pic2.jpg'), },
-	{ image: require('../../../images/blog/grid/pic1.jpg'), },
-	{ image: require('../../../images/blog/grid/pic4.jpg'), },
-	{ image: require('../../../images/blog/grid/pic3.jpg'), },
-	{ image: require('../../../images/blog/grid/pic2.jpg'), },
-	{ image: require('../../../images/blog/grid/pic1.jpg'), },
-	{ image: require('../../../images/blog/grid/pic4.jpg'), },
-	{ image: require('../../../images/blog/grid/pic3.jpg'), },
-	{ image: require('../../../images/blog/grid/pic2.jpg'), },
-	{ image: require('../../../images/blog/grid/pic1.jpg'), },
-]
 
 function Blogdetailgridsidebar(){
-	let PageSize = 8;
-	const [currentPage, setCurrentPage] = useState(1);
 
+	const [totalCount, setTotalCount] = useState(null);
+	const [activePage, SetActivePage] = useState(1);
+	const [loading, setLoading] = useState(false);
 	const [data,setData]= useState([])
    // geting data from api for fourm start
-   const ForumData = () => {
+   const ForumData = (page=1) => {
+	   setLoading(true);
 	   createRequest()
-		 .get("forum/home/")
+		 .get(`forum/home/?page=${page}`)
 		 .then((res) => {
-			   
+			setTotalCount(res?.data?.count)
 			   setData(res.data.results)
-			   console.log("beta done",res)
+			 
 		   
-	   
+			setLoading(false);
 		 })
 		 .catch((e) => {
 		   if (e.response?.status === 400) {
@@ -57,15 +46,13 @@ function Blogdetailgridsidebar(){
 	   
    },[])
    // effect end
-
-//   paganition setup start
-const currentData = useMemo(() => {
+ const Paginate=(page)=>{
 	
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage , data.length]);
-//   paganition setup end
+	SetActivePage(page);
+	ForumData(page);
+	window.scrollTo(0, 0)
+ }
+
    return(
 	   <>
 		   <Header />
@@ -79,7 +66,7 @@ const currentData = useMemo(() => {
 							   <h1>All Questions</h1>							
 						   <div className="row">
 							   <div className="col-6 text-left">
-								   <h2>{data.length} Questions</h2>
+								   <h2>{totalCount} Questions</h2>
 							   </div>
 							   
 <div className="col-6 text-right">
@@ -87,21 +74,42 @@ const currentData = useMemo(() => {
 <Link to="/ask-questions" className="site-button"> <i className="fa fa-question" aria-hidden="true"></i> Ask Question</Link>
 </div>
 		 </div>
+		 							{!loading ?
+									 
 							   <div id="masonry" className="dez-blog-grid-3 row">
-							   {currentData.map((item, index)=>(
+							 
+							   {data?.map((item, index)=>(
 							   
 							  <ForumAnwser item={item} key={index} />
-							   ))}
+							   ))} 
 							   </div>
+							   : 
+							   <div className='loader'>
+							   <ClipLoader
+								 color={"#2e55fa"}
+								 loading={true}
+								 size={150}
+							   />
+							 </div>
+									}
 						   {/* pagination place start */}
 						   <div className="mx-auto text-center m-t30">
-						   <Pagination
-        className="pagination-bar"
-        currentPage={currentPage}
-        totalCount={data.length}
-        pageSize={PageSize}
-        onPageChange={page => setCurrentPage(page)}
-      />
+						   {totalCount>=10 ?
+									<Pagination
+						   activePage={activePage}
+						   itemsCountPerPage={10}
+						   totalItemsCount={totalCount}
+						   pageRangeDisplayed={5}
+						   onChange={Paginate.bind(this)}
+						   prevPageText="⇐ Prev"
+						   nextPageText="Next ⇒"
+						   firstPageText="◀"
+						   lastPageText="▶"
+						 />
+										: null }
+
+	
+
                   </div>
 						  
 						   {/* pagination place end */}

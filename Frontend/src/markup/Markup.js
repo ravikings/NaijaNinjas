@@ -62,6 +62,10 @@ import CompanyManageBids from "./Pages/Other/CompanyManageBids";
 import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask";
 import Header from "./Layout/Header";
 import Search from "./Pages/Search";
+import BrowseAdsgrid from "./Pages/Other/BrowseAdsgrid";
+import BrowseAdsgridDetails from "./Pages/Other/BrowseAdsgridDetails";
+import ContractProposal from "./Pages/Other/ContractProposal";
+import PostAds from "./Pages/Other/PostAds";
 import PrivateRoute from "./PrivateRoutes";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -206,15 +210,32 @@ class Markup extends Component {
               exact
               component={Blogdetailgridsidebar}
             />
+           
+          
             <Route path='/blog-left-img' exact component={Blogleftimg} />
-            <Route path='/blog-details' exact component={Blogdetail} />
-            <Route path='/blog-left-img' exact component={Blogleftimg} />
+            <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
+            <Route path="/search/:query" exact component={Search} />
+
             <Route
-              path='/blog-details/:id/:title'
+              path="/browse-ads-grid"
               exact
-              component={Blogdetail}
+              component={BrowseAdsgrid}
             />
-            <Route path='/search/:query' exact component={Search} />
+             <Route
+              path="/ads-details"
+              exact
+              component={BrowseAdsgridDetails}
+            />
+             <Route
+              path="/contract-proposal"
+              exact
+              component={ContractProposal}
+            />
+             <Route
+              path="/post-ads"
+              exact
+              component={PostAds}
+            />
           </Switch>
         </div>
         <ScrollToTop />

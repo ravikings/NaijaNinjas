@@ -5,7 +5,8 @@ import Footer from './../Layout/Footer';
 import PageTitle from './../Layout/PageTitle';
 import Sidebar from './../Element/Sidebar';
 import createRequest from "../../utils/axios";
-import Pagination from './components/Pagination';
+import Pagination from "react-js-pagination";
+import ClipLoader from "react-spinners/ClipLoader";
 import SearchAnwser from './components/SearchAnwser';
 var bnr = require('./../../images/banner/bnr1.jpg');
 
@@ -15,19 +16,21 @@ const blogGride = [
 ]
 
 function Search(){
-	let PageSize = 8;
-	const [currentPage, setCurrentPage] = useState(1);
+	const [totalCount, setTotalCount] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [activePage, SetActivePage] = useState(1);
 	const location = useLocation();
     let { query } = useParams();
      const [data,setData]= useState([])
 	// geting data from api for fourm start
-	const ForumData = () => {
+	const ForumData = (page=activePage) => {
+		setLoading(true);
 		createRequest()
-		  .get(`forum/search/?search=${query}`)
+		  .get(`forum/search/?page=${page}&search=${query}`)
 		  .then((res) => {
-				
+			setTotalCount(res.data.count)
 				setData(res.data.results)
-				console.log("beta done",res)
+				setLoading(false);
 			
 		
 		  })
@@ -43,18 +46,16 @@ function Search(){
 	// geting data from api for fourm end
 	// effect start
 	useEffect(()=>{
-		setCurrentPage(1);
+		SetActivePage(1);
 		ForumData()
 	},[location.key])
 	// effect end
-	//   paganition setup start
-const currentData = useMemo(() => {
+	const Paginate=(page)=>{
 	
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage , data.length]);
-//   paganition setup end
+		SetActivePage(page);
+		ForumData(page);
+		window.scrollTo(0, 0)
+	 }
 	return(
 		<>
 			<Header />
@@ -64,21 +65,39 @@ const currentData = useMemo(() => {
 					<div className="container">
 						<div className="row">
 							<div className="col-lg-8 col-md-7 col-sm-12">							
-								<div id="masonry" className="dez-blog-grid-3 row">
-								{currentData.map((item, index)=>(
-								
-								<SearchAnwser item={item} key={index} />
-								 ))}
-								</div>
+							{!loading ?
+									 
+									 <div id="masonry" className="dez-blog-grid-3 row">
+								   
+									 {data.map((item, index)=>(
+									 
+									<SearchAnwser item={item} key={index} />
+									 ))} 
+									 </div>
+									 : 
+									 <div className='loader'>
+									 <ClipLoader
+									   color={"#2e55fa"}
+									   loading={true}
+									   size={150}
+									 />
+								   </div>
+										  }
 								<div className="pagination-bx clearfix text-center">
 									{/* pagination place */}
+									{totalCount>=10 ?
 									<Pagination
-        className="pagination-bar"
-        currentPage={currentPage}
-        totalCount={data.length}
-        pageSize={PageSize}
-        onPageChange={page => setCurrentPage(page)}
-      />
+						   activePage={activePage}
+						   itemsCountPerPage={10}
+						   totalItemsCount={totalCount}
+						   pageRangeDisplayed={5}
+						   onChange={Paginate.bind(this)}
+						   prevPageText="⇐ Prev"
+						   nextPageText="Next ⇒"
+						   firstPageText="◀"
+						   lastPageText="▶"
+						 />
+										: null }
 								</div>
 							</div>
 							<div className="col-lg-4 col-md-5 col-sm-12 sticky-top">
