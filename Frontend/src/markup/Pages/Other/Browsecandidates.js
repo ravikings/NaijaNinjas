@@ -256,7 +256,7 @@ function Browsecandidates() {
                                 {console.log(item, "item")}
                                 <Link
                                   to={{
-                                    pathname: "/make-offer",
+                                    pathname: `/make-offer/${item.id}`,
                                     state: {
                                       id: item.author,
                                     },
