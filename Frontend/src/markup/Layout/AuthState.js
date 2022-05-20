@@ -15,6 +15,7 @@ import { useStyles } from "./LayoutStyles";
 import { useDispatch } from "react-redux";
 import { logout } from "../Pages/Auth/Redux/AuthActions";
 import ReactButton from "react-bootstrap/Button";
+import {Dropdown} from 'react-bootstrap'
 
 function AuthState({ userDetails }) {
   const classes = useStyles();
@@ -22,7 +23,40 @@ function AuthState({ userDetails }) {
   const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
+  const [msgAnchorEl, setMsgAnchorEl] = React.useState(null);
+
   const [onlineState, setOnlineState] = React.useState("Online");
+
+  // Notification start
+  
+  const NotificationClick = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const NotificationClose = () => {
+    setNotificationAnchorEl(null);
+  };
+
+  const notificationOpen = Boolean(notificationAnchorEl);
+  const notificationId = notificationOpen ? 'simple-popover' : undefined;
+
+  // Notification end
+ 
+  // msg start
+  
+  const MsgClick = (event) => {
+    setMsgAnchorEl(event.currentTarget);
+  };
+
+  const MsgClose = () => {
+    setMsgAnchorEl(null);
+  };
+
+  const MsgOpen = Boolean(msgAnchorEl);
+  const MsgId = MsgOpen ? 'simple-popover' : undefined;
+
+  // Notification end
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -48,19 +82,146 @@ function AuthState({ userDetails }) {
         >
           <Divider orientation='vertical' flexItem />
           <div>
-            <Badge badgeContent={4} color='primary'>
-              <Link
-                to={"/messages"}
-                style={{ display: "flex", alignItems: "center" }}
-              >
+            <Badge badgeContent={4} color='primary' onClick={MsgClick}>
+           
                 <MailOutlineOutlinedIcon color='action' />
-              </Link>
+             
             </Badge>
+            <Popover
+        id={MsgId}
+        open={MsgOpen}
+        anchorEl={msgAnchorEl}
+        onClose={MsgClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+            <div className="cent">{/* Fold this div and try deleting evrything inbetween */}
+        <div className="sec new">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://c1.staticflickr.com/5/4007/4626436851_5629a97f30_b.jpg" />
+            </div>
+            <div className="txt">James liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/7 - 2:30 pm</div>
+          </a>
+        </div>
+        <div className="sec new">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://obamawhitehouse.archives.gov/sites/obamawhitehouse.archives.gov/files/styles/person_medium_photo/public/person-photo/amanda_lucidon22.jpg?itok=JFPi8OFJ" />
+            </div>
+            <div className="txt">Annita liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/7 - 2:13 pm</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3O45RK9qyCrZJivYsY6PmeVEJH07l7bkoolJmscBsNjzump27" />
+            </div>
+            <div className="txt">Brie liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/6 - 9:35 pm</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://c1.staticflickr.com/4/3725/10214643804_75c0b6eeab_b.jpg" />
+            </div>
+            <div className="txt">Madison liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/6 - 4:04 pm</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://upload.wikimedia.org/wikipedia/commons/5/52/NG_headshot_white_shirt_square_Jan18.jpg" />
+            </div>
+            <div className="txt">Ted liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/6 - 10:37 am</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Pat-headshot-square.jpg" />
+            </div>
+            <div className="txt">Tommas liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/5 - 7:30 pm</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="https://c1.staticflickr.com/8/7407/13785133614_6254abb8c4.jpg" />
+            </div>
+            <div className="txt">Claire liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/5 - 2:30 pm</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="//c1.staticflickr.com/1/185/440890151_54c5b920b0_b.jpg" />
+            </div>
+            <div className="txt">Jerimaiah liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/5 - 1:34 pm</div>
+          </a>
+        </div>
+        <div className="sec">
+          <a href="https://codepen.io/Golez/">
+            <div className="profCont">
+              <img className="profile" src="//c2.staticflickr.com/4/3397/3585544855_28442029a5_z.jpg?zz=1" />
+            </div>
+            <div className="txt">Debra liked your post: "Pure css notification box"</div>
+            <div className="txt sub">11/5 - 10:20 am</div>
+          </a>
+        </div>
+      </div>
+
+        </Popover>
           </div>
           <div>
-            <Badge badgeContent={8} color='primary'>
-              <NotificationsNoneOutlinedIcon color='action' />
+          <Badge badgeContent={4} color='primary' onClick={NotificationClick}>
+             
+                <NotificationsNoneOutlinedIcon color='action' />
+        
             </Badge>
+            <Popover
+        id={notificationId}
+        open={notificationOpen}
+        anchorEl={notificationAnchorEl}
+        onClose={NotificationClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+       <div className="notication-box">
+           <div className="notication-title">Notification</div>
+         
+         <div className="sec new">
+      
+          <div className="txt">Annita liked your post: "Pure css notification box"</div>
+          <div className="txt sub">11/7 - 2:13 pm</div>
+       
+      </div>
+         <div className="sec ">
+      
+          <div className="txt">Annita liked your post: "Pure css notification box"</div>
+          <div className="txt sub">11/7 - 2:13 pm</div>
+        
+      </div>
+         <div className="sec">
+       
+          <div className="txt">Annita liked your post: "Pure css notification box"</div>
+          <div className="txt sub">11/7 - 2:13 pm</div>
+        
+      </div>
+       </div>
+      </Popover>
           </div>
           <Divider orientation='vertical' flexItem />
           <div>

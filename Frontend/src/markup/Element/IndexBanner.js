@@ -130,7 +130,7 @@ function IndexBanner() {
           </div>
         </div>
       </div>
-      <div style={style}>
+      <div className="mobile-block" style={style}>
         <Card>
           {/* <Card.Img
             variant='top'
@@ -140,9 +140,9 @@ function IndexBanner() {
           <Card.Body>
             <Card.Title>Reach your target customers</Card.Title>
             <Card.Text>marketing expert for anyone!.</Card.Text>
-            <button className='site-button btn-block' variant='primary'>
+            <Link to="/post-ads" className='site-button btn-block' variant='primary'>
               Post Ads for Free!
-            </button>
+            </Link>
           </Card.Body>
         </Card>
       </div>

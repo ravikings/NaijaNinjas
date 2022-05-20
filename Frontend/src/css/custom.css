@@ -1006,3 +1006,121 @@ Color:#222222;
 .dzu-inputLabel {
   color:#000 !important;
 }
+.dropdownIcon >button{
+  background: none;
+  border: none;
+}
+.dropdownIcon >button:hover{
+  background: none;
+  border: none;
+}
+.dropdownIcon .dropdown-toggle {
+  background: none !important;
+  border: none !important;
+}
+.dropdownIcon .dropdown-toggle:focus {
+ box-shadow: none !important;
+}
+
+/* notification start */
+.notication-box{
+ 
+  width: 300px;
+  padding-bottom:10px;
+}
+
+.notication-title{
+  font-size: 15px;
+  font-weight: bold;
+  padding: 7px 23px;
+  border-bottom: 2px solid  #1d46f5;
+
+}
+
+.cent{
+  
+  height: 350px;
+  overflow-y: scroll;
+}
+
+.sec{
+  padding: 10px 10px;
+  
+  transition: 0.5s;
+}
+
+.profCont{
+  padding-left: 15px;
+}
+
+.profile{
+  clip-path: circle(50% at 50% 50%);
+  width: 44px;
+  float: left;
+  margin-right: 11px;
+}
+
+.txt{
+  vertical-align: top;
+  font-size:14px;
+   
+}
+
+.sub{
+  font-size: 13px;
+  color: #000;
+  text-align: right;
+}
+
+.new{
+  
+  font-weight: bold;
+}
+
+.sec:hover{
+  background-color: #BFBFBF;
+}
+
+
+
+
+/* notification end */
+
+.services-box{
+  padding-bottom: 15px;
+  border: 1px solid #dfdddd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.services-title{
+  padding: 4px 8px;
+}
+.services-title h3{
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #000;
+  
+}
+.services-title h3:hover{
+  color:#0052cc;
+  transition:0.5s ease-in-out;
+  
+}
+.services-caption{
+  width: 50%;
+    float: left;
+    font-size: 14px;
+}
+.services-caption b{
+  color:#000;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.project-modal{
+  z-index:0 !important;
+}
+.project-modal-header  {
+background-color:#0052cc !important;
+}

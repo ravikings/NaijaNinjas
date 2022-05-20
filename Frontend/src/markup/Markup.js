@@ -136,7 +136,7 @@ class Markup extends Component {
               exact
               component={MakeOfferTaskPage}
             />
-            <Route path='/make-offer/:id' exact component={MakeOfferPage} />
+            <Route path='/make-offer/:id/:title' exact component={MakeOfferPage} />
             <Route path='/companies' exact component={Companies} />
             <Route path='/free-job-alerts' exact component={Freejobalerts} />
             <Route path='/browse-job-list' exact component={Browsejoblist} />

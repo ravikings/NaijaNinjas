@@ -15,7 +15,10 @@ function Services(props) {
     <div>
       <ul className="row">
         {postBox.map((item, index) => (
-          <ServiceCard {...{ item }} key={index} />
+          <div className="col-lg-4 col-sm-12 col-12 m-b20">
+
+            <ServiceCard  key={index} />
+          </div>
         ))}
       </ul>
     </div>
