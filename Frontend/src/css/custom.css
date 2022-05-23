@@ -1124,3 +1124,47 @@ Color:#222222;
 .project-modal-header  {
 background-color:#0052cc !important;
 }
+
+.service-tag a{
+background-color: #e1e7ff;
+    padding: 6px 8px;
+    border-radius: 10px;
+    color: #0347ac;
+    text-decoration: none;
+}
+.service-tag a:hover{
+background-color: #0347ac;
+   
+    color: #fff;
+    transition:0.5s ease-in-out;
+    text-decoration: none;
+   
+}
+
+.project-edit-btn{
+  float: right;
+  width: 30px;
+  background: #0347ac;
+  color:#fff;
+  text-align: right;
+  padding: 2px 7px;
+  /* border-radius: 1px; */
+  position: absolute;
+  bottom: 26%;
+  right: 4%;
+  text-align: center;
+}
+.project-edit-btn:hover{
+  background: #02337e !important;
+  color:#fff !important;
+}
+
+/* mobile view start*/
+@media only screen and (max-width: 480px) {
+  .project-edit-btn{
+    bottom:30%;
+    right:5%;
+
+  }
+}
+/* mobile view end*/

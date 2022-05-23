@@ -68,6 +68,10 @@ import ContractProposal from "./Pages/Other/ContractProposal";
 import PostAds from "./Pages/Other/PostAds";
 import PrivateRoute from "./PrivateRoutes";
 import ProtectedRoute from "./ProtectedRoute";
+import AddServices from "./Pages/Other/AddServices";
+import UserServices from "./Pages/Other/UserServices";
+import AddProject from "./Pages/Other/AddProject";
+import UserProject from "./Pages/Other/UserProject";
 
 class Markup extends Component {
   render() {
@@ -235,6 +239,26 @@ class Markup extends Component {
               path="/post-ads"
               exact
               component={PostAds}
+            />
+             <Route
+              path="/add-services"
+              exact
+              component={AddServices}
+            />
+             <Route
+              path="/user-services"
+              exact
+              component={UserServices}
+            />
+             <Route
+              path="/add-projects"
+              exact
+              component={AddProject}
+            />
+             <Route
+              path="/user-projects"
+              exact
+              component={UserProject}
             />
           </Switch>
         </div>

@@ -16,7 +16,7 @@ const postBlog = [
 	{ title: 'Branch Credit Manager', },
 ]
 
-function AskQuestion (){
+function AddProject (){
 	const history = useHistory();
 	const baseURL= `http://127.0.0.1:8000/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
@@ -81,53 +81,31 @@ function AskQuestion (){
 					<div className="section-full bg-white p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-							<ProfileSidebar active={"question"} />
+							<ProfileSidebar active={"project"} />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
 								<div className="job-bx-title  clearfix">
-										<h5 className="font-weight-700 pull-left text-uppercase">Ask a Question</h5>
-										<div className="float-right">
-													<Link to="all-questions" className="btn btn-primary">Previous Question</Link>
-													</div>
+										<h5 className="font-weight-700 pull-left text-uppercase">Projects</h5>
+									
 									</div>
 								<form onSubmit={SubmitQuestion} enctype="multipart/form-data">
 								
 											<div className="row">
 												<div className="col-lg-12 col-md-12">
 													<div className="form-group">
-														<label>Question Title</label>
+														<label>Project Title</label>
 														<input type="text" 
 														name="QuestionTitle"
-														className="form-control" placeholder="Enter Job Title" />
+														className="form-control" placeholder="Enter Project Title" />
 													</div>
 													
 												</div>
 												
-												<div className="col-lg-12 col-md-12">
-													<div className="form-group">
-														<label>Question Tags</label>
-														<input type="text" 
-														name="tag"
-														className="form-control tags_input" />
-														
-													</div>
-												</div>
-												<div className="col-lg-12 col-md-12">
-													<div className="form-group">
-														<label>Question Category</label>
-														<Form.Control as="select" custom 
-														name="category"
-														className="custom-select">
-															<option>Communcation</option>
-															<option>Company</option>
-															<option>Language</option>
-															<option>Freelance</option>
-														</Form.Control>
-													</div>
-												</div>
+											
+												
 										
 												<div className="col-lg-12 col-md-12">
 													<div className="form-group">
-														<label>Details:</label>
+														<label>Description:</label>
 														<ReactQuill value={detailsValue || ''}
                   onChange={(e)=>{setDetailsValue(e)}} style={{height:'200px', paddingBottom:'70px'}} />
 									
@@ -138,6 +116,7 @@ function AskQuestion (){
 											
 												
 												<div className="col-lg-12 col-md-12">
+                                                    <label>Image</label>
 												<Dropzone
       getUploadParams={getUploadParams}
       onChangeStatus={handleChangeStatus}
@@ -147,7 +126,7 @@ function AskQuestion (){
 													
 												</div>
 											</div>
-											<button type="submit" className="site-button m-b30">Publish</button>
+											<button type="submit" className="site-button m-b30 mt-5">Publish</button>
 										</form>
 								</div>
 							</div>
@@ -159,4 +138,4 @@ function AskQuestion (){
 		</>
 	)
 }
-export default AskQuestion; 
+export default AddProject; 

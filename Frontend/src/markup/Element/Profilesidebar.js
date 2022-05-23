@@ -8,6 +8,8 @@ import Collapse from "@material-ui/core/Collapse";
 function ProfileSidebar({ active, showManageProp = false }) {
   const [showManage, setShowManage] = useState(showManageProp);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [showServices, setShowServices] = useState(false);
+  const [showProject, setShowProject] = useState(false);
   return (
     <div className='col-xl-3 col-lg-4 m-b30'>
       <div className='sticky-top'>
@@ -119,7 +121,60 @@ function ProfileSidebar({ active, showManageProp = false }) {
                 </Link>
               </li>
             </Collapse>
-
+               {/* start ask question start */}
+            <li onClick={() => setShowServices(!showServices)}>
+              <Link to={"#"} className={active === "services" ? "active" : ""}>
+                <i
+                  className={
+                    showServices ? "fa fa-arrow-down" : "fa fa-arrow-right"
+                  }
+                  aria-hidden='true'
+                ></i>
+                <span>Services</span>
+              </Link>
+            </li>
+            <Collapse in={showServices}>
+              <li>
+                <Link className={"ml-4"} to={"/add-services"}>
+                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <span>Add Services</span>
+                </Link>
+              </li>
+              <li>
+                <Link className={"ml-4"} to={"/user-services"}>
+                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <span>All Services</span>
+                </Link>
+              </li>
+            </Collapse>
+            {/* start ask question end */}
+               {/* start project end */}
+               <li onClick={() => setShowProject(!showProject)}>
+              <Link to={"#"} className={active === "project" ? "active" : ""}>
+                <i
+                  className={
+                    showProject ? "fa fa-arrow-down" : "fa fa-arrow-right"
+                  }
+                  aria-hidden='true'
+                ></i>
+                <span>Projects</span>
+              </Link>
+            </li>
+            <Collapse in={showProject}>
+              <li>
+                <Link className={"ml-4"} to={"/add-projects"}>
+                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <span>Add Projects</span>
+                </Link>
+              </li>
+              <li>
+                <Link className={"ml-4"} to={"/user-projects"}>
+                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <span>All Projects</span>
+                </Link>
+              </li>
+            </Collapse>
+            {/* start project end */}
             <li>
               <Link
                 className={active === "Applied Jobs" ? "active" : ""}
