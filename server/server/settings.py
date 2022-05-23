@@ -297,6 +297,12 @@ CHANNEL_LAYERS = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_USE_TLS = True
