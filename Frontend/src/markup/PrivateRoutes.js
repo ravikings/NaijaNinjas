@@ -15,17 +15,17 @@ const PrivateRoute = ({ component: Component, path, checkRunner }) => {
     if (!checkRunner) {
       return <Route component={Component} exact path={path} />;
     }
-    if (checkRunner) {
-      console.log(
-        auth.userStatus && auth.userStatus.is_a_runner,
-        "auth.userStatus"
-      );
-      if (auth.userStatus && auth.userStatus.is_a_runner) {
-        return <Route path={path} component={Component} />;
-      } else {
-        return <Redirect to='/' />;
-      }
-    }
+    // if (checkRunner) {
+    //   console.log(
+    //     auth.userStatus && auth.userStatus.is_a_runner,
+    //     "auth.userStatus"
+    //   );
+    //   if (auth.userStatus && auth.userStatus.is_a_runner) {
+    //     return <Route path={path} component={Component} />;
+    //   } else {
+    //     return <Redirect to='/' />;
+    //   }
+    // }
   }
 
   setTimeout(() => {

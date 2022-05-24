@@ -82,7 +82,6 @@ class Markup extends Component {
             <PrivateRoute
               path='/jobs-my-resume'
               exact
-              checkRunner={true}
               component={Jobmyresume}
             />
 
@@ -215,32 +214,23 @@ class Markup extends Component {
               exact
               component={Blogdetailgridsidebar}
             />
-           
-          
-            <Route path='/blog-left-img' exact component={Blogleftimg} />
-            <Route path="/blog-details/:id/:title" exact component={Blogdetail} />
-            <Route path="/search/:query" exact component={Search} />
 
+            <Route path='/blog-left-img' exact component={Blogleftimg} />
             <Route
-              path="/browse-ads-grid"
+              path='/blog-details/:id/:title'
               exact
-              component={BrowseAdsgrid}
+              component={Blogdetail}
             />
-             <Route
-              path="/ads-details"
-              exact
-              component={BrowseAdsgridDetails}
-            />
-             <Route
-              path="/contract-proposal"
+            <Route path='/search/:query' exact component={Search} />
+
+            <Route path='/browse-ads-grid' exact component={BrowseAdsgrid} />
+            <Route path='/ads-details' exact component={BrowseAdsgridDetails} />
+            <Route
+              path='/contract-proposal'
               exact
               component={ContractProposal}
             />
-             <Route
-              path="/post-ads"
-              exact
-              component={PostAds}
-            />
+            <Route path='/post-ads' exact component={PostAds} />
           </Switch>
         </div>
         <ScrollToTop />

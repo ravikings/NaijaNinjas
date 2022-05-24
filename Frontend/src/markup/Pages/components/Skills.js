@@ -13,7 +13,7 @@ const Skills = ({
   user,
   owner,
 }) => {
-  const [updatedSkills, setUpdatedSkills] = React.useState(null);
+  const [updatedSkills, setUpdatedSkills] = React.useState(skills);
   const reqUpdateResume = useUpdateResume();
   const handleSubmit = async () => {
     await reqUpdateResume.callAPI({
@@ -77,6 +77,8 @@ const Skills = ({
                 It is the first thing recruiters notice in your profile. Write
                 concisely what makes you unique and right person for the job you
                 are looking for.
+                <br />
+                <b>Note: Skills should be comma separated.</b>
               </p>
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className='row'>
@@ -88,7 +90,6 @@ const Skills = ({
                         value={updatedSkills}
                         onChange={(e) => setUpdatedSkills(e.target.value)}
                         placeholder='Separate with comma'
-                        defaultValue='html,css,bootstrap,photoshop'
                       />
                     </div>
                   </div>

@@ -16,6 +16,11 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case authActionTypes.UPDATE_ACCESS_TOKEN:
+      return {
+        ...state,
+        accessToken: action.payload,
+      };
     case authActionTypes.GET_USER_STATUS_START:
       console.log("GET_USER_STATUS_START");
       return {

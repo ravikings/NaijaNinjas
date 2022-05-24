@@ -143,10 +143,7 @@ function ProfileSidebar({ active, showManageProp = false }) {
               </Link>
             </li>
             <li>
-              <Link
-              
-                to={"/post-ads"}
-              >
+              <Link to={"/post-ads"}>
                 <i className='fa fa-handshake-o' aria-hidden='true'></i>
                 <span>Post Ad</span>
               </Link>

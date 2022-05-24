@@ -22,6 +22,8 @@ export const authActionTypes = {
   GET_ACCESS_TOKEN_SUCCESS: "loan-agents/auth/get_access_token_success",
   GET_ACCESS_TOKEN_FAILED: "loan-agents/auth/get_access_token_failed",
 
+  UPDATE_ACCESS_TOKEN: "loan-agents/auth/update_access_token",
+
   USER_PROFILE: "loan-agents/auth/get_user_profile",
 
   GET_USER_RESUME: "loan-agents/auth/get_user_resume",

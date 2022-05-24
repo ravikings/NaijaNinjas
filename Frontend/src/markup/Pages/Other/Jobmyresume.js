@@ -162,7 +162,7 @@ function Jobmyresume() {
                         {userProfile?.city && (
                           <li>
                             <i className='ti-location-pin'></i>
-                            {userProfile?.city}
+                            {userProfile?.city}{" "}
                             {userProfile.country && userProfile?.country}
                           </li>
                         )}

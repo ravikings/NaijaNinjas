@@ -18,7 +18,7 @@ function Resume({ data }) {
   return (
     <>
       {!data ? (
-        <Loader />
+        <></>
       ) : (
         <div>
           {/* Headline Section Start */}

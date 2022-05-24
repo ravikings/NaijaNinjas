@@ -3,10 +3,13 @@ import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 import { axiosPrivate } from "../utils/axios";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { authActionTypes } from "../markup/Pages/Auth/Redux/AuthActions";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
   const { accessToken } = useAuth();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -31,9 +34,16 @@ const useAxiosPrivate = () => {
           console.log("sendingAgain");
           prevRequest.sent = true;
           const newAccessToken = refresh();
+          if (newAccessToken) {
+            dispatch({
+              type: authActionTypes.UPDATE_ACCESS_TOKEN,
+              payload: newAccessToken,
+            });
+          }
           Cookies.set("access_token", newAccessToken, {
             expires: new Date(new Date().getTime() + 5 * 60 * 1000),
           });
+          console.log("NewAccessToken", newAccessToken);
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }
