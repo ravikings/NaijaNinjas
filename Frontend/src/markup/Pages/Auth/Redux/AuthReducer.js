@@ -1,8 +1,13 @@
 import { authActionTypes } from "./AuthActions";
 
 const initialState = {
-  loading: false,
   currentUser: null,
+
+  userProfile: null,
+  userResume: null,
+  userStatus: null,
+
+  loading: false,
   isAuthenticated: false,
   accessToken: null,
   isVerified: false,
@@ -11,6 +16,39 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case authActionTypes.GET_USER_STATUS_START:
+      console.log("GET_USER_STATUS_START");
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case authActionTypes.GET_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        userStatus: action.status,
+      };
+
+    case authActionTypes.GET_USER_STATUS_FAILED:
+      return {
+        ...state,
+        userStatus: null,
+        loading: false,
+      };
+
+    case authActionTypes.GET_USER_RESUME:
+      return {
+        ...state,
+        userResume: action.payload,
+      };
+
+    case authActionTypes.USER_PROFILE:
+      return {
+        ...state,
+        userProfile: action.payload,
+      };
+
     case authActionTypes.VERIFYING_TOKEN:
       return {
         ...state,

@@ -22,6 +22,15 @@ export const authActionTypes = {
   GET_ACCESS_TOKEN_SUCCESS: "loan-agents/auth/get_access_token_success",
   GET_ACCESS_TOKEN_FAILED: "loan-agents/auth/get_access_token_failed",
 
+  USER_PROFILE: "loan-agents/auth/get_user_profile",
+
+  GET_USER_RESUME: "loan-agents/auth/get_user_resume",
+
+  GET_USER_STATUS: "loan-agents/auth/get_user_status",
+  GET_USER_STATUS_START: "loan-agents/auth/get_user_status_start",
+  GET_USER_STATUS_SUCCESS: "loan-agents/auth/get_user_status_success",
+  GET_USER_STATUS_FAILED: "loan-agents/auth/get_user_status_failed",
+
   LOGOUT_SUCCESS: "loan-agents/auth/logout_success",
 };
 
@@ -39,4 +48,13 @@ export function getCurrentUser() {
 
 export function verifyToken(token) {
   return { type: authActionTypes.VERIFY_TOKEN, token };
+}
+
+export function getUserStatus(id) {
+  return { type: authActionTypes.GET_USER_STATUS, id };
+}
+
+export function setProfileData(data) {
+  console.log(data, "setProfileData");
+  return { type: authActionTypes.USER_PROFILE, data };
 }

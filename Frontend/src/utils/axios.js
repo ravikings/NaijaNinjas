@@ -17,6 +17,10 @@ export default function createRequest() {
 
 export const axiosPrivate = axios.create({
   baseURL: "/",
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${Cookies.get("access_token")}`,
+  },
   withCredentials: true,
 });

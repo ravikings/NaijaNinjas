@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
+import { useSelector } from "react-redux";
 
 // function ProfileSidebar({ active }) {
 //   const [showManage, setShowManage] = useState(false);
@@ -8,6 +9,9 @@ import Collapse from "@material-ui/core/Collapse";
 function ProfileSidebar({ active, showManageProp = false }) {
   const [showManage, setShowManage] = useState(showManageProp);
   const [showQuestion, setShowQuestion] = useState(false);
+
+  const { userProfile, userStatus } = useSelector((state) => state.authReducer);
+
   return (
     <div className='col-xl-3 col-lg-4 m-b30'>
       <div className='sticky-top'>
@@ -29,12 +33,19 @@ function ProfileSidebar({ active, showManageProp = false }) {
             </div>
             <div className='candidate-title'>
               <div className=''>
-                <h4 className='m-b5'>
-                  <Link to={""}>David Matin</Link>
-                </h4>
-                <p className='m-b0'>
-                  <Link to={""}>Web developer</Link>
-                </p>
+                {userProfile.first_name && (
+                  <h4 className='m-b5'>
+                    <Link to={""} onClick={(e) => e.preventDefault()}>
+                      {userProfile.first_name}{" "}
+                      {userProfile.last_name && userProfile.last_name}
+                    </Link>
+                  </h4>
+                )}
+                {userProfile.title && (
+                  <p className='m-b0'>
+                    <Link to={""}>{userProfile.title}</Link>
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -54,12 +65,14 @@ function ProfileSidebar({ active, showManageProp = false }) {
                 <span>Messages</span>
               </Link>
             </li>
-            <li>
-              <Link to={"/jobs-my-resume"}>
-                <i className='fa fa-file-text-o' aria-hidden='true'></i>
-                <span>My Resume</span>
-              </Link>
-            </li>
+            {userStatus.is_a_runner && (
+              <li>
+                <Link to={"/jobs-my-resume"}>
+                  <i className='fa fa-file-text-o' aria-hidden='true'></i>
+                  <span>My Resume</span>
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 to={"/jobs-saved-jobs"}

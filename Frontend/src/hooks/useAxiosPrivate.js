@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 import { axiosPrivate } from "../utils/axios";
+import Cookies from "js-cookie";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
@@ -13,6 +14,7 @@ const useAxiosPrivate = () => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
+        console.log(config);
         return config;
       },
       (error) => Promise.reject(error)
@@ -26,8 +28,12 @@ const useAxiosPrivate = () => {
           error?.response?.status === 403 ||
           (error?.response?.status === 401 && !prevRequest?.sent)
         ) {
+          console.log("sendingAgain");
           prevRequest.sent = true;
           const newAccessToken = refresh();
+          Cookies.set("access_token", newAccessToken, {
+            expires: new Date(new Date().getTime() + 5 * 60 * 1000),
+          });
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }

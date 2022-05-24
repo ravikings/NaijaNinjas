@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Tab, Tabs } from "@material-ui/core";
 import { useStyles } from "../MakeOfferStyles";
-import {AboutMe,Gallery,Resume,Services} from './'
+import { AboutMe, Gallery, Resume, Services } from "./";
 
-
-function TabsGroup(props) {
+function TabsGroup({ data, resume }) {
   const classes = useStyles();
 
   const [value, setValue] = React.useState(0);
@@ -16,11 +15,11 @@ function TabsGroup(props) {
   const renderSelectedTab = () => {
     switch (value) {
       case 0:
-        return <AboutMe data = {props.data} />;
+        return <AboutMe data={data} />;
       case 1:
         return <Services />;
       case 2:
-        return <Resume />;
+        return <Resume data={resume} />;
       default:
         return <Gallery />;
     }
@@ -31,15 +30,15 @@ function TabsGroup(props) {
       <div style={{ marginBottom: 20 }}>
         <Tabs
           value={value}
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor='primary'
+          textColor='primary'
           onChange={handleChange}
-          aria-label="disabled tabs example"
+          aria-label='disabled tabs example'
         >
-          <Tab className={classes.tab} label="About Me" />
-          <Tab className={classes.tab} label="Services" />
-          <Tab className={classes.tab} label="Resume" />
-          <Tab className={classes.tab} label="Projects" />
+          <Tab className={classes.tab} label='About Me' />
+          <Tab className={classes.tab} label='Services' />
+          <Tab className={classes.tab} label='Resume' />
+          <Tab className={classes.tab} label='Projects' />
         </Tabs>
       </div>
       {renderSelectedTab()}
