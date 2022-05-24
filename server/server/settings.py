@@ -194,7 +194,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'newgigxnow', 
+        'NAME': 'lastestgigxdb', 
         'USER': 'postgres', 
         'PASSWORD': '2{c%v~TtV?_SFCer',
         'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
