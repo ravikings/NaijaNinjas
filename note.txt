@@ -18,8 +18,14 @@ npm install --save redux react-redux
 react local docker run: docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true sample:react
 minikube service flask-test-service
 
+# to start env
+Scripts\activate.bat
 
 # use command to start backend application
 docker-compose up -d --build
 
 "kasun:2{c%v~TtV?_SFCer"
+
+
+#back end application
+https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev

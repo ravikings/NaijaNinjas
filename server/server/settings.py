@@ -28,7 +28,7 @@ SECRET_KEY = "h@e3z6yev#04x)$kdhp5!+y=q0t2-&)q-#wvbt-h@%dwem=8s#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"]
 
 
 # Application definition
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "ckeditor",
     "django_filters",
     'rest_framework_simplejwt',
+    'django_s3_storage',
     # "hitcount",
     # Local
     "forum",
@@ -193,7 +194,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'newgigxnow', 
+        'NAME': 'lastestgigxdb', 
         'USER': 'postgres', 
         'PASSWORD': '2{c%v~TtV?_SFCer',
         'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
@@ -296,6 +297,25 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
+
+STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
+
+# These next two lines will serve the static files directly 
+# from the s3 bucket
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % YOUR_S3_BUCKET
+STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+
+# OR...if you create a fancy custom domain for your static files use:
+#AWS_S3_PUBLIC_URL_STATIC = "https://static.zappaguide.com/"
 
 
 # EMAIL_HOST = 'smtp.gmail.com'

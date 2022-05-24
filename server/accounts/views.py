@@ -25,6 +25,8 @@ from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
 from asgiref.sync import async_to_sync
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from .models import (
     AccountUser,
     Photo,
@@ -51,7 +53,7 @@ from .serializers import (
     ServiceSerializer
 )
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class DashboardProfile(viewsets.ModelViewSet):
 
     """
@@ -89,7 +91,7 @@ def taskUpdate(request, pk):
         save_user_profile(profile, request)
 
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class DashboardResume(viewsets.ModelViewSet):
 
     """
@@ -131,7 +133,7 @@ def resumeUpdate(request, pk):
 
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class AccountStatus(viewsets.ModelViewSet):
 
     """
@@ -148,7 +150,7 @@ class AccountStatus(viewsets.ModelViewSet):
 
         return AccountUser.objects.all()
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class PhotoUpload(viewsets.ModelViewSet):
 
     """
@@ -179,7 +181,7 @@ class VideoUpload(viewsets.ModelViewSet):
     serializer_class = VidoesSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ReviewView(viewsets.ModelViewSet):
 
     """
@@ -194,6 +196,8 @@ class ReviewView(viewsets.ModelViewSet):
         return Review.objects.filter(profile=self.request.user.id)
 
 
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class SearchProfile(viewsets.ModelViewSet):
 
     """
@@ -239,7 +243,7 @@ def get_client_ip(request):
         ip = request.META.get("REMOTE_ADDR")
     return ip
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class UserSearchDetails(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
@@ -263,7 +267,7 @@ class UserSearchDetails(viewsets.ModelViewSet):
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ServiceView(viewsets.ModelViewSet):
     
     """
@@ -351,7 +355,6 @@ class ChangePasswordAccountView(APIView):
 
         except Exception as e:
             return Response({'error': f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
