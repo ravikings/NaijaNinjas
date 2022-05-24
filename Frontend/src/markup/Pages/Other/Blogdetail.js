@@ -3,6 +3,7 @@ import {Link,useParams,useLocation} from 'react-router-dom';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import Sidebar from '../../Element/Sidebar';
+import ClipLoader from "react-spinners/ClipLoader";
 import * as bi from 'react-icons/bi';
 // import * as gr  from 'react-icons/gr';
 import ReactQuill from 'react-quill'; 
@@ -20,6 +21,7 @@ var bnr = require('../../../images/banner/bnr1.jpg');
 
 function Blogdetail(){
 	const location = useLocation();
+	const [loading, setLoading] = useState(false);
 	let { id,title } = useParams();
 	const baseURL= `http://127.0.0.1:8000/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
@@ -57,6 +59,7 @@ function Blogdetail(){
 	// geting data from api for fourm start
 
 	const ForumData = async () => {
+		setLoading(true);
 		await createRequest()
 		  .get(`/forum/list/${id}/`)
 		  .then((res) => {
@@ -74,10 +77,10 @@ function Blogdetail(){
 					setTags(mytags)
 				}
 				else{
-					mytags.push(res.data.tags)
+					mytags.push(res?.data?.tags)
 					setTags(mytags)
 				}
-		
+				setLoading(false);
 		  })
 		  .catch((e) => {
 			if (e.response?.status === 400) {
@@ -193,6 +196,7 @@ function Blogdetail(){
 				<div className="content-area">
 					<div className="container">
 						<div className="row">
+							{!loading ?
 							<div className="col-lg-8 col-md-7 m-b10">
 								<div className="col-12 text-right">
 
@@ -363,6 +367,17 @@ function Blogdetail(){
 									</div>
 								</div>
 							</div>
+							: 
+							<div className="col-lg-8 col-md-7 m-b10">
+							  <div className='loader'>
+							<ClipLoader
+							  color={"#2e55fa"}
+							  loading={true}
+							  size={150}
+							/>
+						  </div> 
+						  </div>
+	}
 							<div className="col-lg-4 col-md-5 sticky-top">
 								<Sidebar />
 							</div>

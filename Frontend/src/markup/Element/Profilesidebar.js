@@ -144,6 +144,15 @@ function ProfileSidebar({ active, showManageProp = false }) {
             </li>
             <li>
               <Link
+              
+                to={"/post-ads"}
+              >
+                <i className='fa fa-handshake-o' aria-hidden='true'></i>
+                <span>Post Ad</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 className={active === "Job Alerts" ? "active" : ""}
                 to={"/jobs-alerts"}
               >
