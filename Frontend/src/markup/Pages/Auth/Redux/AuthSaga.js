@@ -141,7 +141,7 @@ export function* logout({ handleClose }) {
 
 function* watchHomePageActionSagas() {
   yield takeEvery(authActionTypes.LOGIN, login);
-  // yield takeEvery(authActionTypes.GET_CURRENT_USER, getCurrentUser);
+  yield takeEvery(authActionTypes.GET_CURRENT_USER, getCurrentUser);
   yield takeEvery(authActionTypes.LOGOUT, logout);
   yield takeEvery(authActionTypes.VERIFY_TOKEN, verify);
   yield takeEvery(authActionTypes.GET_ACCESS_TOKEN, generateAccessToken);
