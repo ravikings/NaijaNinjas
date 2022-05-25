@@ -102,9 +102,10 @@ class ProfileSerializerWithResume(serializers.ModelSerializer):
     def to_representation(self, instance):
         """Convert `username` to lowercase."""
         data = super().to_representation(instance)
-        runner = data.get("a_runner")
-        if not runner[0].get("is_a_runner"):
-            return None
+        #TODO: uncomment in the future to return only runner resume
+        # runner = data.get("a_runner")
+        # if not runner[0].get("is_a_runner"):
+        #     return None
         return data
 
 class PhotosSerializer(serializers.ModelSerializer):
