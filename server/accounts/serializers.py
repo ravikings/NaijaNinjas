@@ -104,7 +104,7 @@ class ProfileSerializerWithResume(serializers.ModelSerializer):
         data = super().to_representation(instance)
         runner = data.get("a_runner")
         if not runner[0].get("is_a_runner"):
-            return {"Key":"Not a runner"}
+            return None
         return data
 
 class PhotosSerializer(serializers.ModelSerializer):
