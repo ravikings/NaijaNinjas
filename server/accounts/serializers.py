@@ -76,6 +76,36 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+class UserResumeSerializer(serializers.ModelSerializer):
+    """
+    resume search serializers use for entry data for resume from ui
+    """
+    class Meta:
+        model = RunnerResume
+        fields = "__all__"
+
+class ProfileSerializerWithResume(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    user_profile = UserResumeSerializer(read_only=True, many=True)
+    a_runner = serializers.SerializerMethodField()
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
+
+    def get_a_runner(self, instance):
+    
+        return AccountUser.objects.filter(id=instance.author_id).values("is_a_runner")
+
+    def to_representation(self, instance):
+        """Convert `username` to lowercase."""
+        data = super().to_representation(instance)
+        runner = data.get("a_runner")
+        if not runner[0].get("is_a_runner"):
+            return {"Key":"Not a runner"}
+        return data
 
 class PhotosSerializer(serializers.ModelSerializer):
     """
@@ -132,13 +162,6 @@ class RunnerProfileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class UserResumeSerializer(serializers.ModelSerializer):
-    """
-    resume search serializers use for entry data for resume from ui
-    """
-    class Meta:
-        model = RunnerResume
-        fields = "__all__"
 
 class UserAccountSerializer(serializers.ModelSerializer):
 

@@ -50,7 +50,8 @@ from .serializers import (
     ResetPasswordEmailRequestSerializer,
     SetNewPasswordSerializer,
     UserOnlineSerializer,
-    ServiceSerializer
+    ServiceSerializer,
+    ProfileSerializerWithResume
 )
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
@@ -215,7 +216,7 @@ class SearchProfile(viewsets.ModelViewSet):
         "local_goverment_zone",
     ]
     queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileSearchSerializer
+    serializer_class = ProfileSerializerWithResume
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -289,13 +290,13 @@ class TestView(viewsets.ModelViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileSearchSerializer
+    serializer_class = ProfileSerializerWithResume
     
-    def retrieve(self, request, pk=None):
+    # def retrieve(self, request, pk=None):
 
-        data = RunnerProfile.objects.get_or_create(author_id=pk)
-        serializer = UserProfileSearchSerializer(data[0])
-        return Response(serializer.data)
+    #     data = RunnerProfile.objects.get_or_create(author_id=pk)
+    #     serializer = UserProfileSearchSerializer(data[0])
+    #     return Response(serializer.data)
 
 
 class ActivateAccountView(APIView):
