@@ -64,9 +64,9 @@ class RunnerResume(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"
     )
-    # profile = models.ForeignKey(
-    #     RunnerProfile, on_delete=models.CASCADE, related_name="user_profile", blank=True
-    # )
+    profile = models.ForeignKey(
+        RunnerProfile,null=True, on_delete=models.CASCADE, related_name="user_profile", blank=True
+    )
     headline = models.CharField(max_length=255, blank=True, db_index=True)
     skills = models.JSONField(null=True)
     employment = models.JSONField(null=True)
