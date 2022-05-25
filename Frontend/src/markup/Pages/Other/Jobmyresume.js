@@ -400,8 +400,8 @@ function Jobmyresume() {
 
                     {/* Employment Start */}
                     <Employment
-                      {...{ setEmployment, employment }}
-                      data={resumeDetails.employment}
+                      {...{ setEmployment, employment, setResumeDetails }}
+                      data={resumeDetails?.employment}
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}
@@ -411,8 +411,8 @@ function Jobmyresume() {
 
                     {/* Education Start */}
                     <Education
-                      {...{ setEducation, education }}
-                      data={resumeDetails.education}
+                      {...{ setEducation, education, setResumeDetails }}
+                      data={resumeDetails?.education}
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}
@@ -422,19 +422,19 @@ function Jobmyresume() {
 
                     {/* It Skills Start */}
 
-                    <ItSkills
+                    {/* <ItSkills
                       {...{ setItSkills, itskills }}
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}
-                    />
+                    /> */}
 
                     {/* It Skills Ends */}
 
                     {/* Projects Start */}
                     <Projects
-                      {...{ setProjects, projects }}
-                      data={resumeDetails.projects}
+                      {...{ setProjects, projects, setResumeDetails }}
+                      data={resumeDetails?.projects}
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}
@@ -1300,7 +1300,8 @@ function Jobmyresume() {
 
                     {/* Career Profile Start */}
                     <CareerProfile
-                      {...{ setCareerProfile, careerprofile }}
+                      {...{ setCareerProfile, careerprofile, setResumeDetails }}
+                      data={resumeDetails?.career_profile}
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}

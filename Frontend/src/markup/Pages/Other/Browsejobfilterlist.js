@@ -42,7 +42,6 @@ function Browsejobfilterlist() {
                     <h5 className='font-weight-700 pull-left text-uppercase'>
                       2269 Jobs Found
                     </h5>
-                  
                   </div>
                   <ul className='post-job-bx'>
                     {postBox.map((item, index) => (

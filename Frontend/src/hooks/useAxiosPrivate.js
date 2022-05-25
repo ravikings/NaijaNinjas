@@ -27,6 +27,7 @@ const useAxiosPrivate = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
+        console.log(prevRequest, "PrevRequest");
         if (
           error?.response?.status === 403 ||
           (error?.response?.status === 401 && !prevRequest?.sent)

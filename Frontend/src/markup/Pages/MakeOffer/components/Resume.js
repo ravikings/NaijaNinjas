@@ -39,7 +39,10 @@ function Resume({ data }) {
           {/* Key Skills Ends */}
 
           {/* Employment Start */}
-          <Employment isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} />
+          {/* {data.employment && ( */}
+          {true && (
+            <Employment isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} />
+          )}
 
           {/* Employment Ends */}
 
