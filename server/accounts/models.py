@@ -54,25 +54,30 @@ class RunnerProfile(models.Model):
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
 
+def upload_to_resume(instance, filename):
+    now = timezone.now()
+    base, extension = os.path.splitext(filename.lower())
+    milliseconds = now.microsecond // 1000
+    return f"documents/user/resume/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
 
 class RunnerResume(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"
     )
-    profile = models.ManyToManyField(
-        RunnerProfile, related_name="user_profile", blank=True
+    profile = models.ForeignKey(
+        RunnerProfile,null=True, on_delete=models.CASCADE, related_name="user_profile", blank=True
     )
     headline = models.CharField(max_length=255, blank=True, db_index=True)
-    skills = models.TextField(null=True, db_index=True, blank=True)
-    employment = models.TextField(null=True, db_index=True, blank=True)
-    education = models.TextField(null=True, db_index=True, blank=True)
-    projects = models.TextField(null=True, db_index=True, blank=True)
+    skills = models.JSONField(null=True)
+    employment = models.JSONField(null=True)
+    education = models.JSONField(null=True)
+    projects = models.JSONField(null=True)
     profile_summary = models.CharField(max_length=255, blank=True, db_index=True)
-    accomplishment = models.TextField(null=True, db_index=True, blank=True)
-    career_profile = models.TextField(null=True, db_index=True, blank=True)
+    accomplishment = models.JSONField(null=True)
+    career_profile = models.JSONField(null=True)
     postcode = models.CharField(max_length=55, blank=True, db_index=True)
     description = models.TextField(null=True, db_index=True)
-    attachment = models.FileField(upload_to="documents/%Y/%m/%d/", blank=True)
+    attachment = models.FileField(upload_to=upload_to_resume, blank=True)
 
 class Review(models.Model):
     author = models.ForeignKey(

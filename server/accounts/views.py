@@ -25,6 +25,8 @@ from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
 from asgiref.sync import async_to_sync
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from .models import (
     AccountUser,
     Photo,
@@ -48,10 +50,11 @@ from .serializers import (
     ResetPasswordEmailRequestSerializer,
     SetNewPasswordSerializer,
     UserOnlineSerializer,
-    ServiceSerializer
+    ServiceSerializer,
+    ProfileSerializerWithResume
 )
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class DashboardProfile(viewsets.ModelViewSet):
 
     """
@@ -65,6 +68,21 @@ class DashboardProfile(viewsets.ModelViewSet):
         
         data = RunnerProfile.objects.get_or_create(author_id=pk)
         serializer = ProfileSerializer(data[0])
+        return Response(serializer.data)
+
+class UserDashboardProfile(viewsets.ModelViewSet):
+    
+    """
+    dashboard serializers use for entry data for getting data to the ui
+    """
+
+    queryset = RunnerProfile.objects.all()
+    serializer_class = ProfileSerializer
+
+    def retrieve(self, request, pk=None):
+        
+        data = RunnerProfile.objects.get(author_id=pk)
+        serializer = ProfileSerializer(data)
         return Response(serializer.data)
 
 
@@ -89,7 +107,7 @@ def taskUpdate(request, pk):
         save_user_profile(profile, request)
 
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class DashboardResume(viewsets.ModelViewSet):
 
     """
@@ -107,6 +125,21 @@ class DashboardResume(viewsets.ModelViewSet):
         serializer = UserResumeSerializer(data[0])
         return Response(serializer.data)
 
+
+class UserDashboardResume(viewsets.ModelViewSet):
+    
+    """
+    uses to viewing resume for only runner dashboard
+    """
+
+    queryset = RunnerResume.objects.all()
+    serializer_class = UserResumeSerializer
+
+    def retrieve(self, request, pk=None):
+    
+        data = RunnerResume.objects.get(author_id=pk)
+        serializer = UserResumeSerializer(data)
+        return Response(serializer.data)
 
 
 def save_profile_resume(resume, request):
@@ -131,7 +164,7 @@ def resumeUpdate(request, pk):
 
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class AccountStatus(viewsets.ModelViewSet):
 
     """
@@ -148,7 +181,7 @@ class AccountStatus(viewsets.ModelViewSet):
 
         return AccountUser.objects.all()
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class PhotoUpload(viewsets.ModelViewSet):
 
     """
@@ -179,7 +212,7 @@ class VideoUpload(viewsets.ModelViewSet):
     serializer_class = VidoesSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ReviewView(viewsets.ModelViewSet):
 
     """
@@ -194,6 +227,8 @@ class ReviewView(viewsets.ModelViewSet):
         return Review.objects.filter(profile=self.request.user.id)
 
 
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class SearchProfile(viewsets.ModelViewSet):
 
     """
@@ -211,7 +246,7 @@ class SearchProfile(viewsets.ModelViewSet):
         "local_goverment_zone",
     ]
     queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileSearchSerializer
+    serializer_class = ProfileSerializerWithResume
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -239,7 +274,7 @@ def get_client_ip(request):
         ip = request.META.get("REMOTE_ADDR")
     return ip
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class UserSearchDetails(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
@@ -263,7 +298,7 @@ class UserSearchDetails(viewsets.ModelViewSet):
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ServiceView(viewsets.ModelViewSet):
     
     """
@@ -285,13 +320,13 @@ class TestView(viewsets.ModelViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileSearchSerializer
+    serializer_class = ProfileSerializerWithResume
     
-    def retrieve(self, request, pk=None):
+    # def retrieve(self, request, pk=None):
 
-        data = RunnerProfile.objects.get_or_create(author_id=pk)
-        serializer = UserProfileSearchSerializer(data[0])
-        return Response(serializer.data)
+    #     data = RunnerProfile.objects.get_or_create(author_id=pk)
+    #     serializer = UserProfileSearchSerializer(data[0])
+    #     return Response(serializer.data)
 
 
 class ActivateAccountView(APIView):
@@ -351,7 +386,6 @@ class ChangePasswordAccountView(APIView):
 
         except Exception as e:
             return Response({'error': f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class RequestPasswordResetEmail(generics.GenericAPIView):

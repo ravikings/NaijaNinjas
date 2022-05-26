@@ -16,6 +16,8 @@ from accounts.views import (
     SetProfilePassword,
     ChangeProfilePassword,
     ServiceView,
+    UserDashboardResume,
+    UserDashboardProfile,
     taskUpdate,
     resumeUpdate,
     TestView,
@@ -24,7 +26,9 @@ from accounts.views import (
 
 router = DefaultRouter()
 router.register(r"profile", DashboardProfile, basename="dashboard-profile")
+router.register(r"user-profile", UserDashboardProfile, basename="user-profile")
 router.register(r"resume", DashboardResume, basename="dashboard-resume")
+router.register(r"user-resume", UserDashboardResume, basename="user-resume")
 router.register(r"image", PhotoUpload, basename="dashboard-images")
 router.register(r"video", VideoUpload, basename="dashboard-videos")
 router.register(r"search", SearchProfile, basename="search")
