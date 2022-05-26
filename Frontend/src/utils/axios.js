@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 export default function createRequest() {
   return axios.create({
-    baseURL: `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev`,
+    baseURL: `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -16,7 +16,7 @@ export default function createRequest() {
 }
 
 export const axiosPrivate = axios.create({
-  baseURL: "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev",
+  baseURL: "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });

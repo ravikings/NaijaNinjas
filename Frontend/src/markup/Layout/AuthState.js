@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState , useEffect , useRef} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { Link, useHistory } from "react-router-dom";
 import Popover from "@material-ui/core/Popover";
@@ -22,40 +22,30 @@ function AuthState({ userDetails }) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
-  const [msgAnchorEl, setMsgAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notification, setNotification] = useState(false);
+  const [msgAnchorEl, setMsgAnchorEl] = useState(null);
 
-  const [onlineState, setOnlineState] = React.useState("Online");
+  const [onlineState, setOnlineState] = useState("Online");
+  
 
   // Notification start
   
-  const NotificationClick = (event) => {
-    setNotificationAnchorEl(event.currentTarget);
-  };
+  // const NotificationClick = (event) => {
+   
+  // };
 
-  const NotificationClose = () => {
-    setNotificationAnchorEl(null);
-  };
+  // const NotificationClose = () => {
+  
+  // };
 
-  const notificationOpen = Boolean(notificationAnchorEl);
-  const notificationId = notificationOpen ? 'simple-popover' : undefined;
+
 
   // Notification end
  
   // msg start
   
-  const MsgClick = (event) => {
-    setMsgAnchorEl(event.currentTarget);
-  };
-
-  const MsgClose = () => {
-    setMsgAnchorEl(null);
-  };
-
-  const MsgOpen = Boolean(msgAnchorEl);
-  const MsgId = MsgOpen ? 'simple-popover' : undefined;
-
+  
   // Notification end
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -81,148 +71,126 @@ function AuthState({ userDetails }) {
           style={{ padding: "10px 0px", width: 480 }}
         >
           <Divider orientation='vertical' flexItem />
-          <div>
-            <Badge badgeContent={4} color='primary' onClick={MsgClick}>
-           
-                <MailOutlineOutlinedIcon color='action' />
-             
-            </Badge>
-            <Popover
-        id={MsgId}
-        open={MsgOpen}
-        anchorEl={msgAnchorEl}
-        onClose={MsgClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-            <div className="cent">{/* Fold this div and try deleting evrything inbetween */}
-        <div className="sec new">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://c1.staticflickr.com/5/4007/4626436851_5629a97f30_b.jpg" />
-            </div>
-            <div className="txt">James liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/7 - 2:30 pm</div>
-          </a>
-        </div>
-        <div className="sec new">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://obamawhitehouse.archives.gov/sites/obamawhitehouse.archives.gov/files/styles/person_medium_photo/public/person-photo/amanda_lucidon22.jpg?itok=JFPi8OFJ" />
-            </div>
-            <div className="txt">Annita liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/7 - 2:13 pm</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3O45RK9qyCrZJivYsY6PmeVEJH07l7bkoolJmscBsNjzump27" />
-            </div>
-            <div className="txt">Brie liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/6 - 9:35 pm</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://c1.staticflickr.com/4/3725/10214643804_75c0b6eeab_b.jpg" />
-            </div>
-            <div className="txt">Madison liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/6 - 4:04 pm</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://upload.wikimedia.org/wikipedia/commons/5/52/NG_headshot_white_shirt_square_Jan18.jpg" />
-            </div>
-            <div className="txt">Ted liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/6 - 10:37 am</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Pat-headshot-square.jpg" />
-            </div>
-            <div className="txt">Tommas liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/5 - 7:30 pm</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="https://c1.staticflickr.com/8/7407/13785133614_6254abb8c4.jpg" />
-            </div>
-            <div className="txt">Claire liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/5 - 2:30 pm</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="//c1.staticflickr.com/1/185/440890151_54c5b920b0_b.jpg" />
-            </div>
-            <div className="txt">Jerimaiah liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/5 - 1:34 pm</div>
-          </a>
-        </div>
-        <div className="sec">
-          <a href="https://codepen.io/Golez/">
-            <div className="profCont">
-              <img className="profile" src="//c2.staticflickr.com/4/3397/3585544855_28442029a5_z.jpg?zz=1" />
-            </div>
-            <div className="txt">Debra liked your post: "Pure css notification box"</div>
-            <div className="txt sub">11/5 - 10:20 am</div>
-          </a>
-        </div>
-      </div>
-
-        </Popover>
+           {/*  User Notifications */}
+      <div className="header-widget hide-on-mobile">
+        {/* Notifications */}
+        <div className={notification ? "header-notifications active" : "header-notifications"}>
+          {/* Trigger */}
+          <div className="header-notifications-trigger">
+           <a href="#" onClick={()=>setNotification(!notification)}><i className="fa fa-bell-o " /><span className="bg-website">4</span></a>
           </div>
-          <div>
-          <Badge badgeContent={4} color='primary' onClick={NotificationClick}>
-             
-                <NotificationsNoneOutlinedIcon color='action' />
-        
-            </Badge>
-            <Popover
-        id={notificationId}
-        open={notificationOpen}
-        anchorEl={notificationAnchorEl}
-        onClose={NotificationClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-       <div className="notication-box">
-           <div className="notication-title">Notification</div>
-         
-         <div className="sec new">
-      
-          <div className="txt">Annita liked your post: "Pure css notification box"</div>
-          <div className="txt sub">11/7 - 2:13 pm</div>
-       
-      </div>
-         <div className="sec ">
-      
-          <div className="txt">Annita liked your post: "Pure css notification box"</div>
-          <div className="txt sub">11/7 - 2:13 pm</div>
-        
-      </div>
-         <div className="sec">
-       
-          <div className="txt">Annita liked your post: "Pure css notification box"</div>
-          <div className="txt sub">11/7 - 2:13 pm</div>
-        
-      </div>
-       </div>
-      </Popover>
+          {/* Dropdown */}
+          <div className="header-notifications-dropdown">
+            <div className="header-notifications-headline">
+              <h4>Notifications</h4>
+              <button className="mark-as-read ripple-effect-dark" title="Mark all as read" data-tippy-placement="left">
+                <i className="icon-feather-check-square" />
+              </button>
+            </div>
+            <div className="header-notifications-content">
+              <div className="header-notifications-scroll" data-simplebar>
+                <ul>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-manage-candidates.html">
+                      <span className="notification-icon"><i className="icon-material-outline-group" /></span>
+                      <span className="notification-text">
+                        <strong>Michael Shannah</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
+                      </span>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li>
+                    <a href="dashboard-manage-bidders.html">
+                      <span className="notification-icon"><i className=" icon-material-outline-gavel" /></span>
+                      <span className="notification-text">
+                        <strong>Gilbert Allanis</strong> placed a bid on your <span className="color">iOS App Development</span> project
+                      </span>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li>
+                    <a href="dashboard-manage-jobs.html">
+                      <span className="notification-icon"><i className="icon-material-outline-autorenew" /></span>
+                      <span className="notification-text">
+                        Your job listing <span className="color">Full Stack PHP Developer</span> is expiring.
+                      </span>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li>
+                    <a href="dashboard-manage-candidates.html">
+                      <span className="notification-icon"><i className="icon-material-outline-group" /></span>
+                      <span className="notification-text">
+                        <strong>Sindy Forrest</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
+        </div>
+        {/* Messages */}
+        <div className="header-notifications">
+          <div className="header-notifications-trigger">
+          <a href="#"><i className="fa fa-envelope-open-o" /><span className="bg-website">4</span></a>
+          </div>
+          {/* Dropdown */}
+          <div className="header-notifications-dropdown">
+            <div className="header-notifications-headline">
+              <h4>Messages</h4>
+              <button className="mark-as-read ripple-effect-dark" title="Mark all as read" data-tippy-placement="left">
+                <i className="icon-feather-check-square" />
+              </button>
+            </div>
+            <div className="header-notifications-content">
+              <div className="header-notifications-scroll" data-simplebar>
+                <ul>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-messages.html">
+                      <span className="notification-avatar status-online"><img src="images/user-avatar-small-03.jpg" alt="" /></span>
+                      <div className="notification-text">
+                        <strong>David Peterson</strong>
+                        <p className="notification-msg-text">Thanks for reaching out. I'm quite busy right now on many...</p>
+                        <span className="color">4 hours ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-messages.html">
+                      <span className="notification-avatar status-offline"><img src="images/user-avatar-small-02.jpg" alt="" /></span>
+                      <div className="notification-text">
+                        <strong>Sindy Forest</strong>
+                        <p className="notification-msg-text">Hi Tom! Hate to break it to you, but I'm actually on vacation until...</p>
+                        <span className="color">Yesterday</span>
+                      </div>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-messages.html">
+                      <span className="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt="" /></span>
+                      <div className="notification-text">
+                        <strong>Marcin Kowalski</strong>
+                        <p className="notification-msg-text">I received payment. Thanks for cooperation!</p>
+                        <span className="color">Yesterday</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <a href="dashboard-messages.html" className="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i className="icon-material-outline-arrow-right-alt" /></a>
+          </div>
+        </div>
+      </div>
+      {/*  User Notifications / End */}
+      {/* old notification start */}
+     
+          {/* old notificaton end */}
           <Divider orientation='vertical' flexItem />
           <div>
             <Avatar
