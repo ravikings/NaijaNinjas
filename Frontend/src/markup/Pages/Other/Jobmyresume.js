@@ -87,7 +87,7 @@ function Jobmyresume() {
     setLoading(true);
     try {
       const { data } = await createRequest().get(
-        `/api/v1/account/resume/${currentUser?.pk}/`
+        `/api/v1/account/user-resume/${currentUser?.pk}/`
       );
       console.log(data, "RESUME DATA");
       setResumeDetails(data);

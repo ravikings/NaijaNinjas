@@ -13,7 +13,7 @@ const useUpdateResume = () => {
     setLoading(true);
     try {
       const { data } = await axiosPrivate.put(
-        `/api/v1/account/resume/${resumeDetails.id}/`,
+        `/api/v1/account/user-resume/${resumeDetails.id}/`,
         {
           ...body,
           author: resumeDetails.author,
@@ -25,6 +25,7 @@ const useUpdateResume = () => {
       setIsResumeUpdate(true);
       toast.success(`Resume updated successfully`);
       setLoading(false);
+      return data;
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
