@@ -1430,7 +1430,7 @@ a.header-notifications-button {
 	color: #fff;
 	font-size: 14.7px;
 	padding: 12px 16px;
-	background-color: #66676b;
+	background-color: #2e55fa;
 	width: 100%;
 	display: block;
 	text-align: center;
@@ -1550,6 +1550,9 @@ ul.user-menu-small-nav li a i {
 
 ul.user-menu-small-nav li a:hover,
 ul.user-menu-small-nav li a:hover i { color: #66676b; }
+@media (max-width: 480px) {
+	.hide-on-mobile { display: none; }
+}
 
 
 /* User Status Section*/

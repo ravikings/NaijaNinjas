@@ -78,11 +78,13 @@ function MakeOfferPage() {
                     justifyContent='space-between'
                     style={{ height: "100%", padding: "5px 0px" }}
                   >
-                    <Grid item>
-                      <h4 style={{ marginBottom: 5 }}>
+                    <Grid item
+                    
+                    >
+                      <div style={{ marginBottom: 5 }}>
                         {user.first_name} {user.last_name}
-                      </h4>
-                      <h5 style={{ color: "gray" }}>iOS Expert + Node Dev</h5>
+                      </div>
+                      <div style={{ color: "gray" }}>iOS Expert + Node Dev</div>
                     </Grid>
                     <Hidden xsDown>
                       <Grid item>

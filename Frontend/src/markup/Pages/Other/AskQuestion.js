@@ -20,6 +20,7 @@ function AskQuestion (){
 	const history = useHistory();
 	const baseURL= `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
+	
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [detailsValue,setDetailsValue]= useState();
 	const [attachFile,setAttachFile]= useState(null);
@@ -35,6 +36,7 @@ function AskQuestion (){
 // upload image end	
 	const SubmitQuestion = (e)=>{
 		e.preventDefault();
+		console.log(token)
 		console.log("woow"+e.target[0].value);
 		console.log("woow"+e.target[1].value);
 		console.log("woow"+e.target[2].value);

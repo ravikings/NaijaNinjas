@@ -21,29 +21,17 @@ function AuthState({ userDetails }) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-
+  const notificatoinRef = useRef();
+  const msgRef = useRef();
   const [anchorEl, setAnchorEl] = useState(null);
   const [notification, setNotification] = useState(false);
-  const [msgAnchorEl, setMsgAnchorEl] = useState(null);
+  const [msg, setMsg] = useState(false);
+
 
   const [onlineState, setOnlineState] = useState("Online");
   
 
-  // Notification start
-  
-  // const NotificationClick = (event) => {
-   
-  // };
 
-  // const NotificationClose = () => {
-  
-  // };
-
-
-
-  // Notification end
- 
-  // msg start
   
   
   // Notification end
@@ -63,6 +51,21 @@ function AuthState({ userDetails }) {
     history.push("/");
   };
 
+  useEffect(() => {
+    function handler(event) {
+      if (!notificatoinRef.current?.contains(event.target)) {
+       
+        setNotification(false) 
+       
+      }
+      if (!msgRef.current?.contains(event.target)) {
+       
+        setMsg(false) 
+      }
+    }
+    window.addEventListener('click', handler)
+    return () => window.removeEventListener('click', handler)
+}, [])
   return (
     <div>
       {userDetails ? (
@@ -74,7 +77,7 @@ function AuthState({ userDetails }) {
            {/*  User Notifications */}
       <div className="header-widget hide-on-mobile">
         {/* Notifications */}
-        <div className={notification ? "header-notifications active" : "header-notifications"}>
+        <div ref={notificatoinRef} className={notification ? "header-notifications active" : "header-notifications"}>
           {/* Trigger */}
           <div className="header-notifications-trigger">
            <a href="#" onClick={()=>setNotification(!notification)}><i className="fa fa-bell-o " /><span className="bg-website">4</span></a>
@@ -83,9 +86,9 @@ function AuthState({ userDetails }) {
           <div className="header-notifications-dropdown">
             <div className="header-notifications-headline">
               <h4>Notifications</h4>
-              <button className="mark-as-read ripple-effect-dark" title="Mark all as read" data-tippy-placement="left">
-                <i className="icon-feather-check-square" />
-              </button>
+              <Link className="site-button  float-right" title="Mark all as read" data-tippy-placement="left">
+                <i className="fa fa-external-link" />
+              </Link>
             </div>
             <div className="header-notifications-content">
               <div className="header-notifications-scroll" data-simplebar>
@@ -132,17 +135,17 @@ function AuthState({ userDetails }) {
           </div>
         </div>
         {/* Messages */}
-        <div className="header-notifications">
+        <div ref={msgRef} className={msg ? "header-notifications active" : "header-notifications"}>
           <div className="header-notifications-trigger">
-          <a href="#"><i className="fa fa-envelope-open-o" /><span className="bg-website">4</span></a>
+          <a href="#"  onClick={()=>setMsg(!msg)}><i className="fa fa-envelope-open-o" /><span className="bg-website">4</span></a>
           </div>
           {/* Dropdown */}
           <div className="header-notifications-dropdown">
             <div className="header-notifications-headline">
               <h4>Messages</h4>
-              <button className="mark-as-read ripple-effect-dark" title="Mark all as read" data-tippy-placement="left">
-                <i className="icon-feather-check-square" />
-              </button>
+              <Link to="#" className="mark-as-read btn btn-primary float-right" title="Mark all as read" data-tippy-placement="left">
+                <i className="fa fa-external-link" />
+              </Link>
             </div>
             <div className="header-notifications-content">
               <div className="header-notifications-scroll" data-simplebar>
@@ -183,7 +186,7 @@ function AuthState({ userDetails }) {
                 </ul>
               </div>
             </div>
-            <a href="dashboard-messages.html" className="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i className="icon-material-outline-arrow-right-alt" /></a>
+            <a href="dashboard-messages.html" className="header-notifications-button ripple-effect button-sliding-icon ">View All Messages<i className="icon-material-outline-arrow-right-alt" /></a>
           </div>
         </div>
       </div>

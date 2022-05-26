@@ -59,7 +59,7 @@ function Header() {
       >
         <div className='sticky-header main-bar-wraper navbar-expand-lg'>
           <div className='main-bar clearfix'>
-            <div className='px-5 clearfix'>
+            <div className='px-3 clearfix'>
               <div className='logo-header mostion'>
                 <Link to={"/"}>
                   <img src={logo2} className='logo' alt='img' />
