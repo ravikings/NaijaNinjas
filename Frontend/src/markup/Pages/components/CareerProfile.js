@@ -4,29 +4,29 @@ import { Link } from "react-router-dom";
 import { Modal, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import useUpdateResume from "../MakeOffer/components/ResumeComponents/useUpdateResume";
+import moment from "moment";
 
 const CareerProfile = ({
   setCareerProfile,
   careerprofile,
   setResumeDetails,
   data,
-  isLoggedIn,
-  user,
-  owner,
 }) => {
   const [startDate, setStartDate] = useState(new Date());
-  const [updatedCareerProfile, setUpdatedCareerProfile] = useState({
-    industry: "",
-    functionalArea: "",
-    role: "",
-    jobType: "",
-    employmentType: "",
-    preferredShift: "",
-    expectedSalary: "",
-    desiredLocation: "",
-    desiredIndustry: "",
-    availability: startDate,
-  });
+  const [updatedCareerProfile, setUpdatedCareerProfile] = useState(
+    data || {
+      industry: "",
+      functionalArea: "",
+      role: "",
+      jobType: "",
+      employmentType: "",
+      preferredShift: "",
+      expectedSalary: "",
+      desiredLocation: "",
+      desiredIndustry: "",
+      availability: startDate,
+    }
+  );
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUpdatedCareerProfile({ ...updatedCareerProfile, [name]: value });
@@ -34,7 +34,7 @@ const CareerProfile = ({
   const reqUpdateResume = useUpdateResume();
   const handleSubmit = async () => {
     await reqUpdateResume.callAPI({
-      body: { careerprofile: updatedCareerProfile },
+      body: { career_profile: updatedCareerProfile },
       setResumeDetails,
     });
     setCareerProfile(false);
@@ -84,6 +84,7 @@ const CareerProfile = ({
                         defaultValue={updatedCareerProfile?.industry}
                         onChange={(e) => handleChange(e)}
                       >
+                        <option value=''>Select Industry</option>
                         <option>Accounting / Finance</option>
                         <option>Banking / Financial Services / Broking</option>
                         <option>Education / Teaching / Training</option>
@@ -102,6 +103,7 @@ const CareerProfile = ({
                         defaultValue={updatedCareerProfile?.functionalArea}
                         onChange={(e) => handleChange(e)}
                       >
+                        <option value=''>Select Functional Area</option>
                         <option>Agent</option>
                         <option>Architecture / Interior Design</option>
                         <option>Beauty / Fitness / Spa Services</option>
@@ -121,6 +123,7 @@ const CareerProfile = ({
                         onChange={(e) => handleChange(e)}
                         as='select'
                       >
+                        <option value=''>Select Role</option>
                         <option>Creative</option>
                         <option>Web Designer</option>
                         <option>Graphic Designer</option>
@@ -373,6 +376,7 @@ const CareerProfile = ({
                         value={updatedCareerProfile?.desiredLocation}
                         onChange={(e) => handleChange(e)}
                       >
+                        <option value=''>Select Location</option>
                         <option>India</option>
                         <option>Australia</option>
                         <option>Bahrain</option>
@@ -394,6 +398,7 @@ const CareerProfile = ({
                         value={updatedCareerProfile?.desiredIndustry}
                         onChange={(e) => handleChange(e)}
                       >
+                        <option value=''>Select Industry</option>
                         <option>Software</option>
                         <option>Factory</option>
                         <option>Ngo</option>
@@ -446,14 +451,7 @@ const CareerProfile = ({
             <div className='clearfix m-b20'>
               <label className='m-b0'>Availability to Join</label>
               <span className='clearfix font-13'>
-                {new Date(data?.availabilityToJoin).toLocaleDateString(
-                  "en-US",
-                  {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  }
-                )}
+                {moment(data?.availabilityToJoin).format("MMMM Do YYYY")}
               </span>
             </div>
             <div className='clearfix m-b20'>
@@ -472,7 +470,7 @@ const CareerProfile = ({
             </div>
             <div className='clearfix m-b20'>
               <label className='m-b0'>Desired Shift</label>
-              <span className='clearfix font-13'>{data?.desiredShift}</span>
+              <span className='clearfix font-13'>{data?.preferredShift}</span>
             </div>
             <div className='clearfix m-b20'>
               <label className='m-b0'>Expected Salary</label>
