@@ -88,12 +88,12 @@ function Resume({ data }) {
           />
           {/* Career Profile End */}
 
-          {/* Personal Details Start */}
+          {/* Personal Details Start
           <PersonalDetails
             isLoggedIn={true}
             user={{ id: 1 }}
             owner={{ id: 1 }}
-          />
+          /> */}
           {/* Career Profile End */}
         </div>
       )}

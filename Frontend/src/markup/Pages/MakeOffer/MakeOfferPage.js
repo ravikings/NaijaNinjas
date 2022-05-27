@@ -44,7 +44,7 @@ function MakeOfferPage() {
   const getResume = async () => {
     try {
       const { data } = await createRequest().get(
-        `/api/v1/account/resume/${id}/`
+        `/api/v1/account/user-resume/${id}/`
       );
       setResume(data);
     } catch (error) {

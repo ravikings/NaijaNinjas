@@ -1309,7 +1309,7 @@ function Jobmyresume() {
                     {/* Career Profile End */}
 
                     {/* Personal Details Start */}
-                    <PersonalDetails
+                    {/* <PersonalDetails
                       {...{
                         setPersonalDetails,
                         personaldetails,
@@ -1319,7 +1319,7 @@ function Jobmyresume() {
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}
-                    />
+                    /> */}
                     {/* Career Profile End */}
 
                     <div

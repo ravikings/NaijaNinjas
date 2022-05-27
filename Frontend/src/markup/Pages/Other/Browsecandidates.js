@@ -189,7 +189,7 @@ function Browsecandidates() {
                                 <h4>
                                   <Link
                                     to={{
-                                      pathname: `/make-offer/${item.id}`,
+                                      pathname: `/make-offer/${item.author}`,
                                       state: {
                                         id: item.author,
                                       },
@@ -256,7 +256,7 @@ function Browsecandidates() {
                                 {console.log(item, "item")}
                                 <Link
                                   to={{
-                                    pathname: `/make-offer/${item.id}`,
+                                    pathname: `/make-offer/${item.author}`,
                                     state: {
                                       id: item.author,
                                     },

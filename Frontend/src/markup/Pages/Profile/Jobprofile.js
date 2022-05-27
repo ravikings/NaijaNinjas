@@ -54,6 +54,10 @@ function Jobprofile() {
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
+    console.log(userDetails, "sended");
+  }, [userDetails]);
+
+  useEffect(() => {
     if (currentUser && !userProfile && !userDetails) {
       console.log(userProfile, "sended");
       console.log("sended user");
@@ -68,7 +72,6 @@ function Jobprofile() {
   useEffect(() => {
     if (userDetails && !userProfile) {
       console.log("sended details");
-      //   dispatch(setProfileData(userDetails));
       dispatch({
         type: authActionTypes.USER_PROFILE,
         payload: userDetails,
