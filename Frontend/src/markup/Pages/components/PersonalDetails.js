@@ -43,7 +43,7 @@ const PersonalDetails = ({
     e.preventDefault();
     await reqUpdateResume.callAPI({
       body: {
-        profile: updatedPersonalDetails,
+        profile_summary: updatedPersonalDetails,
       },
       setResumeDetails,
     });
