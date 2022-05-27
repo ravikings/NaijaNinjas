@@ -1310,7 +1310,12 @@ function Jobmyresume() {
 
                     {/* Personal Details Start */}
                     <PersonalDetails
-                      {...{ setPersonalDetails, personaldetails }}
+                      {...{
+                        setPersonalDetails,
+                        personaldetails,
+                        setResumeDetails,
+                      }}
+                      data={resumeDetails?.profile}
                       isLoggedIn={true}
                       user={{ id: 1 }}
                       owner={{ id: 1 }}
