@@ -24,7 +24,7 @@ function Resume({ data }) {
           {/* Headline Section Start */}
 
           <Headline
-            headline={data.headline}
+            headline={data?.headline}
             isLoggedIn={false}
             user={{ id: 1 }}
             owner={{ id: 6 }}
@@ -34,43 +34,58 @@ function Resume({ data }) {
 
           {/* Key Skills Start */}
 
-          <Skills isLoggedIn={false} user={{ id: 1 }} owner={{ id: 6 }} />
+          <Skills
+            data={data?.skills}
+            isLoggedIn={false}
+            user={{ id: 1 }}
+            owner={{ id: 6 }}
+          />
 
           {/* Key Skills Ends */}
 
           {/* Employment Start */}
           {/* {data.employment && ( */}
-          {true && (
-            <Employment isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} />
-          )}
+
+          <Employment
+            data={data?.employment}
+            isLoggedIn={true}
+            user={{ id: 1 }}
+            owner={{ id: 1 }}
+          />
 
           {/* Employment Ends */}
 
           {/* Education Start */}
-          {data.education && (
-            <Education isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} />
-          )}
+          <Education
+            data={data?.education}
+            isLoggedIn={true}
+            user={{ id: 1 }}
+            owner={{ id: 1 }}
+          />
 
           {/* Education Ends */}
 
           {/* It Skills Start */}
 
-          <ItSkills isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} />
+          {/* <ItSkills isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} /> */}
 
           {/* It Skills Ends */}
 
           {/* Projects Start */}
-          {data.projects !== "FALSE" && <Projects />}
+          <Projects data={data?.projects} />
           {/* Projects End */}
 
           {/* Projects Start */}
-          {data.profile_summary && (
-            <ProfileSummary summary={data.profile_summary} />
-          )}
+          <ProfileSummary summary={data.profile_summary} />
           {/* Projects End */}
 
           {/* Career Profile Start */}
-          <CareerProfile isLoggedIn={true} user={{ id: 1 }} owner={{ id: 1 }} />
+          <CareerProfile
+            data={data?.career_profile}
+            isLoggedIn={true}
+            user={{ id: 1 }}
+            owner={{ id: 1 }}
+          />
           {/* Career Profile End */}
 
           {/* Personal Details Start */}

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const ProfileSummary = ({ summary }) => {
   return (
@@ -10,12 +9,6 @@ const ProfileSummary = ({ summary }) => {
       <p className='m-b0'>{summary}</p>
     </div>
   );
-};
-
-ProfileSummary.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  user: PropTypes.any,
-  owner: PropTypes.any,
 };
 
 export default ProfileSummary;
