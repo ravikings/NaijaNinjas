@@ -90,23 +90,23 @@ class ProfileSerializerWithResume(serializers.ModelSerializer):
     """
 
     user_profile = UserResumeSerializer(read_only=True, many=True)
-    a_runner = serializers.SerializerMethodField()
+    #a_runner = serializers.SerializerMethodField()
     class Meta:
         model = RunnerProfile
-        fields = "__all__"
+        exclude = ("address",)
 
-    def get_a_runner(self, instance):
+    # def get_a_runner(self, instance):
     
-        return AccountUser.objects.filter(id=instance.author_id).values("is_a_runner")
+    #     return AccountUser.objects.filter(id=instance.author_id).values("is_a_runner")
 
-    def to_representation(self, instance):
-        """Convert `username` to lowercase."""
-        data = super().to_representation(instance)
-        #TODO: uncomment in the future to return only runner resume
-        # runner = data.get("a_runner")
-        # if not runner[0].get("is_a_runner"):
-        #     return None
-        return data
+    # def to_representation(self, instance):
+    #     """Convert `username` to lowercase."""
+    #     data = super().to_representation(instance)
+    #     #TODO: uncomment in the future to return only runner resume
+    #     # runner = data.get("a_runner")
+    #     # if not runner[0].get("is_a_runner"):
+    #     #     return None
+    #     return data
 
 class PhotosSerializer(serializers.ModelSerializer):
     """

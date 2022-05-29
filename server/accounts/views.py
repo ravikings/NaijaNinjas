@@ -245,7 +245,7 @@ class SearchProfile(viewsets.ModelViewSet):
         "city",
         "local_goverment_zone",
     ]
-    queryset = RunnerProfile.objects.all()
+    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
     serializer_class = ProfileSerializerWithResume
     filter_backends = [
         DjangoFilterBackend,
@@ -319,14 +319,14 @@ class TestView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = RunnerProfile.objects.all()
+    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
     serializer_class = ProfileSerializerWithResume
     
-    # def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None):
 
-    #     data = RunnerProfile.objects.get_or_create(author_id=pk)
-    #     serializer = UserProfileSearchSerializer(data[0])
-    #     return Response(serializer.data)
+        data = RunnerProfile.objects.get(author=pk)
+        serializer = ProfileSerializerWithResume(data)
+        return Response(serializer.data)
 
 
 class ActivateAccountView(APIView):
