@@ -71,7 +71,7 @@ function AuthState({ userDetails }) {
       {userDetails ? (
         <div
           className='extra-nav d-flex align-items-center justify-content-between'
-          style={{ padding: "10px 0px", width: 480 }}
+          style={{ padding: "10px 0px", width: '480' }}
         >
           <Divider orientation='vertical' flexItem />
            {/*  User Notifications */}
@@ -186,7 +186,7 @@ function AuthState({ userDetails }) {
                 </ul>
               </div>
             </div>
-            <a href="dashboard-messages.html" className="header-notifications-button ripple-effect button-sliding-icon ">View All Messages<i className="icon-material-outline-arrow-right-alt" /></a>
+            <a href="#" className="header-notifications-button ripple-effect button-sliding-icon ">View All Messages<i className="icon-material-outline-arrow-right-alt" /></a>
           </div>
         </div>
       </div>

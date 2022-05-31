@@ -1160,13 +1160,22 @@ background-color: #0347ac;
 }
 
 /* mobile view start*/
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 580px) {
   .project-edit-btn{
     bottom:30%;
     right:5%;
 
   }
+  .mobile-notification {
+    display:inline !important;
+  }
+  .extra-nav{
+    width:100% !important;
+  }
+
 }
+/* mobile view start*/
+
 /* mobile view end*/
 
 
@@ -1174,11 +1183,11 @@ background-color: #0347ac;
 /* Header Notifications
 ------------------------------------- */
 .header-notifications {
-	height: 100%;
-	display: inline-block;
-	padding-right: 15px;
-	position: relative;
-  top:7px;
+  height: 100%;
+  display: inline-block;
+  padding-right: 24px;
+  position: relative;
+  top: 16px;
 }
 
 .header-notifications:last-child { margin-right: -15px; }
@@ -1638,4 +1647,22 @@ ul.user-menu-small-nav li a:hover i { color: #66676b; }
 
 .status-switch label.current-status {
 	color: #fff;
+}
+.mobile-notification{
+  position: absolute;
+  right: 15%;
+  top: 10px;
+  display:none;
+}
+.mobile-notification a{
+  padding: 0 10px;
+  font-size: 20px;
+  color: #333;
+}
+.mobile-notification a sup{
+  font-size: 14px;
+    background-color: blue;
+    padding: 0 5px;
+    color: #fff;
+    border-radius: 35px;
 }

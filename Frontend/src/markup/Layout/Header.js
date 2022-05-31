@@ -4,11 +4,12 @@ import logo2 from "./../../images/logo.png";
 import AuthState from "./AuthState";
 import LoginDialog from "./LoginDialog";
 import { useSelector } from "react-redux";
-
+import Modal from 'react-bootstrap/Modal'
 function Header() {
   const userDetails = useSelector((state) => state.authReducer.currentUser);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
-
+  const [lgShow, setLgShow] = useState(false);
+  const [msg, setMsg] = useState(false);
   const handleClose = () => {
     setShowLoginDialog(false);
   };
@@ -65,7 +66,14 @@ function Header() {
                   <img src={logo2} className='logo' alt='img' />
                 </Link>
               </div>
-
+              {userDetails ?
+            <div className="mobile-notification">
+            <a href="#"  onClick={() => setLgShow(true)}>
+              <i className="fa fa-bell-o " /><sup className="bg-website">4</sup></a>
+            <a href="#" onClick={() => setMsg(true)}>
+              <i className="fa fa-envelope-open-o " /><sup className="bg-website">4</sup></a>
+            </div>
+            : null }
               <button
                 className='navbar-toggler collapsed navicon  justify-content-end'
                 type='button'
@@ -116,6 +124,133 @@ function Header() {
         showLoginDialog={showLoginDialog}
         handleClose={handleClose}
       />
+
+<Modal
+    size="sm"
+    show={lgShow}
+    onHide={() => setLgShow(false)}
+    aria-labelledby="example-modal-sizes-title-lg"
+    backdropClassName="project-modal"
+  >
+      <Modal.Header className="header-notifications-headline bg-white"   closeButton>
+
+              <h4>Notifications</h4>
+             
+          
+    </Modal.Header>
+    <Modal.Body >
+                  
+   
+            
+            <div className="header-notifications-content">
+              <div className="header-notifications-scroll" data-simplebar>
+                <ul>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-manage-candidates.html">
+                      <span className="notification-icon"><i className="icon-material-outline-group" /></span>
+                      <span className="notification-text">
+                        <strong>Michael Shannah</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
+                      </span>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li>
+                    <a href="dashboard-manage-bidders.html">
+                      <span className="notification-icon"><i className=" icon-material-outline-gavel" /></span>
+                      <span className="notification-text">
+                        <strong>Gilbert Allanis</strong> placed a bid on your <span className="color">iOS App Development</span> project
+                      </span>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li>
+                    <a href="dashboard-manage-jobs.html">
+                      <span className="notification-icon"><i className="icon-material-outline-autorenew" /></span>
+                      <span className="notification-text">
+                        Your job listing <span className="color">Full Stack PHP Developer</span> is expiring.
+                      </span>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li>
+                    <a href="dashboard-manage-candidates.html">
+                      <span className="notification-icon"><i className="icon-material-outline-group" /></span>
+                      <span className="notification-text">
+                        <strong>Sindy Forrest</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        
+  
+    </Modal.Body>
+  </Modal>
+
+
+{/* message start */}
+
+<Modal
+    size="sm"
+    show={msg}
+    onHide={() => setMsg(false)}
+    aria-labelledby="example-modal-sizes-title-lg"
+    backdropClassName="project-modal"
+  >
+      <Modal.Header className="header-notifications-headline bg-white"   closeButton>
+
+      <h4>Messages</h4>
+             
+          
+    </Modal.Header>
+    <Modal.Body className="p-0">
+                  
+    <div className="header-notifications-content">
+              <div className="header-notifications-scroll" data-simplebar>
+                <ul>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-messages.html">
+                      <span className="notification-avatar status-online"><img src="images/user-avatar-small-03.jpg" alt="" /></span>
+                      <div className="notification-text">
+                        <strong>David Peterson</strong>
+                        <p className="notification-msg-text">Thanks for reaching out. I'm quite busy right now on many...</p>
+                        <span className="color">4 hours ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-messages.html">
+                      <span className="notification-avatar status-offline"><img src="images/user-avatar-small-02.jpg" alt="" /></span>
+                      <div className="notification-text">
+                        <strong>Sindy Forest</strong>
+                        <p className="notification-msg-text">Hi Tom! Hate to break it to you, but I'm actually on vacation until...</p>
+                        <span className="color">Yesterday</span>
+                      </div>
+                    </a>
+                  </li>
+                  {/* Notification */}
+                  <li className="notifications-not-read">
+                    <a href="dashboard-messages.html">
+                      <span className="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt="" /></span>
+                      <div className="notification-text">
+                        <strong>Marcin Kowalski</strong>
+                        <p className="notification-msg-text">I received payment. Thanks for cooperation!</p>
+                        <span className="color">Yesterday</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <a href="#" className="header-notifications-button ripple-effect button-sliding-icon ">View All Messages<i className="icon-material-outline-arrow-right-alt" /></a>
+  
+    </Modal.Body>
+  </Modal>
+{/* message end */}
     </>
   );
 }
