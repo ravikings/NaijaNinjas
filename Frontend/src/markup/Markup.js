@@ -72,6 +72,8 @@ import AddServices from "./Pages/Other/AddServices";
 import UserServices from "./Pages/Other/UserServices";
 import AddProject from "./Pages/Other/AddProject";
 import UserProject from "./Pages/Other/UserProject";
+import SendOfferPage from "./Pages/MakeOffer/SendOfferPage";
+import SendContract from "./Pages/Other/SendContract";
 
 class Markup extends Component {
   render() {
@@ -260,6 +262,9 @@ class Markup extends Component {
               exact
               component={UserProject}
             />
+
+<Route path='/send-offer' exact component={SendOfferPage} />
+<Route path='/send-contract' exact component={SendContract} />
           </Switch>
         </div>
         <ScrollToTop />

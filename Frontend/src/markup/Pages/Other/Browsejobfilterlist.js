@@ -58,7 +58,7 @@ function Browsejobfilterlist() {
                             </div>
                             <div className='job-post-info'>
                               <h4>
-                                <Link to={"/make-offer"}>
+                                <Link to={"/send-offer"}>
                                   Digital Marketing Executive
                                 </Link>
                               </h4>
@@ -82,7 +82,7 @@ function Browsejobfilterlist() {
                               <p className='h-100'>
                                 {dummyText.substring(0, 150)} ...{"  "}
                                 <Link
-                                  to={"/make-offer"}
+                                  to={"/send-offer"}
                                   className='text-primary'
                                 >
                                   See more
