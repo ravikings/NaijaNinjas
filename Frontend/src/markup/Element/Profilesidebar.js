@@ -1,13 +1,81 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
+import { useDispatch, useSelector } from "react-redux";
+import createRequest, { sendImage } from "../../utils/axios";
+import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage";
+import { BASE_URL } from "../../utils/constants";
+import { toast } from "react-toastify";
+import { authActionTypes } from "../Pages/Auth/Redux/AuthActions";
 
-// function ProfileSidebar({ active }) {
-//   const [showManage, setShowManage] = useState(false);
-//   const [showQuestion, setShowQuestion] = useState(false);
-function ProfileSidebar({ active, showManageProp = false }) {
+function ProfileSidebar({
+  userProfile: profile,
+  author,
+  userID,
+  active,
+  showManageProp = false,
+}) {
   const [showManage, setShowManage] = useState(showManageProp);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [imageState, setImageState] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+
+  const dispatch = useDispatch();
+  const { userProfile, userStatus, currentUser } = useSelector(
+    (state) => state.authReducer
+  );
+
+  useEffect(() => {
+    if (userDetails) {
+      dispatch({
+        type: authActionTypes.USER_PROFILE,
+        payload: userDetails,
+      });
+    }
+  }, [userDetails]);
+
+  // Custom Hooks
+  const imageSendAPI = useAxiosPrivateImage();
+
+  const getUserDetails = () => {
+    console.log("sended");
+    createRequest()
+      .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
+      .then(({ data }) => {
+        setUserDetails(data);
+      })
+      .catch((e) => {
+        toast.error(e.response?.data?.message || "Unknown Error");
+        console.log(e);
+      });
+  };
+
+  const sendImage = async () => {
+    if (imageState) {
+      try {
+        const formData = new FormData();
+        formData.append("photo", imageState);
+        formData.append("author", author);
+        await imageSendAPI.patch(
+          `/api/v1/account/user-profile/${userID}/`,
+          formData
+        );
+        setImageState("");
+        getUserDetails();
+        toast.success("Image Uploaded");
+        console.log("useUserProfile");
+      } catch (error) {
+        console.log(error, "IMAGESENT");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (imageState) {
+      sendImage();
+    }
+  }, [imageState]);
+
   return (
     <div className='col-xl-3 col-lg-4 m-b30'>
       <div className='sticky-top'>
@@ -15,26 +83,43 @@ function ProfileSidebar({ active, showManageProp = false }) {
           <div className='candidate-detail text-center'>
             <div className='canditate-des'>
               <Link to={""}>
-                <img alt='' src={require("./../../images/team/pic1.jpg")} />
+                <img alt={profile.first_name} src={BASE_URL + profile.photo} />
               </Link>
-              <div
-                className='upload-link'
-                title='update'
-                data-toggle='tooltip'
-                data-placement='right'
-              >
-                <input type='file' className='update-flie' />
-                <i className='fa fa-camera'></i>
-              </div>
+              <form>
+                <div
+                  className='upload-link'
+                  title='update'
+                  data-toggle='tooltip'
+                  data-placement='right'
+                >
+                  <input
+                    type='file'
+                    name='photo'
+                    className='update-flie'
+                    accept='image/jpeg,image/png,image/gif'
+                    onChange={(e) => {
+                      setImageState(e.target.files[0]);
+                    }}
+                  />
+                  <i className='fa fa-camera'></i>
+                </div>
+              </form>
             </div>
             <div className='candidate-title'>
               <div className=''>
-                <h4 className='m-b5'>
-                  <Link to={""}>David Matin</Link>
-                </h4>
-                <p className='m-b0'>
-                  <Link to={""}>Web developer</Link>
-                </p>
+                {userProfile.first_name && (
+                  <h4 className='m-b5'>
+                    <Link to={""} onClick={(e) => e.preventDefault()}>
+                      {userProfile.first_name}{" "}
+                      {userProfile.last_name && userProfile.last_name}
+                    </Link>
+                  </h4>
+                )}
+                {userProfile.title && (
+                  <p className='m-b0'>
+                    <Link to={""}>{userProfile.title}</Link>
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -54,12 +139,14 @@ function ProfileSidebar({ active, showManageProp = false }) {
                 <span>Messages</span>
               </Link>
             </li>
-            <li>
-              <Link to={"/jobs-my-resume"}>
-                <i className='fa fa-file-text-o' aria-hidden='true'></i>
-                <span>My Resume</span>
-              </Link>
-            </li>
+            {userStatus.is_a_runner && (
+              <li>
+                <Link to={"/jobs-my-resume"}>
+                  <i className='fa fa-file-text-o' aria-hidden='true'></i>
+                  <span>My Resume</span>
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 to={"/jobs-saved-jobs"}
@@ -130,10 +217,7 @@ function ProfileSidebar({ active, showManageProp = false }) {
               </Link>
             </li>
             <li>
-              <Link
-              
-                to={"/post-ads"}
-              >
+              <Link to={"/post-ads"}>
                 <i className='fa fa-handshake-o' aria-hidden='true'></i>
                 <span>Post Ad</span>
               </Link>

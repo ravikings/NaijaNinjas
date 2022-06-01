@@ -12,9 +12,10 @@ import SocialMedia from "./components/SocialMedia";
 import Skills from "./components/Skills";
 import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
-import { useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -36,19 +37,37 @@ const blogGrid = [
 function MakeOfferPage() {
   const classes = useStyles();
   const { id } = useParams();
+  const history = useHistory();
   const [user, setUser] = React.useState(null);
+  const [resume, setResume] = React.useState(null);
+
+  const getResume = async () => {
+    try {
+      const { data } = await createRequest().get(
+        `/api/v1/account/user-resume/${id}/`
+      );
+      setResume(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     handleRequest();
+    getResume();
   }, [id]);
 
   const handleRequest = async () => {
     console.log(id, "item");
-    const res = await createRequest().get(
-      `/api/v1/account/user-search-detials/${id}/`
-    );
-    setUser(res.data);
-    console.log(res.data);
+    try {
+      const res = await createRequest().get(
+        `/api/v1/account/user-search-detials/${id}/`
+      );
+      setUser(res.data);
+    } catch (error) {
+      toast.error("Something went wrong");
+      history.push("/");
+    }
   };
 
   return (
@@ -103,7 +122,7 @@ function MakeOfferPage() {
           <div className={classes.main}>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12} md={7} lg={8}>
-                <TabsGroup data={user.description} />
+                <TabsGroup data={user.description} resume={resume} />
                 <Feedback />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
