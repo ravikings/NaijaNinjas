@@ -1,79 +1,79 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
-import { useSelector } from "react-redux";
-import { sendImage } from "../../utils/axios";
+import { useDispatch, useSelector } from "react-redux";
+import createRequest, { sendImage } from "../../utils/axios";
 import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage";
+import { BASE_URL } from "../../utils/constants";
+import { toast } from "react-toastify";
+import { authActionTypes } from "../Pages/Auth/Redux/AuthActions";
 
-// function ProfileSidebar({ active }) {
-//   const [showManage, setShowManage] = useState(false);
-//   const [showQuestion, setShowQuestion] = useState(false);
-function ProfileSidebar({ author, userID, active, showManageProp = false }) {
+function ProfileSidebar({
+  userProfile: profile,
+  author,
+  userID,
+  active,
+  showManageProp = false,
+}) {
   const [showManage, setShowManage] = useState(showManageProp);
   const [showQuestion, setShowQuestion] = useState(false);
   const [imageState, setImageState] = useState(null);
-  const [dataToSend, setDataToSend] = useState("");
+  const [userDetails, setUserDetails] = useState(null);
+
+  const dispatch = useDispatch();
+  const { userProfile, userStatus, currentUser } = useSelector(
+    (state) => state.authReducer
+  );
+
+  useEffect(() => {
+    if (userDetails) {
+      dispatch({
+        type: authActionTypes.USER_PROFILE,
+        payload: userDetails,
+      });
+    }
+  }, [userDetails]);
+
+  // Custom Hooks
   const imageSendAPI = useAxiosPrivateImage();
 
+  const getUserDetails = () => {
+    console.log("sended");
+    createRequest()
+      .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
+      .then(({ data }) => {
+        setUserDetails(data);
+      })
+      .catch((e) => {
+        toast.error(e.response?.data?.message || "Unknown Error");
+        console.log(e);
+      });
+  };
+
   const sendImage = async () => {
-    const controller = new AbortController();
-
-    try {
-      const formData = new FormData();
-
-      // const getFormData = (object) =>
-      //   Object.keys(object).reduce((formData, key) => {
-      //     formData.append(key, object[key], "ABC.jpg");
-      //     return formData;
-      //   }, new FormData());
-      // const data = getFormData(imageState);
-      formData.append("photo", imageState, "ABC.jpg");
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1], "IMAGESENT");
-      }
-      console.log(author, "IMAGESENT");
-      console.log(userID, "IMAGESENT");
-      console.log(formData, "IMAGESENT");
-      const res = await imageSendAPI.patch(
-        `/api/v1/account/user-profile/${userID}/`,
-        {
-          photo: formData,
-          author,
-        }
-      );
-      setImageState("");
-      console.log(res, "IMAGESENT");
-    } catch (error) {
-      console.log(error, "IMAGESENT");
-    }
-  };
-
-  useEffect(() => {
-    console.log(dataToSend);
-  }, [dataToSend]);
-
-  useEffect(() => {
-    console.log(imageState, "IMAGESENT");
-    sendImage();
-    // sendImage(imageState, userID, author);
-  }, [imageState]);
-
-  const { userProfile, userStatus } = useSelector((state) => state.authReducer);
-
-  const makingDataToFormData = () => {
-    const formData = new FormData();
     if (imageState) {
-      for (let key in imageState) {
-        formData.append(key, imageState[key]);
+      try {
+        const formData = new FormData();
+        formData.append("photo", imageState);
+        formData.append("author", author);
+        await imageSendAPI.patch(
+          `/api/v1/account/user-profile/${userID}/`,
+          formData
+        );
+        setImageState("");
+        getUserDetails();
+        toast.success("Image Uploaded");
+        console.log("useUserProfile");
+      } catch (error) {
+        console.log(error, "IMAGESENT");
       }
     }
-    console.log(formData);
-    return formData;
   };
 
   useEffect(() => {
-    const formData = makingDataToFormData(imageState);
-    setDataToSend(formData);
+    if (imageState) {
+      sendImage();
+    }
   }, [imageState]);
 
   return (
@@ -83,7 +83,7 @@ function ProfileSidebar({ author, userID, active, showManageProp = false }) {
           <div className='candidate-detail text-center'>
             <div className='canditate-des'>
               <Link to={""}>
-                <img alt='' src={require("./../../images/team/pic1.jpg")} />
+                <img alt={profile.first_name} src={BASE_URL + profile.photo} />
               </Link>
               <form>
                 <div

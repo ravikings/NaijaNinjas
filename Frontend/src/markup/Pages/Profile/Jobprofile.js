@@ -49,7 +49,6 @@ function Jobprofile() {
     (state) => state.authReducer
   );
   const dispatch = useDispatch();
-
   const [userDetails, setUserDetails] = useState(null);
   const axiosPrivate = useAxiosPrivate();
 
@@ -142,6 +141,7 @@ function Jobprofile() {
                 <div className='row'>
                   {userProfile && (
                     <ProfileSidebar
+                      userProfile={userProfile}
                       author={userProfile?.author}
                       userID={userDetails?.id}
                       active={"Profile"}
