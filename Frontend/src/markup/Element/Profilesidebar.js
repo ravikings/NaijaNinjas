@@ -1,16 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Collapse from "@material-ui/core/Collapse";
 import { useSelector } from "react-redux";
+import { sendImage } from "../../utils/axios";
+import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage";
 
 // function ProfileSidebar({ active }) {
 //   const [showManage, setShowManage] = useState(false);
 //   const [showQuestion, setShowQuestion] = useState(false);
-function ProfileSidebar({ active, showManageProp = false }) {
+function ProfileSidebar({ author, userID, active, showManageProp = false }) {
   const [showManage, setShowManage] = useState(showManageProp);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [imageState, setImageState] = useState(null);
+  const [dataToSend, setDataToSend] = useState("");
+  const imageSendAPI = useAxiosPrivateImage();
+
+  const sendImage = async () => {
+    const controller = new AbortController();
+
+    try {
+      const formData = new FormData();
+
+      // const getFormData = (object) =>
+      //   Object.keys(object).reduce((formData, key) => {
+      //     formData.append(key, object[key], "ABC.jpg");
+      //     return formData;
+      //   }, new FormData());
+      // const data = getFormData(imageState);
+      formData.append("photo", imageState, "ABC.jpg");
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1], "IMAGESENT");
+      }
+      console.log(author, "IMAGESENT");
+      console.log(userID, "IMAGESENT");
+      console.log(formData, "IMAGESENT");
+      const res = await imageSendAPI.patch(
+        `/api/v1/account/user-profile/${userID}/`,
+        {
+          photo: formData,
+          author,
+        }
+      );
+      setImageState("");
+      console.log(res, "IMAGESENT");
+    } catch (error) {
+      console.log(error, "IMAGESENT");
+    }
+  };
+
+  useEffect(() => {
+    console.log(dataToSend);
+  }, [dataToSend]);
+
+  useEffect(() => {
+    console.log(imageState, "IMAGESENT");
+    sendImage();
+    // sendImage(imageState, userID, author);
+  }, [imageState]);
 
   const { userProfile, userStatus } = useSelector((state) => state.authReducer);
+
+  const makingDataToFormData = () => {
+    const formData = new FormData();
+    if (imageState) {
+      for (let key in imageState) {
+        formData.append(key, imageState[key]);
+      }
+    }
+    console.log(formData);
+    return formData;
+  };
+
+  useEffect(() => {
+    const formData = makingDataToFormData(imageState);
+    setDataToSend(formData);
+  }, [imageState]);
 
   return (
     <div className='col-xl-3 col-lg-4 m-b30'>
@@ -21,15 +85,25 @@ function ProfileSidebar({ active, showManageProp = false }) {
               <Link to={""}>
                 <img alt='' src={require("./../../images/team/pic1.jpg")} />
               </Link>
-              <div
-                className='upload-link'
-                title='update'
-                data-toggle='tooltip'
-                data-placement='right'
-              >
-                <input type='file' className='update-flie' />
-                <i className='fa fa-camera'></i>
-              </div>
+              <form>
+                <div
+                  className='upload-link'
+                  title='update'
+                  data-toggle='tooltip'
+                  data-placement='right'
+                >
+                  <input
+                    type='file'
+                    name='photo'
+                    className='update-flie'
+                    accept='image/jpeg,image/png,image/gif'
+                    onChange={(e) => {
+                      setImageState(e.target.files[0]);
+                    }}
+                  />
+                  <i className='fa fa-camera'></i>
+                </div>
+              </form>
             </div>
             <div className='candidate-title'>
               <div className=''>

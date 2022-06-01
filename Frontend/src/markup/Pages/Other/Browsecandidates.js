@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
 import Jobfindbox from "../../Element/Jobfindbox";
@@ -30,7 +30,7 @@ function Browsecandidates() {
   const [count, setCount] = useState(null);
   const [page, setPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const history = useHistory();
   const { search } = useLocation();
   const title = search.split("=")[1];
 
@@ -175,11 +175,17 @@ function Browsecandidates() {
                   <ul className='post-job-bx mt-5'>
                     {results && !keyLoad && !loading ? (
                       results.map((item, index) => (
-                        <li key={index}>
+                        <li
+                          key={index}
+                          className='cursor-pointer'
+                          onClick={() => {
+                            history.push(`/make-offer/${item.author}`);
+                          }}
+                        >
                           <div className='post-bx'>
                             <div className='d-flex m-b30'>
                               <div className='job-post-company'>
-                                <Link to={""}>
+                                <Link to={`/make-offer/${item.author}`}>
                                   <span>
                                     <img alt='' src={item.image} />
                                   </span>

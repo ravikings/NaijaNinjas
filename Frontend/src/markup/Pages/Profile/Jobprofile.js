@@ -82,7 +82,7 @@ function Jobprofile() {
   const getUserDetails = () => {
     console.log("sended");
     createRequest()
-      .get(`/api/v1/account/profile/${currentUser?.pk}/`)
+      .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
       .then(({ data }) => {
         setUserDetails(data);
       })
@@ -94,7 +94,7 @@ function Jobprofile() {
 
   const editUserDetails = (values) => {
     axiosPrivate
-      .patch(`/api/v1/account/profile/${userDetails?.id}/`, values)
+      .patch(`/api/v1/account/user-profile/${userDetails?.id}/`, values)
       .then(({ data }) => {
         toast.success("Profile updated successfully");
         getUserDetails();
@@ -140,7 +140,13 @@ function Jobprofile() {
             <div className='section-full bg-white browse-job p-t50 p-b20'>
               <div className='container'>
                 <div className='row'>
-                  {userProfile && <ProfileSidebar active={"Profile"} />}
+                  {userProfile && (
+                    <ProfileSidebar
+                      author={userProfile?.author}
+                      userID={userDetails?.id}
+                      active={"Profile"}
+                    />
+                  )}
                   <div className='col-xl-9 col-lg-8 m-b30'>
                     <div className='job-bx job-profile'>
                       <div className='job-bx-title clearfix'>

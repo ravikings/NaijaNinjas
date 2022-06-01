@@ -72,7 +72,7 @@ function Jobmyresume() {
   const getUserDetails = () => {
     if (currentUser) {
       createRequest()
-        .get(`/api/v1/account/profile/${currentUser?.pk}/`)
+        .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
         .then(({ data }) => {
           setUserDetails(data);
         })
@@ -121,6 +121,30 @@ function Jobmyresume() {
         <Loader />
       ) : (
         <div className='page-content'>
+          <nav aria-label='breadcrumb'>
+            <ol
+              className='breadcrumb ml-4'
+              style={{ backgroundColor: "#f8f8f8" }}
+            >
+              <li className='breadcrumb-item'>
+                <Link to='/'>Home</Link>
+              </li>
+              <li className='breadcrumb-item'>
+                <Link to='/jobs-profile'>Dashboard</Link>
+              </li>
+              <li className='breadcrumb-item active' aria-current='page'>
+                My Resume
+              </li>
+              <div className='flex-fill mr-5'>
+                <Link
+                  to={"/jobs-profile"}
+                  className='site-button right-arrow button-sm float-right'
+                >
+                  Back
+                </Link>
+              </div>
+            </ol>
+          </nav>
           <div
             className='overlay-black-dark profile-edit p-t50 p-b20'
             style={{ backgroundImage: "url(" + bnr + ")" }}

@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
-import { axiosPrivate } from "../utils/axios";
+import { axiosPrivateImage } from "../utils/axios";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { authActionTypes } from "../markup/Pages/Auth/Redux/AuthActions";
 
-const useAxiosPrivate = () => {
+const useAxiosPrivateImage = () => {
   const refresh = useRefreshToken();
   const { accessToken } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const requestIntercept = axiosPrivate.interceptors.request.use(
+    const requestIntercept = axiosPrivateImage.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${accessToken}`;
@@ -23,7 +23,7 @@ const useAxiosPrivate = () => {
       (error) => Promise.reject(error)
     );
 
-    const responseIntercept = axiosPrivate.interceptors.response.use(
+    const responseIntercept = axiosPrivateImage.interceptors.response.use(
       (response) => response,
       async (error) => {
         const prevRequest = error?.config;
@@ -45,19 +45,19 @@ const useAxiosPrivate = () => {
           });
           console.log("NewAccessToken", newAccessToken);
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          return axiosPrivate(prevRequest);
+          return axiosPrivateImage(prevRequest);
         }
         return Promise.reject(error);
       }
     );
 
     return () => {
-      axiosPrivate.interceptors.request.eject(requestIntercept);
-      axiosPrivate.interceptors.response.eject(responseIntercept);
+      axiosPrivateImage.interceptors.request.eject(requestIntercept);
+      axiosPrivateImage.interceptors.response.eject(responseIntercept);
     };
   }, [accessToken, refresh]);
 
-  return axiosPrivate;
+  return axiosPrivateImage;
 };
 
-export default useAxiosPrivate;
+export default useAxiosPrivateImage;
