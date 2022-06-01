@@ -50,7 +50,8 @@ from .serializers import (
     ResetPasswordEmailRequestSerializer,
     SetNewPasswordSerializer,
     UserOnlineSerializer,
-    ServiceSerializer
+    ServiceSerializer,
+    ProfileSerializerWithResume
 )
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
@@ -67,6 +68,21 @@ class DashboardProfile(viewsets.ModelViewSet):
         
         data = RunnerProfile.objects.get_or_create(author_id=pk)
         serializer = ProfileSerializer(data[0])
+        return Response(serializer.data)
+
+class UserDashboardProfile(viewsets.ModelViewSet):
+    
+    """
+    dashboard serializers use for entry data for getting data to the ui
+    """
+
+    queryset = RunnerProfile.objects.all()
+    serializer_class = ProfileSerializer
+
+    def retrieve(self, request, pk=None):
+        
+        data = RunnerProfile.objects.get(author_id=pk)
+        serializer = ProfileSerializer(data)
         return Response(serializer.data)
 
 
@@ -109,6 +125,21 @@ class DashboardResume(viewsets.ModelViewSet):
         serializer = UserResumeSerializer(data[0])
         return Response(serializer.data)
 
+
+class UserDashboardResume(viewsets.ModelViewSet):
+    
+    """
+    uses to viewing resume for only runner dashboard
+    """
+
+    queryset = RunnerResume.objects.all()
+    serializer_class = UserResumeSerializer
+
+    def retrieve(self, request, pk=None):
+    
+        data = RunnerResume.objects.get(author_id=pk)
+        serializer = UserResumeSerializer(data)
+        return Response(serializer.data)
 
 
 def save_profile_resume(resume, request):
@@ -214,8 +245,8 @@ class SearchProfile(viewsets.ModelViewSet):
         "city",
         "local_goverment_zone",
     ]
-    queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileSearchSerializer
+    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    serializer_class = ProfileSerializerWithResume
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -288,13 +319,13 @@ class TestView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = RunnerProfile.objects.all()
-    serializer_class = UserProfileSearchSerializer
+    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    serializer_class = ProfileSerializerWithResume
     
     def retrieve(self, request, pk=None):
 
-        data = RunnerProfile.objects.get_or_create(author_id=pk)
-        serializer = UserProfileSearchSerializer(data[0])
+        data = RunnerProfile.objects.get(author=pk)
+        serializer = ProfileSerializerWithResume(data)
         return Response(serializer.data)
 
 
