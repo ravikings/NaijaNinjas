@@ -22,8 +22,6 @@ import { Badge } from "react-bootstrap";
 import Carousel from "carousel-react-rcdev";
 import ShortImages from "./components/ShortImageGallery";
 import RegisterPageModal from "../Auth/RegisterPageModal";
-import Proposals from "../components/Proposals";
-import Hired from "../components/Hired";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -98,7 +96,7 @@ function MakeOfferPage() {
                     className={classes.avatar}
                     src={user.photo}
                   >
-                    Next.js
+                    K
                   </Avatar>
                 </Grid>
                 <Grid item>
@@ -109,12 +107,24 @@ function MakeOfferPage() {
                     style={{ height: "100%", padding: "5px 0px" }}
                   >
                     <Grid item>
-                      <h4 style={{ marginTop: '42px' }}>
-                      Need A Devloper Convert Figma to Next.js
+                      <h4 style={{ marginBottom: 5 }}>
+                        {user.first_name} {user.last_name}
                       </h4>
-                     
+                      <h5 style={{ color: "gray" }}>iOS Expert + Node Dev</h5>
                     </Grid>
-                   
+                    <Hidden xsDown>
+                      <div className='d-flex'>
+                        {user.location && (
+                          <span>
+                            <BsBuilding size={26} />
+                            <span className='align-top mx-2'>
+                              {user.location}
+                            </span>
+                          </span>
+                        )}
+                        <Ratings />
+                      </div>
+                    </Hidden>
                   </Grid>
                 </Grid>
                 <Hidden smUp>
@@ -124,7 +134,12 @@ function MakeOfferPage() {
                 </Hidden>
               </Grid>
             </div>
-          
+            <div className='right-side'>
+              <div className='salary-box'>
+                <div className='salary-type'>Project Budget</div>
+                <div className='salary-amount'>$2,500 - $4,500</div>
+              </div>
+            </div>
           </div>
 
           <div className={classes.main}>
@@ -156,79 +171,32 @@ function MakeOfferPage() {
                       <Badge>Python</Badge>
                     </div>
                   </div>
-        
+                  {/* <div className='actions'>
+        <button className='site-button'>
+          {" "}
+          <i className='fa fa-comments-o  mr-2'></i> Message
+        </button>
+        <button className='site-button btn-outlined ml-4'>
+          <i className='fa fa-phone mr-2'></i> Request a Call
+        </button>
+      </div> */}
                 </div>
-               {/* we heir start */}
-               <div className="review">
-        <h2 className="mb-5">Hired</h2>
-        <Hired name="Baloch Khan" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
-        <Hired name="Shakeeb Khan" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
-        <Hired name="Sami Bhai" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
-      </div>
-               {/* we heir end */}
-{/* clients reives start */}
-<div className="review">
-        <h2 className="mb-5">Proposals</h2>
-       <Proposals name="Shoaib Ghulam" position="Web Developer" rating={5}/>
-       <Proposals name="Waseem Kaka" position="Graphics Desinger" rating={3}/>
-       
-      </div>
-{/* clients reives end */}
-
-
-
-
-
-                {/* <RelatedJobs /> */}
+                {/* <TabsGroup data={user.description} /> */}
+                <RelatedJobs />
               </Grid>
-              <Grid item xs={12} sm={12} md={5} lg={4} className="project-widget">
-               {/* Price Box Start */}
-               <div className="text-center mx-auto  mt-5">
-        <h3>Budget</h3>
-        <h1>
-          $50 </h1>
-        <span>Project type: Hourly</span>
-        <div>
-          <a href="#" className="site-button" >Submit a Proposal</a>
-         
-        </div>
-      </div>
-               {/* Price Box end */}
-               {/* project type start */}
-               <ul className="list-unstyled mt-5 mb-3 meta">
-        <li className="text-left">Seller Type:<b className="float-right">Company</b></li>
-        <li className="text-left">Project type:<b className="float-right">Hourly</b></li>
-        <li className="text-left">Project Duration:<b className="float-right">Other</b></li>
-        <li className="text-left">Project Level:<b className="float-right">Expensive</b></li>
-        <li className="text-left">Languages:<b className="float-right">Arabic</b></li>
-        <li className="text-left">English Level:<b className="float-right">Professional</b></li>
-      </ul>
-               {/* project type end */}
-
-               {/* Buyer Start */}
-               <div className="text-center">
-    <h3 className="project-widget-title">About Buyer</h3>
-    <a href="#">
-        <img src="https://themebing.com/wp/prolancer/wp-content/uploads/2021/04/pexels-mentatdgt-1138903-150x150.jpg"
-            className="mb-3 rounded-circle img-thumbnail" alt="" /> </a>
-    <a href="#" target="_blank">
-        <h4>Bayley Robertson</h4>
-    </a>
-    <ul className="list-inline mt-2 mb-2 badges">
-        <li className="list-inline-item"><img
-                src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/buyerfirstorder.png"
-                title="Spent money for hiring" alt="badge" style={{cursor: 'default'}} /></li>
-        <li className="list-inline-item"><img
-                src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/level2.png"
-                title="Seller Level 2: Has sold $100+ On ProLancer" alt="badge" /></li>
-    </ul>
-    <ul class="list-unstyled mt-4 meta">
-<li class="text-left">Location:<b class="float-right">Germany</b></li>
-<li class="text-left">Departments:<b class="float-right">Graphich Designing</b></li>
-<li class="text-left">No. of Employees:<b class="float-right">11-20</b></li>
-</ul>
-</div>
-               {/* Buyer end */}
+              <Grid item xs={12} sm={12} md={5} lg={4}>
+                {/* <HourlyRate /> */}
+                {/* <Divider style={{ margin: "30px 0px" }} /> */}
+                <Alert variant={"success"} className='text-center mt-5'>
+                  6 days, 23 hours left
+                </Alert>
+                <MakeOfferForm modal={handleShow} />
+                {/* <Divider style={{ margin: "30px 0px" }} /> */}
+                {/* <SocialMedia /> */}
+                {/* <Divider style={{ margin: "30px 0px" }} /> */}
+                {/* <Skills /> */}
+                {/* <Divider style={{ margin: "30px 0px" }} /> */}
+                {/* <Attachments /> */}
               </Grid>
             </Grid>
           </div>

@@ -18,7 +18,7 @@ const postBlog = [
 
 function AskQuestion (){
 	const history = useHistory();
-	const baseURL= `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/`;
+	const baseURL= `http://127.0.0.1:8000/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	
 	let userId = parseInt(localStorage.getItem("userID"));

@@ -42,7 +42,6 @@ function Browsejobfilterlist() {
                     <h5 className='font-weight-700 pull-left text-uppercase'>
                       2269 Jobs Found
                     </h5>
-                  
                   </div>
                   <ul className='post-job-bx'>
                     {postBox.map((item, index) => (
@@ -58,7 +57,7 @@ function Browsejobfilterlist() {
                             </div>
                             <div className='job-post-info'>
                               <h4>
-                                <Link to={"/send-offer"}>
+                                <Link to={"/make-offer-task"}>
                                   Digital Marketing Executive
                                 </Link>
                               </h4>
@@ -82,7 +81,7 @@ function Browsejobfilterlist() {
                               <p className='h-100'>
                                 {dummyText.substring(0, 150)} ...{"  "}
                                 <Link
-                                  to={"/send-offer"}
+                                  to={"/make-offer-task"}
                                   className='text-primary'
                                 >
                                   See more

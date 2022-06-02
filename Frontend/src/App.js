@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   authActionTypes,
+  getUserStatus,
   verifyToken,
 } from "./markup/Pages/Auth/Redux/AuthActions";
 import Cookies from "js-cookie";
@@ -22,7 +23,9 @@ function App() {
   const refreshToken = Cookies.get("refresh_token");
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.authReducer);
+  const { loading, isVerified, currentUser } = useSelector(
+    (state) => state.authReducer
+  );
 
   useEffect(() => {
     if (refreshToken) {
@@ -44,20 +47,25 @@ function App() {
         console.log(data, "userData");
         isMounted &&
           dispatch({ type: authActionTypes.GET_CURRENT_SUCCESS, user: data });
+        dispatch(getUserStatus(data.pk));
       } catch (e) {
         dispatch({ type: authActionTypes.GET_CURRENT_FAILED });
         console.log(e, "userData");
       }
     };
 
-    if (user.isVerified) {
+    if (isVerified) {
       getUser();
     }
-  }, [user.isVerified]);
+  }, [isVerified]);
+
+  useEffect(() => {
+    console.log(loading, "loading");
+  }, [loading]);
 
   return (
     <div className='App'>
-      {user.loading ? (
+      {loading ? (
         <Loader />
       ) : (
         <>
