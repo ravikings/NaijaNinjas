@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
 
@@ -34,6 +35,7 @@ class ChatConsumer(WebsocketConsumer):
         logging.warning("chat disconnect!")
 
     # Receive message from WebSocket
+    @database_sync_to_async
     def receive(self, text_data=None, bytes_data=None):
         # parse the json data into dictionary object
         text_data_json = json.loads(text_data)
@@ -94,4 +96,4 @@ class ChatConsumer(WebsocketConsumer):
         logging.warning("Receive message from room group!")
 
         # Send message to WebSocket
-        self.send(text_data=json.dumps(dict_to_be_sent))
+        async_to_sync(self.send(text_data=json.dumps(dict_to_be_sent)))
