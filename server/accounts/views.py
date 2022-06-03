@@ -27,6 +27,7 @@ from django.contrib.auth import authenticate
 from asgiref.sync import async_to_sync
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import (
     AccountUser,
     Photo,
@@ -36,6 +37,8 @@ from .models import (
     Review,
     IpModel,
     Service,
+    Projects,
+    ProjectPhoto,
 )
 from .serializers import (
     PhotosSerializer,
@@ -51,7 +54,9 @@ from .serializers import (
     SetNewPasswordSerializer,
     UserOnlineSerializer,
     ServiceSerializer,
-    ProfileSerializerWithResume
+    ProfileSerializerWithResume,
+    ProjectsSerializer,
+    ProjectPhotoSerializer,
 )
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
@@ -210,6 +215,17 @@ class VideoUpload(viewsets.ModelViewSet):
 
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
+    permissions_classes = [IsAuthenticated and IsRunner]
+
+
+class ProjectsViewSet(viewsets.ModelViewSet):
+    
+    """
+    uses to upload video to ui dashboard
+    """
+
+    queryset = Projects.objects.all()
+    serializer_class = ProjectsSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
@@ -505,3 +521,28 @@ class SetNewPasswordAPIView(APIView):
 
             return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/")
 
+
+class ProjectImageAPIView(viewsets.ModelViewSet):
+    queryset = ProjectPhoto.objects.all()
+    serializer_class = ProjectPhotoSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def create(self, request, pk=None):
+        property_id = request.data['project']
+        form_data = {}
+        form_data['forum']= property_id
+        success = True
+        response = []
+
+        for images in request.FILES.getlist('image'):
+            form_data['image']=images   
+            serializer = ProjectPhotoSerializer(data=form_data)
+            if serializer.is_valid():
+                serializer.save()
+                response.append(serializer.data)
+            else:
+                success = False
+        if success:
+            return Response(response, status=status.HTTP_201_CREATED)
+            
+        return Response(response,status=status.HTTP_400_BAD_REQUEST)
