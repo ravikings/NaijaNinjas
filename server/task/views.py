@@ -3,8 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
-from task.serializers import TaskSerializer, TaskBidderSerializer
-from task.models import Task, TaskBidder
+from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from task.models import Task, TaskBidder, Photo
 from history.signals import history_tracker
 from accounts.views import get_client_ip
 from accounts.models import IpModel
@@ -62,3 +63,29 @@ class TaskBidderView(viewsets.ModelViewSet):
             return Response({"message": "You request was successfully processed"})
 
         return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TaskImageAPIView(viewsets.ModelViewSet):
+    queryset = Photo.objects.all()
+    serializer_class = TaskImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def create(self, request, pk=None):
+        property_id = request.data['task']
+        form_data = {}
+        form_data['task']= property_id
+        success = True
+        response = []
+
+        for images in request.FILES.getlist('image'):
+            form_data['image']=images   
+            serializer = TaskImageSerializer(data=form_data)
+            if serializer.is_valid():
+                serializer.save()
+                response.append(serializer.data)
+            else:
+                success = False
+        if success:
+            return Response(response, status=status.HTTP_201_CREATED)
+            
+        return Response(response,status=status.HTTP_400_BAD_REQUEST)

@@ -1,4 +1,4 @@
-from task.models import Task, TaskBidder
+from task.models import Task, TaskBidder, Photo
 from rest_framework import serializers
 
 
@@ -19,4 +19,12 @@ class TaskBidderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskBidder
+        fields = "__all__"
+
+class TaskImageSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use forum picture uploads and retrieve
+    """
+    class Meta:
+        model = Photo
         fields = "__all__"
