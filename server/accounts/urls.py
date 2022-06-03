@@ -18,6 +18,8 @@ from accounts.views import (
     ServiceView,
     UserDashboardResume,
     UserDashboardProfile,
+    ProjectsViewSet,
+    ProjectImageAPIView,
     taskUpdate,
     resumeUpdate,
     TestView,
@@ -41,6 +43,11 @@ router.register(
 router.register(
     r"professional-services", ServiceView, basename="professional-services"
 )
+router.register(
+    r"projects", ProjectsViewSet, basename="runners-project"
+)
+router.register(r"project-images", ProjectImageAPIView, basename="project-images")
+
 
 urlpatterns = [
     path("account/", include(router.urls)),

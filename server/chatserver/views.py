@@ -12,24 +12,24 @@ from django.shortcuts import redirect, reverse
 @api_view(["POST", "GET"])
 def start_convo(
     request,
+    starter,
+    pk
 ):
-    data = request.data
-    id = data.get("id")
 
     try:
-        participant = AccountUser.objects.get(id=id)
+        participant = AccountUser.objects.get(id=pk)
     except AccountUser.DoesNotExist:
         return Response({"message": "You cannot chat with a non existent user"})
- 
+
     conversation = Conversation.objects.filter(
-        Q(initiator=1, receiver=participant)
-        | Q(initiator=participant, receiver=id)
+        Q(initiator=starter, receiver=participant)
+        | Q(initiator=participant, receiver=pk)
     )
 
     if conversation.exists():
         return redirect(reverse("get_conversation", args=(conversation[0].id,)))
     else:
-        initiator = AccountUser.objects.get(id=1)
+        initiator = AccountUser.objects.get(id=starter) 
         conversation = Conversation.objects.create(
             initiator=initiator, receiver=participant
         )

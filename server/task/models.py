@@ -1,4 +1,6 @@
+import os
 from django.db import models
+from django.utils import timezone
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from accounts.models import IpModel
@@ -24,6 +26,7 @@ class Task(models.Model):
     region = models.CharField(max_length=255, blank=True, db_index=True)
     location = models.CharField(max_length=255, blank=True, db_index=True)
     department = models.TextField(null=True, db_index=True)
+    experience = models.CharField(max_length=255, blank=True, null=True)
     description = RichTextField(db_index=True)
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
@@ -56,3 +59,18 @@ class TaskBidder(models.Model):
 
     def number_of_votes(self):
         return self.bid.count()
+
+
+def upload_to(instance, filename):
+    now = timezone.now()
+    base, extension = os.path.splitext(filename.lower())
+    milliseconds = now.microsecond // 1000
+    return f"users/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
+
+class Photo(models.Model):
+    
+    task = models.ForeignKey(
+        Task, on_delete=models.CASCADE, related_name="task_photos"
+    )
+
+    image = models.ImageField(upload_to=upload_to)
