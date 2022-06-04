@@ -23,6 +23,8 @@ from accounts.models import (
     Vidoe,
     Review,
     Service,
+    Projects,
+    ProjectPhoto,
 )
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
@@ -183,6 +185,19 @@ class ServiceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Service
+        fields = "__all__"
+
+
+class ProjectsSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Projects
+        fields = "__all__"
+
+class ProjectPhotoSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProjectPhoto
         fields = "__all__"
 
 class UserOnlineSerializer(serializers.ModelSerializer):
