@@ -21,6 +21,7 @@ class Task(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="task_author"
     )
     title = models.CharField(max_length=255, blank=True, db_index=True)
+    sector  = models.CharField(max_length=255, blank=True, null=True)
     fixed_salary  = models.CharField(max_length=255, blank=True, null=True)
     minimum_salary  = models.CharField(max_length=255, blank=True, db_index=True)
     maximum_salary = models.CharField(max_length=255, blank=True, db_index=True)
