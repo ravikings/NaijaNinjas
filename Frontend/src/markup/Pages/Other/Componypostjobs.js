@@ -1,11 +1,27 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import Header2 from "../../Layout/Header2";
 import Footer from "../../Layout/Footer";
 import { Form } from "react-bootstrap";
 import ProfileSidebar from "../../Element/Profilesidebar";
-
+import axios from 'axios';
 function Componypostjobs() {
+  const [title,setTitle]=useState('');
+  const [sector,setSector]=useState('');
+  const [minimumSalary,setMinimumSalary]=useState('');
+  const [maximumSalary,setMaximumSalary]=useState('');
+  const [region,setRegion]=useState('');
+  const [location,setLocation]=useState('');
+  const [department,setDepartment]=useState('');
+  const [description,setDescription]=useState('');
+  const [tags,setTags]=useState('');
+  const [category,setCategory]=useState('');
+  const [postStatus,setPostStatus]=useState('');
+  const [author,setAuthor]=useState('');
+const addData=(e)=>{
+  e.preventDefault();
+  alert("done")
+}
   return (
     <>
       <Header2 />
@@ -28,35 +44,31 @@ function Componypostjobs() {
                         Back
                       </Link>
                     </div>
-                    <form>
+                    <form onSubmit={addData}>
                       <div className="row">
-                        <div className="col-lg-6 col-md-6">
+                        <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Job Title</label>
+                            
                             <input
                               type="text"
                               className="form-control"
                               placeholder="Enter Job Title"
+                              onChange={(e)=>setTitle(e.target.value)}
+                              value={title}
                             />
                           </div>
                         </div>
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group">
-                            <label>Your email</label>
-                            <input
-                              type="email"
-                              className="form-control"
-                              placeholder="info@gmail.com"
-                            />
-                          </div>
-                        </div>
+                      
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Job Tags</label>
                             <input
                               type="text"
                               className="form-control tags_input"
-                            />
+                              onChange={(e)=>setTags(e.target.value)}
+                              value={tags}
+                              />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
@@ -66,11 +78,13 @@ function Componypostjobs() {
                               as="select"
                               custom
                               className="custom-select"
+                              onChange={(e)=>setCategory(e.target.value)}
+                              value={category}
                             >
-                              <option>Full Time</option>
-                              <option>Part Time</option>
-                              <option>Internship</option>
-                              <option>Freelance</option>
+                              <option value="FUll Time">Full Time</option>
+                              <option value="Part Time">Part Time</option>
+                              <option value="Internship">Internship</option>
+                              <option value="Freelance">Freelance</option>
                             </Form.Control>
                           </div>
                         </div>
@@ -81,6 +95,8 @@ function Componypostjobs() {
                               as="select"
                               custom
                               className="custom-select"
+                              onChange={(e)=>setCategory(e.target.value)}
+                              value={category}
                             >
                               <option>1 Years</option>
                               <option>2 Years</option>
