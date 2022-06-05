@@ -8,8 +8,6 @@ import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import axios from 'axios';
 
-import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone from 'react-dropzone-uploader'
 const postBlog = [
 	{ title: 'PHP Web Developer', },
 	{ title: 'Software Developer', },
@@ -25,13 +23,7 @@ function AskQuestion (){
 	const [detailsValue,setDetailsValue]= useState();
 	const [attachFile,setAttachFile]= useState(null);
 
-		// upload image start
-		const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
-  
-		// called every time a file's `status` changes
-		const handleChangeStatus = ({ meta, file }, status) => {
-			setAttachFile(file);
-			}
+	
 		
 // upload image end	
 	const SubmitQuestion = (e)=>{
@@ -41,7 +33,6 @@ function AskQuestion (){
 		console.log("woow"+e.target[1].value);
 		console.log("woow"+e.target[2].value);
 	
-		console.log("image "+attachFile);
 		
 		var formdata = new FormData();
 		formdata.append("title", e.target[0].value);
@@ -140,14 +131,22 @@ function AskQuestion (){
 											
 												
 												<div className="col-lg-12 col-md-12">
-												<Dropzone
-      getUploadParams={getUploadParams}
-      onChangeStatus={handleChangeStatus}
-     
-      accept="image/*"
-    />
-													
-												</div>
+                          <div className="form-group">
+                            <label>Upload File</label>
+                            <div className="custom-file  p-5">
+                              <p className="m-a0">
+                                <i className="fa fa-upload"></i>
+                                Upload File
+                              </p> 
+                              <input
+                                type="file"
+                                className="site-button form-control"
+                                id="customFile"
+                                onChange={(e)=>setAttachFile(e.target.files[0])}
+                              />
+                            </div>
+                          </div>
+                        </div>
 											</div>
 											<button type="submit" className="site-button m-b30">Publish</button>
 										</form>

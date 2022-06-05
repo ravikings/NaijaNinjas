@@ -23,56 +23,48 @@ function AddServices (){
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [detailsValue,setDetailsValue]= useState();
 	const [attachFile,setAttachFile]= useState(null);
-
-		// upload image start
-		const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
-  
-		// called every time a file's `status` changes
-		const handleChangeStatus = ({ meta, file }, status) => {
-			setAttachFile(file);
-			}
-		
-// upload image end	
-	const SubmitQuestion = (e)=>{
+	const [title,setTitle]=useState('');
+	const [amount,setAmount]=useState('');
+	const [location,setLocation]=useState('');
+	const [tag,setTag]=useState('');
+	const [deliveryMethod,setDeliveryMethod]=useState('');
+	const [loading, setLoading] = useState(false);
+	const addData=(e)=>{
 		e.preventDefault();
-		console.log("woow"+e.target[0].value);
-		console.log("woow"+e.target[1].value);
-		console.log("woow"+e.target[2].value);
-	
-		console.log("image "+attachFile);
-		
-		var formdata = new FormData();
-		formdata.append("title", e.target[0].value);
-		formdata.append("body", detailsValue);
-		formdata.append("tags", e.target[1].value);
-		formdata.append("category", e.target[2].value);
-		formdata.append("attachment", attachFile);
-		formdata.append("author", userId);
-		axios({
-			method: 'POST',
-			url: `${baseURL}forum/list/`,
-			data: formdata,
-			headers: {
-	  
-			  Authorization: token,
-	  
-			},
-		  })
-			.then((response) => {
-			  console.log("the response is ", response)
-			  
-			  if(response.statusText =="Created"){
-				history.push(`/blog-details/${response.data.id}/${response.data.title}`) 
-				
+	 	  setLoading(true);
+		  var formdata = new FormData();
+			  formdata.append("description","detailsValue");
+			  formdata.append("amount",amount);
+			  formdata.append("location",location);
+			  formdata.append("tag",tag);
+			  formdata.append("delivery_method",deliveryMethod);
+			  formdata.append("display",attachFile);
+			
+			  formdata.append("author", userId);
+			  axios({
+				  method: 'POST',
+				  url: `${baseURL}api/v1/account/professional-services/`,
+				  data: formdata,
+				  headers: {
+			
+					Authorization: token,
+			
+				  },
+				})
+				  .then((response) => {
+				   
+			  if(response.statusText=="Created"){
+				setLoading(false);
+				alert("done")
 				
 			  }
-			  //console.log(response.data);
-			}, (error) => {
-			  console.log(error);
-			
-			});
-
-	}
+					
+			  history.push('/company-manage-job')
+				  }, (error) => {
+					console.log(error);
+				  
+				  });
+	  }
 	return(
 		<>
 			<Header2 />
@@ -89,7 +81,7 @@ function AddServices (){
 													<Link to="all-questions" className="btn btn-primary">Services</Link>
 													</div>
 									</div>
-								<form onSubmit={SubmitQuestion} enctype="multipart/form-data">
+								<form onSubmit={addData} enctype="multipart/form-data">
 								
 											<div className="row">
 												<div className="col-lg-12 col-md-12">
@@ -97,7 +89,12 @@ function AddServices (){
 														<label>Service Title</label>
 														<input type="text" 
 														name="serviceTitle"
-														className="form-control" placeholder="Enter  Title" />
+														className="form-control" 
+														placeholder="Enter  Title" 
+														value={title}
+														onChange={(e)=>setTitle(e.target.value)}
+														required
+														/>
 													</div>
 													
 												</div>
@@ -107,7 +104,11 @@ function AddServices (){
 														<label>Services Tags</label>
 														<input type="text" 
 														name="tag"
-														className="form-control tags_input" />
+														className="form-control tags_input" 
+														value={tag}
+														onChange={(e)=>setTag(e.target.value)}
+														required
+														/>
 														
 													</div>
 												</div>
@@ -116,7 +117,11 @@ function AddServices (){
 														<label>Service Price</label>
 														<input type="text" 
 														name="servicePrice"
-														className="form-control tags_input" />
+														className="form-control tags_input"
+														value={amount}
+														onChange={(e)=>setAmount(e.target.value)}
+														required
+														 />
 														
 													</div>
 												</div>
@@ -125,7 +130,11 @@ function AddServices (){
 														<label>Service Location</label>
 														<input type="text" 
 														name="serviceLocation"
-														className="form-control tags_input" />
+														className="form-control tags_input"
+														value={location}
+														onChange={(e)=>setLocation(e.target.value)}
+														required
+														/>
 														
 													</div>
 												</div>
@@ -134,7 +143,11 @@ function AddServices (){
 														<label>Delivery Method</label>
 														<Form.Control as="select" custom 
 														name="method"
-														className="custom-select">
+														className="custom-select"
+														value={deliveryMethod}
+														onChange={(e)=>setDeliveryMethod(e.target.value)}
+														required
+														>
 															<option value="method 1">Method 1</option>
 															<option value="method 2">Method 2</option>
 															
@@ -155,15 +168,22 @@ function AddServices (){
 											
 												
 												<div className="col-lg-12 col-md-12">
-                                                <label>Pictures:</label>
-												<Dropzone
-      getUploadParams={getUploadParams}
-      onChangeStatus={handleChangeStatus}
-     
-      accept="image/*"
-    />
-													
-												</div>
+                          <div className="form-group">
+                            <label>Upload Picture</label>
+                            <div className="custom-file  p-5">
+                              <p className="m-a0">
+                                <i className="fa fa-upload"></i>
+                                Upload File
+                              </p> 
+                              <input
+                                type="file"
+                                className="site-button form-control"
+                                id="customFile"
+                                onChange={(e)=>setAttachFile(e.target.files[0])}
+                              />
+                            </div>
+                          </div>
+                        </div>
                                                 
 											</div>
 											<button type="submit" className="site-button m-b30 m-t20">Publish</button>
