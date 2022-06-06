@@ -128,12 +128,12 @@ class Service(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
     )
-    description = RichTextField(db_index=True)
+    description = RichTextField(db_index=True, null=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
     amount = models.CharField(max_length=250, null=True)
     location = models.CharField(max_length=250, null=True, db_index=True)
     title = models.CharField(max_length=250, null=True, db_index=True)
-    tag = models.CharField(max_length=250, null=True, db_index=True)
+    tag = models.CharField(max_length=250, blank=True, null=True, db_index=True)
     delivery_method = models.CharField(max_length=250, null=True, db_index=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
