@@ -86,8 +86,8 @@ class UserDashboardProfile(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         
-        data = RunnerProfile.objects.get(author_id=pk)
-        serializer = ProfileSerializer(data)
+        data = RunnerProfile.objects.get_or_create(author_id=pk)
+        serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
 
