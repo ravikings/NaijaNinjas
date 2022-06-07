@@ -200,7 +200,7 @@ const Education = ({
         </div>
       </Modal>
 
-      {data.length > 0 &&
+      {data?.length > 0 &&
         data.map((edu) => (
           <div className='d-flex mb-2' key={edu.id}>
             <div className='row'>

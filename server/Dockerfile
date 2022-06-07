@@ -19,7 +19,7 @@
 
 # ENTRYPOINT [ "./docker_entrypoint.sh" ]
 
-FROM python
+FROM python:3.8
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
