@@ -27,6 +27,8 @@ docker-compose up -d --build
 "kasun:2{c%v~TtV?_SFCer"
 
 
+  "proxy": "http://backend:8000" in  the future for docker
+
 #back end application
 https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev
 
