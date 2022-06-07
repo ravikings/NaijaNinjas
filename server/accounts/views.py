@@ -321,13 +321,16 @@ class ServiceView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
+    queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     permissions_classes = [IsAuthenticated and IsOwner]
 
-    def get_queryset(self):
-    
-        return Service.objects.filter(author=self.request.user.id)
 
+    def retrieve(self, request, pk=None):
+        
+        data = Service.objects.get_or_create(author_id=pk)
+        serializer = ServiceSerializer(data[0])
+        return Response(serializer.data)
 
 class TestView(viewsets.ModelViewSet):
 
