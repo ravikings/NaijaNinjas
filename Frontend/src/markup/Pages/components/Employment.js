@@ -151,7 +151,7 @@ const Employment = ({
         </Link>
       </div>
       {/* {data} */}
-      {data.length > 0 &&
+      {data?.length > 0 &&
         data.map((item) => (
           <div className='d-flex mb-2' key={item.id}>
             <div>
