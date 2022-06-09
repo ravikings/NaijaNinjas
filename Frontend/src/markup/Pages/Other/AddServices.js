@@ -33,7 +33,8 @@ function AddServices (){
 		e.preventDefault();
 	 	  setLoading(true);
 		  var formdata = new FormData();
-			  formdata.append("description","detailsValue");
+			  formdata.append("title",title);
+			  formdata.append("description",detailsValue);
 			  formdata.append("amount",amount);
 			  formdata.append("location",location);
 			  formdata.append("tag",tag);
@@ -167,7 +168,7 @@ function AddServices (){
 												
 											
 												
-												<div className="col-lg-12 col-md-12">
+												{/* <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Upload Picture</label>
                             <div className="custom-file  p-5">
@@ -183,7 +184,7 @@ function AddServices (){
                               />
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                                                 
 											</div>
 											<button type="submit" className="site-button m-b30 m-t20">Publish</button>
