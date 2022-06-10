@@ -83,12 +83,19 @@ function ProfileSidebar({
           <div className='candidate-detail text-center'>
             <div className='canditate-des'>
               <Link to={""}>
-                <img alt={profile.first_name} src={BASE_URL + profile.photo} />
+                <img
+                  alt={profile.first_name}
+                  src={
+                    profile.photo
+                      ? BASE_URL + profile.photo
+                      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+                  }
+                />
               </Link>
               <form>
                 <div
                   className='upload-link'
-                  title='update'
+                  title='Update image.'
                   data-toggle='tooltip'
                   data-placement='right'
                 >
