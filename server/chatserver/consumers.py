@@ -35,7 +35,7 @@ class ChatConsumer(WebsocketConsumer):
         logging.warning("chat disconnect!")
 
     # Receive message from WebSocket
-    @database_sync_to_async
+    #@database_sync_to_async
     def receive(self, text_data=None, bytes_data=None):
         # parse the json data into dictionary object
         text_data_json = json.loads(text_data)
