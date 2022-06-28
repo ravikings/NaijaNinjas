@@ -43,3 +43,12 @@ docker-compose logs -f
 
 ==========================[ STOPPING DOCKER SERVICES ]==========================
 docker-compose down
+
+
+==========================[ ZAPPA SERVICES ]==========================
+
+****** deploy ***
+zappa update
+
+****** live log ***
+zappa tail
