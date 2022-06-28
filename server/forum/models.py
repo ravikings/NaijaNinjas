@@ -4,7 +4,9 @@ from django.conf import settings
 from ckeditor.fields import RichTextField
 from accounts.models import IpModel
 from django.utils import timezone
+from django_s3_storage.storage import S3Storage
 
+storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 # Create your models here.
 
 
@@ -16,7 +18,7 @@ class Forum(models.Model):
     body = RichTextField(db_index=True)
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
-    attachment = models.FileField(upload_to="forum/documents/%Y/%m/%d/", blank=True)
+    attachment = models.FileField(upload_to="forum/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True, db_index=True)
     views = models.ManyToManyField(IpModel, related_name="forum_views", blank=True)

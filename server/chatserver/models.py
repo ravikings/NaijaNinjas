@@ -2,6 +2,10 @@ import os
 from django.utils import timezone
 from django.db import models
 from django.conf import settings
+
+from django_s3_storage.storage import S3Storage
+
+storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 # Create your models here.
 
 class Conversation(models.Model):
@@ -33,7 +37,7 @@ class Message(models.Model):
         null=True,
     )
     text = models.CharField(max_length=200)
-    attachment = models.FileField(upload_to=upload_to, blank=True)
+    attachment = models.FileField(upload_to=upload_to, blank=True, storage=storage)
     conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 

@@ -5,7 +5,9 @@ from django.utils import timezone
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from accounts.models import IpModel
+from django_s3_storage.storage import S3Storage
 
+storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 # Create your models here.
 
 
@@ -32,7 +34,7 @@ class Task(models.Model):
     description = RichTextField(db_index=True)
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
-    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True)
+    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
