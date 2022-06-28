@@ -21,6 +21,7 @@ import createRequest from "../../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { authActionTypes } from "../Auth/Redux/AuthActions";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../../utils/constants";
 
 var bnr = require("../../../images/banner/bnr1.jpg");
 //var bnr2 = require('./../../images/background/bg3.jpg');
@@ -46,6 +47,10 @@ function Jobmyresume() {
   const { currentUser, userProfile } = useSelector(
     (state) => state.authReducer
   );
+
+  useEffect(() => {
+    console.log(userProfile);
+  }, [userProfile]);
 
   const [loading, setLoading] = useState(true);
   const [resumeDetails, setResumeDetails] = useState(null);
@@ -156,11 +161,15 @@ function Jobmyresume() {
                     <div className='canditate-des text-center'>
                       <Link to={""}>
                         <img
-                          alt=''
-                          src={require("../../../images/team/pic1.jpg")}
+                          alt={userProfile.first_name}
+                          src={
+                            userProfile.photo
+                              ? BASE_URL + userProfile.photo
+                              : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+                          }
                         />
                       </Link>
-                      <div
+                      {/* <div
                         className='upload-link'
                         title='update'
                         data-toggle='tooltip'
@@ -168,7 +177,7 @@ function Jobmyresume() {
                       >
                         <input type='file' className='update-flie' />
                         <i className='fa fa-camera'></i>
-                      </div>
+                      </div> */}
                     </div>
                     <div className='text-white browse-job text-left'>
                       <h4 className='m-b0'>
