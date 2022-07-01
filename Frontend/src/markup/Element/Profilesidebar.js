@@ -17,17 +17,34 @@ function ProfileSidebar({ active, showManageProp = false }) {
           <div className='candidate-detail text-center'>
             <div className='canditate-des'>
               <Link to={""}>
-                <img alt='' src={require("./../../images/team/pic1.jpg")} />
+                <img
+                  alt={profile.first_name}
+                  src={
+                    profile.photo
+                      ? BASE_URL + profile.photo
+                      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+                  }
+                />
               </Link>
-              <div
-                className='upload-link'
-                title='update'
-                data-toggle='tooltip'
-                data-placement='right'
-              >
-                <input type='file' className='update-flie' />
-                <i className='fa fa-camera'></i>
-              </div>
+              <form>
+                <div
+                  className='upload-link'
+                  title='Update image.'
+                  data-toggle='tooltip'
+                  data-placement='right'
+                >
+                  <input
+                    type='file'
+                    name='photo'
+                    className='update-flie'
+                    accept='image/jpeg,image/png,image/gif'
+                    onChange={(e) => {
+                      setImageState(e.target.files[0]);
+                    }}
+                  />
+                  <i className='fa fa-camera'></i>
+                </div>
+              </form>
             </div>
             <div className='candidate-title'>
               <div className=''>
