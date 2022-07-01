@@ -1,7 +1,7 @@
 {
   "name": "jobboard",
   "version": "0.1.0",
-  "homepage": "http://localhost:3000",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.3",
