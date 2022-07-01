@@ -4,22 +4,13 @@ import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
 import axios from 'axios';
 import ProfileSidebar from "../../Element/Profilesidebar";
-import createRequest from "../../../utils/axios";
+import { Modal } from "react-bootstrap";
 import ClipLoader from "react-spinners/ClipLoader";
-const postResume = [
-	{ title: 'Tammy Dixon', },
-	{ title: 'John Doe', },
-	{ title: 'Ali Tufan', },
-	{ title: 'David kamal', },
-	{ title: 'Tammy Dixon', },
-	{ title: 'John Doe', },
-	{ title: 'David kamal', },
-	{ title: 'Ali Tufan', },
-]
 
 function UserServices (){
 	const [data,setData]=useState([])
-	const [singleData,setSingleData]=useState([])
+	const [viewData,setViewData]=useState([])
+	const [company, setCompany] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const history = useHistory();
 	const baseURL= `http://127.0.0.1:8000/`;
@@ -28,9 +19,13 @@ function UserServices (){
 
 	const allData=()=>{
 		setLoading(true)
-		createRequest()
-		  .get(`/api/v1/account/professional-services/`)
-		  .then((res) => {
+		axios({
+			method: 'GET',
+			url: `${baseURL}api/v1/account/professional-services/`,
+		   
+			
+			})
+			.then((res) => {
 		//   console.log(res)
 		  setData(res.data.results);
 		  setLoading(false)
@@ -60,7 +55,6 @@ function UserServices (){
 			 
 				allData();
 			  
-					console.log(response.data);
 			}, (error) => {
 			  console.log(error);
 			
@@ -101,7 +95,9 @@ allData();
 																	<li><i className="fa fa-map-marker"></i>{item?.location}</li>
 																	<li><i className="fa fa-money"></i> $ {item?.amount}</li>
 																</ul>
+
 															</div>
+															
 														</div>
 														<div className="service-tag m-t15 m-b10">
 															{item?.tag?.split(',')?.map((e)=>(
@@ -110,12 +106,18 @@ allData();
 															))}
 														
 														</div>
-														<Link to={"/files/pdf-sample.pdf"} target="blank" className="job-links">
+														{/* <Link to={"/files/pdf-sample.pdf"} target="blank" className="job-links">
+															<i className="fa fa-pencil"></i>
+														</Link> */}
+														<button   onClick={()=>deleteData(item.id)}  className="btn rounded btn-danger float-right mr-2">
+															<i className="fa fa-trash"></i>
+														</button>
+														<Link    to={`/update-services/${item.id}`}  className="btn rounded btn-primary float-right mr-2">
 															<i className="fa fa-pencil"></i>
 														</Link>
-														<Link  onClick={()=>deleteData(item.id)}  className="job-links mt-5">
-															<i className="fa fa-trash"></i>
-														</Link>
+														<button   onClick={()=>{setViewData(item); setCompany(true);}}  className="btn rounded btn-info float-right mr-2">
+															<i className="fa fa-eye"></i>
+														</button>
 													</div>
 												</li>
 											))}
@@ -146,6 +148,82 @@ allData();
 					</div>
 				</div>
 			</div>
+			<Modal
+                      show={company}
+                      onHide={setCompany}
+                      className='modal fade modal-bx-info'
+                    >
+                      <div className='' role='document'>
+                        <div className='modal-content'>
+                          <div className='modal-header'>
+                            <div className='logo-img'>
+                              <img
+                                alt=''
+                                src={require("../../../images/logo/icon2.png")}
+                              />
+                            </div>
+                            <h5 className='modal-title'>Services  Details</h5>
+
+                            <button
+                              type='button'
+                              className='close'
+                              onClick={() => setCompany(false)}
+                            >
+                              <span aria-hidden='true'>&times;</span>
+                            </button>
+                          </div>
+                          <div className='modal-body'>
+                           <img src={viewData.image} />
+						    <ul>
+                           
+   
+                              <li>
+                                <strong>Job Title :</strong>
+                                <p> {viewData?.title} </p>
+                              </li>
+                              <li>
+                                <strong>Date :</strong>
+                                <p> {viewData?.created || viewData?.updated} </p>
+                              </li>
+                              <li>
+                                <strong>Amount :</strong>
+                                <p> ${viewData?.amount} </p>
+                              </li>
+                              <li>
+                                <strong>Location :</strong>
+                                <p>{viewData?.location}</p>
+                              </li>
+                              <li >
+                                <strong style={{width:'30%'}}>Delivery Method :</strong>
+                                <p>{viewData?.delivery_method}</p>
+                              </li>
+                            
+                             
+                              <li>
+                                <strong>Deseription :</strong>
+                                <p dangerouslySetInnerHTML={{__html:viewData?.description}} />
+                                  
+                              </li>
+                              <li>
+                                <strong>Tags :</strong>
+                                <p>
+                                  {viewData?.tag}
+                                </p>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className='modal-footer'>
+                            <button
+                              type='button'
+                              className='btn btn-secondary'
+                              onClick={() => setCompany(false)}
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </Modal>
 			<Footer />	
 		</>
 	)

@@ -36,7 +36,7 @@ function Companymanage() {
         console.log("Unknown Error");
         }
       });
-    };
+    }
     
     // geting data from api for fourm end
     const deleteItem=(e)=>{
@@ -51,7 +51,7 @@ function Companymanage() {
         },
         })
         .then((response) => {
-          console.log("the response is ", response)
+         
           allData();
           
                 console.log(response.data);

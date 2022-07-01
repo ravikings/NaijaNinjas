@@ -74,6 +74,7 @@ import AddProject from "./Pages/Other/AddProject";
 import UserProject from "./Pages/Other/UserProject";
 import SendOfferPage from "./Pages/MakeOffer/SendOfferPage";
 import SendContract from "./Pages/Other/SendContract";
+import UpdateServices from "./Pages/Other/UpdateServices";
 
 class Markup extends Component {
   render() {
@@ -245,6 +246,11 @@ class Markup extends Component {
               path="/add-services"
               exact
               component={AddServices}
+            />
+             <Route
+              path="/update-services/:id"
+              exact
+              component={UpdateServices}
             />
              <Route
               path="/user-services"

@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {Link,useHistory} from 'react-router-dom';
+import React,{useState,useEffect} from 'react';
+import {Link,useHistory,useParams} from 'react-router-dom';
 import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
 import {Form}  from 'react-bootstrap';  
@@ -10,11 +10,13 @@ import axios from 'axios';
 import ClipLoader from "react-spinners/ClipLoader";
 
 
-function AddServices (){
+function UpdateServices (){
+    var {id}= useParams();
 	const history = useHistory();
 	const baseURL= `http://127.0.0.1:8000/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
+	const [data,setData]= useState([]);
 	const [detailsValue,setDetailsValue]= useState();
 	const [attachFile,setAttachFile]= useState(null);
 	const [title,setTitle]=useState('');
@@ -23,6 +25,34 @@ function AddServices (){
 	const [tag,setTag]=useState('');
 	const [deliveryMethod,setDeliveryMethod]=useState('');
 	const [loading, setLoading] = useState(false);
+    const formData=()=>{
+        setLoading(true)
+		axios({
+			method: 'GET',
+			url: `${baseURL}api/v1/account/professional-services/${id}`,
+		   
+			
+			})
+			.then((res) => {
+		  console.log(res?.data.tag)
+                setData(res?.data)
+            // setDetailsValue(res?.data?.description)
+            // setAttachFile(res?.data?.image)
+            // setTitle(res?.data?.title)
+            // setAmount(res?.data?.amount)
+            // setLocation(res?.data?.location)
+            // setTag(res?.data?.tag)
+            // setDeliveryMethod(res?.data?.delivery_method)
+		  setLoading(false)
+		  })
+		  .catch((e) => {
+			if (e.response?.status === 400) {
+			console.log(e?.response?.data?.non_field_errors[0]);
+			} else {
+			  console.log("Unknown Error");
+			}
+		  });
+    }
 	const addData=(e)=>{
 		e.preventDefault();
 	 	  setLoading(true);
@@ -63,6 +93,9 @@ function AddServices (){
 				  
 				  });
 	  }
+      useEffect(()=>{
+        formData();
+      },[])
 	return(
 		<>
 			<Header2 />
@@ -95,7 +128,7 @@ function AddServices (){
 														name="serviceTitle"
 														className="form-control" 
 														placeholder="Enter  Title" 
-														value={title}
+														value={title || data.title}
 														onChange={(e)=>setTitle(e.target.value)}
 														required
 														/>
@@ -211,4 +244,4 @@ function AddServices (){
 		</>
 	)
 }
-export default AddServices; 
+export default UpdateServices; 
