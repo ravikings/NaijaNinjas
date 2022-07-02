@@ -52,3 +52,6 @@ zappa update
 
 ****** live log ***
 zappa tail
+
+To migrate notification use:
+python manage.py migrate notifications
