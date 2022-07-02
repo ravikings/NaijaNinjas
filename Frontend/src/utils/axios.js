@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// const BASE_URL = "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev";
-const BASE_URL = "/";
+const BASE_URL = "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev";
+// const BASE_URL = "/";
 
 export default function createRequest() {
   return axios.create({
