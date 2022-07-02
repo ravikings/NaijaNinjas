@@ -90,3 +90,7 @@ def load_runner():
 
 #thus need to chnage to json before usage
 # #load_resume()
+
+
+user = AccountUser.objects.get(pk=41)
+print(user.notifications.unread())

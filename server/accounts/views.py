@@ -58,6 +58,7 @@ from .serializers import (
     ProjectsSerializer,
     ProjectPhotoSerializer,
 )
+from notifications.signals import notify
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class DashboardProfile(viewsets.ModelViewSet):
@@ -87,6 +88,13 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         
         data = RunnerProfile.objects.get_or_create(author_id=pk)
+        print("im checking dashboard")
+        print("im checking dashboard")
+        print("im checking dashboard")
+        user = AccountUser.objects.get(id=pk)
+        recipient = AccountUser.objects.get(id=41)
+        notify.send(user,recipient=recipient, verb='hello come to dashboard')
+        print("sent")
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 

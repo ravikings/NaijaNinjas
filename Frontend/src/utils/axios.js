@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const BASE_URL = "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev";
-// const BASE_URL = "/";
+//const BASE_URL = "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev";
+const BASE_URL = "/";
 
 export default function createRequest() {
   return axios.create({
@@ -22,7 +22,8 @@ export const sendImage = (image, userID, author) => {
   const formData = new FormData();
   formData.append("photo", image);
   return axios.put(
-    `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/api/v1/account/user-profile/${userID}/`,
+    //`https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/api/v1/account/user-profile/${userID}/`,
+    `http://127.0.0.1:8000//api/v1/account/user-profile/${userID}/`,
     {
       formData,
       author,
