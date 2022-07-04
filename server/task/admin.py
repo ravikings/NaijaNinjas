@@ -1,6 +1,6 @@
 import imp
 from django.contrib import admin
-from task.models import Task, TaskBidder
+from task.models import Task, TaskBidder, Timeline, Comment
 # Register your models here.
 
 @admin.register(Task)
@@ -12,3 +12,6 @@ class TaskAdmin(admin.ModelAdmin):
 class TaskBidderAdmin(admin.ModelAdmin):
     list_display = ['task', "offer", "bid_approve_status"]
     list_filter = ['runner_confirmed', 'created', 'bidder']
+
+admin.site.register(Timeline)
+admin.site.register(Comment)

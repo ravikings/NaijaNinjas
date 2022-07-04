@@ -87,8 +87,29 @@ class Timeline(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
     )
+    # TODO: Add validator to chech if user is a runner
     task_owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    comment = RichTextField(null=True, blank=True)
+    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="timeline_comment_author",
+    )
+    body = RichTextField()
+    timeline = models.ForeignKey(
+        Timeline, on_delete=models.CASCADE, related_name="timeline_comment"
+    )
+    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated = models.DateTimeField(auto_now=True, db_index=True)
+
+    class Meta:
+        ordering = ("created",)
