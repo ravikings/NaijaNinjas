@@ -31,7 +31,7 @@ class Task(models.Model):
     location = models.CharField(max_length=255, blank=True, db_index=True)
     department = models.TextField(null=True, db_index=True)
     experience = models.CharField(max_length=255, blank=True, null=True)
-    description = RichTextField(db_index=True)
+    description = RichTextField(blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
     attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
@@ -49,6 +49,7 @@ def upload_to(instance, filename):
     base, extension = os.path.splitext(filename.lower())
     milliseconds = now.microsecond // 1000
     return f"users/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
+
 class TaskBidder(models.Model):
     """
     The junction table for task and bid models/tables. Contains every instance of a task for a placement
@@ -61,7 +62,9 @@ class TaskBidder(models.Model):
     offer = models.IntegerField()
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
-    confirmed = models.BooleanField(default=False)
+    bid_approve_status = models.BooleanField(default=False)
+    transaction_id = models.CharField(max_length=255, blank=True, db_index=True)
+    runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -78,3 +81,14 @@ class Photo(models.Model):
     )
 
     image = models.ImageField(upload_to=upload_to)
+
+
+class Timeline(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
+    )
+    task_owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
+    )
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    comment = RichTextField(null=True, blank=True)
