@@ -103,7 +103,11 @@ class TaskApproveView(viewsets.ModelViewSet):
 
         task_id = request.query_params.get('task_id')
         bid_to_approve = get_object_or_404(TaskBidder, task_id=task_id)
-        if bid_to_approve.exists() and bid_to_approve.bid_approve_status == False or bid_to_approve.runner_confirmed == False:
+        if (bid_to_approve.exists() and bid_to_approve.bid_approve_status == False):
+
+            if bid_to_approve.runner_confirmed:
+                return Response({"error": "Task already assigned"})
+                
             serializer = TaskBidderSerializer(instance=bid_to_approve, data=request.data)
             if serializer.is_valid():
                 serializer.save()
