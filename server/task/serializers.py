@@ -30,16 +30,15 @@ class TaskImageSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TimelineSerializer(serializers.ModelSerializer):
+class TimelineCommentSerializer(serializers.ModelSerializer):
     """
-    Profile serializers use profile for picture uploads and retrieve
+    Comment serializers.
     """
 
-    #timeline_author = serializers.SerializerMethodField()
-    timeline_comment = serializers.SerializerMethodField()
+    time_created = serializers.SerializerMethodField()
 
     class Meta:
-        model = Timeline
+        model = Comment
         exclude = ("updated", "created")
 
     def get_time_created(self, instance):
@@ -55,23 +54,17 @@ class TimelineSerializer(serializers.ModelSerializer):
 
         return data
 
-    def get_timeline_comment(self, instance):
-        comments = Comment.objects.filter(timeline=instance.timeline_id)
 
-        return comments
-
-
-class TimelineCommentSerializer(serializers.ModelSerializer):
+class TimelineSerializer(serializers.ModelSerializer):
     """
-    Comment serializers.
+    Profile serializers use profile for picture uploads and retrieve
     """
 
-    #timeline_comment_author = serializers.SerializerMethodField()
-    #timeline_comment = serializers.SerializerMethodField()
-
+    timeline_comment = TimelineCommentSerializer(read_only=True, many=True)
+   
     class Meta:
-        model = Comment
-        exclude = ("updated", "created")
+        model = Timeline
+        exclude = ("updated", "created", "comment")
 
     def get_time_created(self, instance):
         dateTimeObj = instance.created

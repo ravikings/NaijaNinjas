@@ -14,9 +14,9 @@ storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 class Task(models.Model):
 
     STATUS = [
-        ("Open", "Accepting offers"),
-        ("Assigned", "Task assigned to a pro"),
-        ("Completed", "Task completed!")
+        ("OPEN", "OPEN"),
+        ("ASSIGNED", "ASSIGNED"),
+        ("COMPLETED", "COMPLETED")
     ]
 
     author = models.ForeignKey(
@@ -38,7 +38,7 @@ class Task(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
-    post_status = models.CharField(max_length=255,choices=STATUS, default="open")
+    post_status = models.CharField(max_length=255,choices=STATUS, default="OPEN")
 
     class Meta:
         ordering = ("created",)
@@ -83,18 +83,18 @@ class Photo(models.Model):
     image = models.ImageField(upload_to=upload_to)
 
 
-class Timeline(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
-    )
-    # TODO: Add validator to chech if user is a runner
-    task_owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
-    )
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+# class Timeline(models.Model):
+#     author = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
+#     )
+#     # TODO: Add validator to chech if user is a runner
+#     task_owner = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
+#     )
+#     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+#     attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True)
 
 
 class Comment(models.Model):
@@ -104,12 +104,34 @@ class Comment(models.Model):
         related_name="timeline_comment_author",
     )
     body = RichTextField()
-    timeline = models.ForeignKey(
-        Timeline, on_delete=models.CASCADE, related_name="timeline_comment"
-    )
     attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True, db_index=True)
 
     class Meta:
         ordering = ("created",)
+
+
+
+class Timeline(models.Model):
+
+    STATUS = [
+        ("STARTED", "STARTED"),
+        ("DELIVERED", "DELIVERED"),
+        ("REVIEW", "REVIEW"),
+        ("APPROVED", "APPROVED")
+    ]
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
+    )
+    # TODO: Add validator to chech if user is a runner
+    task_owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
+    )
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="timeline_comment", blank=True, null=True)
+    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
+    timeline_status = models.CharField(max_length=255,choices=STATUS, default="STARTED")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
