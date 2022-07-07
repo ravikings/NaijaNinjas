@@ -24,6 +24,7 @@ import ShortImages from "./components/ShortImageGallery";
 import RegisterPageModal from "../Auth/RegisterPageModal";
 import Proposals from "../components/Proposals";
 import Hired from "../components/Hired";
+import { Link } from "react-router-dom";
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -189,7 +190,8 @@ function MakeOfferPage() {
           $50 </h1>
         <span>Project type: Hourly</span>
         <div>
-          <a href="#" className="site-button" >Submit a Proposal</a>
+          <Link to="/send-contract" className="site-button">Submit a Proposal</Link>
+          {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
          
         </div>
       </div>

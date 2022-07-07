@@ -96,7 +96,7 @@ function MakeOfferPage() {
                     className={classes.avatar}
                     src={user.photo}
                   >
-                    K
+                    
                   </Avatar>
                 </Grid>
                 <Grid item>
