@@ -6,6 +6,7 @@ import {Form}  from 'react-bootstrap';
 import ReactQuill from 'react-quill'; 
 import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
+import baseURL from '../../../utils/baseUrl';
 import axios from 'axios';
 
 const postBlog = [
@@ -16,7 +17,7 @@ const postBlog = [
 
 function AskQuestion (){
 	const history = useHistory();
-	const baseURL= `http://127.0.0.1:8000/`;
+
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	
 	let userId = parseInt(localStorage.getItem("userID"));

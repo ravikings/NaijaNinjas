@@ -237,11 +237,7 @@ class Markup extends Component {
               exact
               component={ContractProposal}
             />
-             <Route
-              path="/post-ads"
-              exact
-              component={PostAds}
-            />
+         
              <Route
               path="/add-services"
               exact
@@ -270,7 +266,7 @@ class Markup extends Component {
 
 <Route path='/send-offer' exact component={SendOfferPage} />
 <Route path='/send-contract' exact component={SendContract} />
-          
+            <Route path="/post-ads" exact component={PostAds} />
           </Switch>
         </div>
         <ScrollToTop />

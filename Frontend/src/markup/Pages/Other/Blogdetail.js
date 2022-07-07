@@ -15,7 +15,7 @@ import axios from 'axios'
 import Swiper from 'react-id-swiper';
 import 'swiper/css';
 
-
+import baseURL from '../../../utils/baseUrl';
 //Images
 var bnr = require('../../../images/banner/bnr1.jpg');
 
@@ -23,7 +23,7 @@ function Blogdetail(){
 	const location = useLocation();
 	const [loading, setLoading] = useState(false);
 	let { id,title } = useParams();
-	const baseURL= `http://127.0.0.1:8000/`;
+	
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [showIcon,setShowIcon]=useState(true);
