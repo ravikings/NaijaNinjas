@@ -6,14 +6,14 @@ import axios from 'axios';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import { Modal } from "react-bootstrap";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import baseURL from '../../../utils/baseUrl';
 function UserServices (){
 	const [data,setData]=useState([])
 	const [viewData,setViewData]=useState([])
 	const [company, setCompany] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const history = useHistory();
-	const baseURL= `http://127.0.0.1:8000/`;
+	
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 

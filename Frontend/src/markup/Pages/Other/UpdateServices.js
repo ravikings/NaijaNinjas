@@ -8,12 +8,12 @@ import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import axios from 'axios';
 import ClipLoader from "react-spinners/ClipLoader";
-
+import baseURL from '../../../utils/baseUrl';
 
 function UpdateServices (){
     var {id}= useParams();
 	const history = useHistory();
-	const baseURL= `http://127.0.0.1:8000/`;
+
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [data,setData]= useState([]);

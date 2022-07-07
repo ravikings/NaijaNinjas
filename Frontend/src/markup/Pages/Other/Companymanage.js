@@ -8,8 +8,9 @@ import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import Pagination from "react-js-pagination";
 import axios from 'axios';
+import baseURL from '../../../utils/baseUrl';
 function Companymanage() {
-  const baseURL= `http://127.0.0.1:8000/`;
+  
 	let token = `Bearer ` + localStorage.getItem("access_token");
   const [company, setCompany] = useState(false);
   const [totalCount, setTotalCount] = useState(null);

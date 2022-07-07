@@ -84,10 +84,10 @@ function ProfileSidebar({
             <div className='canditate-des'>
               <Link to={""}>
                 <img
-                  alt={profile.first_name}
+                  alt={profile?.first_name}
                   src={
-                    profile.photo
-                      ? BASE_URL + profile.photo
+                    profile?.photo
+                      ? BASE_URL + profile?.photo
                       : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                   }
                 />
@@ -114,17 +114,17 @@ function ProfileSidebar({
             </div>
             <div className='candidate-title'>
               <div className=''>
-                {userProfile.first_name && (
+                {userProfile?.first_name && (
                   <h4 className='m-b5'>
                     <Link to={""} onClick={(e) => e.preventDefault()}>
-                      {userProfile.first_name}{" "}
-                      {userProfile.last_name && userProfile.last_name}
+                      {userProfile?.first_name}{" "}
+                      {userProfile?.last_name && userProfile?.last_name}
                     </Link>
                   </h4>
                 )}
-                {userProfile.title && (
+                {userProfile?.title && (
                   <p className='m-b0'>
-                    <Link to={""}>{userProfile.title}</Link>
+                    <Link to={""}>{userProfile?.title}</Link>
                   </p>
                 )}
               </div>
@@ -146,7 +146,7 @@ function ProfileSidebar({
                 <span>Messages</span>
               </Link>
             </li>
-            {userStatus.is_a_runner && (
+            {userStatus?.is_a_runner && (
               <li>
                 <Link to={"/jobs-my-resume"}>
                   <i className='fa fa-file-text-o' aria-hidden='true'></i>

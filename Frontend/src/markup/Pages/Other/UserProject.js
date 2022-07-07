@@ -5,7 +5,7 @@ import Footer from '../../Layout/Footer';
 
 import ProfileSidebar from "../../Element/Profilesidebar";
 import axios from 'axios';
-
+import baseURL from '../../../utils/baseUrl';
 const postResume = [
 	{ title: 'Tammy Dixon', },
 	{ title: 'John Doe', },
@@ -19,7 +19,7 @@ const postResume = [
 
 function UserProject(){
 	const history = useHistory();
-	const baseURL= `http://127.0.0.1:8000/`;
+	
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [detailsValue,setDetailsValue]= useState();
