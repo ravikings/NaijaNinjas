@@ -8,7 +8,7 @@ import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import axios from 'axios';
 import ClipLoader from "react-spinners/ClipLoader";
-import baseURL from '../../../utils/baseUrl';
+import url from '../../../utils/baseUrl';
 
 
 function AddServices (){
@@ -42,7 +42,7 @@ function AddServices (){
 			  formdata.append("author", userId);
 			  axios({
 				  method: 'POST',
-				  url: `${baseURL}api/v1/account/professional-services/`,
+				  url: `${url.baseURL}api/v1/account/professional-services/`,
 				  data: formdata,
 				  headers: {
 			

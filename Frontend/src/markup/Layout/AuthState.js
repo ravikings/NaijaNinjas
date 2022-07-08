@@ -73,7 +73,7 @@ function AuthState({ userDetails }) {
           className='extra-nav d-flex align-items-center justify-content-between'
           style={{ padding: "10px 0px", width: '480' }}
         >
-          <Divider orientation='vertical' flexItem />
+         
            {/*  User Notifications */}
       <div className="header-widget hide-on-mobile">
         {/* Notifications */}
@@ -194,7 +194,7 @@ function AuthState({ userDetails }) {
       {/* old notification start */}
      
           {/* old notificaton end */}
-          <Divider orientation='vertical' flexItem />
+         
           <div>
             <Avatar
               aria-describedby={id}
@@ -208,7 +208,7 @@ function AuthState({ userDetails }) {
               K
             </Avatar>
           </div>
-          <Divider orientation='vertical' flexItem />
+         
 
           <ReactButton
             style={{

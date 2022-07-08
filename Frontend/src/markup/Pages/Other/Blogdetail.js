@@ -15,7 +15,7 @@ import axios from 'axios'
 import Swiper from 'react-id-swiper';
 import 'swiper/css';
 
-import baseURL from '../../../utils/baseUrl';
+import url from '../../../utils/baseUrl';
 //Images
 var bnr = require('../../../images/banner/bnr1.jpg');
 
@@ -103,7 +103,7 @@ function Blogdetail(){
 		formdata.append("author", userId);
 		axios({
 			method: 'POST',
-			url: `${baseURL}forum/comment/`,
+			url: `${url.baseURL}forum/comment/`,
 			data: formdata,
 			headers: {
 	  
@@ -141,7 +141,7 @@ function Blogdetail(){
 		formdata.append("author", userId);
 		axios({
 			method: 'PUT',
-			url: `${baseURL}forum/comment/${commentId}/`,
+			url: `${url.baseURL}forum/comment/${commentId}/`,
 			data: formdata,
 			headers: {
 	  

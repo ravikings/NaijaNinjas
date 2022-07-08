@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import {Link,useParams,useHistory} from 'react-router-dom';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import ClipLoader from "react-spinners/ClipLoader";
@@ -9,16 +9,46 @@ import createRequest from "../../../utils/axios";
 import axios from 'axios'
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
-
+import url from '../../../utils/baseUrl';
+import swal from 'sweetalert';
 
 function SendContract(){
+	const history = useHistory();
 
+	let token = `Bearer ` + localStorage.getItem("access_token");
+	var userId = parseInt(localStorage.getItem("userID"));
 	const [freelancerAmount, setFreelancerAmount] = useState(0);
 	const [gigxFee, setGigxFee] = useState(0);
 	const [clientAmount, setClientAmount] = useState(0);
+	const [cover, setCover] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [attachFile,setAttachFile]= useState(null);
-
+	let { id} = useParams();
+	
+	const [data, setData] = useState([]);
+  
+	const allData = async () => {
+		  setLoading(true);
+		  await createRequest()
+			.get(`api/v1/task/task/${id}/`)
+			.then((res) => {
+			 console.log(res)
+		 setData(res.data)
+		
+			   setLoading(false);
+			})
+			.catch((e) => {
+			  if (e.response?.status === 400) {
+			  console.log(e?.response?.data?.non_field_errors[0]);
+			  } else {
+				console.log("Unknown Error");
+			  }
+			});
+		}
+	  useEffect(()=>{
+		allData();
+	  },[])
+  
 	// upload image start
 	const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
 
@@ -27,11 +57,7 @@ function SendContract(){
 		setAttachFile(file);
 		}
 	
-		useEffect(()=>{
-			
-		  
 		
-		},[])
 		const ClientTexCalculator=(e)=>{
 			setClientAmount(e)
 			let fee=(e*20)/100
@@ -56,6 +82,46 @@ function SendContract(){
 		}
 		// effect end
 	// single data fatch end
+	// badding task start
+	const addBadding=(e)=>{
+		
+		e.preventDefault();
+		var formdata = new FormData();
+		formdata.append("description",cover);
+		formdata.append("offer", clientAmount);
+		formdata.append("task",id);
+		formdata.append("bidder",userId);
+	
+		axios({
+			method: 'POST',
+			url: `${url.baseURL}api/v1/task/task-bidding/`,
+			data: formdata,
+			headers: {
+	  
+			  Authorization: token,
+	  
+			},
+		  })
+
+			.then((response) => {
+				
+			  swal("Thank You", "Thank you for filling out your information!", "success");
+			  setInterval(()=>{
+					history.push('/')
+			  },3000)
+
+			  if(response.statusText =="Created"){
+				
+				
+				
+			  }
+			  //console.log(response.data);
+			}, (error) => {
+			  console.log(error);
+			
+			});
+	}
+	// badding task end
 	return(
 		<>
 			<Header />
@@ -65,7 +131,7 @@ function SendContract(){
 				<div className="row">
 				<div className="col-md-9  m-t40">
 						<h1 className="contract-title">Submit Parposal</h1>
-						<form className="contract-form">
+						<form className="contract-form" onSubmit={addBadding}>
 						{/* contract Client Requirements start */}
 						<div className="container-data m-b20">
 						{/* contract Header start */}
@@ -78,21 +144,18 @@ function SendContract(){
 						<div className="contract-section">
 						<div class="contract-client-name">
                             
-						 <h6 class="break">Need to Design Landing Page</h6>
+						 <h6 class="break">{data?.title}</h6>
                          <div className="mt-3 mb-4">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                         </div>
+                           {data?.description}
+						    </div>
                          <Divider />
                          <h4  className="panel-title mt-3">Skills and expertise</h4>
 
                          <div className='d-flex'>
+						 {data?.tags?.split(',')?.map((e)=>(
 
-                                <Badge>iOS</Badge>
-                                <Badge>Android</Badge>
-                                <Badge>Mobile apps</Badge>
-                                <Badge>Python</Badge>
+								<Badge>{e}</Badge>
+								))}
                               </div>
 						 </div>
 						
@@ -114,11 +177,12 @@ function SendContract(){
 						{/* contract section start */}
 						<div className="form-group mb-10">
 							<label className="pl-4">  Cover Latter    </label> 
-		        <textarea  rows="5" className="form-control" required>
+		        <textarea  rows="5" onChange={(e)=>setCover(e.target.value)} className="form-control" required>
+					{cover}
 			  </textarea> 					
 	  <span className="required-label"><i className="fa fa-exclamation-circle mr-1"></i> Cover Latter  is required</span>
 	  </div>
-	  <div className="col-lg-12 col-md-12">
+	  {/* <div className="col-lg-12 col-md-12">
 		  <label>Attach File</label>
 		  <Dropzone
       getUploadParams={getUploadParams}
@@ -126,7 +190,7 @@ function SendContract(){
       className="text-black"
       accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.webm"
     />
-	  </div> 
+	  </div>  */}
 						{/* contract section start */}
 					</div>
 					{/* contract Details end */}
@@ -196,7 +260,7 @@ function SendContract(){
 						{/* contract section start */}
 						<div className="contract-section col-md-7">
 						<button type="button" className="btn btn-outline-primary ml-4">Cancel</button>
-						<button type="button" className="site-button ml-4">Send to Client</button>
+						<button type="submit" className="site-button ml-4">Send to Client</button>
 						</div>
 						{/* contract section start */}
 					</div>

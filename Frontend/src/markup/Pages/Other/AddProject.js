@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import axios from 'axios';
-import baseURL from '../../../utils/baseUrl';
+import url from '../../../utils/baseUrl';
 
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
@@ -50,7 +50,7 @@ function AddProject (){
 		formdata.append("author", userId);
 		axios({
 			method: 'POST',
-			url: `${baseURL}forum/list/`,
+			url: `${url.baseURL}forum/list/`,
 			data: formdata,
 			headers: {
 	  

@@ -143,7 +143,7 @@ class Markup extends Component {
             <Route path="/about-us" exact component={Aboutus} />
             <Route path="/job-detail" exact component={Jobdetail} />
             <Route
-              path="/make-offer-task"
+              path="/make-offer-task/:id/:title"
               exact
               component={MakeOfferTaskPage}
             />
@@ -265,7 +265,7 @@ class Markup extends Component {
             />
 
 <Route path='/send-offer' exact component={SendOfferPage} />
-<Route path='/send-contract' exact component={SendContract} />
+<Route path='/send-contract/:id' exact component={SendContract} />
             <Route path="/post-ads" exact component={PostAds} />
           </Switch>
         </div>

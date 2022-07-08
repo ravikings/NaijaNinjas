@@ -6,9 +6,9 @@ import { Form } from "react-bootstrap";
 import ProfileSidebar from "../../Element/Profilesidebar";
 import ClipLoader from "react-spinners/ClipLoader";
 import axios from 'axios';
+import url from '../../../utils/baseUrl';
 function Componypostjobs() {
   const history = useHistory();
-  const baseURL= `http://127.0.0.1:8000/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
   const userId =localStorage.getItem('userID');
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const addData=(e)=>{
 		formdata.append("author", userId);
 		axios({
 			method: 'POST',
-			url: `${baseURL}api/v1/task/task/`,
+			url: `${url.baseURL}api/v1/task/task/`,
 			data: formdata,
 			headers: {
 	  

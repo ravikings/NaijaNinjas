@@ -8,7 +8,7 @@ import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import Pagination from "react-js-pagination";
 import axios from 'axios';
-import baseURL from '../../../utils/baseUrl';
+import url from '../../../utils/baseUrl';
 function Companymanage() {
   
 	let token = `Bearer ` + localStorage.getItem("access_token");
@@ -43,7 +43,7 @@ function Companymanage() {
     const deleteItem=(e)=>{
       axios({
         method: 'DELETE',
-        url: `${baseURL}api/v1/task/task/${e}`,
+        url: `${url.baseURL}api/v1/task/task/${e}`,
        
         headers: {
       
@@ -117,7 +117,7 @@ function Companymanage() {
                               ></label>
                             </div>
                           </th>
-                          <th>Job Title</th>
+                          <th>Task Title</th>
                           <th>Department</th>
                           <th>Date</th>
                           <th>Status</th>
@@ -142,7 +142,7 @@ function Companymanage() {
    </div>
  </td>
  <td className='job-name'>
-   <Link to={"/company-manage-bids"}>
+   <Link to={`/make-offer-task/${e?.id}/${e?.title}`}>
     {e?.title}
    </Link>
    <ul className='job-post-info'>

@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
 import Avatar from "@material-ui/core/Avatar";
 import { Box, Divider, Grid, Hidden, Modal } from "@material-ui/core";
+
 import { useStyles } from "./MakeOfferStyles";
 import Ratings from "./components/Ratings";
 import HourlyRate from "./components/HourlyRate";
@@ -11,7 +12,7 @@ import SocialMedia from "./components/SocialMedia";
 import Skills from "./components/Skills";
 import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
-import { useLocation } from "react-router-dom";
+import {useParams,Link } from "react-router-dom";
 import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { BsBuilding } from "react-icons/bs";
@@ -24,7 +25,7 @@ import ShortImages from "./components/ShortImageGallery";
 import RegisterPageModal from "../Auth/RegisterPageModal";
 import Proposals from "../components/Proposals";
 import Hired from "../components/Hired";
-import { Link } from "react-router-dom";
+
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -44,25 +45,33 @@ const style = {
 
 function MakeOfferPage() {
   const [show, setShow] = React.useState(false);
-
   const classes = useStyles();
-  const location = useLocation();
-  const [user, setUser] = React.useState(null);
-  const id = location.state && location.state.id ? location.state.id : "10";
+ // const id = location.state && location.state.id ? location.state.id : "10";
+  let { id,title } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    handleRequest();
-  }, [location]);
-
-  const handleRequest = async () => {
-    const res = await createRequest().get(
-      `/api/v1/account/user-search-detials/${id}/`
-    );
-    setUser(res.data);
-    console.log(res.data, "DATA");
-  };
-
-  console.log(location);
+  const allData = async () => {
+		setLoading(true);
+		await createRequest()
+		  .get(`api/v1/task/task/${id}/`)
+		  .then((res) => {
+		   console.log(res)
+       setData(res.data)
+      
+			 setLoading(false);
+		  })
+		  .catch((e) => {
+			if (e.response?.status === 400) {
+			console.log(e?.response?.data?.non_field_errors[0]);
+			} else {
+			  console.log("Unknown Error");
+			}
+		  });
+	  }
+    useEffect(()=>{
+      allData();
+    },[])
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -83,7 +92,7 @@ function MakeOfferPage() {
         </Box>
       </Modal>
       <Header />
-      {user ? (
+      {!loading ? (
         <div className='page-content bg-white'>
           <div
             className='dez-bnr-inr d-flex align-items-center flex-wrap '
@@ -96,10 +105,10 @@ function MakeOfferPage() {
                 <Grid item>
                   <Avatar
                     variant={"square"}
-                    className={classes.avatar}
-                    src={user.photo}
+                    className={classes.avatar }
+                    src={data.photo}
                   >
-                    Next.js
+                   {data?.sector}
                   </Avatar>
                 </Grid>
                 <Grid item>
@@ -111,7 +120,7 @@ function MakeOfferPage() {
                   >
                     <Grid item>
                       <h4 style={{ marginTop: '42px' }}>
-                      Need A Devloper Convert Figma to Next.js
+                     {data?.title}
                       </h4>
                      
                     </Grid>
@@ -133,35 +142,25 @@ function MakeOfferPage() {
               <Grid item xs={12} sm={12} md={7} lg={8}>
                 <div className='mt-4'>
                   <div>
-                    <p>{user.description}</p>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Delectus iure nesciunt possimus? Alias blanditiis
-                      consequatur doloribus, enim esse libero nam officiis omnis
-                      reiciendis. Distinctio ea esse eum itaque, nesciunt sequi!
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Deleniti enim exercitationem non tempore. Amet
-                      consectetur, eius exercitationem facilis harum hic in
-                      labore laborum laudantium natus numquam odio omnis quae
-                      quo quod reiciendis similique sit, totam ullam unde. Ab,
-                      natus velit?
-                    </p>
+                    <p>{data?.description}</p>
+                  
 
                     <h6>Attachments</h6>
                     <ShortImages />
                     <h6>Skills Required</h6>
                     <div className='d-flex badge-div '>
-                      <Badge>iOS</Badge>
-                      <Badge>Android</Badge>
-                      <Badge>Mobile apps</Badge>
-                      <Badge>Python</Badge>
+                    {data?.tags?.split(',')?.map((e)=>(
+
+                      <Badge>{e}</Badge>
+                      ))}
+                    
                     </div>
                   </div>
         
                 </div>
                {/* we heir start */}
                <div className="review">
-        <h2 className="mb-5">Hired</h2>
+        <h2 className="mb-5">Proposals</h2>
         <Hired name="Baloch Khan" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
         <Hired name="Shakeeb Khan" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
         <Hired name="Sami Bhai" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
@@ -169,7 +168,7 @@ function MakeOfferPage() {
                {/* we heir end */}
 {/* clients reives start */}
 <div className="review">
-        <h2 className="mb-5">Proposals</h2>
+        <h2 className="mb-5">Related Jobs</h2>
        <Proposals name="Shoaib Ghulam" position="Web Developer" rating={5}/>
        <Proposals name="Waseem Kaka" position="Graphics Desinger" rating={3}/>
        
@@ -186,11 +185,11 @@ function MakeOfferPage() {
                {/* Price Box Start */}
                <div className="text-center mx-auto  mt-5">
         <h3>Budget</h3>
-        <h1>
-          $50 </h1>
-        <span>Project type: Hourly</span>
+        <h3>
+          ${data?.minimum_salary} To ${data?.maximum_salary} </h3>
+        <span>Project type: {data?.category}</span>
         <div>
-          <Link to="/send-contract" className="site-button">Submit a Proposal</Link>
+          <Link to={`/send-contract/${data?.id}`} className="site-button">Submit a Proposal</Link>
           {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
          
         </div>
@@ -236,9 +235,13 @@ function MakeOfferPage() {
           </div>
         </div>
       ) : (
-        <div className='loader'>
-          <ClipLoader color={"#2e55fa"} loading={true} size={150} />
-        </div>
+        <div className='loader mx-auto'>
+        <ClipLoader
+        color={"#2e55fa"}
+        loading={true}
+        size={150}
+        />
+      </div>
       )}
 
       <Footer />
