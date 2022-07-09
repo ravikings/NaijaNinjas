@@ -48,7 +48,10 @@ function LoginPage() {
     createRequest()
       .post("/dj-rest-auth/login/", loginDetails)
       .then((res) => {
+        //    returnconsole.log("the res is "+res)
+        console.log(res.data)
         localStorage.setItem("userID", res?.data?.user?.pk);
+        localStorage.setItem("access_token",res?.data?.access_token);
         Cookies.set("refresh_token", res?.data?.refresh_token, { expires: 1 });
         const inFiveMinutes = new Date(new Date().getTime() + 5 * 60 * 1000);
         Cookies.set("access_token", res?.data?.access_token, {

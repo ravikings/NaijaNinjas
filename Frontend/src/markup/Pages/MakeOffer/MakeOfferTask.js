@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import Header from "../../Layout/Header";
 import Footer from "../../Layout/Footer";
 import Avatar from "@material-ui/core/Avatar";
 import { Box, Divider, Grid, Hidden, Modal } from "@material-ui/core";
+
 import { useStyles } from "./MakeOfferStyles";
 import Ratings from "./components/Ratings";
 import HourlyRate from "./components/HourlyRate";
@@ -11,7 +12,7 @@ import SocialMedia from "./components/SocialMedia";
 import Skills from "./components/Skills";
 import Attachments from "./components/Attachments";
 import TabsGroup from "./components/TabsGroup";
-import { useLocation } from "react-router-dom";
+import {useParams,Link } from "react-router-dom";
 import createRequest from "../../../utils/axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { BsBuilding } from "react-icons/bs";
@@ -22,6 +23,9 @@ import { Badge } from "react-bootstrap";
 import Carousel from "carousel-react-rcdev";
 import ShortImages from "./components/ShortImageGallery";
 import RegisterPageModal from "../Auth/RegisterPageModal";
+import Proposals from "../components/Proposals";
+import Hired from "../components/Hired";
+
 
 var bnr = require("../../../images/banner/bnr5.png");
 
@@ -41,25 +45,33 @@ const style = {
 
 function MakeOfferPage() {
   const [show, setShow] = React.useState(false);
-
   const classes = useStyles();
-  const location = useLocation();
-  const [user, setUser] = React.useState(null);
-  const id = location.state && location.state.id ? location.state.id : "10";
+ // const id = location.state && location.state.id ? location.state.id : "10";
+  let { id,title } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    handleRequest();
-  }, [location]);
-
-  const handleRequest = async () => {
-    const res = await createRequest().get(
-      `/api/v1/account/user-search-detials/${id}/`
-    );
-    setUser(res.data);
-    console.log(res.data, "DATA");
-  };
-
-  console.log(location);
+  const allData = async () => {
+		setLoading(true);
+		await createRequest()
+		  .get(`api/v1/task/task/${id}/`)
+		  .then((res) => {
+		   console.log(res)
+       setData(res.data)
+      
+			 setLoading(false);
+		  })
+		  .catch((e) => {
+			if (e.response?.status === 400) {
+			console.log(e?.response?.data?.non_field_errors[0]);
+			} else {
+			  console.log("Unknown Error");
+			}
+		  });
+	  }
+    useEffect(()=>{
+      allData();
+    },[])
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -80,7 +92,7 @@ function MakeOfferPage() {
         </Box>
       </Modal>
       <Header />
-      {user ? (
+      {!loading ? (
         <div className='page-content bg-white'>
           <div
             className='dez-bnr-inr d-flex align-items-center flex-wrap '
@@ -93,10 +105,10 @@ function MakeOfferPage() {
                 <Grid item>
                   <Avatar
                     variant={"square"}
-                    className={classes.avatar}
-                    src={user.photo}
+                    className={classes.avatar }
+                    src={data.photo}
                   >
-                    K
+                   {data?.sector}
                   </Avatar>
                 </Grid>
                 <Grid item>
@@ -107,24 +119,12 @@ function MakeOfferPage() {
                     style={{ height: "100%", padding: "5px 0px" }}
                   >
                     <Grid item>
-                      <h4 style={{ marginBottom: 5 }}>
-                        {user.first_name} {user.last_name}
+                      <h4 style={{ marginTop: '42px' }}>
+                     {data?.title}
                       </h4>
-                      <h5 style={{ color: "gray" }}>iOS Expert + Node Dev</h5>
+                     
                     </Grid>
-                    <Hidden xsDown>
-                      <div className='d-flex'>
-                        {user.location && (
-                          <span>
-                            <BsBuilding size={26} />
-                            <span className='align-top mx-2'>
-                              {user.location}
-                            </span>
-                          </span>
-                        )}
-                        <Ratings />
-                      </div>
-                    </Hidden>
+                   
                   </Grid>
                 </Grid>
                 <Hidden smUp>
@@ -134,12 +134,7 @@ function MakeOfferPage() {
                 </Hidden>
               </Grid>
             </div>
-            <div className='right-side'>
-              <div className='salary-box'>
-                <div className='salary-type'>Project Budget</div>
-                <div className='salary-amount'>$2,500 - $4,500</div>
-              </div>
-            </div>
+          
           </div>
 
           <div className={classes.main}>
@@ -147,64 +142,106 @@ function MakeOfferPage() {
               <Grid item xs={12} sm={12} md={7} lg={8}>
                 <div className='mt-4'>
                   <div>
-                    <p>{user.description}</p>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Delectus iure nesciunt possimus? Alias blanditiis
-                      consequatur doloribus, enim esse libero nam officiis omnis
-                      reiciendis. Distinctio ea esse eum itaque, nesciunt sequi!
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Deleniti enim exercitationem non tempore. Amet
-                      consectetur, eius exercitationem facilis harum hic in
-                      labore laborum laudantium natus numquam odio omnis quae
-                      quo quod reiciendis similique sit, totam ullam unde. Ab,
-                      natus velit?
-                    </p>
+                    <p>{data?.description}</p>
+                  
 
                     <h6>Attachments</h6>
                     <ShortImages />
                     <h6>Skills Required</h6>
                     <div className='d-flex badge-div '>
-                      <Badge>iOS</Badge>
-                      <Badge>Android</Badge>
-                      <Badge>Mobile apps</Badge>
-                      <Badge>Python</Badge>
+                    {data?.tags?.split(',')?.map((e)=>(
+
+                      <Badge>{e}</Badge>
+                      ))}
+                    
                     </div>
                   </div>
-                  {/* <div className='actions'>
-        <button className='site-button'>
-          {" "}
-          <i className='fa fa-comments-o  mr-2'></i> Message
-        </button>
-        <button className='site-button btn-outlined ml-4'>
-          <i className='fa fa-phone mr-2'></i> Request a Call
-        </button>
-      </div> */}
+        
                 </div>
-                {/* <TabsGroup data={user.description} /> */}
-                <RelatedJobs />
+               {/* we heir start */}
+               <div className="review">
+        <h2 className="mb-5">Proposals</h2>
+        <Hired name="Baloch Khan" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
+        <Hired name="Shakeeb Khan" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
+        <Hired name="Sami Bhai" rating={4} comment="Amazing artist, I contacted him with examples and told him what I wanted to be done and he got what I envisioned on the first try! Highly recommend" />
+      </div>
+               {/* we heir end */}
+{/* clients reives start */}
+<div className="review">
+        <h2 className="mb-5">Related Jobs</h2>
+       <Proposals name="Shoaib Ghulam" position="Web Developer" rating={5}/>
+       <Proposals name="Waseem Kaka" position="Graphics Desinger" rating={3}/>
+       
+      </div>
+{/* clients reives end */}
+
+
+
+
+
+                {/* <RelatedJobs /> */}
               </Grid>
-              <Grid item xs={12} sm={12} md={5} lg={4}>
-                {/* <HourlyRate /> */}
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                <Alert variant={"success"} className='text-center mt-5'>
-                  6 days, 23 hours left
-                </Alert>
-                <MakeOfferForm modal={handleShow} />
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                {/* <SocialMedia /> */}
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                {/* <Skills /> */}
-                {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                {/* <Attachments /> */}
+              <Grid item xs={12} sm={12} md={5} lg={4} className="project-widget">
+               {/* Price Box Start */}
+               <div className="text-center mx-auto  mt-5">
+        <h3>Budget</h3>
+        <h3>
+          ${data?.minimum_salary} To ${data?.maximum_salary} </h3>
+        <span>Project type: {data?.category}</span>
+        <div>
+          <Link to={`/send-contract/${data?.id}`} className="site-button">Submit a Proposal</Link>
+          {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
+         
+        </div>
+      </div>
+               {/* Price Box end */}
+               {/* project type start */}
+               <ul className="list-unstyled mt-5 mb-3 meta">
+        <li className="text-left">Seller Type:<b className="float-right">Company</b></li>
+        <li className="text-left">Project type:<b className="float-right">Hourly</b></li>
+        <li className="text-left">Project Duration:<b className="float-right">Other</b></li>
+        <li className="text-left">Project Level:<b className="float-right">Expensive</b></li>
+        <li className="text-left">Languages:<b className="float-right">Arabic</b></li>
+        <li className="text-left">English Level:<b className="float-right">Professional</b></li>
+      </ul>
+               {/* project type end */}
+
+               {/* Buyer Start */}
+               <div className="text-center">
+    <h3 className="project-widget-title">About Buyer</h3>
+    <a href="#">
+        <img src="https://themebing.com/wp/prolancer/wp-content/uploads/2021/04/pexels-mentatdgt-1138903-150x150.jpg"
+            className="mb-3 rounded-circle img-thumbnail" alt="" /> </a>
+    <a href="#" target="_blank">
+        <h4>Bayley Robertson</h4>
+    </a>
+    <ul className="list-inline mt-2 mb-2 badges">
+        <li className="list-inline-item"><img
+                src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/buyerfirstorder.png"
+                title="Spent money for hiring" alt="badge" style={{cursor: 'default'}} /></li>
+        <li className="list-inline-item"><img
+                src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/level2.png"
+                title="Seller Level 2: Has sold $100+ On ProLancer" alt="badge" /></li>
+    </ul>
+    <ul class="list-unstyled mt-4 meta">
+<li class="text-left">Location:<b class="float-right">Germany</b></li>
+<li class="text-left">Departments:<b class="float-right">Graphich Designing</b></li>
+<li class="text-left">No. of Employees:<b class="float-right">11-20</b></li>
+</ul>
+</div>
+               {/* Buyer end */}
               </Grid>
             </Grid>
           </div>
         </div>
       ) : (
-        <div className='loader'>
-          <ClipLoader color={"#2e55fa"} loading={true} size={150} />
-        </div>
+        <div className='loader mx-auto'>
+        <ClipLoader
+        color={"#2e55fa"}
+        loading={true}
+        size={150}
+        />
+      </div>
       )}
 
       <Footer />

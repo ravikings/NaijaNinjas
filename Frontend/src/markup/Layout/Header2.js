@@ -90,6 +90,9 @@ function Header2() {
                     <Link to={"/"}>Home</Link>
                   </li>
                   <li>
+                    <Link to={"/browse-job-filter-list"}>tasks</Link>
+                  </li>
+                  <li>
                     <Link to={"/browse-job-filter-list"}>marketplace</Link>
                   </li>
                   <li>

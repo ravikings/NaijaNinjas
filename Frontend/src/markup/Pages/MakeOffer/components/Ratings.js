@@ -1,7 +1,7 @@
 import React from "react";
 import Rating from "@material-ui/lab/Rating";
 
-function Ratings(props) {
+function Ratings({rating=5}) {
   
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
@@ -15,12 +15,12 @@ function Ratings(props) {
           fontWeight: 700,
         }}
       >
-        5.0
+        {rating}.0
       </div>
       <Rating
         style={{ color: "#febe42" }}
         name="read-only"
-        value={4}
+        value={rating}
         readOnly
       />
     </div>

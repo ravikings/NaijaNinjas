@@ -15,7 +15,7 @@ import axios from 'axios'
 import Swiper from 'react-id-swiper';
 import 'swiper/css';
 
-
+import url from '../../../utils/baseUrl';
 //Images
 var bnr = require('../../../images/banner/bnr1.jpg');
 
@@ -23,7 +23,7 @@ function Blogdetail(){
 	const location = useLocation();
 	const [loading, setLoading] = useState(false);
 	let { id,title } = useParams();
-	const baseURL= `http://127.0.0.1:8000/`;
+	
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [showIcon,setShowIcon]=useState(true);
@@ -103,7 +103,7 @@ function Blogdetail(){
 		formdata.append("author", userId);
 		axios({
 			method: 'POST',
-			url: `${baseURL}forum/comment/`,
+			url: `${url.baseURL}forum/comment/`,
 			data: formdata,
 			headers: {
 	  
@@ -141,7 +141,7 @@ function Blogdetail(){
 		formdata.append("author", userId);
 		axios({
 			method: 'PUT',
-			url: `${baseURL}forum/comment/${commentId}/`,
+			url: `${url.baseURL}forum/comment/${commentId}/`,
 			data: formdata,
 			headers: {
 	  
