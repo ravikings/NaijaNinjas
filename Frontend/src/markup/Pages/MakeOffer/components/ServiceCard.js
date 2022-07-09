@@ -5,24 +5,21 @@ import { truncate } from "../../../../utils";
 
 const ServiceCard = ({ item }) => {
   return (
-    <li className="col-lg-4 col-md-6">
-      <div className="service-bx">
-        <div className="service-display">
-          <img
-            src={require("./../../../../images/blog/grid/pic4.jpg")}
-            alt="Services "
-          />
-        </div>
-        <div className="service-details">
-          <h5>
-            <Link to={"/job-detail"}>{truncate(item.title,50)}</Link>
-          </h5>
+  <div className="services-box">
+    <img src="https://images.unsplash.com/photo-1426170042593-200f250dfdaf?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg"/>
+    <div className="services-title p-2">
+      <Link to={"/job-detail"}>
+      <h3>This is my new Gigxnow Here igxnow Here </h3>
 
-          <span>$400</span>
-
-        </div>
-      </div>
-    </li>
+      </Link>
+    </div>
+    <div className="services-caption">
+      <span className="mr-1">From</span> <b>$5000</b>
+    </div>
+    <div className="services-caption">
+      <span><i className="fa fa-clock-o mr-1"></i> 3 day delivery</span>
+    </div>
+  </div>
   );
 };
 

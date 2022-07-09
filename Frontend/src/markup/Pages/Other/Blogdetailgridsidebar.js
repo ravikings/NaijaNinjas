@@ -58,7 +58,7 @@ function Blogdetailgridsidebar(){
 		   <Header />
 		   <div className="page-content bg-white">
 		   
-			   <div className="content-area">
+			   <div className="">
 				   <div className="container">
 					   
 					   <div className="row">

@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import PageTitle from '../../Layout/PageTitle';
+import ServiceCard from "../MakeOffer/components/ServiceCard";
 
 var bnr =require('../../../images/banner/bnr1.jpg');
 
@@ -43,11 +44,11 @@ function Jobdetail(){
 											</div>
 											<div className="col-lg-12 col-md-6">
 												<div className="widget bg-white p-lr20 p-t20  widget_getintuch radius-sm">
-													<h4 className="text-black font-weight-700 p-t10 m-b15">Job Details</h4>
+													<h4 className="text-black font-weight-700 p-t10 m-b15"> Service Details</h4>
 													<ul>
 														<li><i className="ti-location-pin"></i><strong className="font-weight-700 text-black">Address</strong><span className="text-black-light"> Demo Address #8901 Marmora Road Chi Minh City, Vietnam </span></li>
-														<li><i className="ti-money"></i><strong className="font-weight-700 text-black">Salary</strong> $800 Monthy</li>
-														<li><i className="ti-shield"></i><strong className="font-weight-700 text-black">Experience</strong>6 Year Experience</li>
+														<li><i className="ti-money"></i><strong className="font-weight-700 text-black">Price</strong> $800 Monthy</li>
+														<li><i className="ti-shield"></i><strong className="font-weight-700 text-black">Rating</strong>4.7 Rating</li>
 													</ul>
 												</div>
 											</div>
@@ -80,7 +81,7 @@ function Jobdetail(){
 											<li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</li>
 											<li>DexignLab standard dummy text ever since</li>
 										</ul>
-										<Link to={"/jobs-applied-job"} className="site-button">Apply This Job</Link>
+										<Link to={"/jobs-applied-job"} className="site-button">Contact Pro</Link>
 									</div>
 								</div>
 							</div>
@@ -88,30 +89,14 @@ function Jobdetail(){
 					</div>
 					<div className="section-full content-inner">
 						<div className="container">
+						<h4 class="text-black font-weight-700 p-t10 m-b15"> Related Services</h4>
 							<div className="row">
 								{blogGrid.map((item,index)=>(
-									<div className="col-xl-3 col-lg-6 col-md-6" key={index}>
-										<div className="m-b30 blog-grid">
-											<div className="dez-post-media dez-img-effect "> <Link to={"/blog-details"}><img src={item.image} alt="" /></Link> </div>
-											<div className="dez-info p-a20 border-1">
-												<div className="dez-post-title ">
-													<h5 className="post-title"><Link to={"/blog-details"}>Title of blog post</Link></h5>
-												</div>
-												<div className="dez-post-meta ">
-													<ul>
-														<li className="post-date"> <i className="ti-location-pin"></i> London </li>
-														<li className="post-author"><i className="ti-user"></i>By <Link to={"#"}>Jone</Link> </li>
-													</ul>
-												</div>
-												<div className="dez-post-text">
-													 <p>All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks.</p>
-												</div>
-											    <div className="dez-post-readmore"> 
-													<Link to={"/blog-details"} title="READ MORE" rel="bookmark" className="site-button-link"><span className="fw6">READ MORE</span></Link>
-												</div>
-											</div>
-										</div>
-									</div>
+									
+									<div className="col-lg-3 col-sm-12 col-12 m-b20">
+
+									<ServiceCard  key={index} />
+								  </div>
 								))}	
 							</div>
 						</div>

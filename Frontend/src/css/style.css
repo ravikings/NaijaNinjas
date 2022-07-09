@@ -2595,6 +2595,9 @@ blockquote:before {
   .alignright {
     margin: 5px 0 15px 15px;
   }
+  .mobile-block{
+    display:none !important;
+  }
 }
 /*---------------------------------------------------------------
 14. HEADER (top part of page)
@@ -2625,6 +2628,9 @@ blockquote:before {
 @media only screen and (max-width: 767px) {
   .extra-nav {
     margin-right: 15px;
+  }
+  .mobile-block{
+    display:none !important;
   }
 }
 @media only screen and (max-width: 480px) {

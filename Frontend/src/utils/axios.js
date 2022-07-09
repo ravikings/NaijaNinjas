@@ -22,7 +22,7 @@ export const sendImage = (image, userID, author) => {
   const formData = new FormData();
   formData.append("photo", image);
   return axios.put(
-    `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/api/v1/account/user-profile/${userID}/`,
+    `${BASE_URL}${userID}/`,
     {
       formData,
       author,

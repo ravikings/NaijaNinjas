@@ -76,7 +76,7 @@ function Browsejobfiltergrid() {
                           <div className="d-flex m-b30">
                             <div className="job-post-info">
                               <h5>
-                                <Link to={"make-offer"}>{item.title}</Link>
+                                <Link to={"send-offer"}>{item.title}</Link>
                               </h5>
                               <ul>
                                 <li>
