@@ -24,7 +24,7 @@ from .utilis import send_verify_email,send_reset_password_email, send_successful
 from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
-from asgiref.sync import async_to_sync
+from asgiref.sync import sync_to_async
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -38,7 +38,7 @@ from .models import (
     IpModel,
     Service,
     Projects,
-    ProjectPhoto,
+    ProjectPhoto
 )
 from .serializers import (
     PhotosSerializer,
@@ -177,22 +177,15 @@ def resumeUpdate(request, pk):
 
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
 class AccountStatus(viewsets.ModelViewSet):
 
     """
     uses to upload pictures to ui dashboard
     """
-
+    queryset = AccountUser.objects.all()
     serializer_class = UserOnlineSerializer
-
-    @async_to_sync
-    async def get_queryset(self):
-        """
-        Return a list of all users.
-        """
-
-        return AccountUser.objects.all()
+    
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class PhotoUpload(viewsets.ModelViewSet):

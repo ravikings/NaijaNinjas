@@ -16,12 +16,27 @@ class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
-    is_online = models.BooleanField(default=False, verbose_name="is_online", blank=True)
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
+    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
+    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
+    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
+
+
+    def private_mode(self, status=False):
+
+        self.user_set_status = status
+        self.save()
+
+    def public_online_status(self):
+
+        if not self.user_set_status:
+            self.user_set_status = True
+            self.save()
+
 
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)

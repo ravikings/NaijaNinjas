@@ -55,3 +55,8 @@ zappa tail
 
 To migrate notification use:
 python manage.py migrate notifications
+
+
+test credentials
+admintest@gmail.com
+123Tcorrect8@

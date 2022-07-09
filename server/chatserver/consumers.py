@@ -4,7 +4,7 @@ import secrets
 from datetime import datetime
 import logging
 
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from channels.db import database_sync_to_async
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
@@ -35,6 +35,7 @@ class ChatConsumer(WebsocketConsumer):
         logging.warning("chat disconnect!")
 
     # Receive message from WebSocket
+    @sync_to_async
     def receive(self, text_data=None, bytes_data=None):
         # parse the json data into dictionary object
         text_data_json = json.loads(text_data)
