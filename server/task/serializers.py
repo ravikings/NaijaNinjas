@@ -1,4 +1,4 @@
-from task.models import Task, TaskBidder, Photo
+from task.models import Task, TaskBidder, Photo, Comment, Timeline
 from rest_framework import serializers
 
 
@@ -28,3 +28,54 @@ class TaskImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = "__all__"
+
+
+class TimelineCommentSerializer(serializers.ModelSerializer):
+    """
+    Comment serializers.
+    """
+
+    time_created = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        exclude = ("updated", "created")
+
+    def get_time_created(self, instance):
+        dateTimeObj = instance.created
+        timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
+        time_difference = instance.updated - dateTimeObj
+        data = {"Created": "","Updated": ""}
+        if int(time_difference.seconds) >= 1:
+            data["Updated"] = timestampStr
+
+        else:
+            data["Created"] = timestampStr
+
+        return data
+
+
+class TimelineSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    timeline_comment = TimelineCommentSerializer(read_only=True, many=True)
+   
+    class Meta:
+        model = Timeline
+        exclude = ("updated", "created", "comment")
+
+    def get_time_created(self, instance):
+        dateTimeObj = instance.created
+        timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
+        time_difference = instance.updated - dateTimeObj
+        data = {"Created": "","Updated": ""}
+        if int(time_difference.seconds) >= 1:
+            data["Updated"] = timestampStr
+
+        else:
+            data["Created"] = timestampStr
+
+        return data
+

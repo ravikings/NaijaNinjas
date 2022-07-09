@@ -203,36 +203,33 @@ class ProjectPhotoSerializer(serializers.ModelSerializer):
 class UserOnlineSerializer(serializers.ModelSerializer):
     
     online_status = serializers.SerializerMethodField()
-
     class Meta:
         model = AccountUser
-        fields = ("id", "online_status", "is_a_runner")
-        read_only_fields = ("id","online", "is_a_runner")
-
+        fields = ("id", "online_status",)
+        read_only_fields = ("id","online_status")
 
     def get_online_status(self, instance):
-    
-        #data = instance.objects.get(id=pk)
+
+        if instance.user_set_status:
+
+            return "offline"
+
+        else:
+            try:
+                user_last_login = arrow.get(instance.last_login)
+                now = arrow.utcnow()
+                current_time = now.replace(tzinfo='Africa/Lagos')
+                minutes = current_time-user_last_login
+                difference = minutes.total_seconds()
+                time = difference // (60)
+                if time < 1:
+
+                    return "online"
+
+            except:
+
+                return "offline"
         
-        x = instance.last_login
-        if x:
-
-            user_last_login = arrow.get(x)
-            now = arrow.utcnow()
-            current_time = now.replace(tzinfo='Africa/Lagos')
-
-            minutes = current_time-user_last_login
-
-            difference = minutes.total_seconds()
-            time = difference // (60)
-            print("checking if user is online")
-            if time < 1:
-                print({"status":"online"})
-                return "online"
-        print({"status":"offline"})
-        return "offline"
-
-
 class UserSearchDetialSerializer(serializers.ModelSerializer):
 
     total_reviews = serializers.SerializerMethodField()

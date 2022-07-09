@@ -4,7 +4,7 @@ import secrets
 from datetime import datetime
 import logging
 
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from channels.db import database_sync_to_async
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
@@ -35,7 +35,7 @@ class ChatConsumer(WebsocketConsumer):
         logging.warning("chat disconnect!")
 
     # Receive message from WebSocket
-    @database_sync_to_async
+    @sync_to_async
     def receive(self, text_data=None, bytes_data=None):
         # parse the json data into dictionary object
         text_data_json = json.loads(text_data)
@@ -50,24 +50,20 @@ class ChatConsumer(WebsocketConsumer):
         sender = self.scope["user"]
 
         # Attachment
-        #if attachment:
-            # file_str, file_ext = attachment["data"], attachment["format"]
+        file_data = None
+        if attachment:
+            file_str, file_ext = attachment["data"], attachment["format"]
 
-            # file_data = ContentFile(
-            #     base64.b64decode(file_str), name=f"{secrets.token_hex(8)}.{file_ext}"
-            # )
+            file_data = ContentFile(
+                base64.b64decode(file_str), name=f"{secrets.token_hex(8)}.{file_ext}"
+            )
         _message = Message.objects.create(
             sender=sender,
-            attachment=attachment,
+            attachment=file_data,
             text=message,
             conversation_id=conversation,
         )
-        # else:
-        #     _message = Message.objects.create(
-        #         sender=sender,
-        #         text=message,
-        #         conversation_id=conversation,
-        #     )
+
         # Send message to room group
         chat_type = {"type": "chat_message"}
         message_serializer = dict(MessageSerializer(instance=_message).data)

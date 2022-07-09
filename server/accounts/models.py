@@ -8,18 +8,35 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import Avg, F, Count
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
+from django_s3_storage.storage import S3Storage
 
+storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 
 class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
-    is_online = models.BooleanField(default=False, verbose_name="is_online", blank=True)
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
+    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
+    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
+    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
+
+
+    def private_mode(self, status=False):
+
+        self.user_set_status = status
+        self.save()
+
+    def public_online_status(self):
+
+        if not self.user_set_status:
+            self.user_set_status = True
+            self.save()
+
 
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)
@@ -34,7 +51,7 @@ class RunnerProfile(models.Model):
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     title = models.CharField(max_length=55, blank=True, db_index=True)
-    photo = models.ImageField(upload_to="users/%Y/%m/%d/", blank=True, null=True)
+    photo = models.ImageField(upload_to="users/%Y/%m/%d/", blank=True, null=True, storage=storage)
     language = models.CharField(max_length=55, blank=True, null=True)
     location = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     salary = models.CharField(max_length=55, blank=True, null=True, db_index=True)
@@ -78,7 +95,7 @@ class RunnerResume(models.Model):
     career_profile = models.JSONField(null=True, blank=True)
     postcode = models.CharField(max_length=55, blank=True, db_index=True)
     description = models.TextField(null=True, db_index=True, blank=True)
-    attachment = models.FileField(upload_to=upload_to_resume, blank=True)
+    attachment = models.FileField(upload_to=upload_to_resume, blank=True, storage=storage)
 
 class Review(models.Model):
     author = models.ForeignKey(
@@ -102,7 +119,7 @@ class Photo(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="photo_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    image = models.ImageField(upload_to="users/%Y/%m/%d/")
+    image = models.ImageField(upload_to="users/%Y/%m/%d/", storage=storage)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
@@ -113,7 +130,7 @@ class Vidoe(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="video_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True)
+    video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True, storage=storage)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
@@ -129,7 +146,7 @@ class Service(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
     )
     description = RichTextField(db_index=True, null=True)
-    image = models.ImageField(upload_to=upload_to, blank=True)
+    image = models.ImageField(upload_to=upload_to, blank=True, storage=storage)
     amount = models.CharField(max_length=250, null=True)
     location = models.CharField(max_length=250, null=True, db_index=True)
     title = models.CharField(max_length=250, null=True, db_index=True)
@@ -153,4 +170,4 @@ class ProjectPhoto(models.Model):
         Projects, on_delete=models.CASCADE, related_name="project_photos"
     )
 
-    image = models.ImageField(upload_to=upload_to)
+    image = models.ImageField(upload_to=upload_to, storage=storage)

@@ -32,6 +32,7 @@ server/db.sqlite3
 *.pyc
 server/db.sqlite3
 server/.env
+server/tutorial-env
 
 *.pyc
 *.pyc
