@@ -20,13 +20,13 @@ class TaskView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = Task.objects.all()
+    queryset = Task.objects.filter(post_status="open")
     serializer_class = TaskSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    #permissions_classes = [IsAuthenticated and FreelancerIsOwner]
 
     def retrieve(self, request, pk=None):
         ip = get_client_ip(request)
-        task = get_object_or_404(Task, id=pk)
+        task = Task.objects.get(id=pk)
         history_tracker(request, task)
         if IpModel.objects.filter(ip=ip).exists():
                 task.views.add(IpModel.objects.get(ip=ip))
@@ -36,6 +36,16 @@ class TaskView(viewsets.ModelViewSet):
         serializer = TaskSerializer(task)
 
         return Response(serializer.data)
+
+class TaskOwnerView(viewsets.ModelViewSet):
+
+    serializer_class = TaskSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+
+        return Task.objects.filter(author_id=self.request.user.id)
+
 
 class TaskBidderView(viewsets.ModelViewSet):
     
