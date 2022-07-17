@@ -104,12 +104,14 @@ class RunnerProfile(models.Model):
                     # if time < 1:
                     self.status = True
                     self.save()
+                    print("set status to login")
                     return "online"
 
                 elif type == "LOGOUT":
 
                     self.status = False
                     self.save()
+                    print("set status to logout")
                     return "offline"
 
             except:

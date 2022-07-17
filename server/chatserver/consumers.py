@@ -17,17 +17,17 @@ from .serializers import MessageSerializer
 
 class ChatConsumer(WebsocketConsumer):
     
-
     def getUser(self):
         sender = self.scope["user"]
+        print("chat user online")
+        print(sender)
         return RunnerProfile.objects.get(author=sender)
 
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
-
-        userObj = self.getUser()
-        userObj.set_online_status("LOGIN")
+        self.userObj = self.getUser()
+        self.userObj.set_online_status("LOGIN")
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
@@ -36,11 +36,11 @@ class ChatConsumer(WebsocketConsumer):
         self.accept()
         logging.warning("connected to room group!")
 
-    async def disconnect(self, close_code):
+    def disconnect(self, close_code):
         # Leave room group
-        userObj = await database_sync_to_async(self.getUser())
-        await userObj.set_online_status("LOGOUT")
-        await self.channel_layer.group_discard(
+        # userObj = await database_sync_to_async(self.getUser())
+        self.userObj.set_online_status("LOGOUT")
+        async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
         logging.warning("chat disconnect!")
@@ -79,8 +79,8 @@ class ChatConsumer(WebsocketConsumer):
             )
 
             # Send message to room group
-            userObj = self.getUser()
-            userObj.set_online_status("ONLINE")
+            #userObj = self.getUser()
+            # userObj.set_online_status("ONLINE")
             chat_type = {"type": "chat_message"}
             message_serializer = dict(MessageSerializer(instance=_message).data)
             return_dict = {**chat_type, **message_serializer}
@@ -91,9 +91,9 @@ class ChatConsumer(WebsocketConsumer):
                         "type": "chat_message",
                         "message": message,
                         "sender": sender.email,
-                        'userImage': userObj.photo.url,
-                        "online_status": True, # userObj.status come back change from uueraccount to profile in model
-                        'userName': userObj.first_name + " " + userObj.last_name,
+                        'userImage': self.userObj.photo.url,
+                        "online_status": self.userObj.status,
+                        'userName': self.userObj.first_name + " " + self.userObj.last_name,
                         "attachment": _message.attachment.url,
                         "time": str(_message.timestamp),
                     },
