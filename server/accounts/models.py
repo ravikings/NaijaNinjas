@@ -9,6 +9,7 @@ from django.db.models import Avg, F, Count
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
 from django_s3_storage.storage import S3Storage
+import arrow
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 
@@ -18,24 +19,24 @@ class AccountUser(AbstractUser):
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
-    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
-    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
-    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
+    # status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
+    # login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
+    # user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
 
-    def private_mode(self, status=False):
+    # def private_mode(self, status=False):
 
-        self.user_set_status = status
-        self.save()
+    #     self.user_set_status = status
+    #     self.save()
 
-    def public_online_status(self):
+    # def public_online_status(self):
 
-        if not self.user_set_status:
-            self.user_set_status = True
-            self.save()
+    #     if not self.user_set_status:
+    #         self.user_set_status = True
+    #         self.save()
 
 
 class IpModel(models.Model):
@@ -71,6 +72,52 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
+    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
+    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
+    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
+
+
+    def private_mode(self, status=False):
+    
+        self.user_set_status = status
+        self.save()
+
+    def public_online_status(self):
+
+        if not self.user_set_status:
+            self.user_set_status = True
+            self.save()
+    
+    def set_online_status(self, type):
+        
+        instance = AccountUser.objects.get(id=self.author.id)
+        if not self.user_set_status:
+
+            try:
+                if type == "LOGIN":
+                    user_last_login = arrow.get(instance.last_login)
+                    now = arrow.utcnow()
+                    current_time = now.replace(tzinfo='Africa/Lagos')
+                    minutes = current_time-user_last_login
+                    difference = minutes.total_seconds()
+                    time = difference // (60)
+                    if time < 1:
+
+                        self.status = True
+                        self.save()
+                        return "online"
+
+                elif type == "LOGOUT":
+
+                    self.status = False
+                    self.save()
+                    return "online"
+
+            except:
+                
+                pass
+                
+
 
 def upload_to_resume(instance, filename):
     now = timezone.now()

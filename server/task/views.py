@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
-from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer
+from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment
 from history.signals import history_tracker
@@ -11,6 +11,7 @@ from accounts.views import get_client_ip
 from accounts.models import IpModel
 from rest_framework import status
 from django.db import transaction
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -107,6 +108,7 @@ class TaskApproveView(viewsets.ModelViewSet):
 
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
 
     def post(self, request, pk=None):
@@ -121,6 +123,7 @@ class TaskApproveView(viewsets.ModelViewSet):
             serializer = TaskBidderSerializer(instance=bid_to_approve, data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                bid_to_approve.set_task_status()
 
                 return Response({"message": "the bid you approved was successful"})
 
@@ -146,3 +149,30 @@ class TimelineCommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = TimelineCommentSerializer
     #permissions_classes = [IsAuthenticated and IsOwner]
+
+
+class TaskAssigned(viewsets.ModelViewSet):
+
+    """
+    uses to get assigned tasks to professionals
+    """
+
+    queryset = TaskBidder.objects.all()
+    serializer_class = TaskAssignedSerializer
+    #permissions_classes = [IsAuthenticated and Is_a_runner]
+
+    def get_queryset(self):
+    
+        return TaskBidder.objects.filter(bidder_id=self.request.user.id, bid_approve_status=True).order_by("modified").asc()
+
+
+@api_view(["POST", "GET"])
+def task_favorite(request, pk):
+
+    task = get_object_or_404(Task, id=pk)
+    if task.bookmarks.filter(id=request.user.id).exists():
+        task.bookmarks.remove(request.user)
+        return Response({"message": "task removed"})
+    else:
+        task.bookmarks.add(request.user)
+        return Response({"message": "task added"})

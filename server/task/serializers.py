@@ -80,3 +80,12 @@ class TimelineSerializer(serializers.ModelSerializer):
 
         return data
 
+class TaskAssignedSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    task_assigned = TaskSerializer(read_only=True, many=True)
+    class Meta:
+        model = TaskBidder
+        exclude = ("transaction_id",)

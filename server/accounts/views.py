@@ -52,7 +52,6 @@ from .serializers import (
     UserResumeSerializer,
     ResetPasswordEmailRequestSerializer,
     SetNewPasswordSerializer,
-    UserOnlineSerializer,
     ServiceSerializer,
     ProfileSerializerWithResume,
     ProjectsSerializer,
@@ -178,13 +177,15 @@ def resumeUpdate(request, pk):
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
 
-class AccountStatus(viewsets.ModelViewSet):
+@api_view(["POST", "GET"])
+def account_status(request, pk, type):
 
     """
     uses to upload pictures to ui dashboard
     """
-    queryset = AccountUser.objects.all()
-    serializer_class = UserOnlineSerializer
+    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset.set_online_status(str(type).upper()) # pass type, either login or logout
+    return Response({"message": f"status updated to {queryset.status}"})
     
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
