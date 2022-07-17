@@ -16,12 +16,12 @@ from .serializers import MessageSerializer
 
 
 class ChatConsumer(WebsocketConsumer):
+    
 
     def getUser(self):
         sender = self.scope["user"]
         return RunnerProfile.objects.get(author=sender)
 
-    @sync_to_async
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
@@ -36,12 +36,11 @@ class ChatConsumer(WebsocketConsumer):
         self.accept()
         logging.warning("connected to room group!")
 
-    @sync_to_async
-    def disconnect(self):
+    async def disconnect(self, close_code):
         # Leave room group
-        userObj = self.getUser()
-        userObj.set_online_status("LOGOUT")
-        async_to_sync(self.channel_layer.group_discard)(
+        userObj = await database_sync_to_async(self.getUser())
+        await userObj.set_online_status("LOGOUT")
+        await self.channel_layer.group_discard(
             self.room_group_name, self.channel_name
         )
         logging.warning("chat disconnect!")
@@ -93,7 +92,7 @@ class ChatConsumer(WebsocketConsumer):
                         "message": message,
                         "sender": sender.email,
                         'userImage': userObj.photo.url,
-                        "online_status": True, # come back change from uueraccount to profile in model
+                        "online_status": True, # userObj.status come back change from uueraccount to profile in model
                         'userName': userObj.first_name + " " + userObj.last_name,
                         "attachment": _message.attachment.url,
                         "time": str(_message.timestamp),
@@ -107,7 +106,7 @@ class ChatConsumer(WebsocketConsumer):
                 
         elif action == 'typing':
             return_dict = {
-				'type': 'chat_message',
+				'action': 'typing',
 				'message': message
 			}
             async_to_sync(self.channel_layer.group_send)(

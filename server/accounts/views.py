@@ -181,7 +181,7 @@ def resumeUpdate(request, pk):
 def account_status(request, pk, type):
 
     """
-    uses to upload pictures to ui dashboard
+    uses to upload pictures to ui dashboard.
     """
     queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
     queryset.set_online_status(str(type).upper()) # pass type, either login or logout

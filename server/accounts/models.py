@@ -95,23 +95,22 @@ class RunnerProfile(models.Model):
 
             try:
                 if type == "LOGIN":
-                    user_last_login = arrow.get(instance.last_login)
-                    now = arrow.utcnow()
-                    current_time = now.replace(tzinfo='Africa/Lagos')
-                    minutes = current_time-user_last_login
-                    difference = minutes.total_seconds()
-                    time = difference // (60)
-                    if time < 1:
-
-                        self.status = True
-                        self.save()
-                        return "online"
+                    # user_last_login = arrow.get(instance.last_login)
+                    # now = arrow.utcnow()
+                    # current_time = now.replace(tzinfo='Africa/Lagos')
+                    # minutes = current_time-user_last_login
+                    # difference = minutes.total_seconds()
+                    # time = difference // (60)
+                    # if time < 1:
+                    self.status = True
+                    self.save()
+                    return "online"
 
                 elif type == "LOGOUT":
 
                     self.status = False
                     self.save()
-                    return "online"
+                    return "offline"
 
             except:
                 
