@@ -8,7 +8,7 @@ const PrivateRoute = ({ component: Component, path, checkRunner }) => {
   const refresh = Cookies.get("refresh_token");
 
   if (!refresh) {
-    return <Redirect to='/login' />;
+    return <Redirect to="/login" />;
   }
 
   if (!auth.loading && auth.isVerified) {
@@ -29,7 +29,7 @@ const PrivateRoute = ({ component: Component, path, checkRunner }) => {
   }
 
   setTimeout(() => {
-    return <Redirect to='/login' />;
+    return <Redirect to="/login" />;
   }, 500);
 
   return <></>;

@@ -2,7 +2,10 @@ import React from "react";
 import { Button, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 
+import useAuth from "../../../../hooks/useAuth";
+
 function MakeOfferForm(props) {
+  const auth = useAuth();
   const history = useHistory();
 
   const handleClick = (e) => {
@@ -10,49 +13,112 @@ function MakeOfferForm(props) {
     props.modal();
   };
   return (
-    <div>
-      <h5 style={{ textAlign: "center" }}>Discuss your project with David</h5>
-      <TextField
-        variant={"outlined"}
-        placeholder={"First and Last Name"}
-        fullWidth
-        style={{ marginTop: 20 }}
-      />
-      <TextField
-        style={{ marginTop: 20 }}
-        variant={"outlined"}
-        placeholder={"Email Address"}
-        fullWidth
-      />
-      <TextField
-        variant={"outlined"}
-        multiline
-        rows={4}
-        placeholder={"Message"}
-        fullWidth
-        style={{ marginTop: 20 }}
-      />
-      <Button
-        style={{ marginTop: 20 }}
-        fullWidth
-        variant={"contained"}
-        color={"primary"}
-        onClick={() => history.push("/messages")}
-      >
-        Make an Offer
-      </Button>
-      <hr />
-      <p className='text-secondary text-center pb-3'>
-        Doesn't have an account?{" "}
-        <Link
-          to={"/signup"}
-          onClick={(e) => handleClick(e)}
-          className='text-primary'
-        >
-          Sign Up
-        </Link>
-      </p>
-    </div>
+    <>
+      {!auth.isAuthenticated ? (
+        <div>
+          <h5 style={{ textAlign: "center" }}>
+            Discuss your project with David
+          </h5>
+          <TextField
+            variant={"outlined"}
+            placeholder={"First and Last Name"}
+            fullWidth
+            style={{ marginTop: 20 }}
+          />
+          <TextField
+            style={{ marginTop: 20 }}
+            variant={"outlined"}
+            placeholder={"Email Address"}
+            fullWidth
+          />
+          <TextField
+            variant={"outlined"}
+            multiline
+            rows={4}
+            placeholder={"Message"}
+            fullWidth
+            style={{ marginTop: 20 }}
+          />
+          <Button
+            style={{ marginTop: 20 }}
+            fullWidth
+            variant={"contained"}
+            color={"primary"}
+            onClick={() => history.push("/messages")}
+          >
+            Make an Offer
+          </Button>
+          <hr />
+          <p className="text-secondary text-center pb-3">
+            Doesn't have an account?{" "}
+            <Link
+              to={"/signup"}
+              onClick={(e) => handleClick(e)}
+              className="text-primary"
+            >
+              Sign Up
+            </Link>
+          </p>
+        </div>
+      ) : (
+        <div className="project-widget">
+          {/* Buyer Start */}
+          <div className="text-center">
+            {/* <h3 className="project-widget-title">About Buyer</h3> */}
+            <a href="#">
+              <img
+                src="https://themebing.com/wp/prolancer/wp-content/uploads/2021/04/pexels-mentatdgt-1138903-150x150.jpg"
+                className="mb-3 rounded-circle img-thumbnail"
+                alt=""
+              />{" "}
+            </a>
+            <a href="#" target="_blank">
+              <h4>{auth.currentUser.username}</h4>
+            </a>
+
+            <ul className="list-inline mt-2 mb-2 badges">
+              <li className="list-inline-item">
+                <Button
+                  style={{ marginTop: 20 }}
+                  fullWidth
+                  variant={"contained"}
+                  color={"primary"}
+                  onClick={() =>
+                    history.push(`/send-contract/${auth.userStatus.id}`)
+                  }
+                >
+                  Contact Me
+                </Button>
+              </li>
+              <li className="list-inline-item">
+                <Button
+                  style={{ marginTop: 20 }}
+                  fullWidth
+                  variant={"contained"}
+                  // color={"primary"}
+                  onClick={() => history.push("/messages")}
+                >
+                  Get a Quote
+                </Button>
+              </li>
+            </ul>
+
+            <ul class="list-unstyled mt-4 meta">
+              <li class="text-left">
+                Location:<b class="float-right">Germany</b>
+              </li>
+              <li class="text-left">
+                Departments:<b class="float-right">Graphich Designing</b>
+              </li>
+              <li class="text-left">
+                No. of Employees:<b class="float-right">11-20</b>
+              </li>
+            </ul>
+          </div>
+          {/* Buyer end */}
+        </div>
+      )}
+    </>
   );
 }
 
