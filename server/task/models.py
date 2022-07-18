@@ -14,6 +14,7 @@ storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 class Task(models.Model):
 
     STATUS = [
+        ("DRAFT", "DRAFT"),
         ("OPEN", "OPEN"),
         ("ASSIGNED", "ASSIGNED"),
         ("COMPLETED", "COMPLETED")
