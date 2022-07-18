@@ -47,7 +47,7 @@ function MakeOfferPage() {
   const [show, setShow] = React.useState(false);
   const classes = useStyles();
  // const id = location.state && location.state.id ? location.state.id : "10";
-  let { id,title } = useParams();
+  let { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
