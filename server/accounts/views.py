@@ -52,7 +52,6 @@ from .serializers import (
     UserResumeSerializer,
     ResetPasswordEmailRequestSerializer,
     SetNewPasswordSerializer,
-    UserOnlineSerializer,
     ServiceSerializer,
     ProfileSerializerWithResume,
     ProjectsSerializer,
@@ -88,11 +87,11 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         
         data = RunnerProfile.objects.get_or_create(author_id=pk)
-        print("im checking dashboard")
-        print("im checking dashboard")
-        print("im checking dashboard")
         user = AccountUser.objects.get(id=pk)
         recipient = AccountUser.objects.get(id=41)
+        print("im sending notification dashboard")
+        print("im checking dashboard")
+        print("im checking dashboard")
         notify.send(user,recipient=recipient, verb='hello come to dashboard')
         print("sent")
         serializer = ProfileSerializer(data[0])
@@ -178,13 +177,15 @@ def resumeUpdate(request, pk):
     return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
 
 
-class AccountStatus(viewsets.ModelViewSet):
+@api_view(["POST", "GET"])
+def account_status(request, pk, type):
 
     """
-    uses to upload pictures to ui dashboard
+    uses to upload pictures to ui dashboard.
     """
-    queryset = AccountUser.objects.all()
-    serializer_class = UserOnlineSerializer
+    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset.set_online_status(str(type).upper()) # pass type, either login or logout
+    return Response({"message": f"status updated to {queryset.status}"})
     
 
 @method_decorator(cache_page(60 * 15), name='dispatch')

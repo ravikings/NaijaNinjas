@@ -14,6 +14,7 @@ storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 class Task(models.Model):
 
     STATUS = [
+        ("DRAFT", "DRAFT"),
         ("OPEN", "OPEN"),
         ("ASSIGNED", "ASSIGNED"),
         ("COMPLETED", "COMPLETED")
@@ -39,6 +40,9 @@ class Task(models.Model):
     updated = models.DateTimeField(auto_now=True)
     views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
     post_status = models.CharField(max_length=255,choices=STATUS, default="OPEN")
+    bookmarks = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="task_bookmarks", blank=True
+    )
 
     class Meta:
         ordering = ("created",)
@@ -55,24 +59,32 @@ class TaskBidder(models.Model):
     The junction table for task and bid models/tables. Contains every instance of a task for a placement
     """
 
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    bidder = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="task_bidder", blank=True
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned")
+    bidder = models.ForeignKey(
+        settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name="task_bidder", blank=True,
+        null=True
     )
     offer = models.IntegerField()
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
     bid_approve_status = models.BooleanField(default=False)
-    transaction_id = models.CharField(max_length=255, blank=True, db_index=True)
+    transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    delivery_date = models.DateTimeField(null=True)
 
     class Meta: 
         ordering = ['-modified'] 
 
     def number_of_votes(self):
-        return self.bid.count()
+        return self.bidder.count()
+
+    def set_task_status(self):
+
+        status = Task.objects.get(id=self.task)
+        status.post_status = "ASSIGNED"
+        status.save()
 
 class Photo(models.Model):
     
@@ -110,7 +122,6 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ("created",)
-
 
 
 class Timeline(models.Model):

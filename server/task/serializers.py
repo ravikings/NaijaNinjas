@@ -1,22 +1,22 @@
 from task.models import Task, TaskBidder, Photo, Comment, Timeline
 from rest_framework import serializers
-
+from accounts.serializers import CustomRegisterSerializer
 
 class TaskSerializer(serializers.ModelSerializer):
     """
     Task serializers use for creating task 
     """
+    # task_author = CustomRegisterSerializer(read_only=True, many=True)
 
     class Meta:
         model = Task
         fields = "__all__"
 
-    
+
 class TaskBidderSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
-
     class Meta:
         model = TaskBidder
         fields = "__all__"
@@ -79,3 +79,12 @@ class TimelineSerializer(serializers.ModelSerializer):
 
         return data
 
+class TaskAssignedSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    task_assigned = TaskSerializer(read_only=True, many=True)
+    class Meta:
+        model = TaskBidder
+        exclude = ("transaction_id",)

@@ -54,3 +54,24 @@ def conversations(request):
     )
     serializer = ConversationListSerializer(instance=conversation_list, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET", "POST"])
+def delete_conversation(request, convo_id):
+    try:
+        conversation = Conversation.objects.get(id=convo_id)
+        if conversation.initiator == request.user:
+            conversation.initiator = None
+            conversation.save()
+        elif conversation.receiver == request.user:
+            conversation.receiver = None
+            conversation.save()
+
+        return Response({"message": "conversation delete"})
+
+    except Exception:
+
+        return Response({"error": "deletion not succesfull"})
+
+
+
