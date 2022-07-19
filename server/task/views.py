@@ -53,15 +53,15 @@ class TaskBidderView(viewsets.ModelViewSet):
     """
     uses to add review to profile
     """
-    queryset = TaskBidder.objects.all()
+
     serializer_class = TaskBidderSerializer
     #permissions_classes = [IsAuthenticated and IsOwner]
 
-    def retrieve(self, request, pk=None):
-
-        data = get_object_or_404(TaskBidder, task_id=pk)
-        serializer = TaskBidderSerializer(data)
-        return Response(serializer.data)
+    def get_queryset(self):
+    
+        data = TaskBidder.objects.filter(task_id=self.request.query_params.get('task'))
+        active_user = data.filter(bid_approve_status=True)
+        return active_user if len(active_user) != 0 else data
 
 
     def post(self, request, pk=None):
@@ -115,7 +115,7 @@ class TaskApproveView(viewsets.ModelViewSet):
 
         task_id = request.query_params.get('task_id')
         bid_to_approve = get_object_or_404(TaskBidder, task_id=task_id)
-        if (bid_to_approve.exists() and bid_to_approve.bid_approve_status == False):
+        if (bid_to_approve.exists() and (bid_to_approve.bid_approve_status == False)):
 
             if bid_to_approve.runner_confirmed:
                 return Response({"error": "Task already assigned"})
@@ -157,7 +157,7 @@ class TaskAssigned(viewsets.ModelViewSet):
     uses to get assigned tasks to professionals
     """
 
-    queryset = TaskBidder.objects.all()
+    #queryset = TaskBidder.objects.all()
     serializer_class = TaskAssignedSerializer
     #permissions_classes = [IsAuthenticated and Is_a_runner]
 

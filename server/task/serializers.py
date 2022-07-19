@@ -17,7 +17,6 @@ class TaskBidderSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
-
     class Meta:
         model = TaskBidder
         fields = "__all__"

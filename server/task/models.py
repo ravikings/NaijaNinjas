@@ -60,8 +60,9 @@ class TaskBidder(models.Model):
     """
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned")
-    bidder = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="task_bidder", blank=True
+    bidder = models.ForeignKey(
+        settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name="task_bidder", blank=True,
+        null=True
     )
     offer = models.IntegerField()
     description = RichTextField(null=True, blank=True)
