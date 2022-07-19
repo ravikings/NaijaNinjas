@@ -78,28 +78,23 @@ function MakeOfferForm(props) {
 
             <ul className="list-inline mt-2 mb-2 badges">
               <li className="list-inline-item">
-                <Button
-                  style={{ marginTop: 20 }}
-                  fullWidth
-                  variant={"contained"}
-                  color={"primary"}
-                  onClick={() =>
-                    history.push(`/send-contract/${auth.userStatus.id}`)
-                  }
+                <button
+                  onClick={() => history.push("/messages")}
+                  className="site-button"
                 >
                   Contact Me
-                </Button>
+                </button>
               </li>
               <li className="list-inline-item">
-                <Button
-                  style={{ marginTop: 20 }}
-                  fullWidth
-                  variant={"contained"}
-                  // color={"primary"}
-                  onClick={() => history.push("/messages")}
+                <button
+                  onClick={() =>
+                    history.push(`/send-contract/${auth.currentUser.pk}`)
+                  }
+                  className="site-button"
+                  id="gray-button"
                 >
                   Get a Quote
-                </Button>
+                </button>
               </li>
             </ul>
 
@@ -111,7 +106,7 @@ function MakeOfferForm(props) {
                 Departments:<b class="float-right">Graphich Designing</b>
               </li>
               <li class="text-left">
-                No. of Employees:<b class="float-right">11-20</b>
+                No. of Task Completed:<b class="float-right">11</b>
               </li>
             </ul>
           </div>

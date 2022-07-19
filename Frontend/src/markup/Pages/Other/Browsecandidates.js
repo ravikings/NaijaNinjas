@@ -149,7 +149,7 @@ function Browsecandidates() {
   return (
     <>
       <Header />
-      <div className='page-content bg-white'>
+      <div className="page-content bg-white">
         {/* <div
           className='dez-bnr-inr overlay-black-middle'
           style={{ backgroundImage: "url(" + bnr + ")" }}
@@ -157,12 +157,12 @@ function Browsecandidates() {
           <PageTitle motherName='Home' activeName='Browse Candidates' />
         </div> */}
         {/* <Jobfindbox /> */}
-        <div className='content-block'>
-          <div className='section-full bg-white browse-job p-b50'>
-            <div className='container'>
-              <div className='row'>
-                <div className='col-xl-9 col-lg-8'>
-                  <h5 className='font-weight-700 pull-left text-uppercase '>
+        <div className="content-block">
+          <div className="section-full bg-white browse-job p-b50">
+            <div className="container">
+              <div className="row">
+                <div className="col-xl-9 col-lg-8">
+                  <h5 className="font-weight-700 pull-left text-uppercase ">
                     {totalResults && totalResults + " Professionals"}
                   </h5>
                   {/* <div className='m-b30'>
@@ -172,26 +172,26 @@ function Browsecandidates() {
                       placeholder='Search freelancer services'
                     />
                   </div> */}
-                  <ul className='post-job-bx mt-5'>
+                  <ul className="post-job-bx mt-5">
                     {results && !keyLoad && !loading ? (
                       results.map((item, index) => (
                         <li
                           key={index}
-                          className='cursor-pointer'
+                          className="cursor-pointer"
                           onClick={() => {
                             history.push(`/make-offer/${item.author}`);
                           }}
                         >
-                          <div className='post-bx'>
-                            <div className='d-flex m-b30'>
-                              <div className='job-post-company'>
+                          <div className="post-bx">
+                            <div className="d-flex m-b30">
+                              <div className="job-post-company">
                                 <Link to={`/make-offer/${item.author}`}>
                                   <span>
-                                    <img alt='' src={item.image} />
+                                    <img alt="" src={item.image} />
                                   </span>
                                 </Link>
                               </div>
-                              <div className='job-post-info'>
+                              <div className="job-post-info">
                                 <h4>
                                   <Link
                                     to={{
@@ -209,13 +209,13 @@ function Browsecandidates() {
                                   userStatus.results.map((user) =>
                                     // user.id === 1 && item.first_name === "Wayne" && true ? (
                                     user.id === item.id && user.online ? (
-                                      <div className='d-flex mb-1'>
+                                      <div className="d-flex mb-1">
                                         <i
-                                          className='fa fa-check-circle circle align-self-center'
-                                          aria-hidden='true'
+                                          className="fa fa-check-circle circle align-self-center"
+                                          aria-hidden="true"
                                         ></i>
 
-                                        <span className='  ml-1'>
+                                        <span className="  ml-1">
                                           Online Now
                                         </span>
                                       </div>
@@ -224,41 +224,41 @@ function Browsecandidates() {
                                     )
                                   )}
                                 <div>
-                                  <i className='fa fa-money money'></i>
-                                  <span className='ml-1'>
+                                  <i className="fa fa-money money"></i>
+                                  <span className="ml-1">
                                     {/* {item.salary} */}$ 500,000
                                   </span>
                                 </div>
 
                                 <ul>
                                   <li>
-                                    <i className='fa fa-map-marker '></i>{" "}
+                                    <i className="fa fa-map-marker "></i>{" "}
                                     {item.location}{" "}
                                     {item.city && ", " + item.city}{" "}
                                     {item.city && item.country}
                                   </li>
                                   <li>
-                                    <i className='fa fa-usd'></i> Full Time
+                                    <i className="fa fa-usd"></i> Full Time
                                   </li>
                                   <li>
-                                    <i className='fa fa-clock-o'></i> Published
+                                    <i className="fa fa-clock-o"></i> Published
                                     11 months ago
                                   </li>
                                 </ul>
                               </div>
                             </div>
-                            <div className='d-flex'>
+                            <div className="d-flex">
                               <div style={{ width: "65px" }}></div>
-                              <div className='job-time mr-4'>
+                              <div className="job-time mr-4">
                                 <span>{item.description}</span>
                               </div>
                               {item.salary && (
-                                <div className='salary-bx'>
+                                <div className="salary-bx">
                                   <span>{item.salary}</span>
                                 </div>
                               )}
 
-                              <div className='salary-bx'>
+                              <div className="salary-bx">
                                 {console.log(item, "item")}
                                 <Link
                                   to={{
@@ -268,7 +268,7 @@ function Browsecandidates() {
                                     },
                                   }}
                                 >
-                                  <button className='site-button btn-block'>
+                                  <button className="site-button btn-block">
                                     View Profile
                                   </button>
                                   {/* <Button variant='primary' size='md'>
@@ -277,9 +277,9 @@ function Browsecandidates() {
                                 </Link>
                               </div>
                             </div>
-                            <label className='like-btn'>
-                              <input type='checkbox' />
-                              <span className='checkmark'></span>
+                            <label className="like-btn">
+                              <input type="checkbox" />
+                              <span className="checkmark"></span>
                             </label>
                           </div>
                         </li>
@@ -287,7 +287,7 @@ function Browsecandidates() {
                     ) : error ? (
                       <p>{error}</p>
                     ) : (
-                      <div className='loader'>
+                      <div className="loader">
                         <ClipLoader
                           color={"#2e55fa"}
                           loading={true}
@@ -297,9 +297,9 @@ function Browsecandidates() {
                     )}
                   </ul>
                   {results && !keyLoad && !loading && (
-                    <div className='pagination-bx m-t30'>
-                      <ul className='pagination '>
-                        <li className='previous mx-2'>
+                    <div className="pagination-bx m-t30">
+                      <ul className="pagination ">
+                        <li className="previous mx-2">
                           <Link
                             to={""}
                             className={
@@ -313,7 +313,7 @@ function Browsecandidates() {
                                 : handleClick(e)
                             }
                           >
-                            <i className='ti-arrow-left'></i> Prev
+                            <i className="ti-arrow-left"></i> Prev
                           </Link>
                         </li>
                         {Array.from(Array(count), (e, i) => {
@@ -326,13 +326,13 @@ function Browsecandidates() {
                                   : "notActive dots"
                               }
                             >
-                              <Link to='' onClick={(e) => handleClick(e)}>
+                              <Link to="" onClick={(e) => handleClick(e)}>
                                 {i + 1}
                               </Link>
                             </li>
                           );
                         })}
-                        <li className='next mx-2'>
+                        <li className="next mx-2">
                           <Link
                             to={""}
                             className={
@@ -344,12 +344,12 @@ function Browsecandidates() {
                                 : handleClick(e)
                             }
                           >
-                            Next <i className='ti-arrow-right'></i>
+                            Next <i className="ti-arrow-right"></i>
                           </Link>
                         </li>
                       </ul>
                       <Pagination
-                        className='pagination-bar'
+                        className="pagination-bar"
                         currentPage={1}
                         totalCount={7}
                         pageSize={8}
@@ -365,19 +365,19 @@ function Browsecandidates() {
                     onPageChange={(page) => setCurrentPage(page)}
                   /> */}
                 </div>
-                <div className='col-xl-3 col-lg-4'>
-                  <div className='sticky-top browse-candidates'>
-                    <div className='clearfix m-b30'>
-                      <h5 className='widget-title font-weight-700 text-uppercase'>
+                <div className="col-xl-3 col-lg-4">
+                  <div className="sticky-top browse-candidates">
+                    <div className="clearfix m-b30">
+                      <h5 className="widget-title font-weight-700 text-uppercase">
                         Keywords
                       </h5>
-                      <div className=''>
+                      <div className="">
                         <input
-                          type='text'
+                          type="text"
                           value={keyword}
                           onChange={(e) => setKeyword(e.target.value)}
-                          className='form-control'
-                          placeholder='Search'
+                          className="form-control"
+                          placeholder="Search"
                         />
                       </div>
                     </div>
@@ -561,14 +561,14 @@ function Browsecandidates() {
                         </div>
                       </div>
                     </div> */}
-                    <div className='clearfix .browse-job'>
-                      <h5 className='widget-title font-weight-700 text-uppercase'>
+                    <div className="clearfix .browse-job">
+                      <h5 className="widget-title font-weight-700 text-uppercase">
                         Category
                       </h5>
                       <Form.Control
-                        as='select'
+                        as="select"
                         custom
-                        className='btn dropdown-toggle text-left btn-default'
+                        className="btn dropdown-toggle text-left btn-default"
                       >
                         <option>Any Category</option>
                         <option>Automotive Jobs</option>
@@ -577,10 +577,10 @@ function Browsecandidates() {
                         <option>Food Services</option>
                       </Form.Control>
                     </div>
-                    <div className='clearfix .browse-job mt-4'>
+                    <div className="clearfix .browse-job mt-4">
                       <button
                         onClick={handleKeyword}
-                        className='site-button btn-block'
+                        className="site-button btn-block"
                       >
                         Find Job
                       </button>
