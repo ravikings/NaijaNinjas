@@ -288,36 +288,38 @@ function AuthState({ userDetails }) {
           </ReactButton>
         </div>
       ) : (
-        <Hidden xsDown>
-          <div
-            className="extra-nav d-flex align-items-center justify-content-end"
-            style={{ padding: "20px 0px", width: 500 }}
-          >
-            <Link to={"/register"} className="site-button">
-              <i className="fa fa-user"></i> SIGNUP
-            </Link>
-            <Link to={"/login"} title="READ MORE" className="site-button">
-              <i className="fa fa-lock"></i> LOGIN{" "}
-            </Link>
-            <ReactButton
-              style={{
-                borderRadius: "2px",
-                marginLeft: 10,
-                padding: "17px 50px",
-                fontSize: "22px",
-                fontWeight: "bold",
-                color: "white",
-              }}
-              variant="warning"
-              size="lg"
-              onClick={() => history.push("/post-ads")}
-              to="/post-ads"
+        <>
+          <Hidden xsDown>
+            <div
+              className="extra-nav d-flex align-items-center justify-content-end"
+              style={{ padding: "20px 0px", width: 500 }}
             >
-              <i className="fa-solid fa-hand-holding-dollar"></i>
-              Sell On Here!
-            </ReactButton>
-          </div>
-        </Hidden>
+              <Link to={"/register"} className="site-button">
+                <i className="fa fa-user"></i> SIGNUP
+              </Link>
+              <Link to={"/login"} title="READ MORE" className="site-button">
+                <i className="fa fa-lock"></i> LOGIN{" "}
+              </Link>
+              <ReactButton
+                style={{
+                  borderRadius: "2px",
+                  marginLeft: 10,
+                  padding: "17px 50px",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+                variant="warning"
+                size="lg"
+                onClick={() => history.push("/post-ads")}
+                to="/post-ads"
+              >
+                <i className="fa-solid fa-hand-holding-dollar"></i>
+                Sell On Here!
+              </ReactButton>
+            </div>
+          </Hidden>
+        </>
       )}
       <Popover
         anchorOrigin={{

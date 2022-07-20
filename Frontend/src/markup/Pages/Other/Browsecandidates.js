@@ -119,7 +119,7 @@ function Browsecandidates() {
 
   useEffect(() => {
     handleRequest(title);
-    checkOnline();
+    // checkOnline();
   }, []);
 
   useEffect(() => {
@@ -143,7 +143,7 @@ function Browsecandidates() {
       });
     }
     handleRequest(keyword);
-    checkOnline();
+    // checkOnline();
   };
 
   return (

@@ -74,32 +74,33 @@ function MakeOfferPage() {
     <>
       <Header />
       {user ? (
-        <div className='page-content bg-white'>
+        <div className="page-content bg-white">
           <div
-            className='dez-bnr-inr d-flex align-items-center'
+            className="dez-bnr-inr d-flex align-items-center"
             style={{ backgroundImage: "url(" + bnr + ")" }}
           >
-            <div className=''>
+            <div className="">
               <Grid container spacing={2} className={classes.headerGrid}>
                 <Grid item>
                   <Avatar
-                    variant={"square"}
+                    variant={"circular"}
                     className={classes.avatar}
                     src={user.photo}
                   >
-                    K
+                    <img
+                      src="https://themebing.com/wp/prolancer/wp-content/uploads/2021/04/pexels-mentatdgt-1138903-150x150.jpg"
+                      alt="Avatar image"
+                    />
                   </Avatar>
                 </Grid>
                 <Grid item>
                   <Grid
                     container
-                    direction='column'
-                    justifyContent='space-between'
+                    direction="column"
+                    justifyContent="space-between"
                     style={{ height: "100%", padding: "5px 0px" }}
                   >
-                    <Grid item
-                    
-                    >
+                    <Grid item>
                       <div style={{ marginBottom: 5 }}>
                         {user.first_name} {user.last_name}
                       </div>
@@ -142,7 +143,7 @@ function MakeOfferPage() {
           </div>
         </div>
       ) : (
-        <div className='loader'>
+        <div className="loader">
           <ClipLoader color={"#2e55fa"} loading={true} size={150} />
         </div>
       )}
