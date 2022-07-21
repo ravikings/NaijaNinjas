@@ -2595,8 +2595,8 @@ blockquote:before {
   .alignright {
     margin: 5px 0 15px 15px;
   }
-  .mobile-block{
-    display:none !important;
+  .mobile-block {
+    display: none !important;
   }
 }
 /*---------------------------------------------------------------
@@ -2629,8 +2629,8 @@ blockquote:before {
   .extra-nav {
     margin-right: 15px;
   }
-  .mobile-block{
-    display:none !important;
+  .mobile-block {
+    display: none !important;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -6219,7 +6219,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 .widget-testimonial .testimonial-position {
   text-transform: uppercase;
   font-family: "Montserrat", sans-serif;
-  color: #888q;
+  color: #888;
   font-size: 12px;
   font-style: inherit;
 }
@@ -6680,10 +6680,19 @@ a,
 }
 /* Gray */
 
-.site-button.gray {
-  background-color: #666666;
-  color: #fff;
+
+
+#gray-button {
+  background-color: transparent;
+  color: #000;
+  border: 1px solid black;
 }
+#gray-button:hover {
+  background-color: gray;
+  color: #fff;
+  border: 1px solid gray;
+}
+
 .site-button.gray:hover,
 .site-button.gray:active,
 .site-button.gray.active,
@@ -7557,7 +7566,7 @@ a,
 .site-button-link.yellow:hover,
 .site-button-link.yellow:active,
 .site-button-link.yellow:focus {
-  color: ##d4af19;
+  color: #d4af19;
 }
 /* purple */
 
@@ -9721,7 +9730,7 @@ ul[class*="list-"] {
 .testimonial-10 .testimonial-position {
   text-transform: uppercase;
   font-family: "Montserrat", sans-serif;
-  color: #888q;
+  color: #888;
   font-size: 12px;
   font-style: inherit;
 }
@@ -10335,7 +10344,7 @@ ul[class*="list-"] {
 .overlay-primary-middle:after,
 .overlay-primary-dark:after,
 .overlay-primary:after {
-  background: ;
+  background: #fff;
 }
 .overlay-black-light:after {
   opacity: 0.3;

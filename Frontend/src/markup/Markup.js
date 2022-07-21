@@ -147,7 +147,7 @@ class Markup extends Component {
               exact
               component={MakeOfferTaskPage}
             />
-            <Route path="/make-offer/:id/:title" exact component={MakeOfferPage} />
+            <Route path="/make-offer/:id" exact component={MakeOfferPage} />
             <Route path="/companies" exact component={Companies} />
             <Route path="/free-job-alerts" exact component={Freejobalerts} />
             <Route path="/browse-job-list" exact component={Browsejoblist} />
@@ -237,35 +237,19 @@ class Markup extends Component {
               exact
               component={ContractProposal}
             />
-         
-             <Route
-              path="/add-services"
-              exact
-              component={AddServices}
-            />
-             <Route
+
+            <Route path="/add-services" exact component={AddServices} />
+            <Route
               path="/update-services/:id"
               exact
               component={UpdateServices}
             />
-             <Route
-              path="/user-services"
-              exact
-              component={UserServices}
-            />
-             <Route
-              path="/add-projects"
-              exact
-              component={AddProject}
-            />
-             <Route
-              path="/user-projects"
-              exact
-              component={UserProject}
-            />
+            <Route path="/user-services" exact component={UserServices} />
+            <Route path="/add-projects" exact component={AddProject} />
+            <Route path="/user-projects" exact component={UserProject} />
 
-<Route path='/send-offer' exact component={SendOfferPage} />
-<Route path='/send-contract/:id' exact component={SendContract} />
+            <Route path="/send-offer" exact component={SendOfferPage} />
+            <Route path="/send-contract/:id" exact component={SendContract} />
             <Route path="/post-ads" exact component={PostAds} />
           </Switch>
         </div>
