@@ -60,3 +60,7 @@ python manage.py migrate notifications
 test credentials
 admintest@gmail.com
 123Tcorrect8@
+
+change directory into server folder from terminal,
+folder: GitHub\NaijaNinjas\server
+run: python manage.py runserver
