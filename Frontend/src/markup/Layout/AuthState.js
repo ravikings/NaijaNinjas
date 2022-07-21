@@ -208,8 +208,10 @@ function AuthState({ userDetails }) {
               K
             </Avatar>
           </div>
-         
-
+          <Link to={"/post-ads"} title='READ MORE' className='site-button'>
+              <i className='fa fa-lock'></i> CORRECT BUSINESS{" "}
+            </Link>
+{/* 
           <ReactButton
             style={{
               borderRadius: "2px",
@@ -225,7 +227,7 @@ function AuthState({ userDetails }) {
           >
             <i className='fa-solid fa-hand-holding-dollar'></i>
             Sell On Here!
-          </ReactButton>
+          </ReactButton> */}
         </div>
       ) : (
         <Hidden xsDown>
@@ -239,7 +241,10 @@ function AuthState({ userDetails }) {
             <Link to={"/login"} title='READ MORE' className='site-button'>
               <i className='fa fa-lock'></i> LOGIN{" "}
             </Link>
-            <ReactButton
+            <Link to={"/post-ads"} title='READ MORE' className='site-button'>
+              <i className='fa fa-lock'></i> CORRECT BUSINESS{" "}
+            </Link>
+            {/* <ReactButton
               style={{
                 borderRadius: "2px",
                 marginLeft: 10,
@@ -255,7 +260,7 @@ function AuthState({ userDetails }) {
             >
               <i class='fa-solid fa-hand-holding-dollar'></i>
               Sell On Here!
-            </ReactButton>
+            </ReactButton> */}
           </div>
         </Hidden>
       )}
