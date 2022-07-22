@@ -10,7 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -38,7 +38,8 @@ from .models import (
     IpModel,
     Service,
     Projects,
-    ProjectPhoto
+    ProjectPhoto,
+    PublicQuotes
 )
 from .serializers import (
     PhotosSerializer,
@@ -56,6 +57,7 @@ from .serializers import (
     ProfileSerializerWithResume,
     ProjectsSerializer,
     ProjectPhotoSerializer,
+    PublicQuotesSerializer,
 )
 from notifications.signals import notify
 
@@ -551,3 +553,24 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
             return Response(response, status=status.HTTP_201_CREATED)
             
         return Response(response,status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def public_quotes(request):
+
+    description = request.query_params.get('description', None) 
+    department = request.query_params.get('department', None)
+    sector = request.query_params.get('sector', None)
+    location = request.query_params.get('location', None)
+    first_name = request.query_params.get('first_name', None)
+    last_name = request.query_params.get('last_name', None)
+    phone = request.query_params.get('phone', None)
+    email = request.query_params.get('email', None)
+    
+    try:
+        PublicQuotes.objects.create(description=description, department=department,sector =sector,location=location,first_name=first_name,last_name=last_name, phone=phone, email=email)
+        return Response({"message": f"request submitted!"})
+    except Exception as e:
+        print(e)
+        pass
+    return Response({"error": f"request not completed"}, status=status.HTTP_400_BAD_REQUEST)

@@ -25,6 +25,7 @@ from accounts.models import (
     Service,
     Projects,
     ProjectPhoto,
+    PublicQuotes,
 )
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
@@ -274,3 +275,11 @@ class SetNewPasswordSerializer(serializers.Serializer):
         min_length=15)
     class Meta:
         fields = ['password1','password2', 'token']
+
+
+class PublicQuotesSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = PublicQuotes
+        fields = "__all__"
+

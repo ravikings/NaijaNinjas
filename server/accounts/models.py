@@ -1,4 +1,5 @@
 # models.py in the users Django app
+from ast import Mod
 from email.mime import image
 import os
 from django.utils import timezone
@@ -19,24 +20,9 @@ class AccountUser(AbstractUser):
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
-    # status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
-    # login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
-    # user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
-
-
-    # def private_mode(self, status=False):
-
-    #     self.user_set_status = status
-    #     self.save()
-
-    # def public_online_status(self):
-
-    #     if not self.user_set_status:
-    #         self.user_set_status = True
-    #         self.save()
 
 
 class IpModel(models.Model):
@@ -219,3 +205,15 @@ class ProjectPhoto(models.Model):
     )
 
     image = models.ImageField(upload_to=upload_to, storage=storage)
+
+class PublicQuotes(models.Model):
+    
+    description = models.TextField()
+    department  = models.CharField(max_length=250)
+    sector  = models.CharField(max_length=250)
+    location = models.CharField(max_length=250, null=True, db_index=True)
+    first_name = models.CharField(max_length=250, null=True, db_index=True)
+    last_name = models.CharField(max_length=250, null=True, db_index=True)
+    phone = models.CharField(max_length=15, null=True,)
+    email = models.CharField(max_length=25, null=True,)
+    created = models.DateTimeField(auto_now_add=True, null=True)

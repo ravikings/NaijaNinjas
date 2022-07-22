@@ -37,7 +37,7 @@ def start_convo(
         return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def get_conversation(request, convo_id):
     conversation = Conversation.objects.filter(id=convo_id)
     if not conversation.exists():
@@ -47,7 +47,7 @@ def get_conversation(request, convo_id):
         return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def conversations(request):
     conversation_list = Conversation.objects.filter(
         Q(initiator=request.user) | Q(receiver=request.user)

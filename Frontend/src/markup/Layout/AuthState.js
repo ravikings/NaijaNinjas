@@ -302,7 +302,7 @@ function AuthState({ userDetails }) {
             <Link to={"/login"} title="READ MORE" className="site-button">
               <i className="fa fa-lock"></i> LOGIN{" "}
             </Link>
-            <Link to={"/post-ads"} title='READ MORE' className='site-button'>
+            <Link to={"/post-ads"} title='READ MORE' className='btn btn-warning'>
               <i className='fa fa-lock'></i> CORRECT BUSINESS{" "}
             </Link>
             {/* <ReactButton
