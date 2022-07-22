@@ -163,8 +163,8 @@ class TaskAssigned(viewsets.ModelViewSet):
 
     def get_queryset(self):
     
-        return TaskBidder.objects.filter(bidder_id=self.request.user.id, bid_approve_status=True).order_by("modified").asc()
-
+        return TaskBidder.objects.filter(bidder_id=self.request.user.id, bid_approve_status=True).order_by("modified")
+        # TODO Missing filter for task completed to be shown.
 
 @api_view(["POST", "GET"])
 def task_favorite(request, pk):

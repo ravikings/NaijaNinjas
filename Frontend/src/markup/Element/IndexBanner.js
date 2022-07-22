@@ -138,10 +138,10 @@ function IndexBanner() {
             style={{ height: "50px", width: "100px"}}
           /> */}
           <Card.Body>
-            <Card.Title>Reach your target customers</Card.Title>
-            <Card.Text>marketing expert for anyone!.</Card.Text>
-            <Link to="/post-ads" className='site-button btn-block' variant='primary'>
-              Post Ads for Free!
+            <Card.Title>Get your project done </Card.Title>
+            <Card.Text>Our talented professional are here to help!</Card.Text>
+            <Link to="/company-post-jobs" className='site-button btn-block' variant='primary'>
+              Post a task
             </Link>
           </Card.Body>
         </Card>

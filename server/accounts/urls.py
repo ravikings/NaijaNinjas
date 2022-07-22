@@ -23,6 +23,7 @@ from accounts.views import (
     taskUpdate,
     resumeUpdate,
     TestView,
+    public_quotes,
 )
 
 
@@ -62,5 +63,6 @@ urlpatterns = [
     path('user-profile-update/<str:pk>/', taskUpdate, name="user-profile-update"),
     path('user-resume-update/<str:pk>/', resumeUpdate, name="user-resume-update"),
     path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
+    path("public-quotes/", public_quotes, name="public-quotes"),
 
 ]
