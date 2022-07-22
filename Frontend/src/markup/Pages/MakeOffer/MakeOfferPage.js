@@ -129,15 +129,17 @@ function MakeOfferPage() {
                 <Feedback />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
-                <HourlyRate />
-                <Divider style={{ margin: "30px 0px" }} />
-                <MakeOfferForm />
-                <Divider style={{ margin: "30px 0px" }} />
-                <SocialMedia />
-                <Divider style={{ margin: "30px 0px" }} />
-                <Skills />
-                <Divider style={{ margin: "30px 0px" }} />
-                <Attachments />
+                <div className="sticky-top browse-candidates">
+                  <HourlyRate />
+                  <Divider style={{ margin: "30px 0px" }} />
+                  <MakeOfferForm />
+                  <Divider style={{ margin: "30px 0px" }} />
+                  <SocialMedia />
+                  <Divider style={{ margin: "30px 0px" }} />
+                  <Skills />
+                  <Divider style={{ margin: "30px 0px" }} />
+                  <Attachments />
+                </div>
               </Grid>
             </Grid>
           </div>

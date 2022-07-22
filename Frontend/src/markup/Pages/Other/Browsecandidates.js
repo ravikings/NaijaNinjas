@@ -267,6 +267,8 @@ function Browsecandidates() {
                                       id: item.author,
                                     },
                                   }}
+                                  onClick={(e) => e.stopPropagation()}
+                                  target={"_blank"}
                                 >
                                   <button className="site-button btn-block">
                                     View Profile
