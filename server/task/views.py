@@ -35,8 +35,7 @@ class TaskView(viewsets.ModelViewSet):
             IpModel.objects.create(ip=ip)
             task.views.add(IpModel.objects.get(ip=ip))
         serializer = TaskSerializer(task)
-
-    #     return Response(serializer.data)
+        return Response(serializer.data)
 
 class TaskOwnerView(viewsets.ModelViewSet):
 
