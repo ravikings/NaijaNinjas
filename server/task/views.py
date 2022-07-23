@@ -22,9 +22,8 @@ class TaskView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = Task.objects.filter(post_status="open")
+    queryset = Task.objects.filter(post_status="OPEN")
     serializer_class = TaskSerializer
-    #permissions_classes = [IsAuthenticated and FreelancerIsOwner]
 
     def retrieve(self, request, pk=None):
         ip = get_client_ip(request)
@@ -37,7 +36,7 @@ class TaskView(viewsets.ModelViewSet):
             task.views.add(IpModel.objects.get(ip=ip))
         serializer = TaskSerializer(task)
 
-        return Response(serializer.data)
+    #     return Response(serializer.data)
 
 class TaskOwnerView(viewsets.ModelViewSet):
 
@@ -109,7 +108,6 @@ class TaskImageAPIView(viewsets.ModelViewSet):
             return Response(response, status=status.HTTP_201_CREATED)
             
         return Response(response,status=status.HTTP_400_BAD_REQUEST)
-
 
 class TaskApproveView(viewsets.ModelViewSet):
 
