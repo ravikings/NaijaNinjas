@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
+from accounts.models import AccountUser
 from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment
@@ -64,15 +65,21 @@ class TaskBidderView(viewsets.ModelViewSet):
         return active_user if len(active_user) != 0 else data
 
 
-    def post(self, request, pk=None):
+    def create(self, request, pk=None):
 
-        task_id = request.query_params.get('task_id')
-        offer = request.query_params.get('offer')
-        bid_queryset = Task.objects.filter(author=pk, post_status="Open")
-        if bid_queryset.exists():
-            placement_bid = TaskBidder.objects.update_or_create(bidder=request.user.id, 
-                                            task=task_id, 
-                                            offer=offer)
+        data = request.data
+        task_id = data.get('task')
+        offer = data.get('offer')
+        bidder_id = data.get('bidder')
+        if not offer:
+            raise("please add offer")
+        bid_queryset = Task.objects.get(id=task_id, post_status="open")
+        account_id = AccountUser.objects.get(id=bidder_id)
+        if bid_queryset:
+            obj, _created = TaskBidder.objects.get_or_create(bidder=account_id, 
+                                            task=bid_queryset)
+            obj.offer = offer
+            obj.save()
             return Response({"message": "Your bid was successfully processed"})
 
         return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)

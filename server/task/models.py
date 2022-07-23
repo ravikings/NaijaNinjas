@@ -64,7 +64,7 @@ class TaskBidder(models.Model):
         settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name="task_bidder", blank=True,
         null=True
     )
-    offer = models.IntegerField()
+    offer = models.IntegerField(null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
     bid_approve_status = models.BooleanField(default=False)
@@ -75,7 +75,7 @@ class TaskBidder(models.Model):
     delivery_date = models.DateTimeField(null=True)
 
     class Meta: 
-        ordering = ['-modified'] 
+        ordering = ["-created", "-modified"] 
 
     def number_of_votes(self):
         return self.bidder.count()
