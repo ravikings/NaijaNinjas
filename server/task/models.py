@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from ckeditor.fields import RichTextField
-from accounts.models import IpModel
+from accounts.models import IpModel, RunnerProfile
 from django_s3_storage.storage import S3Storage
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
@@ -60,8 +60,12 @@ class TaskBidder(models.Model):
     """
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned")
-    bidder = models.ForeignKey(
-        settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name="task_bidder", blank=True,
+    # bidder = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name="task_bidder", blank=True,
+    #     null=True
+    # )
+    bidder_profile = models.ForeignKey(
+        RunnerProfile, on_delete=models.CASCADE, related_name="task_profile_bidder", blank=True,
         null=True
     )
     offer = models.IntegerField(null=True, blank=True)

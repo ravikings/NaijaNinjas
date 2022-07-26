@@ -79,6 +79,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+class BiddersProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = ("first_name","last_name", "photo", "status")
 class UserResumeSerializer(serializers.ModelSerializer):
     """
     resume search serializers use for entry data for resume from ui

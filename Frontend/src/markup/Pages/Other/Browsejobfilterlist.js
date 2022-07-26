@@ -64,7 +64,7 @@ function Browsejobfilterlist() {
                 <div className='col-xl-9 col-lg-8 col-md-7'>
                   <div className='job-bx-title clearfix'>
                     <h5 className='font-weight-700 pull-left text-uppercase'>
-                      {data?.length} Jobs Found
+                      {data?.length} Tasks Found
                     </h5>
                   </div>
                   <ul className='post-job-bx'>
@@ -128,7 +128,7 @@ function Browsejobfilterlist() {
                               {/* <small class='text-muted'>Per hour</small> */}
 
                               <p className='text-muted text-capitalize'>
-                                per month
+                                per assignment
                               </p>
                               <Link to={`/make-offer-task/${data?.id}/${data?.title}`}>
                                 <button className='site-button btn-block '>

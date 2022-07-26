@@ -1,6 +1,7 @@
 from task.models import Task, TaskBidder, Photo, Comment, Timeline
 from rest_framework import serializers
-from accounts.serializers import CustomRegisterSerializer
+from accounts.serializers import CustomRegisterSerializer, ProfileSerializer, BiddersProfileSerializer
+from accounts.models import RunnerProfile
 
 class TaskSerializer(serializers.ModelSerializer):
     """
@@ -20,6 +21,24 @@ class TaskBidderSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskBidder
         fields = "__all__"
+
+class TaskBidderprofileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    bidder_info = serializers.SerializerMethodField()
+    class Meta:
+        model = TaskBidder
+        exclude = ("transaction_id", "task", "bidder_profile", "image")
+
+    def get_bidder_info(self, instance):
+
+        id = instance.bidder_profile
+        profile = RunnerProfile.objects.filter(id=id.id).values("first_name","last_name", "photo", "status")
+        serializer = BiddersProfileSerializer(profile, many=True)
+        return serializer.data
+
 
 class TaskImageSerializer(serializers.ModelSerializer):
     """

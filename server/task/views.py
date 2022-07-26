@@ -3,8 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
-from accounts.models import AccountUser
-from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer
+from accounts.models import AccountUser, RunnerProfile
+from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment
 from history.signals import history_tracker
@@ -44,7 +44,8 @@ class TaskOwnerView(viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        return Task.objects.filter(author_id=self.request.user.id)
+        user_id = self.request.query_params.get('user_id')
+        return Task.objects.filter(author_id=user_id)
 
 
 class TaskBidderView(viewsets.ModelViewSet):
@@ -53,7 +54,8 @@ class TaskBidderView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    serializer_class = TaskBidderSerializer
+    # queryset = TaskBidder.objects.all()
+    serializer_class = TaskBidderprofileSerializer
     #permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -71,10 +73,10 @@ class TaskBidderView(viewsets.ModelViewSet):
         bidder_id = data.get('bidder')
         if not offer:
             raise("please add offer")
-        bid_queryset = Task.objects.get(id=task_id, post_status="open")
-        account_id = AccountUser.objects.get(id=bidder_id)
+        bid_queryset = Task.objects.get(id=task_id, post_status="OPEN")
+        profile_odj = RunnerProfile.objects.get(author=bidder_id)
         if bid_queryset:
-            obj, _created = TaskBidder.objects.get_or_create(bidder=account_id, 
+            obj, _created = TaskBidder.objects.get_or_create(bidder_profile=profile_odj, 
                                             task=bid_queryset)
             obj.offer = offer
             obj.save()
