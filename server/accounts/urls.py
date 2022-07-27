@@ -5,7 +5,7 @@ from accounts.views import (
     VideoUpload,
     SearchProfile,
     DashboardProfile,
-    AccountStatus,
+    account_status,
     ReviewView,
     UserSearchDetails,
     DashboardResume,
@@ -23,6 +23,7 @@ from accounts.views import (
     taskUpdate,
     resumeUpdate,
     TestView,
+    public_quotes,
 )
 
 
@@ -34,7 +35,6 @@ router.register(r"user-resume", UserDashboardResume, basename="user-resume")
 router.register(r"image", PhotoUpload, basename="dashboard-images")
 router.register(r"video", VideoUpload, basename="dashboard-videos")
 router.register(r"search", SearchProfile, basename="search")
-router.register(r"user-status", AccountStatus, basename="user-status")
 router.register(r"user-review", ReviewView, basename="user-review")
 router.register(r"test", TestView, basename="test-view")
 router.register(
@@ -62,5 +62,7 @@ urlpatterns = [
     path('user-reset-password/', SetProfilePassword.as_view(), name="user-reset-password"),
     path('user-profile-update/<str:pk>/', taskUpdate, name="user-profile-update"),
     path('user-resume-update/<str:pk>/', resumeUpdate, name="user-resume-update"),
+    path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
+    path("public-quotes/", public_quotes, name="public-quotes"),
 
 ]

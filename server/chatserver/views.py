@@ -37,7 +37,7 @@ def start_convo(
         return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def get_conversation(request, convo_id):
     conversation = Conversation.objects.filter(id=convo_id)
     if not conversation.exists():
@@ -47,10 +47,31 @@ def get_conversation(request, convo_id):
         return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def conversations(request):
     conversation_list = Conversation.objects.filter(
         Q(initiator=request.user) | Q(receiver=request.user)
     )
     serializer = ConversationListSerializer(instance=conversation_list, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET", "POST"])
+def delete_conversation(request, convo_id):
+    try:
+        conversation = Conversation.objects.get(id=convo_id)
+        if conversation.initiator == request.user:
+            conversation.initiator = None
+            conversation.save()
+        elif conversation.receiver == request.user:
+            conversation.receiver = None
+            conversation.save()
+
+        return Response({"message": "conversation delete"})
+
+    except Exception:
+
+        return Response({"error": "deletion not succesfull"})
+
+
+

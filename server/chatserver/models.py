@@ -2,6 +2,7 @@ import os
 from django.utils import timezone
 from django.db import models
 from django.conf import settings
+from ckeditor.fields import RichTextField
 
 from django_s3_storage.storage import S3Storage
 
@@ -36,7 +37,7 @@ class Message(models.Model):
         related_name="message_sender",
         null=True,
     )
-    text = models.CharField(max_length=200)
+    text = RichTextField()
     attachment = models.FileField(upload_to=upload_to, blank=True, storage=storage)
     conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)

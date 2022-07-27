@@ -25,6 +25,7 @@ from accounts.models import (
     Service,
     Projects,
     ProjectPhoto,
+    PublicQuotes,
 )
 from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
@@ -78,6 +79,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+class BiddersProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = ("first_name","last_name", "photo", "status")
 class UserResumeSerializer(serializers.ModelSerializer):
     """
     resume search serializers use for entry data for resume from ui
@@ -95,8 +104,8 @@ class ProfileSerializerWithResume(serializers.ModelSerializer):
     #a_runner = serializers.SerializerMethodField()
     class Meta:
         model = RunnerProfile
-        exclude = ("address",)
-
+        exclude = ("address", "login_tracker", "user_set_status")
+        read_only_fields = ("status",)
     # def get_a_runner(self, instance):
     
     #     return AccountUser.objects.filter(id=instance.author_id).values("is_a_runner")
@@ -163,7 +172,8 @@ class RunnerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RunnerProfile
         fields = "__all__"
-
+        exclude = ("login_tracker", "user_set_status")
+        read_only_fields = ("status")
 
 
 class UserAccountSerializer(serializers.ModelSerializer):
@@ -200,35 +210,35 @@ class ProjectPhotoSerializer(serializers.ModelSerializer):
         model = ProjectPhoto
         fields = "__all__"
 
-class UserOnlineSerializer(serializers.ModelSerializer):
+# class UserOnlineSerializer(serializers.ModelSerializer):
     
-    online_status = serializers.SerializerMethodField()
-    class Meta:
-        model = AccountUser
-        fields = ("id", "online_status",)
-        read_only_fields = ("id","online_status")
+#     online_status = serializers.SerializerMethodField()
+#     class Meta:
+#         model = RunnerProfile
+#         fields = ("author", "online_status",)
+#         read_only_fields = ("author","online_status")
 
-    def get_online_status(self, instance):
+#     def get_online_status(self, instance):
 
-        if instance.user_set_status:
+#         if instance.user_set_status:
 
-            return "offline"
+#             return "offline"
 
-        else:
-            try:
-                user_last_login = arrow.get(instance.last_login)
-                now = arrow.utcnow()
-                current_time = now.replace(tzinfo='Africa/Lagos')
-                minutes = current_time-user_last_login
-                difference = minutes.total_seconds()
-                time = difference // (60)
-                if time < 1:
+#         else:
+#             try:
+#                 user_last_login = arrow.get(instance.last_login)
+#                 now = arrow.utcnow()
+#                 current_time = now.replace(tzinfo='Africa/Lagos')
+#                 minutes = current_time-user_last_login
+#                 difference = minutes.total_seconds()
+#                 time = difference // (60)
+#                 if time < 1:
 
-                    return "online"
+#                     return "online"
 
-            except:
+#             except:
 
-                return "offline"
+#                 return "offline"
         
 class UserSearchDetialSerializer(serializers.ModelSerializer):
 
@@ -273,3 +283,11 @@ class SetNewPasswordSerializer(serializers.Serializer):
         min_length=15)
     class Meta:
         fields = ['password1','password2', 'token']
+
+
+class PublicQuotesSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = PublicQuotes
+        fields = "__all__"
+

@@ -11,7 +11,7 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(TaskBidder)
 class TaskBidderAdmin(admin.ModelAdmin):
     list_display = ['task', "offer", "bid_approve_status"]
-    list_filter = ['runner_confirmed', 'created', 'bidder']
+    list_filter = ['runner_confirmed', 'created']
 
 admin.site.register(Timeline)
 admin.site.register(Comment)
