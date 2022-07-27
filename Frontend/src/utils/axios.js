@@ -5,12 +5,16 @@ const BASE_URL = "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev";
 //const BASE_URL = "/";
 
 export default function createRequest() {
+  let headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+  if (Cookies.get("access_token")) {
+    headers.Authorization = `Bearer ${Cookies.get("access_token")}`;
+  }
   return axios.create({
     baseURL: BASE_URL,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
+    headers,
 
     withCredentials: true,
     xsrfCookieName: "csrftoken",
