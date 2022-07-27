@@ -195,7 +195,7 @@ function Browsecandidates() {
                                 <h4>
                                   <Link
                                     to={{
-                                      pathname: `/make-offer/${item.id}/${item.first_name}`,
+                                      pathname: `/make-offer/${item.author}`,
                                       state: {
                                         id: item.author,
                                       },

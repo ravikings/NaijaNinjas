@@ -61,7 +61,7 @@ function MakeOfferForm(props) {
           </p>
         </div>
       ) : (
-        <div className="project-widget">
+        <div className="project-widget" id="bg-widget">
           {/* Buyer Start */}
           <div className="text-center">
             {/* <h3 className="project-widget-title">About Buyer</h3> */}

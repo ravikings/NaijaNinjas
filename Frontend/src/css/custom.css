@@ -1662,7 +1662,9 @@ ul.user-menu-small-nav li a:hover i {
 .delete-btn {
   background-color: red !important;
 }
-
+#bg-widget {
+  background-color: #f9faff;
+}
 .project-widget {
   padding: 30px;
   background: #f8fafb;
