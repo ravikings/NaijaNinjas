@@ -157,7 +157,7 @@ function CompanyManageBids() {
                                         <strong>
                                           {item.delivery_date
                                             ? item.delivery_date
-                                            : "None"}
+                                            : "0"}
                                         </strong>
                                         <span>Delivery Time</span>
                                       </li>
