@@ -58,7 +58,6 @@ function MakeOfferPage() {
   }, [id]);
 
   const handleRequest = async () => {
-    console.log(id, "item");
     try {
       const res = await createRequest().get(
         `/api/v1/account/user-search-detials/${id}/`
@@ -66,6 +65,7 @@ function MakeOfferPage() {
       setUser(res.data);
     } catch (error) {
       toast.error("Something went wrong");
+
       history.push("/");
     }
   };
