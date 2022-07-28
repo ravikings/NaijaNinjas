@@ -58,7 +58,6 @@ function MakeOfferPage() {
   }, [id]);
 
   const handleRequest = async () => {
-    console.log(id, "item");
     try {
       const res = await createRequest().get(
         `/api/v1/account/user-search-detials/${id}/`
@@ -66,6 +65,7 @@ function MakeOfferPage() {
       setUser(res.data);
     } catch (error) {
       toast.error("Something went wrong");
+
       history.push("/");
     }
   };
@@ -74,12 +74,12 @@ function MakeOfferPage() {
     <>
       <Header />
       {user ? (
-        <div className='page-content bg-white'>
+        <div className="page-content bg-white">
           <div
-            className='dez-bnr-inr d-flex align-items-center'
+            className="dez-bnr-inr d-flex align-items-center"
             style={{ backgroundImage: "url(" + bnr + ")" }}
           >
-            <div className=''>
+            <div className="">
               <Grid container spacing={2} className={classes.headerGrid}>
                 <Grid item>
                   <Avatar
@@ -93,13 +93,11 @@ function MakeOfferPage() {
                 <Grid item>
                   <Grid
                     container
-                    direction='column'
-                    justifyContent='space-between'
+                    direction="column"
+                    justifyContent="space-between"
                     style={{ height: "100%", padding: "5px 0px" }}
                   >
-                    <Grid item
-                    
-                    >
+                    <Grid item>
                       <div style={{ marginBottom: 5 }}>
                         {user.first_name} {user.last_name}
                       </div>
@@ -142,7 +140,7 @@ function MakeOfferPage() {
           </div>
         </div>
       ) : (
-        <div className='loader'>
+        <div className="loader">
           <ClipLoader color={"#2e55fa"} loading={true} size={150} />
         </div>
       )}
