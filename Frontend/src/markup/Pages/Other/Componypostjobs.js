@@ -129,7 +129,7 @@ function Componypostjobs() {
                         <div className="row">
                           <div className="col-lg-12 col-md-12">
                             <div className="form-group">
-                              <label>Task Title</label>
+                              <label>Job Title</label>
 
                               <input
                                 type="text"
@@ -143,7 +143,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-12 col-md-12">
                             <div className="form-group">
-                              <label>Task Tags</label>
+                              <label>Job Tags</label>
                               <input
                                 type="text"
                                 className="form-control tags_input"
@@ -154,7 +154,7 @@ function Componypostjobs() {
                           </div>
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Task Type</label>
+                              <label>Job Type</label>
                               <Form.Control
                                 as="select"
                                 custom
@@ -164,6 +164,7 @@ function Componypostjobs() {
                               >
                                 <option value="FUll Time">Full Time</option>
                                 <option value="Part Time">Part Time</option>
+                                <option value="Internship">Internship</option>
                                 <option value="Freelance">Freelance</option>
                               </Form.Control>
                             </div>
@@ -183,8 +184,6 @@ function Componypostjobs() {
                                 <option>3 Years</option>
                                 <option>4 Years</option>
                                 <option>5 Years</option>
-                                <option>10 Years</option>
-                                <option>15 Years</option>
                               </Form.Control>
                             </div>
                           </div>
@@ -326,7 +325,7 @@ function Componypostjobs() {
                         <button
                           type="submit"
                           name="DRAFT"
-                          className="site-button m-b30 mr-2"
+                          className="site-button m-b30 mr-5"
                           onClick={addData}
                         >
                           Save as draft
