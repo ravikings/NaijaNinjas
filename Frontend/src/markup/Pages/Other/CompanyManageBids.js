@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Header2 from "../../Layout/Header2";
 import Footer from "../../Layout/Footer";
 import { Modal } from "react-bootstrap";
 import ProfileSidebar from "../../Element/Profilesidebar";
 import DeleteIcon from "@material-ui/icons/Delete";
+import createRequest from "../../../utils/axios";
 import logo from "../../../images/logo/icon1.png";
 import Ratings from "../MakeOffer/components/Ratings";
 import { Button, IconButton } from "@material-ui/core";
@@ -19,7 +20,34 @@ const postBox = [
 ];
 
 function CompanyManageBids() {
+  const location = useLocation();
   const [company, setCompany] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(null);
+  const { id, title } = useParams();
+  const [data, setData] = useState([]);
+  const taskId = location?.pathname?.split("/")[2];
+  const allData = () => {
+    setLoading(true);
+    createRequest()
+      .get(`api/v1/task/task-bidding/?task=${id}`)
+      .then((res) => {
+        setTotalCount(res?.data?.count);
+        setData(res.data.results);
+
+        setLoading(false);
+      })
+      .catch((e) => {
+        if (e.response?.status === 400) {
+          console.log(e?.response?.data?.non_field_errors[0]);
+        } else {
+          console.log("Unknown Error");
+        }
+      });
+  };
+  useEffect(() => {
+    allData();
+  }, []);
 
   const dummyText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Mauris eget nulla eu nunc efficitur tincidunt.
@@ -30,21 +58,21 @@ function CompanyManageBids() {
   return (
     <>
       <Header2 />
-      <div className='page-content bg-white'>
-        <div className='content-block'>
-          <div className='section-full bg-white p-t50 p-b20'>
-            <div className='container'>
-              <div className='row'>
+      <div className="page-content bg-white">
+        <div className="content-block">
+          <div className="section-full bg-white p-t50 p-b20">
+            <div className="container">
+              <div className="row">
                 <ProfileSidebar showManageProp={true} active={"Manage jobs"} />
-                <div className='col-xl-9 col-lg-8 m-b30'>
-                  <div className='job-bx browse-job clearfix'>
-                    <div className='job-bx-title  clearfix'>
-                      <h5 className='font-weight-700 pull-left text-uppercase'>
+                <div className="col-xl-9 col-lg-8 m-b30">
+                  <div className="job-bx browse-job clearfix">
+                    <div className="job-bx-title  clearfix">
+                      <h5 className="font-weight-700 pull-left text-uppercase">
                         Manage Bids
                       </h5>
-                      <div className='float-right'>
-                        <span className='select-title'>Sort by freshness</span>
-                        <select className='custom-btn'>
+                      <div className="float-right">
+                        <span className="select-title">Sort by freshness</span>
+                        <select className="custom-btn">
                           <option>All</option>
                           <option>None</option>
                           <option>Read</option>
@@ -54,92 +82,96 @@ function CompanyManageBids() {
                         </select>
                       </div>
                     </div>
-                    <ul className='post-job-bx'>
-                      {postBox.map((item, index) => (
-                        <li key={index}>
-                          <div className='post-bx'>
-                            <div className='d-flex m-b30'>
-                              <div className='job-post-company'>
-                                <Link to={""}>
-                                  <span style={{ borderRadius: "50%" }}>
-                                    <img
-                                      alt=''
-                                      src={require("./../../../images/team/pic1.jpg")}
-                                    />
-                                  </span>
-                                </Link>
-                              </div>
-                              <div className='job-post-info'>
-                                <h4>
-                                  <Link to={"/make-offer"}>David Peterson</Link>
-                                </h4>
-                                <ul>
-                                  <li>
-                                    <i className='fa fa-envelope mb-2'></i>{" "}
-                                    david@example.com
-                                  </li>
-                                </ul>
-                                <Ratings />
-                                <div className='mt-3'>
-                                  <Button
-                                    style={{
-                                      backgroundColor: "#2e55fa",
-                                      color: "white",
-                                    }}
-                                    variant='outlined'
-                                    startIcon={<i className='fa fa-check'></i>}
-                                  >
-                                    Accept offer
-                                  </Button>
-                                  <Button
-                                    style={{
-                                      backgroundColor: "#333333",
-                                      color: "white",
-                                    }}
-                                    className='ml-2'
-                                    variant='outlined'
-                                    startIcon={
-                                      <i className='fa fa-envelope'></i>
-                                    }
-                                  >
-                                    Send message
-                                  </Button>
-                                  <IconButton
-                                    className='ml-2'
-                                    style={{
-                                      backgroundColor: "#eeeeee",
-                                      borderRadius: "10px",
-                                      height: "40px",
-                                      width: "40px",
-                                    }}
-                                    aria-label='delete'
-                                    size='large'
-                                  >
-                                    <i className='fa fa-trash'></i>
-                                  </IconButton>
+                    <ul className="post-job-bx">
+                      {data.length === 0
+                        ? "No data"
+                        : data.map((item, index) => (
+                            <li key={index}>
+                              <div className="post-bx">
+                                <div className="d-flex m-b30">
+                                  <div className="job-post-company">
+                                    <Link to={""}>
+                                      <span style={{ borderRadius: "50%" }}>
+                                        <img
+                                          alt=""
+                                          src={item.bidder_info.photo}
+                                        />
+                                      </span>
+                                    </Link>
+                                  </div>
+                                  <div className="job-post-info">
+                                    <h4>
+                                      <Link to={"/make-offer"}>
+                                        {`${item.bidder_info[0].first_name} ${item.bidder_info[0].last_name}`}
+                                      </Link>
+                                    </h4>
+                                    <Ratings />
+                                    <div className="mt-3">
+                                      <Button
+                                        style={{
+                                          backgroundColor: "#2e55fa",
+                                          color: "white",
+                                        }}
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-check"></i>
+                                        }
+                                      >
+                                        Accept offer
+                                      </Button>
+                                      <Button
+                                        style={{
+                                          backgroundColor: "#333333",
+                                          color: "white",
+                                        }}
+                                        className="ml-2"
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-envelope"></i>
+                                        }
+                                      >
+                                        Send message
+                                      </Button>
+                                      <IconButton
+                                        className="ml-2"
+                                        style={{
+                                          backgroundColor: "#eeeeee",
+                                          borderRadius: "10px",
+                                          height: "40px",
+                                          width: "40px",
+                                        }}
+                                        aria-label="delete"
+                                        size="large"
+                                      >
+                                        <i className="fa fa-trash"></i>
+                                      </IconButton>
+                                    </div>
+                                  </div>
+                                  <div className="rates">
+                                    <ul class="dashboard-task-info bid-info">
+                                      <li>
+                                        <strong>${item.offer}</strong>
+                                        <span>Fixed Price</span>
+                                      </li>
+                                      <li>
+                                        <strong>
+                                          {item.delivery_date
+                                            ? item.delivery_date
+                                            : "0"}
+                                        </strong>
+                                        <span>Delivery Time</span>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className='rates'>
-                                <ul class='dashboard-task-info bid-info'>
-                                  <li>
-                                    <strong>$3,200</strong>
-                                    <span>Fixed Price</span>
-                                  </li>
-                                  <li>
-                                    <strong>14 Days</strong>
-                                    <span>Delivery Time</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
 
-                            {/* <label className='like-btn'>
+                                {/* <label className='like-btn'>
                               <input type='checkbox' />
                               <span className='checkmark'></span>
                             </label> */}
-                          </div>
-                        </li>
-                      ))}
+                              </div>
+                            </li>
+                          ))}
                     </ul>
                     {/* <table className='table-job-bx cv-manager company-manage-job'>
                       <thead>
@@ -597,54 +629,58 @@ function CompanyManageBids() {
                         </tr>
                       </tbody>
                     </table> */}
-                    <div className='pagination-bx m-t30 float-right'>
-                      <ul className='pagination'>
-                        <li className='previous'>
-                          <Link to={""}>
-                            <i className='ti-arrow-left'></i> Prev
-                          </Link>
-                        </li>
-                        <li className='active'>
-                          <Link to={""}>1</Link>
-                        </li>
-                        <li>
-                          <Link to={""}>2</Link>
-                        </li>
-                        <li>
-                          <Link to={""}>3</Link>
-                        </li>
-                        <li className='next'>
-                          <Link to={""}>
-                            Next <i className='ti-arrow-right'></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
+                    {data.length === 0 ? (
+                      ""
+                    ) : (
+                      <div className="pagination-bx m-t30 float-right">
+                        <ul className="pagination">
+                          <li className="previous">
+                            <Link to={""}>
+                              <i className="ti-arrow-left"></i> Prev
+                            </Link>
+                          </li>
+                          <li className="active">
+                            <Link to={""}>1</Link>
+                          </li>
+                          <li>
+                            <Link to={""}>2</Link>
+                          </li>
+                          <li>
+                            <Link to={""}>3</Link>
+                          </li>
+                          <li className="next">
+                            <Link to={""}>
+                              Next <i className="ti-arrow-right"></i>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
 
                     <Modal
                       show={company}
                       onHide={setCompany}
-                      className='modal fade modal-bx-info'
+                      className="modal fade modal-bx-info"
                     >
-                      <div className='modal-dialog my-0' role='document'>
-                        <div className='modal-content'>
-                          <div className='modal-header'>
-                            <div className='logo-img'>
+                      <div className="modal-dialog my-0" role="document">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <div className="logo-img">
                               <img
-                                alt=''
+                                alt=""
                                 src={require("../../../images/logo/icon2.png")}
                               />
                             </div>
-                            <h5 className='modal-title'>Company Name</h5>
+                            <h5 className="modal-title">Company Name</h5>
                             <button
-                              type='button'
-                              className='close'
+                              type="button"
+                              className="close"
                               onClick={() => setCompany(false)}
                             >
-                              <span aria-hidden='true'>&times;</span>
+                              <span aria-hidden="true">&times;</span>
                             </button>
                           </div>
-                          <div className='modal-body'>
+                          <div className="modal-body">
                             <ul>
                               <li>
                                 <strong>Job Title :</strong>
@@ -664,10 +700,10 @@ function CompanyManageBids() {
                               </li>
                             </ul>
                           </div>
-                          <div className='modal-footer'>
+                          <div className="modal-footer">
                             <button
-                              type='button'
-                              className='btn btn-secondary'
+                              type="button"
+                              className="btn btn-secondary"
                               onClick={() => setCompany(false)}
                             >
                               Close
