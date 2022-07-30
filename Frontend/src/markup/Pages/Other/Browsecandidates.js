@@ -91,9 +91,9 @@ function Browsecandidates() {
       const { data } = await createRequest().get(req);
       if (forNext) {
         console.log("next Called");
-        checkOnline(userNext);
+        //checkOnline(userNext);
       } else {
-        checkOnline(userPrevious);
+        //checkOnline(userPrevious);
       }
       if (data.results) {
         setResults(data.results);
