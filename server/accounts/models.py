@@ -1,5 +1,4 @@
 # models.py in the users Django app
-from ast import Mod
 from email.mime import image
 import os
 from django.utils import timezone
@@ -10,7 +9,6 @@ from django.db.models import Avg, F, Count
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
 from django_s3_storage.storage import S3Storage
-import arrow
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 
@@ -20,9 +18,24 @@ class AccountUser(AbstractUser):
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
+    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
+    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
+    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
+
+
+    def private_mode(self, status=False):
+
+        self.user_set_status = status
+        self.save()
+
+    def public_online_status(self):
+
+        if not self.user_set_status:
+            self.user_set_status = True
+            self.save()
 
 
 class IpModel(models.Model):
@@ -58,53 +71,6 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
-    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
-    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
-    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
-
-
-    def private_mode(self, status=False):
-    
-        self.user_set_status = status
-        self.save()
-
-    def public_online_status(self):
-
-        if not self.user_set_status:
-            self.user_set_status = True
-            self.save()
-    
-    def set_online_status(self, type):
-        
-        instance = AccountUser.objects.get(id=self.author.id)
-        if not self.user_set_status:
-
-            try:
-                if type == "LOGIN":
-                    # user_last_login = arrow.get(instance.last_login)
-                    # now = arrow.utcnow()
-                    # current_time = now.replace(tzinfo='Africa/Lagos')
-                    # minutes = current_time-user_last_login
-                    # difference = minutes.total_seconds()
-                    # time = difference // (60)
-                    # if time < 1:
-                    self.status = True
-                    self.save()
-                    print("set status to login")
-                    return "online"
-
-                elif type == "LOGOUT":
-
-                    self.status = False
-                    self.save()
-                    print("set status to logout")
-                    return "offline"
-
-            except:
-                
-                pass
-                
-
 
 def upload_to_resume(instance, filename):
     now = timezone.now()
@@ -205,15 +171,3 @@ class ProjectPhoto(models.Model):
     )
 
     image = models.ImageField(upload_to=upload_to, storage=storage)
-
-class PublicQuotes(models.Model):
-    
-    description = models.TextField()
-    department  = models.CharField(max_length=250)
-    sector  = models.CharField(max_length=250)
-    location = models.CharField(max_length=250, null=True, db_index=True)
-    first_name = models.CharField(max_length=250, null=True, db_index=True)
-    last_name = models.CharField(max_length=250, null=True, db_index=True)
-    phone = models.CharField(max_length=15, null=True,)
-    email = models.CharField(max_length=25, null=True,)
-    created = models.DateTimeField(auto_now_add=True, null=True)

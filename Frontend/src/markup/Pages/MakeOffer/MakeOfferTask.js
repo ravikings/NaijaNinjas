@@ -200,7 +200,7 @@ function MakeOfferPage() {
                   <h3>
                     ${data?.minimum_salary} To ${data?.maximum_salary}{" "}
                   </h3>
-                  {/* <span>Project type: {data?.category}</span> */}
+                  <span>Project type: {data?.category}</span>
                   <div>
                     <Link
                       to={`/send-contract/${data?.id}`}

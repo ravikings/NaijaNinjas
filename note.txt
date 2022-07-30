@@ -60,19 +60,3 @@ python manage.py migrate notifications
 test credentials
 admintest@gmail.com
 123Tcorrect8@
-
-change directory into server folder from terminal,
-folder: GitHub\NaijaNinjas\server
-run: python manage.py runserver
-
---build image--
-docker build -t chat-app .
-
-create a tag
-docker tag image repo/name:lastest
-docker push repo/name:lastest
-
-
-docker pull raviroyale/chatapp:latest
-
-docker run -p 8000:8000 -it raviroyale/chatapp:latest
