@@ -87,7 +87,7 @@ export function* getCurrentUser() {
     const { data } = yield createRequest().get("/dj-rest-auth/user/");
     console.log(data, "userData");
     yield put({ type: authActionTypes.GET_CURRENT_SUCCESS, user: data });
-    yield call(getUserStatus, data.pk);
+    //yield call(getUserStatus, data.pk);
     // yield put({ type: authActionTypes.GET_USER_STATUS, id: data.pk });
   } catch (e) {
     yield put({ type: authActionTypes.GET_CURRENT_FAILED });
