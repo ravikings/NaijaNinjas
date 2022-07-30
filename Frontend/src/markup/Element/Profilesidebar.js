@@ -154,13 +154,41 @@ function ProfileSidebar({
                 </Link>
               </li>
             )}
+            
+            {/* start ask question start */}
+            <li onClick={() => setShowQuestion(!showQuestion)}>
+              <Link to={"#"} className={active === "question" ? "active" : ""}>
+                <i
+                  className={
+                    showQuestion ? "fa fa-arrow-down" : "fa fa-arrow-right"
+                  }
+                  aria-hidden='true'
+                ></i>
+                <span>Ask Question</span>
+              </Link>
+            </li>
+            <Collapse in={showQuestion}>
+              <li>
+                <Link className={"ml-4"} to={"/ask-questions"}>
+                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <span>Ask a Question</span>
+                </Link>
+              </li>
+              <li>
+                <Link className={"ml-4"} to={"/all-questions"}>
+                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <span>All Question</span>
+                </Link>
+              </li>
+            </Collapse>
+            {/* start ask question end */}
             <li>
               <Link
                 to={"/jobs-saved-jobs"}
                 className={active === "Saved Jobs" ? "active" : ""}
               >
                 <i className='fa fa-heart-o' aria-hidden='true'></i>
-                <span>Saved Jobs</span>
+                <span>Bookmarks</span>
               </Link>
             </li>
             {/*Manage Jobs Collapse*/}
@@ -212,17 +240,16 @@ function ProfileSidebar({
                   <span>Favorite tasks</span>
                 </Link>
               </li>
-            </Collapse>
-
-            <li>
+              <li>
               <Link
-                className={active === "Applied Jobs" ? "active" : ""}
+                className={active === "Applied Jobs" ? "active ml-4" : "ml-4"}
                 to={"/jobs-applied-job"}
               >
                 <i className='fa fa-briefcase' aria-hidden='true'></i>
                 <span>Upcoming tasks</span>
               </Link>
             </li>
+            </Collapse>
             <li>
               <Link to={"/post-ads"}>
                 <i className='fa fa-handshake-o' aria-hidden='true'></i>
@@ -239,33 +266,6 @@ function ProfileSidebar({
               </Link>
             </li>
 
-            {/* start ask question start */}
-            <li onClick={() => setShowQuestion(!showQuestion)}>
-              <Link to={"#"} className={active === "question" ? "active" : ""}>
-                <i
-                  className={
-                    showQuestion ? "fa fa-arrow-down" : "fa fa-arrow-right"
-                  }
-                  aria-hidden='true'
-                ></i>
-                <span>Ask Question</span>
-              </Link>
-            </li>
-            <Collapse in={showQuestion}>
-              <li>
-                <Link className={"ml-4"} to={"/ask-questions"}>
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
-                  <span>Ask a Question</span>
-                </Link>
-              </li>
-              <li>
-                <Link className={"ml-4"} to={"/all-questions"}>
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
-                  <span>All Question</span>
-                </Link>
-              </li>
-            </Collapse>
-            {/* start ask question end */}
             <li>
               <Link
                 className={active === "Change Password" ? "active" : ""}
