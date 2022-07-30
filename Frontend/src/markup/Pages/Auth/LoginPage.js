@@ -1,4 +1,4 @@
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { authActionTypes } from "./Redux/AuthActions";
 import { useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
@@ -33,6 +33,7 @@ function LoginPage() {
   //const userDetails = useUser();
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [value, setValue] = useState("");
 
   const checkCaptcha = () => {
@@ -62,12 +63,20 @@ function LoginPage() {
           user: res?.data?.user,
           accessToken: res?.data?.access_token,
         });
+        const redirectURL = new URLSearchParams(location.search).get(
+          "redirect"
+        );
         if (res?.data?.user?.pk) {
           createRequest().post(
             `/api/v1/user-status/${res?.data?.user?.pk}/login/`
           );
         }
-        history.push("/");
+        // history.push("/");
+        else if (redirectURL) {
+          history.push(redirectURL);
+        } else {
+          history.push("/");
+        }
       })
       .catch((e) => {
         if (e.response?.status === 400) {
