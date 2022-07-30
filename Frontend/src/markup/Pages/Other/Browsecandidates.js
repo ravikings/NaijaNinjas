@@ -119,7 +119,7 @@ function Browsecandidates() {
 
   useEffect(() => {
     handleRequest(title);
-    checkOnline();
+    // checkOnline();
   }, []);
 
   useEffect(() => {
@@ -143,7 +143,7 @@ function Browsecandidates() {
       });
     }
     handleRequest(keyword);
-    checkOnline();
+    // checkOnline();
   };
 
   return (
@@ -195,7 +195,7 @@ function Browsecandidates() {
                                 <h4>
                                   <Link
                                     to={{
-                                      pathname: `/make-offer/${item.id}/${item.first_name}`,
+                                      pathname: `/make-offer/${item.author}`,
                                       state: {
                                         id: item.author,
                                       },
@@ -267,6 +267,8 @@ function Browsecandidates() {
                                       id: item.author,
                                     },
                                   }}
+                                  onClick={(e) => e.stopPropagation()}
+                                  target={"_blank"}
                                 >
                                   <button className="site-button btn-block">
                                     View Profile
