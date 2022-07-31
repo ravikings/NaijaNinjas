@@ -52,7 +52,7 @@ function Componypostjobs() {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [category, setCategory] = useState("");
-  const [attachFile, setAttachFile] = useState(null);
+  const [attachFile, setAttachFile] = useState("");
   // const [postStatus,setPostStatus]=useState('');
   const addData = (e) => {
     e.preventDefault();
@@ -129,7 +129,7 @@ function Componypostjobs() {
                         <div className="row">
                           <div className="col-lg-12 col-md-12">
                             <div className="form-group">
-                              <label>Task Title</label>
+                              <label>Job Title</label>
 
                               <input
                                 type="text"
@@ -143,7 +143,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-12 col-md-12">
                             <div className="form-group">
-                              <label>Task Tags</label>
+                              <label>Job Tags</label>
                               <input
                                 type="text"
                                 className="form-control tags_input"
@@ -154,7 +154,7 @@ function Componypostjobs() {
                           </div>
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Task Type</label>
+                              <label>Job Type</label>
                               <Form.Control
                                 as="select"
                                 custom
@@ -164,6 +164,7 @@ function Componypostjobs() {
                               >
                                 <option value="FUll Time">Full Time</option>
                                 <option value="Part Time">Part Time</option>
+                                <option value="Internship">Ondemand</option>
                                 <option value="Freelance">Freelance</option>
                               </Form.Control>
                             </div>
@@ -249,7 +250,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Department:</label>
+                              <label>Sector:</label>
                               <Autocomplete
                                 fullWidth
                                 autoSelect
@@ -269,7 +270,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Sector:</label>
+                              <label>Department:</label>
                               <Autocomplete
                                 fullWidth
                                 autoSelect
