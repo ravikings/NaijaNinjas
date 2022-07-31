@@ -79,11 +79,11 @@ class TimelineSerializer(serializers.ModelSerializer):
     Profile serializers use profile for picture uploads and retrieve
     """
 
-    timeline_comment = TimelineCommentSerializer(read_only=True, many=True)
+    #timeline_comment = TimelineCommentSerializer(read_only=True, many=True)
    
     class Meta:
         model = Timeline
-        exclude = ("updated", "created", "comment")
+        exclude = ("updated", "created",)
 
     def get_time_created(self, instance):
         dateTimeObj = instance.created

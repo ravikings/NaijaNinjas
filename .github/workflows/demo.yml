@@ -39,4 +39,4 @@ jobs:
           pip list
           python manage.py makemigrations
           python manage.py migrate
-          zappa deploy prod
+          zappa update prod
