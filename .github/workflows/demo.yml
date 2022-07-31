@@ -29,3 +29,14 @@ jobs:
           pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           python manage.py migrate --fake
+
+      - name: Django db migrate
+        working-directory: ./server
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: deploy to aws lambda
+        working-directory: ./server
+        run: |
+          zappa update
