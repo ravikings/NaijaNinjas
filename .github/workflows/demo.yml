@@ -32,6 +32,7 @@ jobs:
         shell: bash
         run: |
           ls
+          pip install virtualenv
           virtualenv my-deploy
           source my-deploy/bin/activate
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
