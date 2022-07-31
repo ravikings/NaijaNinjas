@@ -7,15 +7,19 @@ from accounts.models import AccountUser, RunnerProfile
 from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment
+from django.db.models import Count
 from history.signals import history_tracker
 from accounts.views import get_client_ip
 from accounts.models import IpModel
 from rest_framework import status
 from django.db import transaction
 from rest_framework.decorators import api_view
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
+@method_decorator(cache_page(60 * 30), name='dispatch')
 class TaskView(viewsets.ModelViewSet):
     
     """
@@ -23,6 +27,8 @@ class TaskView(viewsets.ModelViewSet):
     """
 
     queryset = Task.objects.filter(post_status="OPEN")
+    # .annotate(num_views=Count('views')) \
+    #             .order_by('-num_views', '-created',)
     serializer_class = TaskSerializer
 
     def retrieve(self, request, pk=None):

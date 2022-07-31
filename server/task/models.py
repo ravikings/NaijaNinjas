@@ -45,7 +45,7 @@ class Task(models.Model):
     )
 
     class Meta:
-        ordering = ("created",)
+        ordering = ("-updated", "-created",)
 
 
 def upload_to(instance, filename):
@@ -60,10 +60,6 @@ class TaskBidder(models.Model):
     """
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned")
-    # bidder = models.ForeignKey(
-    #     settings.AUTH_USER_MODEL,on_delete=models.CASCADE, related_name="task_bidder", blank=True,
-    #     null=True
-    # )
     bidder_profile = models.ForeignKey(
         RunnerProfile, on_delete=models.CASCADE, related_name="task_profile_bidder", blank=True,
         null=True
@@ -113,21 +109,6 @@ class Photo(models.Model):
 #     updated = models.DateTimeField(auto_now=True)
 
 
-class Comment(models.Model):
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="timeline_comment_author",
-    )
-    body = RichTextField()
-    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated = models.DateTimeField(auto_now=True, db_index=True)
-
-    class Meta:
-        ordering = ("created",)
-
-
 class Timeline(models.Model):
 
     STATUS = [
@@ -145,8 +126,21 @@ class Timeline(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="timeline_comment", blank=True, null=True)
-    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
     timeline_status = models.CharField(max_length=255,choices=STATUS, default="STARTED")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+class Comment(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="timeline_comment_author",
+    )
+    task_timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE, related_name="active_timeline_comment", blank=True, null=True)
+    body = RichTextField()
+    attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True, storage=storage)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated = models.DateTimeField(auto_now=True, db_index=True)
+
+    class Meta:
+        ordering = ("created",)

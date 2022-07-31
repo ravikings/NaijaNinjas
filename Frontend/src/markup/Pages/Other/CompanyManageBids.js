@@ -84,7 +84,7 @@ function CompanyManageBids() {
                     </div>
                     <ul className="post-job-bx">
                       {data.length === 0
-                        ? "No data"
+                        ? "Your task have no bids at the moment, kindly check by soon, Thank you!"
                         : data.map((item, index) => (
                             <li key={index}>
                               <div className="post-bx">
