@@ -33,11 +33,8 @@ jobs:
         shell: bash
         run: |
           ls
-          cd tutorial-env
-          echo " Inside env file"
-          Scripts/activate
           echo " environment activated"
-          cd ..
+          .\tutorial-env\Scripts\activate
           echo " change directory to base"
           python manage.py makemigrations
           python manage.py migrate
