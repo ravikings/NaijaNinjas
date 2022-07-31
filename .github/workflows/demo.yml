@@ -31,7 +31,8 @@ jobs:
         working-directory: ./server
         shell: bash
         run: |
-          ls
+
+          sudo apt-get install libpq-dev -y
           pip install virtualenv
           virtualenv my-deploy
           source my-deploy/bin/activate
