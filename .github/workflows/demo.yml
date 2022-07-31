@@ -1,6 +1,6 @@
 name: Gigxnow deveploment
 
-on: [push]
+on: #[push]
 
 env:
   DAY_OF_WEEK: Monday
