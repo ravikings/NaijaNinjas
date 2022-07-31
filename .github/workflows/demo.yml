@@ -34,7 +34,7 @@ jobs:
         run: |
           ls
           echo " activating environment "
-          ./tutorial-env/Scripts/activate
+          source tutorial-env/Scripts/activate
           echo " environment activated"
           echo " change directory to base"
           python manage.py makemigrations
