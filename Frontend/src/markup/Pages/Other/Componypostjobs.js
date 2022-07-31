@@ -248,7 +248,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Department:</label>
+                              <label>Sector:</label>
                               <Autocomplete
                                 fullWidth
                                 autoSelect
@@ -268,7 +268,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Sector:</label>
+                              <label>Department:</label>
                               <Autocomplete
                                 fullWidth
                                 autoSelect
@@ -325,7 +325,7 @@ function Componypostjobs() {
                         <button
                           type="submit"
                           name="DRAFT"
-                          className="site-button m-b30 mr-5"
+                          className="site-button m-b30 mr-2"
                           onClick={addData}
                         >
                           Save as draft
