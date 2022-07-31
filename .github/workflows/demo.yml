@@ -34,7 +34,11 @@ jobs:
         run: |
           ls
           cd tutorial-env
+          echo " Inside env file"
           Scripts/activate
+          echo " environment activated"
+          cd ..
+          echo " change directory to base"
           python manage.py makemigrations
           python manage.py migrate
           zappa update dev
