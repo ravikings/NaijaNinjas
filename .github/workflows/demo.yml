@@ -35,7 +35,8 @@ jobs:
           pip install virtualenv
           virtualenv my-deploy
           source my-deploy/bin/activate
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
+          pip list
           python manage.py makemigrations
           python manage.py migrate
           zappa deploy prod
