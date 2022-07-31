@@ -40,5 +40,4 @@ jobs:
         shell: bash
         run: |
           ls
-          source tutorial-env/bin/activate
           zappa update dev
