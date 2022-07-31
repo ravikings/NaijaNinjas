@@ -9,6 +9,7 @@
         "django_settings": "server.settings",
         "project_name": "server",
         "runtime": "python3.9",
+        "slim_handler": true,
         "s3_bucket": "zappa-wnf4dp8g2"
     }
 }
