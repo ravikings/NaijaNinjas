@@ -2,6 +2,12 @@ name: Gigxnow deveploment
 
 on: [push]
 
+env:
+  DAY_OF_WEEK: Monday
+  AWS_ACCESS_KEY_ID: AKIA525LDBK2M3KUXK3R 
+  AWS_SECRET_ACCESS_KEY: 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 
+  AWS_DEFAULT_REGION: us-east-1 
+
 jobs:
   build:
 
