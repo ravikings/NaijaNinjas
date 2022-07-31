@@ -4,5 +4,11 @@
         "project_name": "server",
         "runtime": "python3.9",
         "s3_bucket": "zappa-wnf4dp8g2"
+    },
+    "prod": {
+        "django_settings": "server.settings",
+        "project_name": "server",
+        "runtime": "python3.9",
+        "s3_bucket": "zappa-wnf4dp8g2"
     }
 }
