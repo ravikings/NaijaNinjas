@@ -38,4 +38,5 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           python manage.py makemigrations
           python manage.py migrate
-          zappa update dev
+          zappa init
+          zappa deploy dev
