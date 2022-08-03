@@ -130,6 +130,7 @@ function Companymanage() {
                               <th>Date</th>
                               <th>Status</th>
                               <th>Action</th>
+                              <th>Total Bids</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -177,7 +178,12 @@ function Companymanage() {
                                       setViewData(e);
                                     }}
                                   >
-                                    <i className="fa fa-eye"></i>
+                                    <i className="fa fa-eye" ></i>
+                                  </Link>
+                                  <Link
+                                    to={"#"}
+                                  >
+                                    <i className="ti-write" name="edit"></i>
                                   </Link>
                                   <Link
                                     to={"#"}
