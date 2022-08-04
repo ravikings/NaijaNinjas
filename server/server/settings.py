@@ -329,3 +329,6 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
 # EMAIL_HOST_PASSWORD = '123Amina4@'
+
+# Celery settings
+CELERY_BROKER_URL = "amqps://zdrdtxfu:oUHXn7BM5YO0DofEB8MpjzD5CD_yqcPn@armadillo.rmq.cloudamqp.com/zdrdtxfu"

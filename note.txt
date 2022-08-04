@@ -76,3 +76,13 @@ docker push repo/name:lastest
 docker pull raviroyale/chatapp:latest
 
 docker run -p 8000:8000 -it raviroyale/chatapp:latest
+
+To monitor celery
+celery --broker=amqps://zdrdtxfu:oUHXn7BM5YO0DofEB8MpjzD5CD_yqcPn@armadillo.rmq.cloudamqp.com/zdrdtxfu flower
+
+
+elb installation guide
+
+pip install awsebcli
+
+https://docker.io/raviroyale/chatapp
