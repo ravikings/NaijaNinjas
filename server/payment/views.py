@@ -33,7 +33,7 @@ def verify_payment(request):
         return Response({"message":"Payment declined"}, status=status.HTTP_406_NOT_ACCEPTABLE)
     
 
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def accept_webhook(request):
 
     if webhook_handler_service(request):
