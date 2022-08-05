@@ -78,10 +78,11 @@ class TaskBidder(models.Model):
         ordering = ["-created", "-modified"] 
 
     def save(self, *args, **kwargs):
- 
-        ref = secrets.token_urlsafe(50)
-        self.transaction_id = ref
-        super().save(*args, **kwargs)
+        
+        if not self.transaction_id:
+            ref = secrets.token_urlsafe(50)
+            self.transaction_id = ref
+            super().save(*args, **kwargs)
 
     def number_of_bids(self):
         return self.bidder.count()
