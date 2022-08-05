@@ -6,6 +6,7 @@ from django.conf import settings
 from ckeditor.fields import RichTextField
 from accounts.models import IpModel, RunnerProfile
 from django_s3_storage.storage import S3Storage
+from payment.paystack import PayStack
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 # Create your models here.
@@ -69,6 +70,7 @@ class TaskBidder(models.Model):
     image = models.ImageField(upload_to=upload_to, blank=True)
     bid_approve_status = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True, unique=True)
+    transaction_completed = models.BooleanField(default=False)
     runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -82,7 +84,7 @@ class TaskBidder(models.Model):
         if not self.transaction_id:
             ref = secrets.token_urlsafe(50)
             self.transaction_id = ref
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def number_of_bids(self):
         return self.bidder.count()
@@ -92,6 +94,17 @@ class TaskBidder(models.Model):
         status = Task.objects.get(id=self.task)
         status.post_status = "ASSIGNED"
         status.save()
+
+    def verify_transaction_completed(self):
+        paystack = PayStack()
+        status, result = paystack.verify_payment(self.transaction_id, self.offer)
+        if status:
+            self.paystack_response = result
+            if result["amount"] / 100 == self.offer:
+                self.transaction_completed = True
+            self.save()
+            return True
+        return False
 
 class Photo(models.Model):
     

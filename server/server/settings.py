@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "accounts",
     "debug_toolbar",
     "task",
+    "payment"
 ]
 
 REST_FRAMEWORK = {
@@ -332,3 +333,8 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # Celery settings
 CELERY_BROKER_URL = "amqps://zdrdtxfu:oUHXn7BM5YO0DofEB8MpjzD5CD_yqcPn@armadillo.rmq.cloudamqp.com/zdrdtxfu"
+
+
+#paystack info
+PAYSTACK_SECRET_KEY = "sk_test_200fcc984243e4e0d1ec71326d74e6a4e0750c29"
+PAYSTACK_PUBLIC_KEY  = "pk_test_b4198537c6f3c50f8fc0fccaebf4d0aae311d411"
