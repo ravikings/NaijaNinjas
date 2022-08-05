@@ -6,6 +6,7 @@ from django.conf import settings
 from rest_framework.exceptions import ValidationError
 from .models import TransactionLog
 from django.db import transaction
+from celery import shared_task
 
 class PayStack:
     PAYSTACK_SECRET_KEY = settings.PAYSTACK_SECRET_KEY
@@ -42,6 +43,15 @@ def log_transaction(transaction_data):
         logs=transaction_data,
     )
 
+@shared_task(bind=True, autoretry_for=(Exception,),acks_late=True, retry_backoff=960, retry_jitter=True, retry_kwargs={'max_retries': 5})
+def log_transaction_task(transaction_data):
+
+    try:
+        log_transaction(transaction_data)
+
+    except:
+        raise Exception()
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
@@ -65,7 +75,7 @@ def webhook_handler_service(request):
     if webhook_data["event"] == "charge.success":
         
         #to store transcation logs
-        log_transaction(webhook_data["data"])
+        log_transaction_task(webhook_data["data"])
         return True
 
     return False
