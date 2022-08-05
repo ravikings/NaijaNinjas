@@ -14,6 +14,24 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class TaskWithTotalBidSerializer(serializers.ModelSerializer):
+    """
+    Task serializers use for creating task 
+    """
+    total_bids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = "__all__"
+
+
+    def get_total_bids(self, instance):
+
+        data = TaskBidder.objects.filter(task=instance.pk)
+
+        return len(data)
+
+
 class TaskBidderSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
-from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer
+from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment
 from django.db.models import Count
@@ -45,7 +45,7 @@ class TaskView(viewsets.ModelViewSet):
 
 class TaskOwnerView(viewsets.ModelViewSet):
 
-    serializer_class = TaskSerializer
+    serializer_class = TaskWithTotalBidSerializer
     #permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):

@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "accounts",
     "debug_toolbar",
     "task",
+    "payment",
 ]
 
 REST_FRAMEWORK = {
@@ -160,6 +161,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = "None"
 
 SESSION_COOKIE_HTTPONLY = "True"
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2
 
 
 ROOT_URLCONF = "server.urls"
@@ -328,3 +330,11 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
 # EMAIL_HOST_PASSWORD = '123Amina4@'
+
+# Celery settings
+CELERY_BROKER_URL = "amqps://zdrdtxfu:oUHXn7BM5YO0DofEB8MpjzD5CD_yqcPn@armadillo.rmq.cloudamqp.com/zdrdtxfu"
+
+
+#paystack info
+PAYSTACK_SECRET_KEY = "sk_test_200fcc984243e4e0d1ec71326d74e6a4e0750c29"
+PAYSTACK_PUBLIC_KEY  = "pk_test_b4198537c6f3c50f8fc0fccaebf4d0aae311d411"

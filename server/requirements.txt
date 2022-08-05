@@ -26,3 +26,5 @@ zappa
 django-s3-storage
 django-notifications-hq
 django-notifications-rest
+amqp
+celery

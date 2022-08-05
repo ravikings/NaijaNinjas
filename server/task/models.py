@@ -1,11 +1,12 @@
 import os
-import black
+import secrets
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from accounts.models import IpModel, RunnerProfile
 from django_s3_storage.storage import S3Storage
+from payment.paystack import PayStack
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 # Create your models here.
@@ -68,7 +69,8 @@ class TaskBidder(models.Model):
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
     bid_approve_status = models.BooleanField(default=False)
-    transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True, unique=True)
+    transaction_completed = models.BooleanField(default=False)
     runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -77,7 +79,14 @@ class TaskBidder(models.Model):
     class Meta: 
         ordering = ["-created", "-modified"] 
 
-    def number_of_votes(self):
+    def save(self, *args, **kwargs):
+        
+        if not self.transaction_id:
+            ref = secrets.token_urlsafe(50)
+            self.transaction_id = ref
+        super().save(*args, **kwargs)
+
+    def number_of_bids(self):
         return self.bidder.count()
 
     def set_task_status(self):
@@ -86,6 +95,17 @@ class TaskBidder(models.Model):
         status.post_status = "ASSIGNED"
         status.save()
 
+    def verify_transaction_completed(self):
+        paystack = PayStack()
+        status, result = paystack.verify_payment(self.transaction_id, self.offer)
+        if status:
+            self.paystack_response = result
+            if result["amount"] / 100 == self.offer:
+                self.transaction_completed = True
+            self.save()
+            return True
+        return False
+
 class Photo(models.Model):
     
     task = models.ForeignKey(
@@ -93,20 +113,6 @@ class Photo(models.Model):
     )
 
     image = models.ImageField(upload_to=upload_to)
-
-
-# class Timeline(models.Model):
-#     author = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
-#     )
-#     # TODO: Add validator to chech if user is a runner
-#     task_owner = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
-#     )
-#     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-#     attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
-#     created = models.DateTimeField(auto_now_add=True)
-#     updated = models.DateTimeField(auto_now=True)
 
 
 class Timeline(models.Model):
@@ -137,6 +143,7 @@ class Comment(models.Model):
         related_name="timeline_comment_author",
     )
     task_timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE, related_name="active_timeline_comment", blank=True, null=True)
+    contract = models.BooleanField(default=False)
     body = RichTextField()
     attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
