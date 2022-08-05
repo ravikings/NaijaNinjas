@@ -5,6 +5,7 @@ from task.models import TaskBidder
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from .paystack import webhook_handler_service
 # Create your views here.
 
 
@@ -30,4 +31,14 @@ def verify_payment(request):
     else:
         messages.warning(request, "Sorry, your payment could not be confirmed.")
         return Response({"message":"Payment declined"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+    
+
+@api_view(["POST", "GET"])
+def accept_webhook(request):
+
+    if webhook_handler_service(request):
+
+        return Response({"message":"log was processed succesfull!"}, status=status.HTTP_200_OK)
+
+    return Response({"message":"sorry log was not process"}, status=status.HTTP_400_BAD_REQUEST)
     

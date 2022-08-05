@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     "accounts",
     "debug_toolbar",
     "task",
-    "payment"
+    "payment",
 ]
 
 REST_FRAMEWORK = {
