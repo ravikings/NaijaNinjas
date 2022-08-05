@@ -44,7 +44,7 @@ def log_transaction(transaction_data):
     )
 
 @shared_task(bind=True, autoretry_for=(Exception,),acks_late=True, retry_backoff=960, retry_jitter=True, retry_kwargs={'max_retries': 5})
-def log_transaction_task(transaction_data):
+def log_transaction_task(self, transaction_data):
 
     try:
         log_transaction(transaction_data)
@@ -75,7 +75,7 @@ def webhook_handler_service(request):
     if webhook_data["event"] == "charge.success":
         
         #to store transcation logs
-        log_transaction_task(webhook_data["data"])
+        log_transaction_task.delay(webhook_data["data"])
         return True
 
     return False
