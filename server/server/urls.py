@@ -62,6 +62,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('notifications/', include('notifications_rest.urls')),
+    path('celery-progress/', include('celery_progress.urls')),
 
 ]
 

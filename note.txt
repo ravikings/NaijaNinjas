@@ -86,3 +86,6 @@ elb installation guide
 pip install awsebcli
 
 https://docker.io/raviroyale/chatapp
+
+python -m celery -A server worker -l info
+celery -A server worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo

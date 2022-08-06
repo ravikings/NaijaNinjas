@@ -16,6 +16,6 @@ class TransactionLog(models.Model):
     amount = models.IntegerField(null=True, blank=True)
     currency = models.CharField(max_length=255)
     payment_date_time = models.DateTimeField(max_length=100, null=True, blank=True)
-    status= models.DateTimeField(max_length=100, null=True, blank=True)
-    refrence = models.CharField(max_length=255, db_index=True)
+    status= models.CharField(max_length=255, null=True, blank=True)
+    refrence = models.CharField(max_length=255, db_index=True, unique=True)
     logs = models.JSONField(null=True, blank=True)

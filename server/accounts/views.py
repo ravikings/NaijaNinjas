@@ -92,10 +92,8 @@ class UserDashboardProfile(viewsets.ModelViewSet):
         user = AccountUser.objects.get(id=pk)
         recipient = AccountUser.objects.get(id=41)
         print("im sending notification dashboard")
-        print("im checking dashboard")
-        print("im checking dashboard")
-        notify.send(user,recipient=recipient, verb='hello come to dashboard')
-        print("sent")
+        #notify.send(user,recipient=recipient, verb='hello come to dashboard')
+
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
@@ -163,6 +161,13 @@ def save_profile_resume(resume, request):
 
         return Response({"message": f"resume updated"})
 
+
+# def start_celery_work(request):
+#     import subprocess
+
+#     subprocess.run("celery -A server worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo")
+
+#     return Response({"message": f"workder stared"})
 
 @api_view(["POST", "PATCH"])
 def resumeUpdate(request, pk):
