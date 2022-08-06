@@ -44,7 +44,7 @@ def log_transaction(transaction_data, webhook_data):
 
     print("writing transaction to db")
     TransactionLog.objects.create(
-        amount=transaction_data["amount"],
+        amount=transaction_data["amount"] / 100,
         currency=transaction_data["currency"],
         refrence=transaction_data["reference"],
         payment_date_time=transaction_data["paid_at"],
