@@ -24,6 +24,7 @@ from accounts.views import (
     resumeUpdate,
     TestView,
     public_quotes,
+    #start_celery_work,
 )
 
 
@@ -64,5 +65,6 @@ urlpatterns = [
     path('user-resume-update/<str:pk>/', resumeUpdate, name="user-resume-update"),
     path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
     path("public-quotes/", public_quotes, name="public-quotes"),
+    #path("public-celery/", start_celery_work, name="start-celery"),
 
 ]
