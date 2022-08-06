@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from .paystack import webhook_handler_service
 from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import ValidationError
 # Create your views here.
 
 
@@ -17,17 +18,19 @@ def verify_payment(request):
 
     trxref = request.query_params.get('trxref')
 
-    if trxref:
+    if not trxref:
         messages.error(
             request,
             "The transaction reference passed was different from the actual reference. Please do not modify data during transactions",
         )
+        raise ValidationError("error: trxref is not passed")
+
     payment: TaskBidder = get_object_or_404(TaskBidder, transaction_id=trxref)
     if payment.verify_transaction_completed():
         messages.success(
             request, f"Payment Completed Successfully, ₦ {payment.offer}."
         )
-        return Response({"message":"Pay was succesfull!"}, status=status.HTTP_200_OK)
+        return Response({"message":"Payment was succesfull!"}, status=status.HTTP_200_OK)
 
     else:
         messages.warning(request, "Sorry, your payment could not be confirmed.")
