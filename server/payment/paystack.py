@@ -45,9 +45,9 @@ def webhook_handler_service(request):
         raise ValidationError(e)
 
     webhook_data = request.data
-    # ip = get_client_ip(request)
-    # if ip not in IP_WHITELIST:
-    #     raise ValidationError("source request authentication failed")
+    ip = get_client_ip(request)
+    if ip not in IP_WHITELIST:
+        raise ValidationError("source request authentication failed")
 
     if webhook_data["event"] == "charge.success":
         
