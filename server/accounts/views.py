@@ -92,10 +92,8 @@ class UserDashboardProfile(viewsets.ModelViewSet):
         user = AccountUser.objects.get(id=pk)
         recipient = AccountUser.objects.get(id=41)
         print("im sending notification dashboard")
-        print("im checking dashboard")
-        print("im checking dashboard")
-        notify.send(user,recipient=recipient, verb='hello come to dashboard')
-        print("sent")
+        #notify.send(user,recipient=recipient, verb='hello come to dashboard')
+
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
