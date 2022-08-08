@@ -61,6 +61,9 @@ class RunnerProfile(models.Model):
     status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
     login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
     user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
+    bookmarks = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="profile_bookmarks", blank=True
+    )
 
 
     def private_mode(self, status=False):

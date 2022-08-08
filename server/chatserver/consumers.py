@@ -90,7 +90,7 @@ class ChatConsumer(WebsocketConsumer):
                     {
                         "type": "chat_message",
                         "message": message,
-                        "sender": sender.email,
+                        "sender": sender,
                         'userImage': self.userObj.photo.url,
                         "online_status": self.userObj.status,
                         'userName': self.userObj.first_name + " " + self.userObj.last_name,
@@ -101,13 +101,27 @@ class ChatConsumer(WebsocketConsumer):
             else:
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
-                    return_dict,
+                    #return_dict,
+                        {
+                        "type": "chat_message",
+                        "message": message,
+                        "sender": sender,
+                        'userImage': self.userObj.photo.url,
+                        "online_status": self.userObj.status,
+                        'userName': self.userObj.first_name + " " + self.userObj.last_name,
+                        "time": str(_message.timestamp),
+                    },
                 )
                 
         elif action == 'typing':
             return_dict = {
 				'action': 'typing',
-				'message': message
+				'message': message,
+                "sender": sender,
+                'userImage': self.userObj.photo.url,
+                "online_status": self.userObj.status,
+                'userName': self.userObj.first_name + " " + self.userObj.last_name,
+                "time": str(_message.timestamp),
 			}
             async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
