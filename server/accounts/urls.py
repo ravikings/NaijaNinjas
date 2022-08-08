@@ -20,10 +20,14 @@ from accounts.views import (
     UserDashboardProfile,
     ProjectsViewSet,
     ProjectImageAPIView,
+    DashboardProfileFavorite,
     taskUpdate,
     resumeUpdate,
     TestView,
     public_quotes,
+    profile_mode_status,
+    profile_favorite,
+    #start_celery_work,
 )
 
 
@@ -47,6 +51,7 @@ router.register(
     r"projects", ProjectsViewSet, basename="runners-project"
 )
 router.register(r"project-images", ProjectImageAPIView, basename="project-images")
+router.register(r"dashboard-profile-bookmarks", DashboardProfileFavorite, basename="dashboard-profile-bookmarks")
 
 
 urlpatterns = [
@@ -63,6 +68,9 @@ urlpatterns = [
     path('user-profile-update/<str:pk>/', taskUpdate, name="user-profile-update"),
     path('user-resume-update/<str:pk>/', resumeUpdate, name="user-resume-update"),
     path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
+    path("profile-mode/<str:pk>/<str:type>/", profile_mode_status, name="profile_mode_status"),
     path("public-quotes/", public_quotes, name="public-quotes"),
+    path('profile-bookmark/<str:pk>/', profile_favorite, name="profile-bookmark"),
+    #path("public-celery/", start_celery_work, name="start-celery"),
 
 ]

@@ -28,3 +28,7 @@ django-notifications-hq
 django-notifications-rest
 amqp
 celery
+redis
+django-celery-results
+celery-progress
+django-fsm

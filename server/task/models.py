@@ -41,9 +41,6 @@ class Task(models.Model):
     updated = models.DateTimeField(auto_now=True)
     views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
     post_status = models.CharField(max_length=255,choices=STATUS, default="OPEN")
-    bookmarks = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="task_bookmarks", blank=True
-    )
 
     class Meta:
         ordering = ("-updated", "-created",)
@@ -99,7 +96,7 @@ class TaskBidder(models.Model):
         paystack = PayStack()
         status, result = paystack.verify_payment(self.transaction_id, self.offer)
         if status:
-            self.paystack_response = result
+            #self.paystack_response = result
             if result["amount"] / 100 == self.offer:
                 self.transaction_completed = True
             self.save()
@@ -151,3 +148,12 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ("created",)
+
+class TaskBookmarks(models.Model):
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="task_bookmarks_author",
+    )
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)

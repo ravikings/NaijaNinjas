@@ -58,6 +58,7 @@ from .serializers import (
     ProjectsSerializer,
     ProjectPhotoSerializer,
     PublicQuotesSerializer,
+    BiddersProfileSerializer,
 )
 from notifications.signals import notify
 
@@ -92,10 +93,8 @@ class UserDashboardProfile(viewsets.ModelViewSet):
         user = AccountUser.objects.get(id=pk)
         recipient = AccountUser.objects.get(id=41)
         print("im sending notification dashboard")
-        print("im checking dashboard")
-        print("im checking dashboard")
-        notify.send(user,recipient=recipient, verb='hello come to dashboard')
-        print("sent")
+        #notify.send(user,recipient=recipient, verb='hello come to dashboard')
+
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
@@ -164,6 +163,13 @@ def save_profile_resume(resume, request):
         return Response({"message": f"resume updated"})
 
 
+# def start_celery_work(request):
+#     import subprocess
+
+#     subprocess.run("celery -A server worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo")
+
+#     return Response({"message": f"workder stared"})
+
 @api_view(["POST", "PATCH"])
 def resumeUpdate(request, pk):
     resume =  RunnerResume.objects.filter(author_id=pk)
@@ -189,6 +195,17 @@ def account_status(request, pk, type):
     queryset.set_online_status(str(type).upper()) # pass type, either login or logout
     return Response({"message": f"status updated to {queryset.status}"})
     
+
+@api_view(["POST", "GET"])
+def profile_mode_status(request, pk, type):
+
+    """
+    uses to upload pictures to ui dashboard.
+    """
+    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset.private_mode(type) # pass type, either login or logout
+    
+    return Response({"message": f"status updated"})
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class PhotoUpload(viewsets.ModelViewSet):
@@ -574,3 +591,27 @@ def public_quotes(request):
         print(e)
         pass
     return Response({"error": f"request not completed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST", "GET"])
+def profile_favorite(request, pk):
+
+    profile = get_object_or_404(RunnerProfile, author_id=request.user.id)
+    if profile.bookmarks.filter(id=pk).exists():
+        profile.bookmarks.remove(pk)
+        return Response({"message": f"profile {pk} removed"})
+    else:
+        profile.bookmarks.add(pk)
+        return Response({"message": f"profile {pk} added"})
+
+class DashboardProfileFavorite(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = BiddersProfileSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+
+        return RunnerProfile.objects.filter(author__in=RunnerProfile.objects.filter(author_id=self.request.user.id).values_list("bookmarks"))
