@@ -1,134 +1,134 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import Header from "../../Layout/Header";
-import Footer from "../../Layout/Footer";
-import Jobfindbox from "../../Element/Jobfindbox";
-import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
-import { Button, Form } from "react-bootstrap";
-import createRequest from "../../../utils/axios";
-import Pagination from "../components/Pagination";
+import React, { useEffect, useState } from "react"
+import { Link, useHistory, useLocation } from "react-router-dom"
+import Header from "../../Layout/Header"
+import Footer from "../../Layout/Footer"
+import Jobfindbox from "../../Element/Jobfindbox"
+import ClipLoader from "react-spinners/ClipLoader"
+import { toast } from "react-toastify"
+import { Button, Form } from "react-bootstrap"
+import createRequest from "../../../utils/axios"
+import Pagination from "../components/Pagination"
 
-var bnr = require("../../../images/banner/bnr1.jpg");
+var bnr = require("../../../images/banner/bnr1.jpg")
 
 function Browsecandidates() {
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
-  const [totalResults, setTotalResults] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [results, setResults] = useState(null)
+  const [totalResults, setTotalResults] = useState(null)
+  const [error, setError] = useState(null)
 
-  const [userStatus, setUserStatus] = useState(null);
-  const [userNext, setUserNext] = useState(null);
-  const [userPrevious, setUserPrevious] = useState(null);
+  const [userStatus, setUserStatus] = useState(null)
+  const [userNext, setUserNext] = useState(null)
+  const [userPrevious, setUserPrevious] = useState(null)
 
-  const [keyword, setKeyword] = useState("");
-  const [keyLoad, setKeyLoad] = useState(false);
+  const [keyword, setKeyword] = useState("")
+  const [keyLoad, setKeyLoad] = useState(false)
 
-  const [next, setNext] = useState(null);
-  const [previous, setPrevious] = useState(null);
-  const [count, setCount] = useState(null);
-  const [page, setPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const history = useHistory();
-  const { search } = useLocation();
-  const title = search.split("=")[1];
+  const [next, setNext] = useState(null)
+  const [previous, setPrevious] = useState(null)
+  const [count, setCount] = useState(null)
+  const [page, setPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const history = useHistory()
+  const { search } = useLocation()
+  const title = search.split("=")[1]
 
   const checkOnline = async (req = "/api/v1/account/user-status/") => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const { data } = await createRequest().get(req);
-      data.next ? setUserNext(data.next) : setUserNext(null);
-      data.previous ? setUserPrevious(data.previous) : setUserPrevious(null);
-      setUserStatus(data);
-      setLoading(false);
+      const { data } = await createRequest().get(req)
+      data.next ? setUserNext(data.next) : setUserNext(null)
+      data.previous ? setUserPrevious(data.previous) : setUserPrevious(null)
+      setUserStatus(data)
+      setLoading(false)
     } catch (error) {
-      setError(error);
-      setLoading(false);
+      setError(error)
+      setLoading(false)
     }
-  };
+  }
 
   const handleRequest = async (title) => {
-    setLoading(true);
-    setKeyLoad(true);
+    setLoading(true)
+    setKeyLoad(true)
     try {
-      console.log(title);
+      console.log(title)
       const params = {
         search: title,
-      };
+      }
       const { data } = await createRequest().get("/api/v1/account/search/", {
         params,
-      });
+      })
       if (data.results) {
-        setTotalResults(data.count);
-        setResults(data.results);
-        data.next ? setNext(data.next) : setNext(null);
-        data.previous ? setPrevious(data.previous) : setPrevious(null);
-        const pgs = Math.ceil(data.count / 10);
-        data.count && setCount(pgs);
-        setKeyLoad(false);
-        console.log(data, "data");
+        setTotalResults(data.count)
+        setResults(data.results)
+        data.next ? setNext(data.next) : setNext(null)
+        data.previous ? setPrevious(data.previous) : setPrevious(null)
+        const pgs = Math.ceil(data.count / 10)
+        data.count && setCount(pgs)
+        setKeyLoad(false)
+        console.log(data, "data")
       } else {
-        setError("No results found");
+        setError("No results found")
       }
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
-      setError("Something went wrong");
-      setLoading(false);
+      setError("Something went wrong")
+      setLoading(false)
     }
-  };
+  }
 
   const handleClick = async (e, req, forNext) => {
     if (!req) {
-      return e.preventDefault();
+      return e.preventDefault()
     }
 
-    e.preventDefault();
-    setLoading(true);
-    setKeyLoad(true);
-    console.log("cliked");
+    e.preventDefault()
+    setLoading(true)
+    setKeyLoad(true)
+    console.log("cliked")
     try {
-      const { data } = await createRequest().get(req);
+      const { data } = await createRequest().get(req)
       if (forNext) {
-        console.log("next Called");
-       // checkOnline(userNext);
+        console.log("next Called")
+        // checkOnline(userNext);
       } else {
         //checkOnline(userPrevious);
       }
       if (data.results) {
-        setResults(data.results);
-        data.previous ? setPrevious(data.previous) : setPrevious(null);
-        data.next ? setNext(data.next) : setNext(null);
+        setResults(data.results)
+        data.previous ? setPrevious(data.previous) : setPrevious(null)
+        data.next ? setNext(data.next) : setNext(null)
         if (forNext) {
-          setPage(page + 1);
+          setPage(page + 1)
         } else {
-          setPage(page - 1);
+          setPage(page - 1)
         }
-        setLoading(false);
-        setKeyLoad(false);
-        console.log(data, "new data");
+        setLoading(false)
+        setKeyLoad(false)
+        console.log(data, "new data")
       } else {
-        setError("No results found");
+        setError("No results found")
       }
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
-      setError("Something went wrong");
-      setLoading(true);
+      setError("Something went wrong")
+      setLoading(true)
     }
-  };
+  }
 
   useEffect(() => {
-    handleRequest(title);
+    handleRequest(title)
     // checkOnline();
-  }, []);
+  }, [])
 
   useEffect(() => {
-    console.log("running effect");
+    console.log("running effect")
 
     return () => {
-      console.log("clearing effect");
-    };
-  }, []);
+      console.log("clearing effect")
+    }
+  }, [])
 
   const handleKeyword = () => {
     if (!keyword) {
@@ -140,11 +140,11 @@ function Browsecandidates() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      });
+      })
     }
-    handleRequest(keyword);
+    handleRequest(keyword)
     // checkOnline();
-  };
+  }
 
   return (
     <>
@@ -175,24 +175,96 @@ function Browsecandidates() {
                   <ul className="post-job-bx mt-5">
                     {results && !keyLoad && !loading ? (
                       results.map((item, index) => (
-                        <li
-                          key={index}
-                          className="cursor-pointer"
-                          onClick={() => {
-                            history.push(`/make-offer/${item.author}`);
-                          }}
-                        >
-                          <div className="post-bx">
-                            <div className="d-flex m-b30">
-                              <div className="job-post-company">
-                                <Link to={`/make-offer/${item.author}`}>
-                                  <span>
-                                    <img alt="" src={item.image} />
-                                  </span>
-                                </Link>
+                        <li key={index} className="cursor-pointer">
+                          <Link
+                            to={`/make-offer/${item.author}`}
+                            onClick={(e) => e.stopPropagation()}
+                            target="_blank"
+                          >
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-company">
+                                  <Link
+                                    to={`/make-offer/${item.author}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    target={"_blank"}
+                                  >
+                                    <span>
+                                      <img alt="" src={item.image} />
+                                    </span>
+                                  </Link>
+                                </div>
+                                <div className="job-post-info">
+                                  <h4>
+                                    <Link
+                                      to={{
+                                        pathname: `/make-offer/${item.author}`,
+                                        state: {
+                                          id: item.author,
+                                        },
+                                      }}
+                                      onClick={(e) => e.stopPropagation()}
+                                      target={"_blank"}
+                                    >
+                                      {item.first_name} {item.last_name}
+                                    </Link>
+                                  </h4>
+                                  {/* <i class='fa fa-solid fa-circle circle'></i> */}
+                                  {userStatus &&
+                                    userStatus.results.map((user) =>
+                                      // user.id === 1 && item.first_name === "Wayne" && true ? (
+                                      user.id === item.id && user.online ? (
+                                        <div className="d-flex mb-1">
+                                          <i
+                                            className="fa fa-check-circle circle align-self-center"
+                                            aria-hidden="true"
+                                          ></i>
+
+                                          <span className="  ml-1">
+                                            Online Now
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <></>
+                                      )
+                                    )}
+                                  <div>
+                                    <i className="fa fa-money money"></i>
+                                    <span className="ml-1">
+                                      {/* {item.salary} */}$ 500,000
+                                    </span>
+                                  </div>
+
+                                  <ul>
+                                    <li>
+                                      <i className="fa fa-map-marker "></i>{" "}
+                                      {item.location}{" "}
+                                      {item.city && ", " + item.city}{" "}
+                                      {item.city && item.country}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-usd"></i> Full Time
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-clock-o"></i>{" "}
+                                      Published 11 months ago
+                                    </li>
+                                  </ul>
+                                </div>
                               </div>
-                              <div className="job-post-info">
-                                <h4>
+                              <div className="d-flex">
+                                <div style={{ width: "65px" }}></div>
+                                <div className="job-time mr-4">
+                                  <span>{item.description}</span>
+                                </div>
+                                {item.salary && (
+                                  <div className="salary-bx">
+                                    <span>{item.salary}</span>
+                                  </div>
+                                )}
+
+                                <div className="salary-bx">
+                                  {console.log(item, "item")}
                                   <Link
                                     to={{
                                       pathname: `/make-offer/${item.author}`,
@@ -200,90 +272,24 @@ function Browsecandidates() {
                                         id: item.author,
                                       },
                                     }}
+                                    onClick={(e) => e.stopPropagation()}
+                                    target={"_blank"}
                                   >
-                                    {item.first_name} {item.last_name}
-                                  </Link>
-                                </h4>
-                                {/* <i class='fa fa-solid fa-circle circle'></i> */}
-                                {userStatus &&
-                                  userStatus.results.map((user) =>
-                                    // user.id === 1 && item.first_name === "Wayne" && true ? (
-                                    user.id === item.id && user.online ? (
-                                      <div className="d-flex mb-1">
-                                        <i
-                                          className="fa fa-check-circle circle align-self-center"
-                                          aria-hidden="true"
-                                        ></i>
-
-                                        <span className="  ml-1">
-                                          Online Now
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <></>
-                                    )
-                                  )}
-                                <div>
-                                  <i className="fa fa-money money"></i>
-                                  <span className="ml-1">
-                                    {/* {item.salary} */}$ 500,000
-                                  </span>
-                                </div>
-
-                                <ul>
-                                  <li>
-                                    <i className="fa fa-map-marker "></i>{" "}
-                                    {item.location}{" "}
-                                    {item.city && ", " + item.city}{" "}
-                                    {item.city && item.country}
-                                  </li>
-                                  <li>
-                                    <i className="fa fa-usd"></i> Full Time
-                                  </li>
-                                  <li>
-                                    <i className="fa fa-clock-o"></i> Published
-                                    11 months ago
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div className="d-flex">
-                              <div style={{ width: "65px" }}></div>
-                              <div className="job-time mr-4">
-                                <span>{item.description}</span>
-                              </div>
-                              {item.salary && (
-                                <div className="salary-bx">
-                                  <span>{item.salary}</span>
-                                </div>
-                              )}
-
-                              <div className="salary-bx">
-                                {console.log(item, "item")}
-                                <Link
-                                  to={{
-                                    pathname: `/make-offer/${item.author}`,
-                                    state: {
-                                      id: item.author,
-                                    },
-                                  }}
-                                  onClick={(e) => e.stopPropagation()}
-                                  target={"_blank"}
-                                >
-                                  <button className="site-button btn-block">
-                                    View Profile
-                                  </button>
-                                  {/* <Button variant='primary' size='md'>
+                                    <button className="site-button btn-block">
+                                      View Profile
+                                    </button>
+                                    {/* <Button variant='primary' size='md'>
                                     <b className='fw8'>View Profile</b>
                                   </Button> */}
-                                </Link>
+                                  </Link>
+                                </div>
                               </div>
+                              <label className="like-btn">
+                                <input type="checkbox" />
+                                <span className="checkmark"></span>
+                              </label>
                             </div>
-                            <label className="like-btn">
-                              <input type="checkbox" />
-                              <span className="checkmark"></span>
-                            </label>
-                          </div>
+                          </Link>
                         </li>
                       ))
                     ) : error ? (
@@ -332,7 +338,7 @@ function Browsecandidates() {
                                 {i + 1}
                               </Link>
                             </li>
-                          );
+                          )
                         })}
                         <li className="next mx-2">
                           <Link
@@ -596,6 +602,6 @@ function Browsecandidates() {
       </div>
       <Footer />
     </>
-  );
+  )
 }
-export default Browsecandidates;
+export default Browsecandidates
