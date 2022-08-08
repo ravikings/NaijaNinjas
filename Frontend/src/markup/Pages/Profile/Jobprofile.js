@@ -207,7 +207,7 @@ function Jobprofile() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Sector:</label>
+                              <label>Department:</label>
                               <Autocomplete
                                 fullWidth
                                 freeSolo

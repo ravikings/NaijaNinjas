@@ -6,7 +6,7 @@ from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
 from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
-from task.models import Task, TaskBidder, Photo, Timeline, Comment
+from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
 from django.db.models import Count
 from history.signals import history_tracker
 from accounts.views import get_client_ip
@@ -178,13 +178,30 @@ class TaskAssigned(viewsets.ModelViewSet):
         return TaskBidder.objects.filter(bidder_profile=self.request.user.id, bid_approve_status=True).order_by("modified")
         # TODO Missing filter for task completed to be shown.
 
+
 @api_view(["POST", "GET"])
 def task_favorite(request, pk):
 
-    task = get_object_or_404(Task, id=pk)
-    if task.bookmarks.filter(id=request.user.id).exists():
-        task.bookmarks.remove(request.user)
-        return Response({"message": "task removed"})
+    task = TaskBookmarks.objects.filter(author=request.user.id, task=pk)
+    if task:
+        task.delete()        
+        return Response({"message": f"task {pk} removed"})
     else:
-        task.bookmarks.add(request.user)
-        return Response({"message": "task added"})
+        author = get_object_or_404(AccountUser, id=31)#request.user.id)
+        task = get_object_or_404(Task, id=pk)
+        TaskBookmarks.objects.create(author=author, task=task)
+        return Response({"message": f"task {pk} added"})
+
+
+class DashboardTaskFavorite(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = TaskSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+
+        return Task.objects.filter(id__in=TaskBookmarks.objects.filter(author_id=self.request.user.id).values_list("task"))
