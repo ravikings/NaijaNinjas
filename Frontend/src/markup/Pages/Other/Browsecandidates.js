@@ -78,6 +78,18 @@ function Browsecandidates() {
     }
   }
 
+  const handleBookmark = async (id) => {
+    try {
+      const { data } = await createRequest().post(
+        `/api/v1/profile-bookmark/${id}/`
+      )
+      toast.success(data.message)
+    } catch (error) {
+      setError("Something went wrong")
+      toast.error(error.response.data.message || "Something went wrong")
+    }
+  }
+
   const handleClick = async (e, req, forNext) => {
     if (!req) {
       return e.preventDefault()
@@ -285,7 +297,13 @@ function Browsecandidates() {
                                 </div>
                               </div>
                               <label className="like-btn">
-                                <input type="checkbox" />
+                                <input
+                                  type="checkbox"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleBookmark(item.author)
+                                  }}
+                                />
                                 <span className="checkmark"></span>
                               </label>
                             </div>

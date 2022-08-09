@@ -3,7 +3,7 @@ import Cookies from "js-cookie"
 
 export const BASE_URL =
   "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"
-//const BASE_URL = "/";
+// export const BASE_URL = "/"
 
 export default function createRequest() {
   let headers = {
@@ -15,6 +15,24 @@ export default function createRequest() {
   }
   return axios.create({
     baseURL: BASE_URL,
+    headers,
+
+    withCredentials: true,
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFToken",
+  })
+}
+
+export const createRequestWithoutBase = (url) => {
+  let headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  }
+  if (Cookies.get("access_token")) {
+    headers.Authorization = `Bearer ${Cookies.get("access_token")}`
+  }
+  return axios.create({
+    baseURL: url,
     headers,
 
     withCredentials: true,

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Collapse from "@material-ui/core/Collapse";
-import { useDispatch, useSelector } from "react-redux";
-import createRequest, { sendImage } from "../../utils/axios";
-import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage";
-import { BASE_URL } from "../../utils/constants";
-import { toast } from "react-toastify";
-import { authActionTypes } from "../Pages/Auth/Redux/AuthActions";
+import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import Collapse from "@material-ui/core/Collapse"
+import { useDispatch, useSelector } from "react-redux"
+import createRequest, { sendImage } from "../../utils/axios"
+import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage"
+import { BASE_URL } from "../../utils/constants"
+import { toast } from "react-toastify"
+import { authActionTypes } from "../Pages/Auth/Redux/AuthActions"
 
 function ProfileSidebar({
   userProfile: profile,
@@ -15,107 +15,120 @@ function ProfileSidebar({
   active,
   showManageProp = false,
 }) {
-  const [showManage, setShowManage] = useState(showManageProp);
-  const [showQuestion, setShowQuestion] = useState(false);
-  const [imageState, setImageState] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
+  const [showManage, setShowManage] = useState(showManageProp)
+  const [showQuestion, setShowQuestion] = useState(false)
+  const [imageState, setImageState] = useState(null)
+  const [userDetails, setUserDetails] = useState(null)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const { userProfile, userStatus, currentUser } = useSelector(
     (state) => state.authReducer
-  );
-
+  )
   useEffect(() => {
     if (userDetails) {
       dispatch({
         type: authActionTypes.USER_PROFILE,
         payload: userDetails,
-      });
+      })
     }
-  }, [userDetails]);
+  }, [userDetails])
 
   // Custom Hooks
-  const imageSendAPI = useAxiosPrivateImage();
+  const imageSendAPI = useAxiosPrivateImage()
 
   const getUserDetails = () => {
-    console.log("sended");
+    console.log("sended")
     createRequest()
       .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
       .then(({ data }) => {
-        setUserDetails(data);
+        setUserDetails(data)
+        dispatch({
+          type: authActionTypes.USER_PROFILE,
+          payload: data,
+        })
+        console.log("War gate")
       })
       .catch((e) => {
-        toast.error(e.response?.data?.message || "Unknown Error");
-        console.log(e);
-      });
-  };
+        toast.error(e.response?.data?.message || "Unknown Error")
+        console.log(e)
+        console.log("War gate")
+      })
+  }
+
+  useEffect(() => {
+    if (currentUser) {
+      getUserDetails()
+    }
+  }, [currentUser])
 
   const sendImage = async () => {
     if (imageState) {
       try {
-        const formData = new FormData();
-        formData.append("photo", imageState);
-        formData.append("author", author);
+        const formData = new FormData()
+        formData.append("photo", imageState)
+        formData.append("author", userProfile?.author)
         await imageSendAPI.patch(
-          `/api/v1/account/user-profile/${userID}/`,
+          `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`,
           formData
-        );
-        setImageState("");
-        getUserDetails();
-        toast.success("Image Uploaded");
-        console.log("useUserProfile");
+        )
+        setImageState("")
+        getUserDetails()
+        toast.success("Image Uploaded")
+        console.log("useUserProfile")
       } catch (error) {
-        console.log(error, "IMAGESENT");
+        console.log(error, "IMAGESENT")
+        toast.error(error.response?.data?.message || "Unknown Error")
       }
     }
-  };
+  }
 
   useEffect(() => {
     if (imageState) {
-      sendImage();
+      sendImage()
     }
-  }, [imageState]);
+  }, [imageState])
 
   return (
-    <div className='col-xl-3 col-lg-4 m-b30'>
-      <div className='sticky-top'>
-        <div className='candidate-info'>
-          <div className='candidate-detail text-center'>
-            <div className='canditate-des'>
+    <div className="col-xl-3 col-lg-4 m-b30">
+      <div className="sticky-top">
+        <div className="candidate-info">
+          <div className="candidate-detail text-center">
+            <div className="canditate-des">
               <Link to={""}>
+                {console.log(userProfile)}
                 <img
-                  alt={profile?.first_name}
+                  alt={userProfile?.first_name}
                   src={
-                    profile?.photo
-                      ? BASE_URL + profile?.photo
+                    userProfile?.photo
+                      ? BASE_URL + userProfile?.photo
                       : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                   }
                 />
               </Link>
               <form>
                 <div
-                  className='upload-link'
-                  title='Update image.'
-                  data-toggle='tooltip'
-                  data-placement='right'
+                  className="upload-link"
+                  title="Update image."
+                  data-toggle="tooltip"
+                  data-placement="right"
                 >
                   <input
-                    type='file'
-                    name='photo'
-                    className='update-flie'
-                    accept='image/jpeg,image/png,image/gif'
+                    type="file"
+                    name="photo"
+                    className="update-flie"
+                    accept="image/jpeg,image/png,image/gif"
                     onChange={(e) => {
-                      setImageState(e.target.files[0]);
+                      setImageState(e.target.files[0])
                     }}
                   />
-                  <i className='fa fa-camera'></i>
+                  <i className="fa fa-camera"></i>
                 </div>
               </form>
             </div>
-            <div className='candidate-title'>
-              <div className=''>
+            <div className="candidate-title">
+              <div className="">
                 {userProfile?.first_name && (
-                  <h4 className='m-b5'>
+                  <h4 className="m-b5">
                     <Link to={""} onClick={(e) => e.preventDefault()}>
                       {userProfile?.first_name}{" "}
                       {userProfile?.last_name && userProfile?.last_name}
@@ -123,7 +136,7 @@ function ProfileSidebar({
                   </h4>
                 )}
                 {userProfile?.title && (
-                  <p className='m-b0'>
+                  <p className="m-b0">
                     <Link to={""}>{userProfile?.title}</Link>
                   </p>
                 )}
@@ -136,25 +149,25 @@ function ProfileSidebar({
                 to={"/jobs-profile"}
                 className={active === "Profile" ? "active" : ""}
               >
-                <i className='fa fa-user-o' aria-hidden='true'></i>
+                <i className="fa fa-user-o" aria-hidden="true"></i>
                 <span>Profile</span>
               </Link>
             </li>
             <li>
               <Link to={"/messages"}>
-                <i className='fa fa-comments-o' aria-hidden='true'></i>
+                <i className="fa fa-comments-o" aria-hidden="true"></i>
                 <span>Messages</span>
               </Link>
             </li>
             {userStatus?.is_a_runner && (
               <li>
                 <Link to={"/jobs-my-resume"}>
-                  <i className='fa fa-file-text-o' aria-hidden='true'></i>
+                  <i className="fa fa-file-text-o" aria-hidden="true"></i>
                   <span>My Resume</span>
                 </Link>
               </li>
             )}
-            
+
             {/* start ask question start */}
             <li onClick={() => setShowQuestion(!showQuestion)}>
               <Link to={"#"} className={active === "question" ? "active" : ""}>
@@ -162,7 +175,7 @@ function ProfileSidebar({
                   className={
                     showQuestion ? "fa fa-arrow-down" : "fa fa-arrow-right"
                   }
-                  aria-hidden='true'
+                  aria-hidden="true"
                 ></i>
                 <span>Ask Question</span>
               </Link>
@@ -170,13 +183,13 @@ function ProfileSidebar({
             <Collapse in={showQuestion}>
               <li>
                 <Link className={"ml-4"} to={"/ask-questions"}>
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>Ask a Question</span>
                 </Link>
               </li>
               <li>
                 <Link className={"ml-4"} to={"/all-questions"}>
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>All Question</span>
                 </Link>
               </li>
@@ -187,7 +200,7 @@ function ProfileSidebar({
                 to={"/jobs-saved-jobs"}
                 className={active === "Saved Jobs" ? "active" : ""}
               >
-                <i className='fa fa-heart-o' aria-hidden='true'></i>
+                <i className="fa fa-heart-o" aria-hidden="true"></i>
                 <span>Bookmarks</span>
               </Link>
             </li>
@@ -198,7 +211,7 @@ function ProfileSidebar({
                   className={
                     showManage ? "fa fa-arrow-down" : "fa fa-arrow-right"
                   }
-                  aria-hidden='true'
+                  aria-hidden="true"
                 ></i>
                 <span>Tasks</span>
               </Link>
@@ -209,7 +222,7 @@ function ProfileSidebar({
                   className={active === "Post a job" ? "active ml-4" : "ml-4"}
                   to={"/company-post-jobs"}
                 >
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>Post a task</span>
                 </Link>
               </li>
@@ -218,7 +231,7 @@ function ProfileSidebar({
                   className={active === "Task" ? "active ml-4" : "ml-4"}
                   to={"/company-manage-job"}
                 >
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>Manage tasks</span>
                 </Link>
               </li>
@@ -236,23 +249,23 @@ function ProfileSidebar({
                   className={active === "Favorite" ? "active ml-4" : "ml-4"}
                   to={"/company-resume"}
                 >
-                  <i className='fa fa-briefcase' aria-hidden='true'></i>
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>Favorite tasks</span>
                 </Link>
               </li>
               <li>
-              <Link
-                className={active === "Applied Jobs" ? "active ml-4" : "ml-4"}
-                to={"/jobs-applied-job"}
-              >
-                <i className='fa fa-briefcase' aria-hidden='true'></i>
-                <span>Upcoming tasks</span>
-              </Link>
-            </li>
+                <Link
+                  className={active === "Applied Jobs" ? "active ml-4" : "ml-4"}
+                  to={"/jobs-applied-job"}
+                >
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
+                  <span>Upcoming tasks</span>
+                </Link>
+              </li>
             </Collapse>
             <li>
               <Link to={"/post-ads"}>
-                <i className='fa fa-handshake-o' aria-hidden='true'></i>
+                <i className="fa fa-handshake-o" aria-hidden="true"></i>
                 <span>Post Ad</span>
               </Link>
             </li>
@@ -261,7 +274,7 @@ function ProfileSidebar({
                 className={active === "Job Alerts" ? "active" : ""}
                 to={"/jobs-alerts"}
               >
-                <i className='fa fa-bell-o' aria-hidden='true'></i>
+                <i className="fa fa-bell-o" aria-hidden="true"></i>
                 <span>Alerts</span>
               </Link>
             </li>
@@ -271,13 +284,13 @@ function ProfileSidebar({
                 className={active === "Change Password" ? "active" : ""}
                 to={"/jobs-change-password"}
               >
-                <i className='fa fa-key' aria-hidden='true'></i>
+                <i className="fa fa-key" aria-hidden="true"></i>
                 <span>Change Password</span>
               </Link>
             </li>
             <li>
               <Link to={"./"}>
-                <i className='fa fa-sign-out' aria-hidden='true'></i>
+                <i className="fa fa-sign-out" aria-hidden="true"></i>
                 <span>Log Out</span>
               </Link>
             </li>
@@ -285,7 +298,7 @@ function ProfileSidebar({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ProfileSidebar;
+export default ProfileSidebar
