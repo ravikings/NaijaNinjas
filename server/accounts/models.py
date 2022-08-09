@@ -91,7 +91,6 @@ class RunnerProfile(models.Model):
     
     def set_online_status(self, type):
         
-        instance = AccountUser.objects.get(id=self.author.id)
         if not self.user_set_status:
 
             try:
