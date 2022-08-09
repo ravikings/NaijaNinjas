@@ -196,7 +196,7 @@ def account_status(request, pk, type):
     return Response({"message": f"status updated to {queryset.status}"})
     
 
-@api_view(["POST"])
+@api_view(["POST","GET"])
 def profile_mode_status(request, pk, type):
 
     """
