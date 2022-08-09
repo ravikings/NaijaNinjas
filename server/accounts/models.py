@@ -66,10 +66,20 @@ class RunnerProfile(models.Model):
     )
 
 
-    def private_mode(self, status=False):
+    def private_mode(self, status):
     
+        if status == "True":
+            print("setting status to private")
+            self.user_set_status = status
+            self.save()
+            print("profile is private")
+            return True
+
         self.user_set_status = status
         self.save()
+        print("profile is public")
+        return False
+        
 
     def public_online_status(self):
 

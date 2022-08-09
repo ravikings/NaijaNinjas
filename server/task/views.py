@@ -179,7 +179,7 @@ class TaskAssigned(viewsets.ModelViewSet):
         # TODO Missing filter for task completed to be shown.
 
 
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def task_favorite(request, pk):
 
     task = TaskBookmarks.objects.filter(author=request.user.id, task=pk)
@@ -187,7 +187,7 @@ def task_favorite(request, pk):
         task.delete()        
         return Response({"message": f"task {pk} removed"})
     else:
-        author = get_object_or_404(AccountUser, id=31)#request.user.id)
+        author = get_object_or_404(AccountUser, id=request.user.id)
         task = get_object_or_404(Task, id=pk)
         TaskBookmarks.objects.create(author=author, task=task)
         return Response({"message": f"task {pk} added"})
