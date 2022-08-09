@@ -82,7 +82,7 @@ function Jobsection() {
           <>
             <Loader />
           </>
-        ) : tasks.length > 0 ? (
+        ) : (
           <div className="row">
             <div className="col-lg-9">
               <ul className="post-job-bx browse-job">
@@ -246,8 +246,6 @@ function Jobsection() {
               </div>
             </div>
           </div>
-        ) : (
-          <h1>No tasks found</h1>
         )}
       </div>
     </div>
