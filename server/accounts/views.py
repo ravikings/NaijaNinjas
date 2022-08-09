@@ -196,13 +196,13 @@ def account_status(request, pk, type):
     return Response({"message": f"status updated to {queryset.status}"})
     
 
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def profile_mode_status(request, pk, type):
 
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset = RunnerProfile.objects.get(author=pk)  #TODO: CHANGE TO REQUEST
     queryset.private_mode(type) # pass type, either login or logout
     
     return Response({"message": f"status updated"})

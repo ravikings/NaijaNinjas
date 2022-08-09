@@ -1,4 +1,4 @@
-from task.models import Task, TaskBidder, Photo, Comment, Timeline
+from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks
 from rest_framework import serializers
 from accounts.serializers import CustomRegisterSerializer, ProfileSerializer, BiddersProfileSerializer
 from accounts.models import RunnerProfile
@@ -8,11 +8,14 @@ class TaskSerializer(serializers.ModelSerializer):
     Task serializers use for creating task 
     """
     # task_author = CustomRegisterSerializer(read_only=True, many=True)
+    bookmarks = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = "__all__"
-
+    
+    def get_bookmarks(self, instance):
+        return TaskBookmarks.objects.filter(task=instance.id).values_list("author")
 
 class TaskWithTotalBidSerializer(serializers.ModelSerializer):
     """
