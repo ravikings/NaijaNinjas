@@ -44,6 +44,10 @@ function Jobsection() {
       const { data } = await createRequestWithoutBase().get(req)
 
       if (data.results) {
+        // Scroll to specific element when pagination is clicked
+        const element = document.getElementById("scroll-to-element")
+        element.scrollIntoView({ behavior: "smooth" })
+
         setTasks(data.results)
         data.previous ? setPrevious(data.previous) : setPrevious(null)
         data.next ? setNext(data.next) : setNext(null)
@@ -65,7 +69,10 @@ function Jobsection() {
     }
   }
   return (
-    <div className="section-full bg-white content-inner-2">
+    <div
+      className="section-full bg-white content-inner-2"
+      id="scroll-to-element"
+    >
       <div className="container">
         <div className="d-flex job-title-bx section-head">
           <div className="mr-auto">
