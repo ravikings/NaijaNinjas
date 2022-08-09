@@ -28,7 +28,7 @@ function AuthState({ userDetails }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [notification, setNotification] = useState(false)
   const [msg, setMsg] = useState(false)
-
+  const [userProfile, setUserProfile] = useState(null)
   const [onlineState, setOnlineState] = useState(true)
   const [serverState, setServerState] = useState(false)
 
@@ -58,6 +58,7 @@ function AuthState({ userDetails }) {
       console.log(data)
       setServerState(data.status)
       setOnlineState(status)
+      setUserProfile(data)
     } catch (error) {
       console.log(error)
     }
@@ -300,15 +301,21 @@ function AuthState({ userDetails }) {
                 : "notification-avatar status-offline"
             }
           >
-            <Avatar
-              aria-describedby={id}
-              onClick={handleClick}
-              style={{ height: "55px", width: "55px" }}
-              sizes={"20"}
-              src={"https://freesvg.org/img/abstract-user-flat-3.png"}
-            >
-              K
-            </Avatar>
+            {
+              <Avatar
+                aria-describedby={id}
+                onClick={handleClick}
+                style={{ height: "55px", width: "55px" }}
+                sizes={"20"}
+                src={
+                  userProfile
+                    ? userProfile.photo
+                    : "https://freesvg.org/img/abstract-user-flat-3.png"
+                }
+              >
+                K
+              </Avatar>
+            }
           </div>
           <Link to={"/post-ads"} title="READ MORE" className="site-button">
             <i className="fa fa-lock"></i> CORRECT BUSINESS{" "}

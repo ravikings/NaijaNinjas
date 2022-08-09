@@ -93,6 +93,8 @@ function Browsejobfilterlist() {
                                 <h4>
                                   <Link
                                     to={`/make-offer-task/${data?.id}/${data?.title}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    target="_blank"
                                   >
                                     {data?.title}
                                   </Link>
@@ -121,6 +123,8 @@ function Browsejobfilterlist() {
                                   <Link
                                     to={`/make-offer-task/${data?.id}/${data?.title}`}
                                     className="text-primary"
+                                    onClick={(e) => e.stopPropagation()}
+                                    target="_blank"
                                   >
                                     See more
                                   </Link>
@@ -147,6 +151,8 @@ function Browsejobfilterlist() {
                                 </p>
                                 <Link
                                   to={`/make-offer-task/${data?.id}/${data?.title}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  target="_blank"
                                 >
                                   <button className="site-button btn-block ">
                                     Show Interest
