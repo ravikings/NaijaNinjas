@@ -1,63 +1,100 @@
-import React, { useState, useEffect, useRef } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import { Link, useHistory } from "react-router-dom";
-import Popover from "@material-ui/core/Popover";
-import Button from "@material-ui/core/Button";
-import Badge from "@material-ui/core/Badge";
-import MailOutlineOutlinedIcon from "@material-ui/icons/MailOutlineOutlined";
-import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import { Divider, Hidden } from "@material-ui/core";
-import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
-import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
-import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined";
-import FolderSpecialOutlinedIcon from "@material-ui/icons//FolderSpecialOutlined";
-import { useStyles } from "./LayoutStyles";
-import { useDispatch } from "react-redux";
-import { logout } from "../Pages/Auth/Redux/AuthActions";
-import ReactButton from "react-bootstrap/Button";
-import { Dropdown } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react"
+import Avatar from "@material-ui/core/Avatar"
+import { Link, useHistory } from "react-router-dom"
+import Popover from "@material-ui/core/Popover"
+import Button from "@material-ui/core/Button"
+import Badge from "@material-ui/core/Badge"
+import MailOutlineOutlinedIcon from "@material-ui/icons/MailOutlineOutlined"
+import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined"
+import { Divider, Hidden } from "@material-ui/core"
+import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined"
+import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined"
+import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined"
+import FolderSpecialOutlinedIcon from "@material-ui/icons//FolderSpecialOutlined"
+import { useStyles } from "./LayoutStyles"
+import { useDispatch } from "react-redux"
+import { logout } from "../Pages/Auth/Redux/AuthActions"
+import ReactButton from "react-bootstrap/Button"
+import { Dropdown } from "react-bootstrap"
+import createRequest from "../../utils/axios"
+import { toast } from "react-toastify"
 
 function AuthState({ userDetails }) {
-  const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const notificatoinRef = useRef();
-  const msgRef = useRef();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [notification, setNotification] = useState(false);
-  const [msg, setMsg] = useState(false);
-
-  const [onlineState, setOnlineState] = useState("Online");
+  const classes = useStyles()
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const notificatoinRef = useRef()
+  const msgRef = useRef()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [notification, setNotification] = useState(false)
+  const [msg, setMsg] = useState(false)
+  const [userProfile, setUserProfile] = useState(null)
+  const [onlineState, setOnlineState] = useState(true)
+  const [serverState, setServerState] = useState(false)
 
   // Notification end
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const open = Boolean(anchorEl)
+  const id = open ? "simple-popover" : undefined
 
   const signOut = () => {
-    dispatch(logout(handleClose));
-    history.push("/");
-  };
+    dispatch(logout(handleClose))
+    history.push("/")
+  }
+
+  const getOnlineState = async () => {
+    try {
+      const { data } = await createRequest().get(
+        `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`
+      )
+      const status = data.user_set_status === false ? true : false
+      console.log(data)
+      setServerState(data.status)
+      setOnlineState(status)
+      setUserProfile(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getOnlineState()
+  }, [])
+
+  const handleOnlineStatus = async (status) => {
+    setOnlineState(status)
+    const userID = localStorage.getItem("userID")
+    try {
+      const resp = await createRequest().post(
+        `/api/v1/profile-mode/${userID}/${!status ? "True" : "False"}/`
+      )
+      console.log(resp)
+      toast.success(resp.data.message)
+      getOnlineState()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     function handler(event) {
       if (!notificatoinRef.current?.contains(event.target)) {
-        setNotification(false);
+        setNotification(false)
       }
       if (!msgRef.current?.contains(event.target)) {
-        setMsg(false);
+        setMsg(false)
       }
     }
-    window.addEventListener("click", handler);
-    return () => window.removeEventListener("click", handler);
-  }, []);
+    window.addEventListener("click", handler)
+    return () => window.removeEventListener("click", handler)
+  }, [])
   return (
     <div>
       {userDetails ? (
@@ -257,23 +294,33 @@ function AuthState({ userDetails }) {
 
           {/* old notificaton end */}
 
-          <div>
-            <Avatar
-              aria-describedby={id}
-              onClick={handleClick}
-              style={{ height: "55px", width: "55px" }}
-              sizes={"20"}
-              src={
-                "https://image.shutterstock.com/image-photo/young-man-studio-looking-cameraportrait-260nw-139246634.jpg"
-              }
-            >
-              K
-            </Avatar>
+          <div
+            className={
+              serverState
+                ? "notification-avatar status-online"
+                : "notification-avatar status-offline"
+            }
+          >
+            {
+              <Avatar
+                aria-describedby={id}
+                onClick={handleClick}
+                style={{ height: "55px", width: "55px" }}
+                sizes={"20"}
+                src={
+                  userProfile
+                    ? userProfile.photo
+                    : "https://freesvg.org/img/abstract-user-flat-3.png"
+                }
+              >
+                K
+              </Avatar>
+            }
           </div>
-          <Link to={"/post-ads"} title='READ MORE' className='site-button'>
-              <i className='fa fa-lock'></i> CORRECT BUSINESS{" "}
-            </Link>
-{/* 
+          <Link to={"/post-ads"} title="READ MORE" className="site-button">
+            <i className="fa fa-lock"></i> CORRECT BUSINESS{" "}
+          </Link>
+          {/* 
           <ReactButton
             style={{
               borderRadius: "2px",
@@ -302,8 +349,12 @@ function AuthState({ userDetails }) {
             <Link to={"/login"} title="READ MORE" className="site-button">
               <i className="fa fa-lock"></i> LOGIN{" "}
             </Link>
-            <Link to={"/post-ads"} title='READ MORE' className='btn btn-warning'>
-              <i className='fa fa-lock'></i> CORRECT BUSINESS{" "}
+            <Link
+              to={"/post-ads"}
+              title="READ MORE"
+              className="btn btn-warning"
+            >
+              <i className="fa fa-lock"></i> CORRECT BUSINESS{" "}
             </Link>
             {/* <ReactButton
               style={{
@@ -349,12 +400,12 @@ function AuthState({ userDetails }) {
               textTransform: "none",
             }}
             className={
-              onlineState === "Online"
+              onlineState === true
                 ? classes.onlineSelected
                 : classes.onlineInvisButtonNotSelected
             }
             color="primary"
-            onClick={() => setOnlineState("Online")}
+            onClick={() => handleOnlineStatus(true)}
           >
             Online
           </Button>
@@ -366,12 +417,12 @@ function AuthState({ userDetails }) {
               textTransform: "none",
             }}
             className={
-              onlineState === "Invisible"
+              onlineState === false
                 ? classes.invisibleSelected
                 : classes.onlineInvisButtonNotSelected
             }
             color="primary"
-            onClick={() => setOnlineState("Invisible")}
+            onClick={() => handleOnlineStatus(false)}
           >
             Invisible
           </Button>
@@ -427,7 +478,7 @@ function AuthState({ userDetails }) {
         </div>
       </Popover>
     </div>
-  );
+  )
 }
 
-export default AuthState;
+export default AuthState

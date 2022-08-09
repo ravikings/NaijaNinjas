@@ -153,7 +153,7 @@ class Markup extends Component {
               component={CompanyManageBids}
             />
             <Route
-              path="/make-offer/:id/:title"
+              path="/make-offer/:id"
               exact
               component={MakeOfferPage}
             />

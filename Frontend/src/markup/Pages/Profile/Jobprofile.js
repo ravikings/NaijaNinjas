@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Header2 from "../../Layout/Header2";
-import Footer from "../../Layout/Footer";
-import ProfileSidebar from "../../Element/Profilesidebar";
-import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import createRequest from "../../../utils/axios";
-import SingleInputField from "./SingleInputField";
-import { toast } from "react-toastify";
-import { Autocomplete } from "@material-ui/lab";
-import { styled, TextField } from "@material-ui/core";
-import { sectors } from "../../../helper/sectors";
-import { makeStyles } from "@material-ui/core/styles";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { authActionTypes, setProfileData } from "../Auth/Redux/AuthActions";
-import Loader from "../../Element/Loader";
+import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import Header2 from "../../Layout/Header2"
+import Footer from "../../Layout/Footer"
+import ProfileSidebar from "../../Element/Profilesidebar"
+import { useFormik } from "formik"
+import { useDispatch, useSelector } from "react-redux"
+import createRequest from "../../../utils/axios"
+import SingleInputField from "./SingleInputField"
+import { toast } from "react-toastify"
+import { Autocomplete } from "@material-ui/lab"
+import { styled, TextField } from "@material-ui/core"
+import { sectors } from "../../../helper/sectors"
+import { makeStyles } from "@material-ui/core/styles"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import { authActionTypes, setProfileData } from "../Auth/Redux/AuthActions"
+import Loader from "../../Element/Loader"
 
 const useStyles = makeStyles({
   root: {
     height: "13px",
   },
-});
+})
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -41,59 +41,56 @@ const CssTextField = styled(TextField)({
       border: "none",
     },
   },
-});
+})
 
 function Jobprofile() {
-  const classes = useStyles();
+  const classes = useStyles()
   const { currentUser, userProfile, loading } = useSelector(
     (state) => state.authReducer
-  );
-  const dispatch = useDispatch();
-  const [userDetails, setUserDetails] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
+  )
+
+  const dispatch = useDispatch()
+  const [userDetails, setUserDetails] = useState(null)
+  const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
-    // if (currentUser && !userProfile) {
-    getUserDetails();
-    // }
-
-    return () => {
-      console.log("unmount sended");
-    };
-  }, [currentUser && !userDetails]);
+    if (currentUser && !userProfile) {
+      getUserDetails()
+    }
+  }, [currentUser])
 
   useEffect(() => {
     if (userDetails && !userProfile) {
       dispatch({
         type: authActionTypes.USER_PROFILE,
         payload: userDetails,
-      });
+      })
     }
-  }, [userDetails]);
+  }, [userDetails])
 
   const getUserDetails = () => {
     createRequest()
       .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
       .then(({ data }) => {
-        console.log("user data api", data);
-        setUserDetails(data);
+        console.log("user data api", data)
+        setUserDetails(data)
       })
       .catch((e) => {
-        toast.error(e.response?.data?.message || "Unknown Error");
-      });
-  };
+        toast.error(e.response?.data?.message || "Unknown Error")
+      })
+  }
 
   const editUserDetails = (values) => {
     axiosPrivate
       .patch(`/api/v1/account/user-profile/${userDetails?.id}/`, values)
       .then(({ data }) => {
-        toast.success("Profile updated successfully");
-        getUserDetails();
+        toast.success("Profile updated successfully")
+        getUserDetails()
       })
       .catch((e) => {
-        toast.error(e.response?.data?.message || "Unknown Error");
-      });
-  };
+        toast.error(e.response?.data?.message || "Unknown Error")
+      })
+  }
 
   const initialValues = {
     first_name: userDetails?.first_name || "",
@@ -111,16 +108,16 @@ function Jobprofile() {
     city: userDetails?.city || "",
     local_goverment_zone: userDetails?.local_goverment_zone || "",
     author: currentUser?.pk,
-  };
+  }
 
   const formik = useFormik({
     initialValues,
     //validationSchema: validationSchema,
     onSubmit: (values) => {
-      editUserDetails(values);
+      editUserDetails(values)
     },
     enableReinitialize: true,
-  });
+  })
 
   return (
     <>
@@ -192,7 +189,7 @@ function Jobprofile() {
                                 classes={{ input: classes.root }}
                                 value={formik.values.sector}
                                 onChange={(e, value) => {
-                                  formik.setFieldValue("sector", value);
+                                  formik.setFieldValue("sector", value)
                                 }}
                                 options={Object.keys(sectors)}
                                 renderInput={(params) => (
@@ -215,7 +212,7 @@ function Jobprofile() {
                                 classes={{ input: classes.root }}
                                 value={formik.values.department}
                                 onChange={(e, value) => {
-                                  formik.setFieldValue("department", value);
+                                  formik.setFieldValue("department", value)
                                 }}
                                 options={
                                   sectors[formik.values.sector]
@@ -298,7 +295,7 @@ function Jobprofile() {
       )}
       <Footer />
     </>
-  );
+  )
 }
 
-export default Jobprofile;
+export default Jobprofile

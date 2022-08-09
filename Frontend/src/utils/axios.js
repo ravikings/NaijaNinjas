@@ -1,16 +1,17 @@
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios from "axios"
+import Cookies from "js-cookie"
 
-const BASE_URL = "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev";
-//const BASE_URL = "/";
+export const BASE_URL =
+  "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"
+// export const BASE_URL = "/"
 
 export default function createRequest() {
   let headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
-  };
+  }
   if (Cookies.get("access_token")) {
-    headers.Authorization = `Bearer ${Cookies.get("access_token")}`;
+    headers.Authorization = `Bearer ${Cookies.get("access_token")}`
   }
   return axios.create({
     baseURL: BASE_URL,
@@ -19,12 +20,30 @@ export default function createRequest() {
     withCredentials: true,
     xsrfCookieName: "csrftoken",
     xsrfHeaderName: "X-CSRFToken",
-  });
+  })
+}
+
+export const createRequestWithoutBase = (url) => {
+  let headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  }
+  if (Cookies.get("access_token")) {
+    headers.Authorization = `Bearer ${Cookies.get("access_token")}`
+  }
+  return axios.create({
+    baseURL: url,
+    headers,
+
+    withCredentials: true,
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFToken",
+  })
 }
 
 export const sendImage = (image, userID, author) => {
-  const formData = new FormData();
-  formData.append("photo", image);
+  const formData = new FormData()
+  formData.append("photo", image)
   return axios.put(
     `${BASE_URL}${userID}/`,
     {
@@ -36,8 +55,8 @@ export const sendImage = (image, userID, author) => {
         "Content-Type": "multipart/form-data",
       },
     }
-  );
-};
+  )
+}
 export const axiosPrivateImage = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -48,7 +67,7 @@ export const axiosPrivateImage = axios.create({
   withCredentials: true,
   xsrfCookieName: "csrftoken",
   xsrfHeaderName: "X-CSRFToken",
-});
+})
 
 export const axiosPrivate = axios.create({
   baseURL: BASE_URL,
@@ -58,4 +77,4 @@ export const axiosPrivate = axios.create({
     Authorization: `Bearer ${Cookies.get("access_token")}`,
   },
   withCredentials: true,
-});
+})
