@@ -71,11 +71,13 @@ class RunnerProfile(models.Model):
         if status == "True":
             print("setting status to private")
             self.user_set_status = status
+            self.status = False
             self.save()
             print("profile is private")
             return True
 
         self.user_set_status = status
+        self.status = True
         self.save()
         print("profile is public")
         return False

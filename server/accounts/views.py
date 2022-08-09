@@ -196,16 +196,16 @@ def account_status(request, pk, type):
     return Response({"message": f"status updated to {queryset.status}"})
     
 
-@api_view(["POST"])
+@api_view(["POST","GET"])
 def profile_mode_status(request, pk, type):
 
     """
     uses to upload pictures to ui dashboard.
     """
     queryset = RunnerProfile.objects.get(author=pk)  #TODO: CHANGE TO REQUEST
-    queryset.private_mode(type) # pass type, either login or logout
-    
-    return Response({"message": f"status updated"})
+    queryset.private_mode(type) 
+    serializer = ProfileSerializer(queryset)
+    return Response(serializer.data)
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class PhotoUpload(viewsets.ModelViewSet):
