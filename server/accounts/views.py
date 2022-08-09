@@ -273,6 +273,9 @@ class SearchProfile(viewsets.ModelViewSet):
     """
 
     search_fields = [
+        "first_name",
+        "last_name",
+        "address",
         "title",
         "location",
         "salary",
@@ -290,6 +293,8 @@ class SearchProfile(viewsets.ModelViewSet):
         filters.OrderingFilter,
     ]
     filterset_fields = [
+        "first_name",
+        "last_name",
         "title",
         "location",
         "salary",
