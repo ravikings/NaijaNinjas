@@ -114,13 +114,6 @@ class Photo(models.Model):
 
 class Timeline(models.Model):
 
-    STATUS = [
-        ("STARTED", "STARTED"),
-        ("DELIVERED", "DELIVERED"),
-        ("REVIEW", "REVIEW"),
-        ("APPROVED", "APPROVED")
-    ]
-
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
     )
@@ -129,18 +122,28 @@ class Timeline(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_task_owner"
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    timeline_status = models.CharField(max_length=255,choices=STATUS, default="STARTED")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
 class Comment(models.Model):
+
+    STATUS = [
+        ("CONTRACT", "CONTRACT"),
+        ("STARTED", "STARTED"),
+        ("PROGRESS", "PROGRESS"),
+        ("DELIVERED", "DELIVERED"),
+        ("CLIENT_REVIEW", "CLIENT_REVIEW"),
+        ("PRO_REVIEW", "PRO_REVIEW"),
+        ("APPROVED", "APPROVED")
+    ]
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="timeline_comment_author",
     )
     task_timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE, related_name="active_timeline_comment", blank=True, null=True)
-    contract = models.BooleanField(default=False)
+    status = models.CharField(max_length=255,choices=STATUS, null=True)
     body = RichTextField()
     attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
