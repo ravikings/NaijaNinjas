@@ -216,6 +216,12 @@ function ProfileSidebar({
                 <span>Tasks</span>
               </Link>
             </li>
+            <li>
+              <Link to={"/add-services"}>
+                <i className="fa fa-comments-o" aria-hidden="true"></i>
+                <span>Services</span>
+              </Link>
+            </li>
             <Collapse in={showManage}>
               <li>
                 <Link
