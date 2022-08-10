@@ -4,7 +4,7 @@ import requests
 import json
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
-# from .tasks import log_transaction_task, log_transaction
+from .tasks import log_transaction_task # log_transaction
 from .models import TransactionLog
 from django.db import transaction
 
@@ -55,21 +55,17 @@ def log_transaction(transaction_data, webhook_data):
 
 def webhook_handler_service(request):
     IP_WHITELIST = {"52.31.139.75", "52.49.173.169", "52.214.14.220"}
-    try:
-        secret = getattr(settings, "PAYSTACK_SECRET_KEY")
-    except Exception as e:  # If user hasn't declared variable
-        raise ValidationError(e)
 
     webhook_data = request.data
-    ip = get_client_ip(request)
-    if ip not in IP_WHITELIST:
-        raise ValidationError("source request authentication not allow")
+    # ip = get_client_ip(request)
+    # if ip not in IP_WHITELIST:
+    #     raise ValidationError("source request authentication not allow")
 
     if webhook_data["event"] == "charge.success":
         
         #to store transcation logs
-        #log_transaction_task.delay(webhook_data["data"], webhook_data) use celery in the future
-        log_transaction(webhook_data["data"], webhook_data)
+        log_transaction_task.delay(webhook_data["data"], webhook_data) #use celery in the future
+        #log_transaction(webhook_data["data"], webhook_data)
         print("transaction log ongoing")
 
         return True
