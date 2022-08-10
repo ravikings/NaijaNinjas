@@ -57,9 +57,9 @@ def webhook_handler_service(request):
     IP_WHITELIST = {"52.31.139.75", "52.49.173.169", "52.214.14.220"}
 
     webhook_data = request.data
-    # ip = get_client_ip(request)
-    # if ip not in IP_WHITELIST:
-    #     raise ValidationError("source request authentication not allow")
+    ip = get_client_ip(request)
+    if ip not in IP_WHITELIST:
+        raise ValidationError("source request authentication not allow")
 
     if webhook_data["event"] == "charge.success":
         
