@@ -155,6 +155,8 @@ class Review(models.Model):
     rating = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
+    on_budget = models.BooleanField(default=False)
+    on_time = models.BooleanField(default=False)
     profile = models.ForeignKey(
         RunnerProfile, on_delete=models.CASCADE, related_name="profile_review", default=False
     )

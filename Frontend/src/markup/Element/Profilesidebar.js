@@ -159,15 +159,32 @@ function ProfileSidebar({
                 <span>Messages</span>
               </Link>
             </li>
-            {userStatus?.is_a_runner && (
+            {/* {userStatus?.is_a_runner && (
               <li>
                 <Link to={"/jobs-my-resume"}>
                   <i className="fa fa-file-text-o" aria-hidden="true"></i>
                   <span>My Resume</span>
                 </Link>
               </li>
-            )}
-
+            )} */}
+            <li>
+              <Link to={"/jobs-my-resume"}>
+                <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                <span>My Resume</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={"/add-projects"}>
+                <i className="fa fa-comments-o" aria-hidden="true"></i>
+                <span>Add Projects</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={"/add-services"}>
+                <i className="fa fa-comments-o" aria-hidden="true"></i>
+                <span>Add Services</span>
+              </Link>
+            </li>
             {/* start ask question start */}
             <li onClick={() => setShowQuestion(!showQuestion)}>
               <Link to={"#"} className={active === "question" ? "active" : ""}>
@@ -214,12 +231,6 @@ function ProfileSidebar({
                   aria-hidden="true"
                 ></i>
                 <span>Tasks</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/add-services"}>
-                <i className="fa fa-comments-o" aria-hidden="true"></i>
-                <span>Services</span>
               </Link>
             </li>
             <Collapse in={showManage}>
