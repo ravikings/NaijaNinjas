@@ -1,6 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Badge } from "react-bootstrap"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import createRequest, {
@@ -14,23 +15,34 @@ function Jobsection() {
   const [loading, setLoading] = useState(false)
   const [next, setNext] = useState(null)
   const [previous, setPrevious] = useState(null)
+  const { isAuthenticated } = useSelector((state) => state.authReducer)
 
-  const allData = async (page = 1) => {
-    setLoading(true)
-    try {
-      // const res = await axios.get(BASE_URL + `api/v1/task/task/?page=${page}`)
-      const res = await createRequest().get(`api/v1/task/task/?page=${page}`)
-      setTasks(res.data.results)
-      setLoading(false)
-      res.data.next && setNext(res.data.next)
-      res.data.previous && setPrevious(res.data.previous)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
-    }
-  }
   useEffect(() => {
+    let isMounted = true
+    const controller = new AbortController()
+    const allData = async (page = 1) => {
+      setLoading(true)
+      try {
+        const res = await createRequest().get(
+          `api/v1/task/task/?page=${page}`,
+          {
+            signal: controller.signal,
+          }
+        )
+        isMounted && setTasks(res.data.results)
+        isMounted && setLoading(false)
+        isMounted && res.data.next && setNext(res.data.next)
+        isMounted && res.data.previous && setPrevious(res.data.previous)
+      } catch (error) {
+        console.log(error)
+        isMounted && setLoading(false)
+      }
+    }
     allData()
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
   }, [])
 
   const paginateTasks = async (e, req) => {
@@ -59,6 +71,9 @@ function Jobsection() {
   }
 
   const handleBookmark = async (id) => {
+    if (!isAuthenticated) {
+      toast.error("You need to login to bookmark a task")
+    }
     try {
       const { data } = await createRequest().post(
         `/api/v1/task/task-bookmark/${id}/`
@@ -144,8 +159,8 @@ function Jobsection() {
                             </Link>
                           </p>
                           <div className="d-flex badge-div ">
-                            {data?.tags?.split(",")?.map((e) => (
-                              <Badge>{e}</Badge>
+                            {data?.tags?.split(",")?.map((e, index) => (
+                              <Badge key={index}>{e}</Badge>
                             ))}
                           </div>
                           {/* <Link to={""}>

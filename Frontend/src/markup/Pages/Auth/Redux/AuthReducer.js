@@ -7,6 +7,7 @@ const initialState = {
   userResume: null,
   userStatus: null,
 
+  headerLoading: false,
   loading: false,
   isAuthenticated: false,
   accessToken: null,
@@ -119,19 +120,19 @@ function reducer(state = initialState, action) {
     case authActionTypes.GETTING_CURRENT_USER:
       return {
         ...state,
-        loading: true,
+        headerLoading: true,
       }
     case authActionTypes.GET_CURRENT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        headerLoading: false,
         currentUser: action.user,
         isAuthenticated: true,
       }
     case authActionTypes.GET_CURRENT_FAILED:
       return {
         ...state,
-        loading: false,
+        headerLoading: false,
         currentUser: null,
         isAuthenticated: false,
       }
