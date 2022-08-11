@@ -19,3 +19,18 @@ class TransactionLog(models.Model):
     status= models.CharField(max_length=255, null=True, blank=True)
     refrence = models.CharField(max_length=255, db_index=True, unique=True)
     logs = models.JSONField(null=True, blank=True)
+
+
+class ClientPaymentInfo(models.Model):
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="client_payment_author"
+    )
+    authorization_code = models.CharField(max_length=255)
+    last4 = models.CharField(max_length=255)
+    exp_month = models.CharField(max_length=255)
+    exp_year = models.CharField(max_length=255)
+    card_type = models.CharField(max_length=255)
+    bank = models.CharField(max_length=255)
+    country_code = models.CharField(max_length=255)
+    account_name = models.CharField(max_length=255)

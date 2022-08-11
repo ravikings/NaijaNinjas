@@ -4,7 +4,7 @@ import requests
 import json
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
-from .tasks import log_transaction_task # log_transaction
+from .tasks import log_transaction_task, save_payment_info # log_transaction
 from .models import TransactionLog
 from django.db import transaction
 
@@ -64,7 +64,8 @@ def webhook_handler_service(request):
     if webhook_data["event"] == "charge.success":
         
         #to store transcation logs
-        log_transaction_task.delay(webhook_data["data"], webhook_data) #use celery in the future
+        log_transaction_task.delay(webhook_data["data"]) 
+        save_payment_info.delay(webhook_data["data"])
         #log_transaction(webhook_data["data"], webhook_data)
         print("transaction log ongoing")
 
