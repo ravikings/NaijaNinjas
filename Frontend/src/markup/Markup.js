@@ -8,6 +8,7 @@ import AskQuestion from "./Pages/Other/AskQuestion";
 import UpdateQuestion from "./Pages/Other/UpdateQuestion";
 import AllQuestion from "./Pages/Other/AllQuestion";
 import Jobprofile from "./Pages/Profile/Jobprofile";
+import Dashboard from "./Pages/dashboard/Dashboard";
 import Jobmyresume from "./Pages/Other/Jobmyresume";
 import Jobsappliedjob from "./Pages/Other/Jobsappliedjob";
 import Jobsalert from "./Pages/Other/Jobsalert";
@@ -86,6 +87,7 @@ class Markup extends Component {
             <Route path="/index-2" exact component={Homepage2} />
             <Route path="/messages" exact component={MessagesPage} />
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />
+            <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute
               path="/jobs-my-resume"
               exact
@@ -152,11 +154,7 @@ class Markup extends Component {
               exact
               component={CompanyManageBids}
             />
-            <Route
-              path="/make-offer/:id"
-              exact
-              component={MakeOfferPage}
-            />
+            <Route path="/make-offer/:id" exact component={MakeOfferPage} />
             <Route path="/companies" exact component={Companies} />
             <Route path="/free-job-alerts" exact component={Freejobalerts} />
             <Route path="/browse-job-list" exact component={Browsejoblist} />
