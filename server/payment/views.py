@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
-from .tasks import log_transaction_task, save_payment_info
+from .tasks import log_transaction_task
 from .models import TransactionLog
 from django.db import transaction
 # Create your views here.

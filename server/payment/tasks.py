@@ -1,4 +1,4 @@
-from celery import shared_task, Task
+from celery import shared_task
 from .models import TransactionLog, ClientPaymentInfo
 from django.db import transaction
 
@@ -35,19 +35,19 @@ def save_card_info(account, transaction_data):
     )
 
   
-@shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=15, retry_jitter=True, retry_kwargs={'max_retries': 0})
-def save_payment_info(self, account, transaction_data):
+# @shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=15, retry_jitter=True, retry_kwargs={'max_retries': 0})
+# def save_payment_info(self, account, transaction_data):
 
-    try:
-        print("saving payment info log")
-        save_card_info(account, transaction_data)
-        print("saving payment info log saved")
-        return "saving payment info logsaved"
+#     try:
+#         print("saving payment info log")
+#         save_card_info(account, transaction_data)
+#         print("saving payment info log saved")
+#         return "saving payment info logsaved"
 
-    except:
-        raise Exception()
+#     except:
+#         raise Exception()
 
-@shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=15, retry_jitter=True, retry_kwargs={'max_retries': 0})
+@shared_task(name="log-transaction-task", bind=True, autoretry_for=(Exception,), retry_backoff=15, retry_jitter=True, retry_kwargs={'max_retries': 0})
 def log_transaction_task(self, account, transaction_data):
 
     try:
