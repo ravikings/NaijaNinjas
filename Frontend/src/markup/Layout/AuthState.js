@@ -430,7 +430,7 @@ function AuthState({ userDetails }) {
         <Divider style={{ margin: "20px 0px" }} />
         <div style={{ paddingBottom: 20, paddingLeft: 20 }}>
           <div
-            onClick={() => history.push("/jobs-profile")}
+            onClick={() => history.push("/dashboard")}
             className={classes.listItem}
           >
             <DashboardOutlinedIcon style={{ marginRight: 8 }} />
