@@ -1,12 +1,5 @@
-import hashlib
-import hmac
 import requests
-import json
 from django.conf import settings
-from rest_framework.exceptions import ValidationError
-from .tasks import log_transaction_task, save_payment_info # log_transaction
-from .models import TransactionLog
-from django.db import transaction
 
 class PayStack:
     PAYSTACK_SECRET_KEY = settings.PAYSTACK_SECRET_KEY
@@ -30,45 +23,3 @@ class PayStack:
         response_data = response.json()
         return response_data['status'], response_data['message']
 
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0]
-    else:
-        ip = request.META.get("REMOTE_ADDR")
-    return ip
-
-@transaction.atomic
-def log_transaction(transaction_data, webhook_data):
-
-    print("writing transaction to db")
-    TransactionLog.objects.create(
-        amount=transaction_data["amount"] / 100,
-        currency=transaction_data["currency"],
-        refrence=transaction_data["reference"],
-        payment_date_time=transaction_data["paid_at"],
-        status=transaction_data["status"],
-        logs=webhook_data,
-    )
-    print("writing to db completed")
-
-def webhook_handler_service(request):
-    IP_WHITELIST = {"52.31.139.75", "52.49.173.169", "52.214.14.220"}
-
-    webhook_data = request.data
-    ip = get_client_ip(request)
-    if ip not in IP_WHITELIST:
-        raise ValidationError("source request authentication not allow")
-
-    if webhook_data["event"] == "charge.success":
-        
-        #to store transcation logs
-        log_transaction_task.delay(webhook_data["data"]) 
-        save_payment_info.delay(webhook_data["data"])
-        #log_transaction(webhook_data["data"], webhook_data)
-        print("transaction log ongoing")
-
-        return True
-
-    return False

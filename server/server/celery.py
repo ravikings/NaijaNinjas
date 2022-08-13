@@ -21,3 +21,5 @@ def start_celery_worker():
     thread.start()
 
 start_celery_worker()
+#app.Worker(app=app, pool="eventlet", concurrency=5, loglevel="INFO").start()
+#celery -A server worker --without-heartbeat --without-gossip --without-mingle
