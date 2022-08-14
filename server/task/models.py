@@ -62,12 +62,16 @@ class TaskBidder(models.Model):
         RunnerProfile, on_delete=models.CASCADE, related_name="task_profile_bidder", blank=True,
         null=True
     )
+    payment_author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="payment_author", null=True, blank=True
+    )
+    payment_submitted = models.BooleanField(default=False, null=True)
     offer = models.IntegerField(null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
     bid_approve_status = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True, unique=True)
-    transaction_completed = models.BooleanField(default=False)
+    transaction_verified = models.BooleanField(default=False, null=True)
     runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -96,9 +100,9 @@ class TaskBidder(models.Model):
         paystack = PayStack()
         status, result = paystack.verify_payment(self.transaction_id, self.offer)
         if status:
-            #self.paystack_response = result
+            self.payment_submitted = True
             if result["amount"] / 100 == self.offer:
-                self.transaction_completed = True
+                self.transaction_verified = True
             self.save()
             return True
         return False

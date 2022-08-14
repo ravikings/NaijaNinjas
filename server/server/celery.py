@@ -21,3 +21,4 @@ def start_celery_worker():
     thread.start()
 
 start_celery_worker()
+#celery -A server worker --without-heartbeat --without-gossip --without-mingle

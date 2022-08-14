@@ -12,10 +12,31 @@ def key_generator():
     return key
 class TransactionLog(models.Model):
 
+    author = models.IntegerField(null=True, blank=True)
     uuid = models.CharField(max_length=6,unique=True, default=key_generator, editable=False)
     amount = models.IntegerField(null=True, blank=True)
     currency = models.CharField(max_length=255)
     payment_date_time = models.DateTimeField(max_length=100, null=True, blank=True)
     status= models.CharField(max_length=255, null=True, blank=True)
-    refrence = models.CharField(max_length=255, db_index=True, unique=True)
+    refrence = models.CharField(max_length=255, db_index=True,)
     logs = models.JSONField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    class Meta:
+        ordering = ("created",)
+
+
+class ClientPaymentInfo(models.Model):
+
+    author = models.IntegerField(null=True, blank=True)
+    authorization_code = models.CharField(max_length=255)
+    last4 = models.CharField(max_length=255)
+    exp_month = models.CharField(max_length=255)
+    exp_year = models.CharField(max_length=255)
+    card_type = models.CharField(max_length=255)
+    bank = models.CharField(max_length=255)
+    country_code = models.CharField(max_length=255)
+    account_name = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        ordering = ("created",)

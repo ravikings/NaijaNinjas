@@ -32,3 +32,4 @@ redis
 django-celery-results
 celery-progress
 django-fsm
+eventlet

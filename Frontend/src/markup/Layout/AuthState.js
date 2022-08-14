@@ -317,8 +317,8 @@ function AuthState({ userDetails }) {
               </Avatar>
             }
           </div>
-          <Link to={"/post-ads"} title="READ MORE" className="site-button">
-            <i className="fa fa-lock"></i> CORRECT BUSINESS{" "}
+          <Link to={"/post-ads"} title="READ MORE" className="btn btn-warning">
+            <i className="fas fa-treasure-chest"></i> CORRECT BUSINESS{" "}
           </Link>
           {/* 
           <ReactButton
@@ -354,7 +354,7 @@ function AuthState({ userDetails }) {
               title="READ MORE"
               className="btn btn-warning"
             >
-              <i className="fa fa-lock"></i> CORRECT BUSINESS{" "}
+              <i className="fas fa-treasure-chest"></i> CORRECT BUSINESS{" "}
             </Link>
             {/* <ReactButton
               style={{
