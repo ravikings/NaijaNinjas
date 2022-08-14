@@ -32,6 +32,7 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.user_id = self.scope["url_route"]["kwargs"]["user_id"]
         self.room_group_name = f"chat_{self.room_name}"
+        self.sender = self.get_account()
         self.userObj = self.getUser()
         self.userObj.set_online_status("LOGIN")
         if self.userObj.photo.url and self.userObj.first_name and self.userObj.last_name:
@@ -40,10 +41,10 @@ class ChatConsumer(WebsocketConsumer):
             self.user_photo = self.userObj.photo.url 
 
         elif self.userObj.first_name:
-            raise({"error":"Please complete profile to continue"})
+            self.user_last_name = self.sender.username
 
         elif self.userObj.last_name:
-            raise({"error":"Please complete profile to continue"})
+            self.user_last_name = None
 
         elif self.userObj.photo.url:
 
@@ -80,7 +81,7 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         conversation = Conversation.objects.get(id=int(self.room_name))
-        sender = self.get_account()
+        #sender = self.get_account()
 
         if action == 'message':
             # Attachment
@@ -93,7 +94,7 @@ class ChatConsumer(WebsocketConsumer):
                 )
             
             _message = Message.objects.create(
-                sender=sender,
+                sender=self.sender,
                 attachment=file_data,
                 text=message,
                 conversation_id=conversation,
@@ -109,7 +110,7 @@ class ChatConsumer(WebsocketConsumer):
                     {
                         "type": "chat_message",
                         "message": message,
-                        "sender": sender.id,
+                        "sender": self.sender.id,
                         'userImage': self.user_photo,
                         "online_status": self.userObj.status,
                         'userName': self.user_first_name + " " + self.userObj.self.user_last_name,
@@ -124,7 +125,7 @@ class ChatConsumer(WebsocketConsumer):
                         {
                         "type": "chat_message",
                         "message": message,
-                        "sender": sender.id,
+                        "sender": self.sender.id,
                         'userImage': self.user_photo,
                         "online_status": self.userObj.status,
                         'userName': self.user_first_name + " " + self.user_last_name,
@@ -136,7 +137,7 @@ class ChatConsumer(WebsocketConsumer):
             return_dict = {
                 "type": "chat_message",
 				'action': 'typing',
-                "sender": sender.id,
+                "sender": self.sender.id,
                 'userImage': self.user_photo,
                 "online_status": self.userObj.status,
                 'userName': self.user_first_name + " " + self.user_last_name,
