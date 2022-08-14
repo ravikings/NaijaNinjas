@@ -35,20 +35,27 @@ class ChatConsumer(WebsocketConsumer):
         self.sender = self.get_account()
         self.userObj = self.getUser()
         self.userObj.set_online_status("LOGIN")
-        if self.userObj.photo.url and self.userObj.first_name and self.userObj.last_name:
+        if self.userObj.photo and self.userObj.first_name and self.userObj.last_name:
             self.user_first_name = self.userObj.first_name
             self.user_last_name = self.userObj.last_name
             self.user_photo = self.userObj.photo.url 
 
-        elif self.userObj.first_name:
-            self.user_last_name = self.sender.username
-
-        elif self.userObj.last_name:
-            self.user_last_name = None
-
-        elif self.userObj.photo.url:
+        if not self.userObj.photo:
 
             self.user_photo = None
+            self.user_first_name = self.sender.username
+            self.user_last_name = ""
+
+        if self.userObj.photo:
+    
+            self.user_photo = self.userObj.photo.url
+
+        if not self.userObj.first_name:
+            self.user_first_name = self.sender.username
+
+        if not self.userObj.last_name:
+            self.user_last_name = None
+
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -113,7 +120,8 @@ class ChatConsumer(WebsocketConsumer):
                         "sender": self.sender.id,
                         'userImage': self.user_photo,
                         "online_status": self.userObj.status,
-                        'userName': self.user_first_name + " " + self.userObj.self.user_last_name,
+                        'FirstName': self.user_first_name,
+                        "LastName": self.user_last_name,
                         "attachment": _message.attachment.url,
                         "time": str(_message.timestamp),
                     },
@@ -128,7 +136,8 @@ class ChatConsumer(WebsocketConsumer):
                         "sender": self.sender.id,
                         'userImage': self.user_photo,
                         "online_status": self.userObj.status,
-                        'userName': self.user_first_name + " " + self.user_last_name,
+                        'FirstName': self.user_first_name,
+                        "LastName": self.user_last_name,
                         "time": str(_message.timestamp),
                     },
                 )
@@ -140,7 +149,8 @@ class ChatConsumer(WebsocketConsumer):
                 "sender": self.sender.id,
                 'userImage': self.user_photo,
                 "online_status": self.userObj.status,
-                'userName': self.user_first_name + " " + self.user_last_name,
+                'FirstName': self.user_first_name,
+                "LastName": self.user_last_name,
 			}
             async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
