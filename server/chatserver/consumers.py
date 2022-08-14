@@ -4,8 +4,7 @@ import secrets
 from datetime import datetime
 import logging
 
-from asgiref.sync import async_to_sync, sync_to_async
-from channels.db import database_sync_to_async
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
 from accounts.models import RunnerProfile, AccountUser
@@ -32,8 +31,31 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.user_id = self.scope["url_route"]["kwargs"]["user_id"]
         self.room_group_name = f"chat_{self.room_name}"
+        self.sender = self.get_account()
         self.userObj = self.getUser()
         self.userObj.set_online_status("LOGIN")
+        if self.userObj.photo and self.userObj.first_name and self.userObj.last_name:
+            self.user_first_name = self.userObj.first_name
+            self.user_last_name = self.userObj.last_name
+            self.user_photo = self.userObj.photo.url 
+
+        if not self.userObj.photo:
+
+            self.user_photo = None
+            self.user_first_name = self.sender.username
+            self.user_last_name = ""
+
+        if self.userObj.photo:
+    
+            self.user_photo = self.userObj.photo.url
+
+        if not self.userObj.first_name:
+            self.user_first_name = self.sender.username
+
+        if not self.userObj.last_name:
+            self.user_last_name = None
+
+
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
@@ -44,7 +66,6 @@ class ChatConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # Leave room group
-        # userObj = await database_sync_to_async(self.getUser())
         self.userObj.set_online_status("LOGOUT")
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
@@ -65,7 +86,6 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         conversation = Conversation.objects.get(id=int(self.room_name))
-        sender = self.get_account()
 
         if action == 'message':
             # Attachment
@@ -78,7 +98,7 @@ class ChatConsumer(WebsocketConsumer):
                 )
             
             _message = Message.objects.create(
-                sender=sender,
+                sender=self.sender,
                 attachment=file_data,
                 text=message,
                 conversation_id=conversation,
@@ -94,10 +114,11 @@ class ChatConsumer(WebsocketConsumer):
                     {
                         "type": "chat_message",
                         "message": message,
-                        "sender": sender.id,
-                        'userImage': self.userObj.photo.url,
+                        "sender": self.sender.id,
+                        'userImage': self.user_photo,
                         "online_status": self.userObj.status,
-                        'userName': self.userObj.first_name + " " + self.userObj.last_name,
+                        'FirstName': self.user_first_name,
+                        "LastName": self.user_last_name,
                         "attachment": _message.attachment.url,
                         "time": str(_message.timestamp),
                     },
@@ -105,14 +126,14 @@ class ChatConsumer(WebsocketConsumer):
             else:
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
-                    #return_dict,
                         {
                         "type": "chat_message",
                         "message": message,
-                        "sender": sender.id,
-                        'userImage': self.userObj.photo.url,
+                        "sender": self.sender.id,
+                        'userImage': self.user_photo,
                         "online_status": self.userObj.status,
-                        'userName': self.userObj.first_name + " " + self.userObj.last_name,
+                        'FirstName': self.user_first_name,
+                        "LastName": self.user_last_name,
                         "time": str(_message.timestamp),
                     },
                 )
@@ -121,10 +142,11 @@ class ChatConsumer(WebsocketConsumer):
             return_dict = {
                 "type": "chat_message",
 				'action': 'typing',
-                "sender": sender.id,
-                'userImage': self.userObj.photo.url,
+                "sender": self.sender.id,
+                'userImage': self.user_photo,
                 "online_status": self.userObj.status,
-                'userName': self.userObj.first_name + " " + self.userObj.last_name,
+                'FirstName': self.user_first_name,
+                "LastName": self.user_last_name,
 			}
             async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -134,7 +156,6 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from room group
     def chat_message(self, event):
         dict_to_be_sent = event.copy()
-        #dict_to_be_sent.pop("action")
         logging.warning("Receive message from room group!")
 
         # Send message to WebSocket
