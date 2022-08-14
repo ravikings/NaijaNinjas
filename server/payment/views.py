@@ -7,8 +7,10 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 from .tasks import log_transaction_task
-from .models import TransactionLog
+from .models import TransactionLog, ClientPaymentInfo
 from django.db import transaction
+from rest_framework import viewsets
+from .serializers import CardSerializer
 # Create your views here.
 
 
@@ -97,3 +99,18 @@ def webhook_handler_service(request):
         return True
 
     return False
+
+
+class CardsDetailView(viewsets.ModelViewSet):
+    
+    """
+    uses to get user card info
+    """
+
+    http_method_names = ['get','delete']
+    serializer_class = CardSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        return ClientPaymentInfo.objects.filter(author=self.request.user.id)

@@ -33,3 +33,4 @@ class ClientPaymentInfo(models.Model):
     bank = models.CharField(max_length=255)
     country_code = models.CharField(max_length=255)
     account_name = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
