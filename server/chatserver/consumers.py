@@ -119,13 +119,12 @@ class ChatConsumer(WebsocketConsumer):
                 
         elif action == 'typing':
             return_dict = {
+                "type": "chat_message",
 				'action': 'typing',
-				'message': message,
                 "sender": sender.id,
                 'userImage': self.userObj.photo.url,
                 "online_status": self.userObj.status,
                 'userName': self.userObj.first_name + " " + self.userObj.last_name,
-                "time": str(_message.timestamp),
 			}
             async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -135,7 +134,7 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from room group
     def chat_message(self, event):
         dict_to_be_sent = event.copy()
-        dict_to_be_sent.pop("type")
+        #dict_to_be_sent.pop("action")
         logging.warning("Receive message from room group!")
 
         # Send message to WebSocket
