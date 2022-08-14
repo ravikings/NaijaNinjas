@@ -20,6 +20,9 @@ class TransactionLog(models.Model):
     status= models.CharField(max_length=255, null=True, blank=True)
     refrence = models.CharField(max_length=255, db_index=True,)
     logs = models.JSONField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    class Meta:
+        ordering = ("created",)
 
 
 class ClientPaymentInfo(models.Model):
@@ -34,3 +37,6 @@ class ClientPaymentInfo(models.Model):
     country_code = models.CharField(max_length=255)
     account_name = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        ordering = ("created",)
