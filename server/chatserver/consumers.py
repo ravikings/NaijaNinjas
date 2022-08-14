@@ -4,8 +4,7 @@ import secrets
 from datetime import datetime
 import logging
 
-from asgiref.sync import async_to_sync, sync_to_async
-from channels.db import database_sync_to_async
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.core.files.base import ContentFile
 from accounts.models import RunnerProfile, AccountUser
@@ -67,7 +66,6 @@ class ChatConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # Leave room group
-        # userObj = await database_sync_to_async(self.getUser())
         self.userObj.set_online_status("LOGOUT")
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
@@ -88,7 +86,6 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         conversation = Conversation.objects.get(id=int(self.room_name))
-        #sender = self.get_account()
 
         if action == 'message':
             # Attachment
@@ -129,7 +126,6 @@ class ChatConsumer(WebsocketConsumer):
             else:
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
-                    #return_dict,
                         {
                         "type": "chat_message",
                         "message": message,
@@ -160,7 +156,6 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from room group
     def chat_message(self, event):
         dict_to_be_sent = event.copy()
-        #dict_to_be_sent.pop("action")
         logging.warning("Receive message from room group!")
 
         # Send message to WebSocket
