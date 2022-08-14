@@ -90,9 +90,9 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         
         data = RunnerProfile.objects.get_or_create(author_id=pk)
-        user = AccountUser.objects.get(id=pk)
-        recipient = AccountUser.objects.get(id=41)
-        print("im sending notification dashboard")
+        #user = AccountUser.objects.get(id=pk)
+        #recipient = AccountUser.objects.get(id=41)
+        #print("im sending notification dashboard")
         #notify.send(user,recipient=recipient, verb='hello come to dashboard')
 
         serializer = ProfileSerializer(data[0])
