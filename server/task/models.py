@@ -147,7 +147,9 @@ class Comment(models.Model):
         related_name="timeline_comment_author",
     )
     task_timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE, related_name="active_timeline_comment", blank=True, null=True)
-    status = models.CharField(max_length=255,choices=STATUS, null=True)
+    status = models.CharField(max_length=255,choices=STATUS, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    delivery_date = models.DateTimeField(null=True, blank=True)
     body = RichTextField()
     attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
