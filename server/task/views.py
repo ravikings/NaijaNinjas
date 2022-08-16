@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import IsOwner
@@ -205,3 +206,48 @@ class DashboardTaskFavorite(viewsets.ModelViewSet):
     def get_queryset(self):
 
         return Task.objects.filter(id__in=TaskBookmarks.objects.filter(author_id=self.request.user.id).values_list("task"))
+
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
+class SearchTask(viewsets.ModelViewSet):
+
+    search_fields = [
+        "title",
+        "sector",
+        "fixed_salary",
+        "minimum_salary",
+        "maximum_salary",
+        "region",
+        "location",
+        "department",
+        "experience",
+        "description",
+        "tags",
+        "created",
+        "updated",
+    ] 
+
+    queryset = Task.objects.filter(post_status="OPEN")
+    serializer_class = TaskSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "title",
+        "sector",
+        "fixed_salary",
+        "minimum_salary",
+        "maximum_salary",
+        "region",
+        "location",
+        "department",
+        "experience",
+        "description",
+        "tags",
+        "created",
+        "updated",
+    ] 
+
+    ordering_fields = "__all__"
