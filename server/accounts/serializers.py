@@ -79,6 +79,23 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+
+class PublicProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data.pop("address")
+        data.pop("login_tracker")
+        data.pop("user_set_status")
+        return data
+
 class BiddersProfileSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve

@@ -59,6 +59,7 @@ from .serializers import (
     ProjectPhotoSerializer,
     PublicQuotesSerializer,
     BiddersProfileSerializer,
+    PublicProfileSerializer,
 )
 from notifications.signals import notify
 
@@ -85,7 +86,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = PublicProfileSerializer
 
     def retrieve(self, request, pk=None):
         
@@ -95,8 +96,9 @@ class UserDashboardProfile(viewsets.ModelViewSet):
         #print("im sending notification dashboard")
         #notify.send(user,recipient=recipient, verb='hello come to dashboard')
 
-        serializer = ProfileSerializer(data[0])
+        serializer = PublicProfileSerializer(data[0])
         return Response(serializer.data)
+        
 
 
 def save_user_profile(profile, request):
