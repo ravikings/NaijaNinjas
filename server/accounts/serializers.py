@@ -67,7 +67,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountUser
-        fields = ["id"]
+        fields = ["id", "username"]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
