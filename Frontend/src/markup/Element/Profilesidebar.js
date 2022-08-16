@@ -18,6 +18,7 @@ function ProfileSidebar({
   const [showManage, setShowManage] = useState(showManageProp)
   const [showQuestion, setShowQuestion] = useState(false)
   const [showResume, setShowResume] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [imageState, setImageState] = useState(null)
   const [userDetails, setUserDetails] = useState(null)
 
@@ -181,10 +182,10 @@ function ProfileSidebar({
               <Link to={"#"} className={active === "question" ? "active" : ""}>
                 <i
                   className={
-                    showQuestion ? "fa fa-arrow-down" : "fa fa-arrow-right"
+                    showResume ? "fa fa-arrow-down" : "fa fa-arrow-right"
                   }
                   aria-hidden="true"
-                  onClick={() => setShowQuestion(!showQuestion)}
+                  onClick={() => showResume(!showResume)}
                 ></i>
                 <span>My Resume</span>
               </Link>
@@ -311,31 +312,46 @@ function ProfileSidebar({
                 <span>Post Ad</span>
               </Link>
             </li>
-            <li>
-              <Link
-                className={active === "Job Alerts" ? "active" : ""}
-                to={"/jobs-alerts"}
-              >
-                <i className="fa fa-bell-o" aria-hidden="true"></i>
-                <span>Alerts</span>
+            <li onClick={() => setShowSettings(!showSettings)}>
+              <Link to={"#"} className={active === "question" ? "active" : ""}>
+                {/* <i class="fa-solid fa-gear"></i> */}
+                <i
+                  className={
+                    !showSettings ? "fa-solid fa-gear" : "fa fa-arrow-up"
+                  }
+                  aria-hidden="true"
+                ></i>
+                <span>Settings</span>
               </Link>
             </li>
-
-            <li>
-              <Link
-                className={active === "Change Password" ? "active" : ""}
-                to={"/jobs-change-password"}
-              >
-                <i className="fa fa-key" aria-hidden="true"></i>
-                <span>Change Password</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={"./"}>
-                <i className="fa fa-sign-out" aria-hidden="true"></i>
-                <span>Log Out</span>
-              </Link>
-            </li>
+            <Collapse in={showSettings}>
+              <li>
+                <Link
+                  className={active === "Job Alerts" ? "active ml-4" : "ml-4"}
+                  to={"/jobs-alerts"}
+                >
+                  <i className="fa fa-bell-o" aria-hidden="true"></i>
+                  <span>Alerts</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={
+                    active === "Change Password" ? "active ml-4" : "ml-4"
+                  }
+                  to={"/jobs-change-password"}
+                >
+                  <i className="fa fa-key" aria-hidden="true"></i>
+                  <span>Change Password</span>
+                </Link>
+              </li>
+              <li>
+                <Link className="ml-4" to={"./"}>
+                  <i className="fa fa-sign-out" aria-hidden="true"></i>
+                  <span>Log Out</span>
+                </Link>
+              </li>
+            </Collapse>
           </ul>
         </div>
       </div>
