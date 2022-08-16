@@ -76,6 +76,8 @@ import UserProject from "./Pages/Other/UserProject";
 import SendOfferPage from "./Pages/MakeOffer/SendOfferPage";
 import SendContract from "./Pages/Other/SendContract";
 import UpdateServices from "./Pages/Other/UpdateServices";
+import LinkedAccount from "./Pages/Other/LinkedAccounts";
+import AccountSecurity from "./Pages/Other/AccountSecurity";
 
 class Markup extends Component {
   render() {
@@ -117,6 +119,8 @@ class Markup extends Component {
               exact
               component={Changepasswordpage}
             />
+            <PrivateRoute path="/linked-accounts" exact component={LinkedAccount} />
+            <PrivateRoute path="/account-security" exact component={AccountSecurity} />
 
             <Route path="/company-profile" exact component={Companyprofile} />
             <Route path="/company-resume" exact component={Companyresume} />
@@ -262,7 +266,7 @@ class Markup extends Component {
         </div>
         <ScrollToTop />
       </HashRouter>
-    );
+    )
   }
 }
 

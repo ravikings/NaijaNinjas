@@ -14,11 +14,12 @@ function ProfileSidebar({
   userID,
   active,
   showManageProp = false,
+  showManagePropSetting = false,
 }) {
   const [showManage, setShowManage] = useState(showManageProp)
   const [showQuestion, setShowQuestion] = useState(false)
   const [showResume, setShowResume] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
+  const [showSettings, setShowSettings] = useState(showManagePropSetting)
   const [imageState, setImageState] = useState(null)
   const [userDetails, setUserDetails] = useState(null)
 
@@ -334,6 +335,30 @@ function ProfileSidebar({
                   <span>Alerts</span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  className={active === "Security" ? "active ml-4" : "ml-4"}
+                  to={"/account-security"}
+                >
+                  <i className="fa fa-lock" aria-hidden="true"></i>
+                  <span>Security</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={
+                    active === "Linked Accounts" ? "active ml-4" : "ml-4"
+                  }
+                  to={"/linked-accounts"}
+                >
+                  <i
+                    className="fa-solid fa-building-columns"
+                    aria-hidden="true"
+                  ></i>
+                  <span>Linked Accounts</span>
+                </Link>
+              </li>
+
               <li>
                 <Link
                   className={

@@ -127,13 +127,13 @@ function MakeOfferPage() {
               <Grid item xs={12} sm={12} md={7} lg={8}>
                 <TabsGroup data={user.description} resume={resume} />
                 <Feedback />
-                {/* <Feedback />
                 <Feedback />
                 <Feedback />
                 <Feedback />
                 <Feedback />
                 <Feedback />
-                <Feedback /> */}
+                <Feedback />
+                <Feedback />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
                 <div className="sticky-top browse-candidates">
