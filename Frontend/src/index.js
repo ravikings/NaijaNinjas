@@ -4,12 +4,16 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import configureStore from "./utils/store";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 const store = configureStore();
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />{" "}
+    <QueryClientProvider client={queryClient}>
+      <App />{" "}
+    </QueryClientProvider>
   </Provider>,
   document.getElementById("root")
 );
