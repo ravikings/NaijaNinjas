@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Header from "../../Layout/Header";
-import Footer from "../../Layout/Footer";
-import Avatar from "@material-ui/core/Avatar";
-import { Box, Divider, Grid, Hidden, Modal } from "@material-ui/core";
+import React, { useEffect, useState } from "react"
+import Header from "../../Layout/Header"
+import Footer from "../../Layout/Footer"
+import Avatar from "@material-ui/core/Avatar"
+import { Box, Divider, Grid, Hidden, Modal } from "@material-ui/core"
 
-import { useStyles } from "./MakeOfferStyles";
-import Ratings from "./components/Ratings";
-import HourlyRate from "./components/HourlyRate";
-import MakeOfferForm from "./components/MakeOfferFormTask";
-import SocialMedia from "./components/SocialMedia";
-import Skills from "./components/Skills";
-import Attachments from "./components/Attachments";
-import TabsGroup from "./components/TabsGroup";
-import { useParams, Link } from "react-router-dom";
-import createRequest from "../../../utils/axios";
-import ClipLoader from "react-spinners/ClipLoader";
-import { BsBuilding } from "react-icons/bs";
-import { Alert, Button, Form } from "react-bootstrap";
-import { AboutMe } from "./components";
-import RelatedJobs from "./components/RelatedJobs";
-import { Badge } from "react-bootstrap";
-import Carousel from "carousel-react-rcdev";
-import ShortImages from "./components/ShortImageGallery";
-import RegisterPageModal from "../Auth/RegisterPageModal";
-import Proposals from "../components/Proposals";
-import Hired from "../components/Hired";
+import { useStyles } from "./MakeOfferStyles"
+import Ratings from "./components/Ratings"
+import HourlyRate from "./components/HourlyRate"
+import MakeOfferForm from "./components/MakeOfferFormTask"
+import SocialMedia from "./components/SocialMedia"
+import Skills from "./components/Skills"
+import Attachments from "./components/Attachments"
+import TabsGroup from "./components/TabsGroup"
+import { useParams, Link } from "react-router-dom"
+import createRequest from "../../../utils/axios"
+import ClipLoader from "react-spinners/ClipLoader"
+import { BsBuilding } from "react-icons/bs"
+import { Alert, Button, Form } from "react-bootstrap"
+import { AboutMe } from "./components"
+import RelatedJobs from "./components/RelatedJobs"
+import { Badge } from "react-bootstrap"
+import Carousel from "carousel-react-rcdev"
+import ShortImages from "./components/ShortImageGallery"
+import RegisterPageModal from "../Auth/RegisterPageModal"
+import Proposals from "../components/Proposals"
+import Hired from "../components/Hired"
 
-var bnr = require("../../../images/banner/bnr5.png");
+var bnr = require("../../../images/banner/bnr5.png")
 
 const style = {
   position: "absolute",
@@ -40,40 +40,40 @@ const style = {
   borderRadius: "5px",
   boxShadow: 24,
   p: 4,
-};
+}
 
 function MakeOfferPage() {
-  const [show, setShow] = React.useState(false);
-  const classes = useStyles();
+  const [show, setShow] = React.useState(false)
+  const classes = useStyles()
   // const id = location.state && location.state.id ? location.state.id : "10";
-  let { id } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  let { id } = useParams()
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState([])
 
   const allData = async () => {
-    setLoading(true);
+    setLoading(true)
     await createRequest()
       .get(`api/v1/task/task/${id}/`)
       .then((res) => {
-        console.log(res);
-        setData(res.data);
+        console.log(res)
+        setData(res.data)
 
-        setLoading(false);
+        setLoading(false)
       })
       .catch((e) => {
         if (e.response?.status === 400) {
-          console.log(e?.response?.data?.non_field_errors[0]);
+          console.log(e?.response?.data?.non_field_errors[0])
         } else {
-          console.log("Unknown Error");
+          console.log("Unknown Error")
         }
-      });
-  };
+      })
+  }
   useEffect(() => {
-    allData();
-  }, []);
+    allData()
+  }, [])
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
 
   return (
     <div>
@@ -181,6 +181,26 @@ function MakeOfferPage() {
                     position="Graphics Desinger"
                     rating={3}
                   />
+                  {/* <Proposals
+                    name="Waseem Kaka"
+                    position="Graphics Desinger"
+                    rating={3}
+                  />
+                  <Proposals
+                    name="Waseem Kaka"
+                    position="Graphics Desinger"
+                    rating={3}
+                  />
+                  <Proposals
+                    name="Waseem Kaka"
+                    position="Graphics Desinger"
+                    rating={3}
+                  />
+                  <Proposals
+                    name="Waseem Kaka"
+                    position="Graphics Desinger"
+                    rating={3}
+                  /> */}
                 </div>
                 {/* clients reives end */}
 
@@ -192,92 +212,95 @@ function MakeOfferPage() {
                 sm={12}
                 md={5}
                 lg={4}
-                className="project-widget"
+                className="project-widget sticky-top"
               >
-                {/* Price Box Start */}
-                <div className="text-center mx-auto  mt-5">
-                  <h3>Budget</h3>
-                  <h3>
-                    ${data?.minimum_salary} To ${data?.maximum_salary}{" "}
-                  </h3>
-                  {/* <span>Project type: {data?.category}</span> */}
-                  <div>
-                    <Link
-                      to={`/send-contract/${data?.id}`}
-                      className="site-button"
-                    >
-                      Submit a Proposal
-                    </Link>
-                    {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
+                <aside className="sticky-top">
+                  {/* Price Box Start */}
+                  <div className="text-center mx-auto  mt-5">
+                    <h3>Budget</h3>
+                    <h3>
+                      ${data?.minimum_salary} To ${data?.maximum_salary}{" "}
+                    </h3>
+                    {/* <span>Project type: {data?.category}</span> */}
+                    <div>
+                      <Link
+                        to={`/send-contract/${data?.id}`}
+                        className="site-button"
+                      >
+                        Submit a Proposal
+                      </Link>
+                      {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
+                    </div>
                   </div>
-                </div>
-                {/* Price Box end */}
-                {/* project type start */}
-                <ul className="list-unstyled mt-5 mb-3 meta">
-                  <li className="text-left">
-                    Seller Type:<b className="float-right">Company</b>
-                  </li>
-                  <li className="text-left">
-                    Project type:<b className="float-right">Hourly</b>
-                  </li>
-                  <li className="text-left">
-                    Project Duration:<b className="float-right">Other</b>
-                  </li>
-                  <li className="text-left">
-                    Project Level:<b className="float-right">Expensive</b>
-                  </li>
-                  <li className="text-left">
-                    Languages:<b className="float-right">Arabic</b>
-                  </li>
-                  <li className="text-left">
-                    English Level:<b className="float-right">Professional</b>
-                  </li>
-                </ul>
-                {/* project type end */}
+                  {/* Price Box end */}
+                  {/* project type start */}
+                  <ul className="list-unstyled mt-5 mb-3 meta">
+                    <li className="text-left">
+                      Seller Type:<b className="float-right">Company</b>
+                    </li>
+                    <li className="text-left">
+                      Project type:<b className="float-right">Hourly</b>
+                    </li>
+                    <li className="text-left">
+                      Project Duration:<b className="float-right">Other</b>
+                    </li>
+                    <li className="text-left">
+                      Project Level:<b className="float-right">Expensive</b>
+                    </li>
+                    <li className="text-left">
+                      Languages:<b className="float-right">Arabic</b>
+                    </li>
+                    <li className="text-left">
+                      English Level:<b className="float-right">Professional</b>
+                    </li>
+                  </ul>
+                  {/* project type end */}
 
-                {/* Buyer Start */}
-                <div className="text-center">
-                  <h3 className="project-widget-title">About Buyer</h3>
-                  <a href="#">
-                    <img
-                      src="https://themebing.com/wp/prolancer/wp-content/uploads/2021/04/pexels-mentatdgt-1138903-150x150.jpg"
-                      className="mb-3 rounded-circle img-thumbnail"
-                      alt=""
-                    />{" "}
-                  </a>
-                  <a href="#" target="_blank">
-                    <h4>Bayley Robertson</h4>
-                  </a>
-                  <ul className="list-inline mt-2 mb-2 badges">
-                    <li className="list-inline-item">
+                  {/* Buyer Start */}
+                  <div className="text-center">
+                    <h3 className="project-widget-title">About Buyer</h3>
+                    <a href="#">
                       <img
-                        src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/buyerfirstorder.png"
-                        title="Spent money for hiring"
-                        alt="badge"
-                        style={{ cursor: "default" }}
-                      />
-                    </li>
-                    <li className="list-inline-item">
-                      <img
-                        src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/level2.png"
-                        title="Seller Level 2: Has sold $100+ On ProLancer"
-                        alt="badge"
-                      />
-                    </li>
-                  </ul>
-                  <ul class="list-unstyled mt-4 meta">
-                    <li class="text-left">
-                      Location:<b class="float-right">Germany</b>
-                    </li>
-                    <li class="text-left">
-                      Departments:<b class="float-right">Graphich Designing</b>
-                    </li>
-                    <li class="text-left">
-                      No. of Employees:<b class="float-right">11-20</b>
-                    </li>
-                  </ul>
-                </div>
-                {/* Buyer end */}
+                        src="https://themebing.com/wp/prolancer/wp-content/uploads/2021/04/pexels-mentatdgt-1138903-150x150.jpg"
+                        className="mb-3 rounded-circle img-thumbnail"
+                        alt=""
+                      />{" "}
+                    </a>
+                    <a href="#" target="_blank">
+                      <h4>Bayley Robertson</h4>
+                    </a>
+                    <ul className="list-inline mt-2 mb-2 badges">
+                      <li className="list-inline-item">
+                        <img
+                          src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/buyerfirstorder.png"
+                          title="Spent money for hiring"
+                          alt="badge"
+                          style={{ cursor: "default" }}
+                        />
+                      </li>
+                      <li className="list-inline-item">
+                        <img
+                          src="https://themebing.com/wp/prolancer/wp-content/uploads/2022/01/level2.png"
+                          title="Seller Level 2: Has sold $100+ On ProLancer"
+                          alt="badge"
+                        />
+                      </li>
+                    </ul>
+                    <ul class="list-unstyled mt-4 meta">
+                      <li class="text-left">
+                        Location:<b class="float-right">Germany</b>
+                      </li>
+                      <li class="text-left">
+                        Departments:
+                        <b class="float-right">Graphich Designing</b>
+                      </li>
+                      <li class="text-left">
+                        No. of Employees:<b class="float-right">11-20</b>
+                      </li>
+                    </ul>
+                  </div>
+                  {/* Buyer end */}
+                </aside>
               </Grid>
             </Grid>
           </div>
@@ -290,6 +313,6 @@ function MakeOfferPage() {
 
       <Footer />
     </div>
-  );
+  )
 }
-export default MakeOfferPage;
+export default MakeOfferPage

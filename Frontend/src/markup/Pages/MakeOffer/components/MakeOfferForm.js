@@ -1,21 +1,24 @@
-import React from "react";
-import { Button, TextField } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import React from "react"
+import { Button, Divider, TextField } from "@material-ui/core"
+import { Link, useHistory } from "react-router-dom"
 
-import useAuth from "../../../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth"
+import SocialMedia from "./SocialMedia"
+import { Skills } from "./ResumeComponents"
+import Attachments from "./Attachments"
 
 function MakeOfferForm(props) {
-  const auth = useAuth();
-  const history = useHistory();
+  const auth = useAuth()
+  const history = useHistory()
 
   const handleClick = (e) => {
-    e.preventDefault();
-    props.modal();
-  };
+    e.preventDefault()
+    props.modal()
+  }
   return (
     <>
       {!auth.isAuthenticated ? (
-        <div>
+        <aside>
           <h5 style={{ textAlign: "center" }}>
             Discuss your project with David
           </h5>
@@ -59,11 +62,15 @@ function MakeOfferForm(props) {
               Sign Up
             </Link>
           </p>
-        </div>
+        </aside>
       ) : (
-        <div className="project-widget" id="bg-widget">
+        // <aside id="accordion1" className="sticky-top sidebar-filter bg-white"></aside>
+        <aside
+          className="project-widget sticky-top  sidebar-filter"
+          id="bg-widget"
+        >
           {/* Buyer Start */}
-          <div className="text-center">
+          <div className="text-center ">
             {/* <h3 className="project-widget-title">About Buyer</h3> */}
             <a href="#">
               <img
@@ -111,10 +118,18 @@ function MakeOfferForm(props) {
             </ul>
           </div>
           {/* Buyer end */}
-        </div>
+          <Divider style={{ margin: "30px 0px" }} />
+
+          <SocialMedia />
+
+          <Divider style={{ margin: "30px 0px" }} />
+          <Skills />
+          <Divider style={{ margin: "30px 0px" }} />
+          <Attachments />
+        </aside>
       )}
     </>
-  );
+  )
 }
 
-export default MakeOfferForm;
+export default MakeOfferForm

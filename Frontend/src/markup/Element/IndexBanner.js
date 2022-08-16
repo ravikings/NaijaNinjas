@@ -1,22 +1,35 @@
-import React, { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Alert, Card, Form } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react"
+import { Link, useHistory } from "react-router-dom"
+import { Alert, Card, Form } from "react-bootstrap"
+import { toast } from "react-toastify"
 
-var bnr1 = require("./../../images/main-slider/slide2.jpg");
+var bnr1 = require("./../../images/main-slider/slide2.jpg")
 
 const style = {
   margin: "0 auto",
   position: "absolute",
   top: "125px",
   right: "50px",
-};
+}
 
 function IndexBanner() {
-  const [title, setTitle] = React.useState("");
-  const history = useHistory();
+  const [title, setTitle] = useState("")
+  const [sector, setSector] = useState("")
+  const history = useHistory()
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    if (!sector) {
+      toast.error("Please select sector.", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+      return
+    }
     if (!title) {
       toast.error("Please enter title.", {
         position: "bottom-center",
@@ -26,100 +39,100 @@ function IndexBanner() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      });
-      return;
+      })
+      return
     }
-    history.push({
-      pathname: "/browse-candidates",
-      search: `?title=${title}`,
-      state: {
-        title: title,
-      },
-    });
-  };
+    history.push(`/browse-candidates/${sector}/${title}`)
+  }
 
   useEffect(() => {
-    var i = 0;
+    var i = 0
     // Placeholder Animation Start
-    var inputSelector = document.querySelectorAll("input, textarea");
+    var inputSelector = document.querySelectorAll("input, textarea")
     for (i = 0; i < inputSelector.length; i++) {
       inputSelector[i].addEventListener("focus", function (event) {
-        return this.parentElement.parentElement.classList.add("focused");
-      });
+        return this.parentElement.parentElement.classList.add("focused")
+      })
     }
     for (i = 0; i < inputSelector.length; i++) {
       inputSelector[i].addEventListener("blur", function (event) {
-        var inputValue = this.value;
+        var inputValue = this.value
         if (inputValue === "") {
-          this.parentElement.parentElement.classList.remove("filled");
-          this.parentElement.parentElement.classList.remove("focused");
+          this.parentElement.parentElement.classList.remove("filled")
+          this.parentElement.parentElement.classList.remove("focused")
         } else {
-          this.parentElement.parentElement.classList.add("filled");
+          this.parentElement.parentElement.classList.add("filled")
         }
-      });
+      })
     }
     // Placeholder Animation End
-  }, []);
+  }, [])
 
   return (
     <>
       <div
-        className='dez-bnr-inr dez-bnr-inr-md'
+        className="dez-bnr-inr dez-bnr-inr-md"
         style={{ backgroundImage: "url(" + bnr1 + ")" }}
       >
-        <div className='container'>
-          <div className='dez-bnr-inr-entry align-m'>
-            <div className='find-job-bx'>
-              <Link to={"/browse-job"} className='site-button button-sm'>
+        <div className="container">
+          <div className="dez-bnr-inr-entry align-m">
+            <div className="find-job-bx">
+              <Link to={"/browse-job"} className="site-button button-sm">
                 Find Jobs, Employment & Career Opportunities
               </Link>
               <h2>
                 Search and Hire More Than <br />{" "}
-                <span className='text-primary'>50,000</span> Open Professionals.
+                <span className="text-primary">50,000</span> Open Professionals.
               </h2>
-              <form className='dezPlaceAni'>
-                <div className='row'>
-                  <div className='col-lg-6 col-md-6'>
-                    <div className='form-group'>
+              <form className="dezPlaceAni">
+                <div className="row">
+                  <div className="col-lg-6 col-md-6">
+                    <div className="form-group">
                       <label>Job Title, Keywords, or Phrase</label>
-                      <div className='input-group'>
+                      <div className="input-group">
                         <input
-                          type='text'
+                          type="text"
                           value={title}
                           onChange={(e) => setTitle(e.target.value)}
-                          className='form-control'
-                          placeholder=''
+                          className="form-control"
+                          placeholder=""
                         />
-                        <div className='input-group-append'>
-                          <span className='input-group-text'>
-                            <i className='fa fa-search'></i>
+                        <div className="input-group-append">
+                          <span className="input-group-text">
+                            <i className="fa fa-search"></i>
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className='col-lg-4 col-md-6'>
-                    <div className='form-group'>
-                      <Form.Control as='select' custom className='select-btn'>
-                        <option>Select Sector</option>
-                        <option>Construction</option>
-                        <option>Corodinator</option>
-                        <option>Employer</option>
-                        <option>Financial Career</option>
-                        <option>Information Technology</option>
-                        <option>Marketing</option>
-                        <option>Quality check</option>
-                        <option>Real Estate</option>
-                        <option>Sales</option>
-                        <option>Supporting</option>
-                        <option>Teaching</option>
+                  <div className="col-lg-4 col-md-6">
+                    <div className="form-group">
+                      <Form.Control
+                        as="select"
+                        custom
+                        className="select-btn"
+                        onChange={(e) => setSector(e.target.value)}
+                      >
+                        <option value={""}>Select Sector</option>
+                        <option>Home Improvement</option>
+                        <option>Wellness</option>
+                        <option>Pets</option>
+                        <option>Business</option>
+                        <option>Events</option>
+                        <option>Lessons</option>
+                        <option>Crafts</option>
+                        <option>Design and Web</option>
+                        <option>Legal</option>
+                        <option>Personal</option>
+                        <option>Photography</option>
+                        <option>Repair and Technical Support</option>
                       </Form.Control>
                     </div>
                   </div>
-                  <div className='col-lg-2 col-md-6'>
+                  <div className="col-lg-2 col-md-6">
                     <button
                       onClick={handleSubmit}
-                      className='site-button btn-block'
+                      className="site-button btn-block"
                     >
                       Find Job
                     </button>
@@ -140,13 +153,17 @@ function IndexBanner() {
           <Card.Body>
             <Card.Title>Get your project done </Card.Title>
             <Card.Text>Our talented professional are here to help!</Card.Text>
-            <Link to="/company-post-jobs" className='site-button btn-block' variant='primary'>
+            <Link
+              to="/company-post-jobs"
+              className="site-button btn-block"
+              variant="primary"
+            >
               Post a task
             </Link>
           </Card.Body>
         </Card>
       </div>
     </>
-  );
+  )
 }
-export default IndexBanner;
+export default IndexBanner

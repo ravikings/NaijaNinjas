@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Collapse from "@material-ui/core/Collapse";
-import { useDispatch, useSelector } from "react-redux";
-import createRequest, { sendImage } from "../../utils/axios";
-import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage";
-import { BASE_URL } from "../../utils/constants";
-import { toast } from "react-toastify";
-import { authActionTypes } from "../Pages/Auth/Redux/AuthActions";
+import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import Collapse from "@material-ui/core/Collapse"
+import { useDispatch, useSelector } from "react-redux"
+import createRequest, { sendImage } from "../../utils/axios"
+import useAxiosPrivateImage from "../../hooks/useAxiosPrivateImage"
+import { BASE_URL } from "../../utils/constants"
+import { toast } from "react-toastify"
+import { authActionTypes } from "../Pages/Auth/Redux/AuthActions"
 
 function ProfileSidebar({
   userProfile: profile,
@@ -15,78 +15,79 @@ function ProfileSidebar({
   active,
   showManageProp = false,
 }) {
-  const [showManage, setShowManage] = useState(showManageProp);
-  const [showQuestion, setShowQuestion] = useState(false);
-  const [imageState, setImageState] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
+  const [showManage, setShowManage] = useState(showManageProp)
+  const [showQuestion, setShowQuestion] = useState(false)
+  const [showResume, setShowResume] = useState(false)
+  const [imageState, setImageState] = useState(null)
+  const [userDetails, setUserDetails] = useState(null)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const { userProfile, userStatus, currentUser } = useSelector(
     (state) => state.authReducer
-  );
+  )
   useEffect(() => {
     if (userDetails) {
       dispatch({
         type: authActionTypes.USER_PROFILE,
         payload: userDetails,
-      });
+      })
     }
-  }, [userDetails]);
+  }, [userDetails])
 
   // Custom Hooks
-  const imageSendAPI = useAxiosPrivateImage();
+  const imageSendAPI = useAxiosPrivateImage()
 
   const getUserDetails = () => {
-    console.log("sended");
+    console.log("sended")
     createRequest()
       .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
       .then(({ data }) => {
-        setUserDetails(data);
+        setUserDetails(data)
         dispatch({
           type: authActionTypes.USER_PROFILE,
           payload: data,
-        });
-        console.log("War gate");
+        })
+        console.log("War gate")
       })
       .catch((e) => {
-        toast.error(e.response?.data?.message || "Unknown Error");
-        console.log(e);
-        console.log("War gate");
-      });
-  };
+        toast.error(e.response?.data?.message || "Unknown Error")
+        console.log(e)
+        console.log("War gate")
+      })
+  }
 
   useEffect(() => {
     if (currentUser) {
-      getUserDetails();
+      getUserDetails()
     }
-  }, [currentUser]);
+  }, [currentUser])
 
   const sendImage = async () => {
     if (imageState) {
       try {
-        const formData = new FormData();
-        formData.append("photo", imageState);
-        formData.append("author", userProfile?.author);
+        const formData = new FormData()
+        formData.append("photo", imageState)
+        formData.append("author", userProfile?.author)
         await imageSendAPI.patch(
           `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`,
           formData
-        );
-        setImageState("");
-        getUserDetails();
-        toast.success("Image Uploaded");
-        console.log("useUserProfile");
+        )
+        setImageState("")
+        getUserDetails()
+        toast.success("Image Uploaded")
+        console.log("useUserProfile")
       } catch (error) {
-        console.log(error, "IMAGESENT");
-        toast.error(error.response?.data?.message || "Unknown Error");
+        console.log(error, "IMAGESENT")
+        toast.error(error.response?.data?.message || "Unknown Error")
       }
     }
-  };
+  }
 
   useEffect(() => {
     if (imageState) {
-      sendImage();
+      sendImage()
     }
-  }, [imageState]);
+  }, [imageState])
 
   return (
     <div className="col-xl-3 col-lg-4 m-b30">
@@ -118,7 +119,7 @@ function ProfileSidebar({
                     className="update-flie"
                     accept="image/jpeg,image/png,image/gif"
                     onChange={(e) => {
-                      setImageState(e.target.files[0]);
+                      setImageState(e.target.files[0])
                     }}
                   />
                   <i className="fa fa-camera"></i>
@@ -176,24 +177,39 @@ function ProfileSidebar({
                 </Link>
               </li>
             )} */}
-            <li>
-              <Link to={"/jobs-my-resume"}>
-                <i className="fa fa-file-text-o" aria-hidden="true"></i>
+            <li onClick={() => setShowResume(!showResume)}>
+              <Link to={"#"} className={active === "question" ? "active" : ""}>
+                <i
+                  className={
+                    showQuestion ? "fa fa-arrow-down" : "fa fa-arrow-right"
+                  }
+                  aria-hidden="true"
+                  onClick={() => setShowQuestion(!showQuestion)}
+                ></i>
                 <span>My Resume</span>
               </Link>
             </li>
-            <li>
-              <Link to={"/add-projects"}>
-                <i className="fa fa-comments-o" aria-hidden="true"></i>
-                <span>Add Projects</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/add-services"}>
-                <i className="fa fa-comments-o" aria-hidden="true"></i>
-                <span>Add Services</span>
-              </Link>
-            </li>
+            <Collapse in={showResume}>
+              <li>
+                <Link className={"ml-4"} to={"/jobs-my-resume"}>
+                  <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                  <span>Resume</span>
+                </Link>
+              </li>
+              <li>
+                <Link className={"ml-4"} to={"/add-projects"}>
+                  <i className="fa fa-comments-o" aria-hidden="true"></i>
+                  <span>Add Projects</span>
+                </Link>
+              </li>
+              <li>
+                <Link className={"ml-4"} to={"/add-services"}>
+                  <i className="fa fa-comments-o" aria-hidden="true"></i>
+                  <span>Add Services</span>
+                </Link>
+              </li>
+            </Collapse>
+
             {/* start ask question start */}
             <li onClick={() => setShowQuestion(!showQuestion)}>
               <Link to={"#"} className={active === "question" ? "active" : ""}>
@@ -324,7 +340,7 @@ function ProfileSidebar({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ProfileSidebar;
+export default ProfileSidebar

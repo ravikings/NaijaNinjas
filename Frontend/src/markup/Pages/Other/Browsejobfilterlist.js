@@ -12,6 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader"
 import logo from "../../../images/logo/icon1.png"
 import { Badge } from "react-bootstrap"
 import { toast } from "react-toastify"
+import TaskSidebar from "../../Element/TaskSidebar"
 var bnr = require("../../../images/banner/bnr1.jpg")
 
 function Browsejobfilterlist() {
@@ -69,7 +70,7 @@ function Browsejobfilterlist() {
           <div className="section-full browse-job p-b50">
             <div className="container">
               <div className="row">
-                <Accordsidebar />
+                <TaskSidebar />
                 {!loading ? (
                   <div className="col-xl-9 col-lg-8 col-md-7">
                     <div className="job-bx-title clearfix">

@@ -137,7 +137,7 @@ class Markup extends Component {
               component={Companytransactions}
             />
             <Route
-              path="/browse-candidates"
+              path="/browse-candidates/:sector/:title"
               exact
               component={Browsecandidates}
             />

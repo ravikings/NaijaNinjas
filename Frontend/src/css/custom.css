@@ -1727,3 +1727,6 @@ ul.user-menu-small-nav li a:hover i {
 }
 
 /* reives component end */
+.rangeslider__fill {
+  background-color: #2e55fa !important;
+}
