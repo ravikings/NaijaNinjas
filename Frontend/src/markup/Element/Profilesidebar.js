@@ -69,7 +69,7 @@ function ProfileSidebar({
       try {
         const formData = new FormData()
         formData.append("photo", imageState)
-        formData.append("author", userProfile?.author)
+        // formData.append("author", userProfile?.author)
         await imageSendAPI.patch(
           `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`,
           formData

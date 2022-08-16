@@ -87,7 +87,10 @@ function AccountSecurity() {
                           />
                         </div>
                       </div>
-                     <h6 className="font-weight-700"> Status : <span className="text-success">Verified</span></h6>
+                      <h6 className="font-weight-700">
+                        {" "}
+                        Status : <span className="text-success">Verified</span>
+                      </h6>
                     </div>
                     <hr />
                     <div className="row">
@@ -100,9 +103,6 @@ function AccountSecurity() {
                             className="form-control"
                           />
                         </div>
-                        <button type="submit" className="site-button w-50">
-                          Add
-                        </button>
                       </div>
                     </div>
                     <i className="fa fa-envelope-o mr-3"></i> Email Address
@@ -118,7 +118,7 @@ function AccountSecurity() {
                             className="form-control"
                           />
                         </div>
-                        <button type="submit" className="site-button w-50">
+                        <button type="submit" className="site-button w-25">
                           Add
                         </button>
                       </div>
