@@ -97,4 +97,4 @@ daphne -b 0.0.0.0 -p 8001 server.asgi:application
 #for public websocket use ngrok tcp 8001
 
 ngrok tcp 8001
-ws://8.tcp.ngrok.io:10567/ws/chat/room/32/1/
+ws://8.tcp.ngrok.io:11544/ws/chat/room/32/1/
