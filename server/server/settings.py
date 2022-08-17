@@ -312,6 +312,7 @@ CACHES = {
 
 YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
 
+DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
 AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
 
