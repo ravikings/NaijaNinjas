@@ -101,6 +101,7 @@ class BiddersProfileSerializer(serializers.ModelSerializer):
     Profile serializers use profile for picture uploads and retrieve
     """
 
+    photo = serializers.ImageField()
     class Meta:
         model = RunnerProfile
         fields = ("first_name","last_name", "photo", "status")
