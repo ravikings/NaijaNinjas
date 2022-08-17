@@ -30,12 +30,11 @@ const CssTextField = withStyles({
 
 function MessageWindow({ props, setUserDetails, userDetails }) {
   const classes = useStyles();
-  const [socketUrl, setSocketUrl] = useState(`ws://8.tcp.ngrok.io:10343/ws/chat/room/`);
+  const [socketUrl, setSocketUrl] = useState(new WebSocket(`ws://6.tcp.ngrok.io:10059/ws/chat/room/${userDetails && userDetails.initiator.id}/${userDetails && userDetails.chat_room_id}/`));
   const [messageHistory, setMessageHistory] = useState([]);
   const [textbox, setTextbox] = useState('');
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-
-  const { data, refetch } = useQuery(["chat-data", userDetails], () => agent.Chat.roomMessage(userDetails.chat_room_id),
+  const { data, refetch } = useQuery(["chat-data", userDetails], () => agent.Chat.roomMessage(userDetails && userDetails.chat_room_id),
     {
       refetchOnWindowFocus: false,//turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
@@ -49,21 +48,23 @@ function MessageWindow({ props, setUserDetails, userDetails }) {
     refetch();
   }, [userDetails])
   useEffect(() => {
-    setSocketUrl(`ws://8.tcp.ngrok.io:10343/ws/chat/room/${userDetails && userDetails.initiator.id}/${userDetails && userDetails.chat_room_id}`);
-    console.log('hit');
+    setSocketUrl(`ws://6.tcp.ngrok.io:10059/ws/chat/room/${userDetails && userDetails.initiator.id}/${userDetails && userDetails.chat_room_id}/`);
   }, [userDetails])
 
   useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
-    }
-  }, [lastMessage, setMessageHistory]);
-  const handleClickSendMessage = useCallback(() => {
-    if (textbox !== '') {
-      sendMessage(textbox)
-      setTextbox('');
+    socketUrl.onopen = () => {
+      console.log('WebSocket Connected');
     }
   }, []);
+  const handleClickSendMessage = useCallback(() => { sendMessage('hi', true); refetch(); console.log(readyState); }, []);
+  // const handleClickSendMessage = () => {
+  //   if (textbox !== '') {
+  //     sendMessage(textbox);
+  //     refetch();
+  //     console.log(lastMessage);
+  //     setTextbox('');
+  //   }
+  // }
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
     [ReadyState.OPEN]: 'Open',
@@ -71,7 +72,6 @@ function MessageWindow({ props, setUserDetails, userDetails }) {
     [ReadyState.CLOSED]: 'Closed',
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
-  console.log(`The WebSocket is currently ${connectionStatus}`);
   return (
     <div
       style={{
