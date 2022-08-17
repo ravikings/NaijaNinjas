@@ -3,8 +3,8 @@ import { Avatar, Grid } from "@material-ui/core";
 import { useStyles } from "./messagesStyles";
 import { ConvertDateTime } from "./convert-date";
 
-function ChatListItem({ selected, user }) {
-  const classes = useStyles();
+function ChatListItem({ selected, user, setUserDetails }) {
+  const classes = useStyles(); 
   return (
     <Grid
       container
@@ -14,6 +14,7 @@ function ChatListItem({ selected, user }) {
         borderLeft: selected ? "7px solid blue" : "",
       }}
       alignItems={"center"}
+      onClick={() => setUserDetails(user)}
     >
       <Grid item xs={2}>
         <Avatar
@@ -50,7 +51,7 @@ function ChatListItem({ selected, user }) {
               textAlign: "right",
             }}
           >
-           {user.last_message && ConvertDateTime(user.last_message.timestamp)} 
+            {user.last_message && ConvertDateTime(user.last_message.timestamp)}
           </div>
         </div>
         <div
@@ -61,7 +62,7 @@ function ChatListItem({ selected, user }) {
             textOverflow: "ellipsis",
           }}
         >
-          {user.last_message ? user.last_message.text : 'Start the conversation'} 
+          {user.last_message ? user.last_message.text : 'Start the conversation'}
         </div>
       </Grid>
     </Grid>

@@ -12,6 +12,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import agent from "../../../api/agent";
 import { useQuery } from "react-query";
 import createRequest from "../../../utils/axios";
+import useAuth from "../../../hooks/useAuth";
 
 const CssTextField = withStyles({
   root: {
@@ -32,10 +33,10 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-function ChatList(props) {
+function ChatList({ props, setUserDetails, userDetails }) {
   const classes = useStyles();
   const [userData, setUserData] = useState(null);
-
+  const auth = useAuth();
   const getOnlineState = async () => {
     try {
       const { data } = await createRequest().get(
@@ -57,8 +58,6 @@ function ChatList(props) {
       refetchOnWindowFocus: false,//turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
       onSuccess: (d) => {
-        console.log(d);
-
       }
     }
   );
@@ -94,7 +93,7 @@ function ChatList(props) {
         {
           rowData && rowData.length > 0 ?
             rowData.map((user, key) => (
-              <ChatListItem key={key} user={user} />
+              <ChatListItem key={key} user={user} setUserDetails={setUserDetails} selected={userDetails && userDetails.chat_room_id === user.chat_room_id} />
             ))
             :
             <div className="row">
@@ -103,13 +102,6 @@ function ChatList(props) {
               </div>
             </div>
         }
-        {/* // <ChatListItem selected={true} />
-        // <ChatListItem />
-        // <ChatListItem />
-        // <ChatListItem />
-        // <ChatListItem />
-        // <ChatListItem />
-        // <ChatListItem /> */}
       </div>
     </div>
   );

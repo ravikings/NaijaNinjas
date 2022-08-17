@@ -7,7 +7,7 @@ import useAuth from "../../../../hooks/useAuth";
 function MakeOfferForm(props) {
   const auth = useAuth();
   const history = useHistory();
-
+  console.log(auth.currentUser);
   const handleClick = (e) => {
     e.preventDefault();
     props.modal();

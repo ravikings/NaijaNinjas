@@ -21,6 +21,7 @@ const requests = {
 // };
 const Chat = {
   getAllConversation: (userId) => requests.get(`/ws/chat/conversations/${userId}`),
+  roomMessage: (roomId) => requests.get(`/ws/chat/message_room/${roomId}`),
 }
 export default {
   Chat,

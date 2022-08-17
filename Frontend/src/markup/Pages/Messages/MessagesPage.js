@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../Layout/Header";
 import { useStyles } from "./messagesStyles";
 import { Grid, Hidden } from "@material-ui/core";
@@ -9,6 +9,7 @@ import Footer from "../../Layout/Footer";
 
 function MessagesPage(props) {
   const classes = useStyles();
+  const [userDetails, setUserDetails] = useState(null);
   return (
     <div
       style={{
@@ -23,11 +24,11 @@ function MessagesPage(props) {
           <Grid container style={{}}>
             <Hidden smDown>
               <Grid item style={{ borderRight: "1px solid #ccc" }}>
-                <ChatList />
+                <ChatList userDetails={userDetails} setUserDetails={setUserDetails} />
               </Grid>
             </Hidden>
             <Grid item xs={true}>
-              <MessageWindow />
+              <MessageWindow userDetails={userDetails} setUserDetails={setUserDetails} />
             </Grid>
           </Grid>
         </div>
