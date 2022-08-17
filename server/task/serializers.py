@@ -51,7 +51,7 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     bidder_info = serializers.SerializerMethodField()
     class Meta:
         model = TaskBidder
-        exclude = ("transaction_id", "task", "bidder_profile", "image")
+        exclude = ("task", "bidder_profile", "image")
 
     def get_bidder_info(self, instance):
 
