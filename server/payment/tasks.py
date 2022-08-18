@@ -55,10 +55,15 @@ def log_transaction_task(self, reference, transaction_data):
         print("transaction log ")
 
         user = TaskBidder.objects.filter(transaction_id=reference).first()
+        
         if user: 
+            
             account = user.payment_author.id
+            user.webhook_transaction_verified = True
+            user.save()
+            print("found user, saved webhook info")
         else:
-            print("user not found saving default")
+            print("user not found saving default user id")
             account = 1
         log_transaction(account, transaction_data)
         print("transaction log saved")

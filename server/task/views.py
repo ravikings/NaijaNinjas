@@ -2,10 +2,10 @@ from django.shortcuts import render,get_object_or_404
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
-from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
+from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
 from django.db.models import Count
@@ -15,8 +15,10 @@ from accounts.models import IpModel
 from rest_framework import status
 from django.db import transaction
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from rest_framework.decorators import api_view, permission_classes
 
 # Create your views here.
 
@@ -119,8 +121,10 @@ class TaskImageAPIView(viewsets.ModelViewSet):
 
 class TaskApproveView(viewsets.ModelViewSet):
 
+    permissions_classes = [AllowAny]
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
+    
     #permissions_classes = [IsAuthenticated and IsOwner]
 
 
@@ -137,8 +141,12 @@ class TaskApproveView(viewsets.ModelViewSet):
             if serializer.is_valid():
                 serializer.save()
                 bid_to_approve.set_task_status()
-
-                return Response({"message": "the bid you approved was successful"})
+            owner = bid_to_approve.bidder_profile_set.author
+            print("owner info")
+            print(owner)
+            AccountUser.objects.get(id__in=[bid_to_approve.payment_author, owner])
+            Timeline.objects.create()
+            return Response({"message": "the bid you approved was successful"})
 
         return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -149,9 +157,12 @@ class TimelineView(viewsets.ModelViewSet):
     uses to add Timeline to view task activities
     """
 
-    queryset = Timeline.objects.all()
     serializer_class = TimelineSerializer
     #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self, pk=None):
+
+        return Timeline.objects.filter(task=pk)
 
 class TimelineCommentView(viewsets.ModelViewSet):
     
@@ -251,3 +262,35 @@ class SearchTask(viewsets.ModelViewSet):
     ] 
 
     ordering_fields = "__all__"
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def accept_bid(request):
+
+    task_id = request.query_params.get('task_id')
+    id = request.query_params.get('id')
+    bid_to_approve = TaskBidder.objects.filter(task_id=task_id, id=id)
+    if bid_to_approve.exists(): #and (bid_to_approve[0].bid_approve_status == False)):
+        bid = bid_to_approve[0]
+        if bid.runner_confirmed:
+            return Response({"error": "Task already assigned"})
+            
+        #TODO: Uncomment in the future
+        # if bid.payment_author.id == task_owner:
+        #     raise ("user not allowed perform action")
+        owner = bid.bidder_profile.author.id
+        #bid.approve_bids()
+        #bid.set_task_status()
+        task_owner= AccountUser.objects.get(id=owner)
+        print("creating timeline")
+        query_set = Timeline.objects.create(author=bid.payment_author,task_owner=task_owner,task=bid.task)
+        print("timeline created")
+        serializer = TimelineStartSerializer(query_set)
+        return Response(serializer.data)
+
+    return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+

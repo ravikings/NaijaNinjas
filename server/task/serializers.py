@@ -95,6 +95,15 @@ class TimelineCommentSerializer(serializers.ModelSerializer):
         return data
 
 
+class TimelineStartSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+   
+    class Meta:
+        model = Timeline
+        exclude = ("updated", "created",)
+
 class TimelineSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
