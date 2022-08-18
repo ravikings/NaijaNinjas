@@ -98,3 +98,5 @@ daphne -b 0.0.0.0 -p 8001 server.asgi:application
 
 ngrok tcp 8001
 ws://8.tcp.ngrok.io:10343/ws/chat/room/32/1/
+
+#reocrd window button + r

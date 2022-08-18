@@ -69,6 +69,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = AccountUser
         fields = ["id", "username", "last_seen"]
 
+class ContractUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountUser
+        fields = ["email"]
 
 class ProfileSerializer(serializers.ModelSerializer):
     """
