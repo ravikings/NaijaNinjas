@@ -33,6 +33,7 @@ def verify_payment(request):
         messages.success(
             request, f"Payment Completed Successfully, ₦ {payment.offer}."
         )
+        #call approve view here to send email to prof to start the task
         return Response({"message":"Payment was succesfull!"}, status=status.HTTP_200_OK)
 
     else:
@@ -86,12 +87,7 @@ def webhook_handler_service(request):
         #to store transcation logs
         reference = webhook_data["data"]["reference"]
         log_data = webhook_data["data"]
-        try:
-            user = TaskBidder.objects.get(transaction_id=reference)
-            user = user.payment_author.id
-        except Exception:
-            user = 1
-        log_transaction_task.delay(user, log_data) 
+        log_transaction_task.delay(reference, log_data) 
         print("transaction log ongoing")
 
         return True
