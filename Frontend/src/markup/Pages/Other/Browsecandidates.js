@@ -13,6 +13,8 @@ import logo from "../../../images/logo/icon1.png"
 import { Badge } from "react-bootstrap"
 import { toast } from "react-toastify"
 import CandidatesSidebar from "../../Element/CandidatesSidebar"
+import queryString from "query-string"
+
 var bnr = require("../../../images/banner/bnr1.jpg")
 
 function BrowseCandidates() {
@@ -20,14 +22,32 @@ function BrowseCandidates() {
   const [data, setData] = useState([])
   const [totalCount, setTotalCount] = useState(null)
   const [activePage, SetActivePage] = useState(1)
-  const { sector, title } = useParams()
-  // ?title=dr&sector=Wellness
+
+  const { title, sector } = queryString.parse(window.location.search)
   const allData = async () => {
     setLoading(true)
-    try {
-      const params = {
+    var params
+    if (title && sector) {
+      params = {
+        search: title,
+        sector: sector,
+      }
+    }
+    if (title && !sector) {
+      params = {
         search: title,
       }
+    }
+    if (!title && sector) {
+      params = {
+        sector: sector,
+      }
+    }
+    if (!title && !sector) {
+      params = {}
+    }
+
+    try {
       const res = await createRequest().get("/api/v1/account/search/", {
         params,
       })

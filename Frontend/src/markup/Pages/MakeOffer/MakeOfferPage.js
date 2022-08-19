@@ -79,7 +79,7 @@ function MakeOfferPage() {
             className="dez-bnr-inr d-flex align-items-center"
             style={{ backgroundImage: "url(" + bnr + ")" }}
           >
-            <div className="">
+            <div className="ml-5">
               <Grid container spacing={2} className={classes.headerGrid}>
                 <Grid item>
                   <Avatar

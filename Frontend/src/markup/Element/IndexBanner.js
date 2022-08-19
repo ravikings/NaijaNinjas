@@ -18,8 +18,8 @@ function IndexBanner() {
   const history = useHistory()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!sector) {
-      toast.error("Please select sector.", {
+    if (!sector && !title) {
+      return toast.error("Please select sector or enter any keyword.", {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -28,21 +28,17 @@ function IndexBanner() {
         draggable: true,
         progress: undefined,
       })
-      return
     }
-    if (!title) {
-      toast.error("Please enter title.", {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-      return
+    if (sector && title) {
+      return history.push(`/browse-candidates?sector=${sector}&title=${title}`)
     }
-    history.push(`/browse-candidates/${sector}/${title}`)
+    if (sector) {
+      return history.push(`/browse-candidates?sector=${sector}`)
+    }
+
+    if (title) {
+      return history.push(`/browse-candidates?title=${title}`)
+    }
   }
 
   useEffect(() => {

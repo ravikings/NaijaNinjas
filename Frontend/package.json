@@ -23,6 +23,7 @@
     "jsx-runtime": "^1.2.0",
     "moment": "^2.29.3",
     "patch-package": "^6.4.7",
+    "query-string": "^7.1.1",
     "react": "^16.12.0",
     "react-animated-slider": "^1.1.4",
     "react-bootstrap": "^1.4.0",

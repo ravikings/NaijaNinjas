@@ -308,11 +308,18 @@ function ProfileSidebar({
               </li>
             </Collapse>
             <li>
+              <Link to={"/transactions"}>
+                <i className="fa fa-handshake-o" aria-hidden="true"></i>
+                <span>Transactions</span>
+              </Link>
+            </li>
+            <li>
               <Link to={"/post-ads"}>
                 <i className="fa fa-handshake-o" aria-hidden="true"></i>
                 <span>Post Ad</span>
               </Link>
             </li>
+
             <li onClick={() => setShowSettings(!showSettings)}>
               <Link to={"#"} className={active === "question" ? "active" : ""}>
                 {/* <i class="fa-solid fa-gear"></i> */}
