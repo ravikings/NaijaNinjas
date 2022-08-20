@@ -22,7 +22,7 @@ const requests = {
 const Chat = {
   getAllConversation: (userId) => requests.get(`/ws/chat/conversations/${userId}`),
   roomMessage: (roomId) => requests.get(`/ws/chat/message_room/${roomId}`),
-  deleteRoom: (roomId) => requests.get(`/ws/chat/delete-conversations/${roomId}`),
+  deleteRoom: (userId, roomId) => requests.get(`/ws/chat/delete-conversations/${userId}/${roomId}`),
   startConversation: (startId, receiverId) => requests.get(`/ws/chat/start/${startId}/${receiverId}/`),
 }
 export default {
