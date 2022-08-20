@@ -1,8 +1,10 @@
 import React from "react";
 import { Avatar, Grid } from "@material-ui/core";
 import { useStyles } from "./messagesStyles";
+import { ConvertDateTime } from "./convert-date";
 
-function ChatListItem({ selected }) {
+function ChatListItem({ selected, user, setUserDetails }) {
+
   const classes = useStyles();
   return (
     <Grid
@@ -13,12 +15,13 @@ function ChatListItem({ selected }) {
         borderLeft: selected ? "7px solid blue" : "",
       }}
       alignItems={"center"}
+      onClick={() => setUserDetails(user)}
     >
       <Grid item xs={2}>
         <Avatar
           style={{ height: "40px", width: "40px" }}
           src={
-            "https://image.shutterstock.com/image-photo/young-man-studio-looking-cameraportrait-260nw-139246634.jpg"
+            user && user.receiver && user.receiver.photo && process.env.REACT_APP_API_URL + user.receiver.photo
           }
         />
       </Grid>
@@ -34,7 +37,7 @@ function ChatListItem({ selected }) {
               textOverflow: "ellipsis",
             }}
           >
-            Kasun Chandika
+            {user.receiver.username}
           </div>
           <div
             style={{
@@ -45,7 +48,7 @@ function ChatListItem({ selected }) {
               textAlign: "right",
             }}
           >
-            4 hours ago
+            {user.last_message && ConvertDateTime(user.last_message.timestamp)}
           </div>
         </div>
         <div
@@ -56,7 +59,7 @@ function ChatListItem({ selected }) {
             textOverflow: "ellipsis",
           }}
         >
-          Thanks for reaching out fdsafdsafdsafdsafds
+          {user.last_message ? user.last_message.text : 'Start the conversation'}
         </div>
       </Grid>
     </Grid>
