@@ -45,7 +45,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
       }
     }
   );
-  const { data: removeData, refetch: removeRefetch } = useQuery(["remove-conversation", userDetails], () => agent.Chat.deleteRoom(userDetails && userDetails.chat_room_id),
+  const { data: removeData, refetch: removeRefetch } = useQuery(["remove-conversation", userDetails], () => agent.Chat.deleteRoom(auth.currentUser.pk, userDetails && userDetails.chat_room_id),
     {
       refetchOnWindowFocus: false,//turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
@@ -80,7 +80,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
     if (textbox.trim() !== '') {
       if (e.keyCode === 13 && !e.shiftKey) {
         handleClickSendMessage();
-        document.getElementById('messageBox').value='';
+        document.getElementById('messageBox').value = '';
         e.preventDefault();
       }
     } else {
@@ -201,7 +201,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
           variant={"outlined"}
           placeholder={"Your Message"}
           onKeyUp={(e) => { setTextbox(e.target.value); }}
-          onKeyDown={(e)=>hitEnter(e)}
+          onKeyDown={(e) => hitEnter(e)}
           fullWidth
         />
         <Button className={classes.sendButton}
