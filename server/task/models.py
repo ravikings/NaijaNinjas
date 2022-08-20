@@ -45,6 +45,10 @@ class Task(models.Model):
     class Meta:
         ordering = ("-updated", "-created",)
 
+    def number_of_bids(self):
+        data = TaskBidder.objects.filter(task=self.id)
+        return len(data)
+
 
 def upload_to(instance, filename):
     now = timezone.now()
@@ -72,6 +76,7 @@ class TaskBidder(models.Model):
     bid_approve_status = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True, unique=True)
     transaction_verified = models.BooleanField(default=False, null=True)
+    webhook_transaction_verified = models.BooleanField(default=False, null=True)
     runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -87,12 +92,13 @@ class TaskBidder(models.Model):
             self.transaction_id = ref
         super().save(*args, **kwargs)
 
-    def number_of_bids(self):
-        return self.bidder.count()
+    def approve_bids(self):
+        self.bid_approve_status = True
+        self.save()
 
     def set_task_status(self):
 
-        status = Task.objects.get(id=self.task)
+        status = Task.objects.get(id=self.task.id)
         status.post_status = "ASSIGNED"
         status.save()
 
@@ -147,7 +153,9 @@ class Comment(models.Model):
         related_name="timeline_comment_author",
     )
     task_timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE, related_name="active_timeline_comment", blank=True, null=True)
-    status = models.CharField(max_length=255,choices=STATUS, null=True)
+    status = models.CharField(max_length=255,choices=STATUS, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    delivery_date = models.DateTimeField(null=True, blank=True)
     body = RichTextField()
     attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)

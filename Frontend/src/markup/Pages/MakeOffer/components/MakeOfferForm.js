@@ -1,20 +1,17 @@
-import React from "react"
-import { Button, Divider, TextField } from "@material-ui/core"
-import { Link, useHistory } from "react-router-dom"
+import React from "react";
+import { Button, TextField } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
 
-import useAuth from "../../../../hooks/useAuth"
-import SocialMedia from "./SocialMedia"
-import { Skills } from "./ResumeComponents"
-import Attachments from "./Attachments"
+import useAuth from "../../../../hooks/useAuth";
 
 function MakeOfferForm(props) {
   const auth = useAuth()
   const history = useHistory()
 
   const handleClick = (e) => {
-    e.preventDefault()
-    props.modal()
-  }
+    e.preventDefault();
+    props.modal();
+  };
   return (
     <>
       {!auth.isAuthenticated ? (
@@ -86,7 +83,7 @@ function MakeOfferForm(props) {
             <ul className="list-inline mt-2 mb-2 badges">
               <li className="list-inline-item">
                 <button
-                  onClick={() => history.push("/messages")}
+                  onClick={() => { refetch(); }}
                   className="site-button"
                 >
                   Contact Me

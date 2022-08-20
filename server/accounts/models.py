@@ -20,6 +20,7 @@ class AccountUser(AbstractUser):
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
+    last_seen = models.DateTimeField(auto_now=True)
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")

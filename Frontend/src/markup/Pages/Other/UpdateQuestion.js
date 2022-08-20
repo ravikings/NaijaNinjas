@@ -27,7 +27,7 @@ function UpdateQuestion (){
 	const [detailsValue,setDetailsValue]= useState(data.body);
 	const [attachment,setAttachment]= useState(data.attachment);
 	const history = useHistory();
-	const baseURL= `http://127.0.0.1:8000/`;
+	const baseURL= `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/`;
 	let token = `Bearer ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [attachFile,setAttachFile]= useState(null);

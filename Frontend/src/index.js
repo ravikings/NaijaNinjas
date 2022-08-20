@@ -1,16 +1,17 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import App from "./App"
-import * as serviceWorker from "./serviceWorker"
-import { Provider } from "react-redux"
-import configureStore from "./utils/store"
-import "react-rangeslider/lib/index.css"
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import configureStore from "./utils/store";
 
-const store = configureStore()
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />{" "}
+    <QueryClientProvider client={queryClient}>
+      <App />{" "} 
+    </QueryClientProvider>
   </Provider>,
   document.getElementById("root")
 )

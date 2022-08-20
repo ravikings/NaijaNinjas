@@ -67,8 +67,12 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountUser
-        fields = ["id"]
+        fields = ["id", "username", "last_seen"]
 
+class ContractUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountUser
+        fields = ["email"]
 
 class ProfileSerializer(serializers.ModelSerializer):
     """
@@ -79,11 +83,29 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+
+class PublicProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data.pop("address")
+        data.pop("login_tracker")
+        data.pop("user_set_status")
+        return data
+
 class BiddersProfileSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
 
+    photo = serializers.ImageField()
     class Meta:
         model = RunnerProfile
         fields = ("first_name","last_name", "photo", "status")
