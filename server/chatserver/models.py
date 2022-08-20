@@ -24,6 +24,9 @@ class Conversation(models.Model):
     )
     start_time = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ("-start_time",)
+
 def upload_to(instance, filename):
     now = timezone.now()
     base, extension = os.path.splitext(filename.lower())
