@@ -1,6 +1,6 @@
 from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks
 from rest_framework import serializers
-from accounts.serializers import CustomRegisterSerializer, ProfileSerializer, BiddersProfileSerializer
+from accounts.serializers import ContractUserSerializer, ProfileSerializer, BiddersProfileSerializer
 from accounts.models import RunnerProfile
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -51,7 +51,7 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     bidder_info = serializers.SerializerMethodField()
     class Meta:
         model = TaskBidder
-        exclude = ("transaction_id", "task", "bidder_profile", "image")
+        exclude = ("task", "bidder_profile", "image")
 
     def get_bidder_info(self, instance):
 
@@ -95,19 +95,28 @@ class TimelineCommentSerializer(serializers.ModelSerializer):
         return data
 
 
+class TimelineStartSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+    author = ContractUserSerializer()
+    class Meta:
+        model = Timeline
+        exclude = ("updated", "created",)
+
 class TimelineSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
 
     timeline_comment = serializers.SerializerMethodField()
-    time_created = serializers.SerializerMethodField()
+    timestamps = serializers.SerializerMethodField()
    
     class Meta:
         model = Timeline
         exclude = ("updated", "created",)
 
-    def get_time_created(self, instance):
+    def get_timestamps(self, instance):
         dateTimeObj = instance.created
         timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
         time_difference = instance.updated - dateTimeObj
@@ -121,6 +130,7 @@ class TimelineSerializer(serializers.ModelSerializer):
         return data
 
     def get_timeline_comment(self, instance):
+
 
         return Comment.objects.filter(task_timeline=instance.id)
 

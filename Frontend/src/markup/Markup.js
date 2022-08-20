@@ -89,7 +89,7 @@ class Markup extends Component {
           <Switch>
             <Route path="/" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
-            <Route path="/messages" exact component={MessagesPage} />
+            <Route path="/messages" exact component={MessagesPage} /> 
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute

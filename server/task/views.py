@@ -1,10 +1,11 @@
 from django.shortcuts import render,get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
-from task.serializers import TaskSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
+from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
 from django.db.models import Count
@@ -14,8 +15,10 @@ from accounts.models import IpModel
 from rest_framework import status
 from django.db import transaction
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from rest_framework.decorators import api_view, permission_classes
 
 # Create your views here.
 
@@ -118,28 +121,34 @@ class TaskImageAPIView(viewsets.ModelViewSet):
 
 class TaskApproveView(viewsets.ModelViewSet):
 
+    permissions_classes = [AllowAny]
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
+    
     #permissions_classes = [IsAuthenticated and IsOwner]
 
 
-    def post(self, request, pk=None):
+    # def post(self, request, pk=None):
 
-        task_id = request.query_params.get('task_id')
-        bid_to_approve = get_object_or_404(TaskBidder, task_id=task_id)
-        if (bid_to_approve.exists() and (bid_to_approve.bid_approve_status == False)):
+    #     task_id = request.query_params.get('task_id')
+    #     bid_to_approve = get_object_or_404(TaskBidder, task_id=task_id)
+    #     if (bid_to_approve.exists() and (bid_to_approve.bid_approve_status == False)):
 
-            if bid_to_approve.runner_confirmed:
-                return Response({"error": "Task already assigned"})
+    #         if bid_to_approve.runner_confirmed:
+    #             return Response({"error": "Task already assigned"})
                 
-            serializer = TaskBidderSerializer(instance=bid_to_approve, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                bid_to_approve.set_task_status()
+    #         serializer = TaskBidderSerializer(instance=bid_to_approve, data=request.data)
+    #         if serializer.is_valid():
+    #             serializer.save()
+    #             bid_to_approve.set_task_status()
+    #         owner = bid_to_approve.bidder_profile_set.author
+    #         print("owner info")
+    #         print(owner)
+    #         AccountUser.objects.get(id__in=[bid_to_approve.payment_author, owner])
+    #         Timeline.objects.create()
+    #         return Response({"message": "the bid you approved was successful"})
 
-                return Response({"message": "the bid you approved was successful"})
-
-        return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+    #     return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TimelineView(viewsets.ModelViewSet):
@@ -151,6 +160,12 @@ class TimelineView(viewsets.ModelViewSet):
     queryset = Timeline.objects.all()
     serializer_class = TimelineSerializer
     #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def retrieve(self, request, pk=None):
+
+        query = Timeline.objects.filter(task=pk)
+        serializer = TimelineSerializer(query)
+        return Response(serializer.data)
 
 class TimelineCommentView(viewsets.ModelViewSet):
     
@@ -205,3 +220,88 @@ class DashboardTaskFavorite(viewsets.ModelViewSet):
     def get_queryset(self):
 
         return Task.objects.filter(id__in=TaskBookmarks.objects.filter(author_id=self.request.user.id).values_list("task"))
+
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
+class SearchTask(viewsets.ModelViewSet):
+
+    search_fields = [
+        "title",
+        "sector",
+        "fixed_salary",
+        "minimum_salary",
+        "maximum_salary",
+        "region",
+        "location",
+        "department",
+        "experience",
+        "description",
+        "tags",
+        "created",
+        "updated",
+    ] 
+
+    queryset = Task.objects.filter(post_status="OPEN")
+    serializer_class = TaskSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "title",
+        "sector",
+        "fixed_salary",
+        "minimum_salary",
+        "maximum_salary",
+        "region",
+        "location",
+        "department",
+        "experience",
+        "description",
+        "tags",
+        "created",
+        "updated",
+    ] 
+
+    ordering_fields = "__all__"
+
+@api_view(["GET", "POST"])
+@permission_classes([AllowAny])
+def accept_bid(request):
+
+    task_id = request.query_params.get('task_id')
+    id = request.query_params.get('id')
+    bid_to_approve = TaskBidder.objects.filter(task_id=task_id, id=id)
+    if bid_to_approve.exists() and (bid_to_approve[0].bid_approve_status == False):
+        bid = bid_to_approve[0]
+        if bid.runner_confirmed:
+            return Response({"error": "Task already assigned"})
+        
+        owner = bid.bidder_profile.author.id
+        #TODO: Uncomment in the future
+        if bid.payment_author.id == owner:
+            raise ("user not allowed perform action")
+        response_data = {}
+        response_data["professional_first_name"] = bid.bidder_profile.first_name
+        response_data["professional_last_name"] = bid.bidder_profile.last_name
+
+        bid.approve_bids()
+        bid.set_task_status()
+        task_owner= AccountUser.objects.get(id=owner)
+        print("creating timeline")
+        query_set = Timeline.objects.create(author=bid.payment_author,task_owner=task_owner,task=bid.task)
+        print("timeline created")
+        serializer = TimelineStartSerializer(query_set)
+        response_data.update(serializer.data)
+        return Response(response_data)
+
+    return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+#@permission_classes([AllowAny])
+def get_timeiline(request, task_id, task_owner):
+
+    data = Timeline.objects.get(task=task_id, task_owner=task_owner)
+    serializer = TimelineSerializer(data)
+    return Response(serializer.data)

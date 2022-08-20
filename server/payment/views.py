@@ -33,6 +33,7 @@ def verify_payment(request):
         messages.success(
             request, f"Payment Completed Successfully, ₦ {payment.offer}."
         )
+        #call approve view here to send email to prof to start the task
         return Response({"message":"Payment was succesfull!"}, status=status.HTTP_200_OK)
 
     else:
@@ -78,22 +79,15 @@ def webhook_handler_service(request):
 
     webhook_data = request.data
     ip = get_client_ip(request)
-    # if ip not in IP_WHITELIST:
-    #     raise ValidationError("source request authentication not allow")
+    if ip not in IP_WHITELIST:
+        raise ValidationError("source request authentication not allow")
 
     if webhook_data["event"] == "charge.success":
         
         #to store transcation logs
         reference = webhook_data["data"]["reference"]
         log_data = webhook_data["data"]
-        user = TaskBidder.objects.get(transaction_id=reference)
-        if user:
-            user = user.payment_author.id
-        else:
-            user = 1
-        #user = user.payment_author.id if user else 1
-        log_transaction_task.delay(user, log_data) 
-        #save_payment_info.delay(user, log_data)
+        log_transaction_task.delay(reference, log_data) 
         print("transaction log ongoing")
 
         return True

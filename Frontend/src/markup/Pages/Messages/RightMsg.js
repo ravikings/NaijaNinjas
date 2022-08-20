@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Grid } from "@material-ui/core";
 
-function RightMsg(props) {
+function RightMsg({ props, item, data }) {
   return (
     <div>
       <Grid
@@ -14,8 +14,7 @@ function RightMsg(props) {
           <div className="talk-bubble-right tri-right right-in">
             <div className="talktext">
               <p>
-                This talk-bubble uses .left-in class to show a triangle on the
-                left slightly indented. Still a blocky square.
+                {item.text}
               </p>
             </div>
           </div>
@@ -24,7 +23,7 @@ function RightMsg(props) {
           <Avatar
             style={{ height: "50px", width: "50px" }}
             src={
-              "https://image.shutterstock.com/image-photo/young-man-studio-looking-cameraportrait-260nw-139246634.jpg"
+              data.users_profile && data.users_profile[0].photo && data.users_profile[0].photo
             }
           />
         </Grid>

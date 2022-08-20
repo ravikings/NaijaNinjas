@@ -67,9 +67,9 @@ function ProfileSidebar({
   const sendImage = async () => {
     if (imageState) {
       try {
-        const formData = new FormData()
-        formData.append("photo", imageState)
-        // formData.append("author", userProfile?.author)
+        const formData = new FormData();
+        formData.append("photo", imageState);
+        //formData.append("author", userProfile?.author);
         await imageSendAPI.patch(
           `/api/v1/account/user-profile/${currentUser?.pk}/`,
           formData
