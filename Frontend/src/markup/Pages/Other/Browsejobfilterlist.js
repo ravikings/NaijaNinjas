@@ -38,6 +38,25 @@ function Browsejobfilterlist() {
         }
       })
   }
+  const handleFilter = async (query) => {
+    window.scrollTo(0, 0)
+    setLoading(true)
+    await createRequest()
+      .get(`/api/v1/task/search-task/?${query}`)
+      .then((res) => {
+        setTotalCount(res?.data?.count)
+        setData(res.data.results)
+
+        setLoading(false)
+      })
+      .catch((e) => {
+        if (e.response?.status === 400) {
+          console.log(e?.response?.data?.non_field_errors[0])
+        } else {
+          console.log("Unknown Error")
+        }
+      })
+  }
   useEffect(() => {
     allData()
   }, [])
@@ -70,7 +89,7 @@ function Browsejobfilterlist() {
           <div className="section-full browse-job p-b50">
             <div className="container">
               <div className="row">
-                <TaskSidebar />
+                <TaskSidebar handleFilter={handleFilter} />
                 {!loading ? (
                   <div className="col-xl-9 col-lg-8 col-md-7">
                     <div className="job-bx-title clearfix">

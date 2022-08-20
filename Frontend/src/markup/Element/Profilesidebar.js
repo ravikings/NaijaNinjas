@@ -71,7 +71,7 @@ function ProfileSidebar({
         formData.append("photo", imageState)
         // formData.append("author", userProfile?.author)
         await imageSendAPI.patch(
-          `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`,
+          `/api/v1/account/user-profile/${currentUser?.pk}/`,
           formData
         )
         setImageState("")

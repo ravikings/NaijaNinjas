@@ -69,8 +69,32 @@ function BrowseCandidates() {
     }
   }
   useEffect(() => {
-    allData(title)
+    allData()
   }, [])
+
+  const handleFilter = async (params) => {
+    window.scrollTo(0, 0)
+    setLoading(true)
+
+    try {
+      const res = await createRequest().get(`/api/v1/account/search/?${params}`)
+      //   data.next ? setNext(data.next) : setNext(null)
+      //   data.previous ? setPrevious(data.previous) : setPrevious(null)
+      //   const pgs = Math.ceil(data.count / 10)
+      //   data.count && setCount(pgs)
+      //   setKeyLoad(false)
+      //   console.log(data, "data")
+      setTotalCount(res?.data?.count)
+      setData(res.data.results)
+      setLoading(false)
+    } catch (e) {
+      if (e.response?.status === 400) {
+        console.log(e?.response?.data?.non_field_errors[0])
+      } else {
+        console.log("Unknown Error")
+      }
+    }
+  }
 
   const handleBookmark = async (id) => {
     try {
@@ -100,7 +124,7 @@ function BrowseCandidates() {
           <div className="section-full browse-job p-b50">
             <div className="container">
               <div className="row">
-                <CandidatesSidebar />
+                <CandidatesSidebar handleFilter={handleFilter} />
                 {!loading ? (
                   <div className="col-xl-9 col-lg-8 col-md-7">
                     <div className="job-bx-title clearfix">

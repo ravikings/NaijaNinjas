@@ -12,7 +12,7 @@ import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined"
 import PowerSettingsNewOutlinedIcon from "@material-ui/icons/PowerSettingsNewOutlined"
 import FolderSpecialOutlinedIcon from "@material-ui/icons//FolderSpecialOutlined"
 import { useStyles } from "./LayoutStyles"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { logout } from "../Pages/Auth/Redux/AuthActions"
 import ReactButton from "react-bootstrap/Button"
 import { Dropdown } from "react-bootstrap"
@@ -31,6 +31,7 @@ function AuthState({ userDetails }) {
   const [userProfile, setUserProfile] = useState(null)
   const [onlineState, setOnlineState] = useState(true)
   const [serverState, setServerState] = useState(false)
+  const { currentUser } = useSelector((state) => state.authReducer)
 
   // Notification end
   const handleClick = (event) => {
@@ -52,10 +53,10 @@ function AuthState({ userDetails }) {
   const getOnlineState = async () => {
     try {
       const { data } = await createRequest().get(
-        `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`
+        `/api/v1/account/user-profile/${currentUser?.pk}/`
       )
       const status = data.user_set_status === false ? true : false
-      console.log(data)
+      console.log("DATA FROM AUTH STATE", data)
       setServerState(data.status)
       setOnlineState(status)
       setUserProfile(data)
@@ -65,8 +66,14 @@ function AuthState({ userDetails }) {
   }
 
   useEffect(() => {
-    getOnlineState()
-  }, [])
+    if (currentUser) {
+      getOnlineState()
+    }
+    return () => {
+      setOnlineState(true)
+      setServerState(false)
+    }
+  }, [currentUser])
 
   const handleOnlineStatus = async (status) => {
     setOnlineState(status)

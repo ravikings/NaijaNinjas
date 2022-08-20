@@ -3,20 +3,77 @@ import { Link } from "react-router-dom"
 import { Accordion, Button, Card, Form } from "react-bootstrap"
 import Slider from "react-rangeslider"
 
-function TaskSidebar() {
-  const [value, setValue] = useState(0)
-  const [sector, setSector] = useState("")
+function TaskSidebar({ handleFilter }) {
+  const [filter, setFilter] = useState({})
+
+  const handleChange = (e, noName) => {
+    if (noName) {
+      setFilter({ ...filter, [noName]: e })
+    } else {
+      setFilter({ ...filter, [e.target.name]: e.target.value })
+    }
+  }
+
+  const handleSubmit = async () => {
+    // Converet object key value pairs to query string
+    const queryString = Object.keys(filter)
+      .map((key) => key + "=" + filter[key])
+      .join("&")
+    if (queryString) {
+      handleFilter(queryString)
+    } else {
+      console.log("Nhe chla")
+    }
+    console.log(queryString)
+  }
+
   return (
     <div className="col-xl-3 col-lg-4 col-md-5 m-b30">
       <aside id="accordion1" className="sticky-top sidebar-filter bg-white">
-        <Accordion defaultActiveKey="0">
+        <Accordion>
           <h6 className="title">
             <i className="fa fa-sliders m-r5"></i> Refined By{" "}
-            <Link to={"#"} className="font-12 float-right">
+            <Link
+              to={"#"}
+              className="font-12 float-right"
+              onClick={() => {
+                setFilter({})
+              }}
+            >
               Reset All
             </Link>
           </h6>
 
+          <Accordion.Toggle as={Card} eventKey="0">
+            <div className="acod-head">
+              <h6 className="acod-title">
+                <Link
+                  data-toggle="collapse"
+                  href="#location"
+                  className="collapsed"
+                >
+                  Location
+                </Link>
+              </h6>
+            </div>
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey="0">
+            <div id="location" className="acod-body collapse show">
+              <div className="acod-content">
+                <div>
+                  <input
+                    type={"text"}
+                    value={filter.location || ""}
+                    onChange={handleChange}
+                    name={"location"}
+                    className="form-control"
+                    id="location"
+                    placeholder="Location"
+                  />
+                </div>
+              </div>
+            </div>
+          </Accordion.Collapse>
           <Accordion.Toggle as={Card} eventKey="1">
             <div className="acod-head">
               <h6 className="acod-title">
@@ -33,71 +90,16 @@ function TaskSidebar() {
           <Accordion.Collapse eventKey="1">
             <div id="experience" className="acod-body collapse show">
               <div className="acod-content">
-                <div className="custom-control custom-radio">
+                <div>
                   <input
-                    className="custom-control-input"
-                    id="one-years"
-                    type="radio"
-                    name="radio-years"
+                    type={"number"}
+                    value={filter.experience || ""}
+                    onChange={handleChange}
+                    name={"experience"}
+                    className="form-control"
+                    id="exp"
+                    placeholder="Experience in Years"
                   />
-                  <label className="custom-control-label" htmlFor="one-years">
-                    0-1 Years
-                  </label>
-                </div>
-                <div className="custom-control custom-radio">
-                  <input
-                    className="custom-control-input"
-                    id="two-years"
-                    type="radio"
-                    name="radio-years"
-                  />
-                  <label className="custom-control-label" htmlFor="two-years">
-                    1-2 Years
-                  </label>
-                </div>
-                <div className="custom-control custom-radio">
-                  <input
-                    className="custom-control-input"
-                    id="three-years"
-                    type="radio"
-                    name="radio-years"
-                  />
-                  <label className="custom-control-label" htmlFor="three-years">
-                    2-3 Years
-                  </label>
-                </div>
-                <div className="custom-control custom-radio">
-                  <input
-                    className="custom-control-input"
-                    id="four-years"
-                    type="radio"
-                    name="radio-years"
-                  />
-                  <label className="custom-control-label" htmlFor="four-years">
-                    3-4 Years
-                  </label>
-                </div>
-                <div className="custom-control custom-radio">
-                  <input
-                    className="custom-control-input"
-                    id="five-years"
-                    type="radio"
-                    name="radio-years"
-                  />
-                  <label className="custom-control-label" htmlFor="five-years">
-                    4-5 Years
-                  </label>
-                </div>
-                <div className="custom-control custom-radio">
-                  <input
-                    className="custom-control-input"
-                    id="five-years"
-                    type="radio"
-                    name="radio-years"
-                  />
-                  <label className="custom-control-label" htmlFor="five-years">
-                    More than 5 Years
-                  </label>
                 </div>
               </div>
             </div>
@@ -117,15 +119,59 @@ function TaskSidebar() {
             </div>
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="2">
-            <div className="px-3">
-              <Slider
-                min={0}
-                max={100}
-                value={value}
-                onChange={(value) => setValue(value)}
-              />
-              <h4 className="value">{value && "$" + value}</h4>
-            </div>
+            <>
+              <div className="px-3">
+                <label className="font-14">Minimum Salary</label>
+                <Slider
+                  min={0}
+                  max={1000}
+                  value={filter.minimum_salary}
+                  onChange={(e) => handleChange(e, "minimum_salary")}
+                />
+                <h4 className="value">
+                  <input
+                    type={"number"}
+                    value={
+                      filter.minimum_salary > 0 ? filter.minimum_salary : 0
+                    }
+                    onChange={(e) =>
+                      handleChange(e.target.value, "minimum_salary")
+                    }
+                    name={"minimum_salary"}
+                    className="form-control"
+                    id="minimum_salary"
+                    placeholder="Minimum Salary"
+                  />
+
+                  {/* {filter.minimum_salary && "$" + filter.minimum_salary} */}
+                </h4>
+              </div>
+              <div className="px-3">
+                <label className="font-14">Maximum Salary</label>
+                <Slider
+                  min={0}
+                  max={1000}
+                  value={filter.maximum_salary}
+                  onChange={(e) => handleChange(e, "maximum_salary")}
+                />
+                <h4 className="value">
+                  <input
+                    type={"number"}
+                    value={
+                      filter.maximum_salary > 0 ? filter.maximum_salary : 0
+                    }
+                    onChange={(e) =>
+                      handleChange(e.target.value, "maximum_salary")
+                    }
+                    name={"maximum_salary"}
+                    className="form-control"
+                    id="maximum_salary"
+                    placeholder="Maximum Salary"
+                  />
+                  {/* {filter.maximum_salary && "$" + filter.maximum_salary} */}
+                </h4>
+              </div>
+            </>
           </Accordion.Collapse>
           <Accordion.Toggle as={Card} eventKey="3">
             <div className="acod-head">
@@ -147,7 +193,9 @@ function TaskSidebar() {
                   as="select"
                   custom
                   className="select-btn"
-                  onChange={(e) => setSector(e.target.value)}
+                  value={filter.sector || ""}
+                  name={"sector"}
+                  onChange={handleChange}
                 >
                   <option value={""}>Select Sector</option>
                   <option>Home Improvement</option>
@@ -167,7 +215,11 @@ function TaskSidebar() {
             </div>
           </Accordion.Collapse>
         </Accordion>
-        <button type="submit" className="site-button btn-block">
+        <button
+          type="submit"
+          className="site-button btn-block"
+          onClick={handleSubmit}
+        >
           Search
         </button>
       </aside>
