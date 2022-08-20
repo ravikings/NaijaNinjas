@@ -76,7 +76,19 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   const handleClickSendMessage = () => {
     sendJsonMessage({ "attachment": null, "message": textbox, "action": "message" });
   };
+  const hitEnter = (e) => {
+    if (textbox.trim() !== '') {
+      if (e.keyCode === 13 && !e.shiftKey) {
+        handleClickSendMessage();
+        document.getElementById('messageBox').value='';
+        e.preventDefault();
+      }
+    } else {
+      if (e.keyCode === 13)
+        e.preventDefault();
+    }
 
+  }
   useEffect(() => {
     if (lastMessage !== null) {
       setMessageHistory((prev) => prev.concat(lastMessage));
@@ -189,6 +201,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
           variant={"outlined"}
           placeholder={"Your Message"}
           onKeyUp={(e) => { setTextbox(e.target.value); }}
+          onKeyDown={(e)=>hitEnter(e)}
           fullWidth
         />
         <Button className={classes.sendButton}
