@@ -11,8 +11,10 @@ import axios from "axios"
 import url from "../../../utils/baseUrl"
 import swal from "sweetalert"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import { useSelector } from "react-redux"
 function LinkedAccount() {
   let token = `Bearer ` + localStorage.getItem("access_token")
+  const { currentUser } = useSelector((state) => state.authReducer)
   const [company, setCompany] = useState(false)
   const [totalCount, setTotalCount] = useState(null)
   const [activePage, SetActivePage] = useState(1)
@@ -26,7 +28,7 @@ function LinkedAccount() {
   const allData = (page = 1) => {
     setLoading(true)
     createRequest()
-      .get(`api/v1/task/task-owner?user_id=${userId}&page=${page}`)
+      .get(`api/v1/task/task-owner?user_id=30&page=${page}`)
       .then((res) => {
         setTotalCount(res?.data?.count)
         setData(res.data.results)
@@ -64,7 +66,9 @@ function LinkedAccount() {
     )
   }
   useEffect(() => {
-    allData()
+    if (currentUser) {
+      allData()
+    }
   }, [])
   const Paginate = (page) => {
     SetActivePage(page)
@@ -105,7 +109,7 @@ function LinkedAccount() {
                           </select>
                         </div>
                       </div>
-                      {!data.length ? (
+                      {false ? (
                         <p>No Accounts added yet.</p>
                       ) : (
                         <table className="table-job-bx cv-manager company-manage-job w-100">
@@ -132,7 +136,7 @@ function LinkedAccount() {
                             </tr>
                           </thead>
                           <tbody>
-                            {data?.map((e) => (
+                            {[0, 1, 2].map((e) => (
                               <tr>
                                 <td className="feature">
                                   <div className="custom-control custom-checkbox">
