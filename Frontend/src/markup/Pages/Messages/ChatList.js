@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Grid,
@@ -29,8 +29,9 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-function ChatList(props) {
+function ChatList({ props, setUserDetails, userDetails, rowData }) {
   const classes = useStyles();
+  
   return (
     <div>
       <div style={{ padding: "22px 30px", borderBottom: "1px solid #ccc" }}>
@@ -56,14 +57,18 @@ function ChatList(props) {
           height: "calc(100vh - 220px)",
         }}
       >
-        <ChatListItem />
-        <ChatListItem selected={true} />
-        <ChatListItem />
-        <ChatListItem />
-        <ChatListItem />
-        <ChatListItem />
-        <ChatListItem />
-        <ChatListItem />
+        {
+          rowData && rowData.length > 0 ?
+            rowData.map((user, key) => (
+              <ChatListItem key={key} user={user} setUserDetails={setUserDetails} selected={userDetails && userDetails.chat_room_id === user.chat_room_id} />
+            ))
+            :
+            <div className="row">
+              <div className="col-12 mt-4">
+                <h6 className="text-muted text-center">No Chat Found</h6>
+              </div>
+            </div>
+        }
       </div>
     </div>
   );
