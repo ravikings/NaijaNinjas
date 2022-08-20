@@ -1,6 +1,7 @@
 from celery import shared_task
 from .models import TransactionLog, ClientPaymentInfo
 from django.db import transaction
+from task.models import TaskBidder
 
 
 @transaction.atomic
@@ -48,10 +49,22 @@ def save_card_info(account, transaction_data):
 #         raise Exception()
 
 @shared_task(name="log-transaction-task", bind=True, autoretry_for=(Exception,), retry_backoff=15, retry_jitter=True, retry_kwargs={'max_retries': 0})
-def log_transaction_task(self, account, transaction_data):
+def log_transaction_task(self, reference, transaction_data):
 
     try:
         print("transaction log ")
+
+        user = TaskBidder.objects.filter(transaction_id=reference).first()
+        
+        if user: 
+            
+            account = user.payment_author.id
+            user.webhook_transaction_verified = True
+            user.save()
+            print("found user, saved webhook info")
+        else:
+            print("user not found saving default user id")
+            account = 1
         log_transaction(account, transaction_data)
         print("transaction log saved")
         print("saving payment info log")

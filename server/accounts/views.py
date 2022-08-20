@@ -285,6 +285,9 @@ class SearchProfile(viewsets.ModelViewSet):
         "description",
         "state",
         "city",
+        "sector",
+        "department",
+        "postcode",
         "local_goverment_zone",
     ]
     queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
@@ -300,6 +303,9 @@ class SearchProfile(viewsets.ModelViewSet):
         "title",
         "location",
         "salary",
+        "sector",
+        "department",
+        "postcode",
         "postcode",
         "description",
         "state",

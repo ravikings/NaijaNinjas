@@ -28,7 +28,7 @@ SECRET_KEY = "h@e3z6yev#04x)$kdhp5!+y=q0t2-&)q-#wvbt-h@%dwem=8s#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"]
+ALLOWED_HOSTS = ["*", "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev", "https://fb54-98-44-232-67.ngrok.io"]
 
 
 # Application definition
@@ -310,11 +310,21 @@ CACHES = {
     }
 }
 
+AWS_ACCESS_KEY_ID = 'AKIA525LDBK2M3KUXK3R'
+AWS_SECRET_ACCESS_KEY = 'mzbEVDLdWPF/Ez4eumkkBh7STtrTdVx30D+arXhM'
+AWS_DEFAULT_REGION= 'us-east-1'
+AWS_LOCATION = 'static'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+
 YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
 
+DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
 AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'staticfiles'),
+]
 # These next two lines will serve the static files directly 
 # from the s3 bucket
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % YOUR_S3_BUCKET
@@ -342,7 +352,7 @@ CELERY_IMPORTS = [
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_JSON = "json"
-CELERY_TIMEZONE = "GMT+1"
+CELERY_TIMEZONE = "Africa/Lagos"
 CELERY_ACKS_LATE=True
 
 #paystack info

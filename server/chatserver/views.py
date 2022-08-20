@@ -57,17 +57,20 @@ def conversations(request, pk):
 
 
 @api_view(["GET", "POST"])
-def delete_conversation(request, convo_id):
+def delete_conversation(request, user_id, convo_id):
     try:
         conversation = Conversation.objects.get(id=convo_id)
-        if conversation.initiator == request.user:
+        if conversation.initiator.id == user_id:
             conversation.initiator = None
             conversation.save()
-        elif conversation.receiver == request.user:
+            return Response({"message": "conversation delete"})
+        elif conversation.receiver.id == user_id:
             conversation.receiver = None
             conversation.save()
+            return Response({"message": "conversation delete"})
 
-        return Response({"message": "conversation delete"})
+        return Response({"error": "sorry, action not completed"})
+        
 
     except Exception:
 

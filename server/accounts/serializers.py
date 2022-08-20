@@ -67,8 +67,12 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountUser
-        fields = ["id"]
+        fields = ["id", "username", "last_seen"]
 
+class ContractUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountUser
+        fields = ["email"]
 
 class ProfileSerializer(serializers.ModelSerializer):
     """
@@ -101,6 +105,7 @@ class BiddersProfileSerializer(serializers.ModelSerializer):
     Profile serializers use profile for picture uploads and retrieve
     """
 
+    photo = serializers.ImageField()
     class Meta:
         model = RunnerProfile
         fields = ("first_name","last_name", "photo", "status")
