@@ -103,6 +103,7 @@ class ChatConsumer(WebsocketConsumer):
                 text=message,
                 conversation_id=conversation,
             )
+            conversation.on_message_alert()
             print("message created")
             # Send message to room group
             chat_type = {"type": "chat_message"}

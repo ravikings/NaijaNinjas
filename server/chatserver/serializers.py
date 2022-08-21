@@ -20,7 +20,7 @@ class ConversationListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conversation
-        fields = ["chat_room_id", "initiator", "receiver","receiver_profile", "last_message"]
+        fields = ["chat_room_id", "initiator", "receiver","receiver_profile", "last_message",]
 
     def get_last_message(self, instance):
         message = instance.message_set.first()
