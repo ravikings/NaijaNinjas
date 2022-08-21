@@ -1,23 +1,23 @@
-import React, { useEffect } from "react";
-import Header from "../../Layout/Header";
-import Footer from "../../Layout/Footer";
-import Avatar from "@material-ui/core/Avatar";
-import { Divider, Grid, Hidden } from "@material-ui/core";
-import { useStyles } from "./MakeOfferStyles";
-import Ratings from "./components/Ratings";
-import Feedback from "./components/Feedback";
-import HourlyRate from "./components/HourlyRate";
-import MakeOfferForm from "./components/MakeOfferForm";
-import SocialMedia from "./components/SocialMedia";
-import Skills from "./components/Skills";
-import Attachments from "./components/Attachments";
-import TabsGroup from "./components/TabsGroup";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import createRequest from "../../../utils/axios";
-import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import React, { useEffect } from "react"
+import Header from "../../Layout/Header"
+import Footer from "../../Layout/Footer"
+import Avatar from "@material-ui/core/Avatar"
+import { Divider, Grid, Hidden } from "@material-ui/core"
+import { useStyles } from "./MakeOfferStyles"
+import Ratings from "./components/Ratings"
+import Feedback from "./components/Feedback"
+import HourlyRate from "./components/HourlyRate"
+import MakeOfferForm from "./components/MakeOfferForm"
+import SocialMedia from "./components/SocialMedia"
+import Skills from "./components/Skills"
+import Attachments from "./components/Attachments"
+import TabsGroup from "./components/TabsGroup"
+import { useHistory, useLocation, useParams } from "react-router-dom"
+import createRequest from "../../../utils/axios"
+import ClipLoader from "react-spinners/ClipLoader"
+import { toast } from "react-toastify"
 
-var bnr = require("../../../images/banner/bnr5.png");
+var bnr = require("../../../images/banner/bnr5.png")
 
 const blogGrid = [
   {
@@ -32,43 +32,43 @@ const blogGrid = [
   {
     image: require("../../../images/blog/grid/pic4.jpg"),
   },
-];
+]
 
 function MakeOfferPage() {
-  const classes = useStyles();
-  const { id } = useParams();
-  const history = useHistory();
-  const [user, setUser] = React.useState(null);
-  const [resume, setResume] = React.useState(null);
+  const classes = useStyles()
+  const { id } = useParams()
+  const history = useHistory()
+  const [user, setUser] = React.useState(null)
+  const [resume, setResume] = React.useState(null)
 
   const getResume = async () => {
     try {
       const { data } = await createRequest().get(
         `/api/v1/account/user-resume/${id}/`
-      );
-      setResume(data);
+      )
+      setResume(data)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   useEffect(() => {
-    handleRequest();
-    getResume();
-  }, [id]);
+    handleRequest()
+    getResume()
+  }, [id])
 
   const handleRequest = async () => {
     try {
       const res = await createRequest().get(
         `/api/v1/account/user-search-detials/${id}/`
-      );
-      setUser(res.data);
+      )
+      setUser(res.data)
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Something went wrong")
 
-      history.push("/");
+      history.push("/")
     }
-  };
+  }
 
   return (
     <>
@@ -79,7 +79,7 @@ function MakeOfferPage() {
             className="dez-bnr-inr d-flex align-items-center"
             style={{ backgroundImage: "url(" + bnr + ")" }}
           >
-            <div className="">
+            <div className="ml-5">
               <Grid container spacing={2} className={classes.headerGrid}>
                 <Grid item>
                   <Avatar
@@ -127,18 +127,21 @@ function MakeOfferPage() {
               <Grid item xs={12} sm={12} md={7} lg={8}>
                 <TabsGroup data={user.description} resume={resume} />
                 <Feedback />
+                <Feedback />
+                <Feedback />
+                <Feedback />
+                <Feedback />
+                <Feedback />
+                <Feedback />
+                <Feedback />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
                 <div className="sticky-top browse-candidates">
                   <HourlyRate />
                   <Divider style={{ margin: "30px 0px" }} />
-                  <MakeOfferForm />
-                  <Divider style={{ margin: "30px 0px" }} />
-                  <SocialMedia />
-                  <Divider style={{ margin: "30px 0px" }} />
-                  <Skills />
-                  <Divider style={{ margin: "30px 0px" }} />
-                  <Attachments />
+                  <aside className="sticky-top">
+                    <MakeOfferForm />
+                  </aside>
                 </div>
               </Grid>
             </Grid>
@@ -151,6 +154,6 @@ function MakeOfferPage() {
       )}
       <Footer />
     </>
-  );
+  )
 }
-export default MakeOfferPage;
+export default MakeOfferPage

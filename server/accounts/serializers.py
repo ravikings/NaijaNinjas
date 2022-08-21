@@ -14,6 +14,8 @@ from django.db import IntegrityError
 from django.utils.safestring import mark_safe
 from django.db.models import Avg, F, Count
 from rest_framework import status
+import datetime
+from django.utils import timezone
 from rest_framework.response import Response
 from accounts.models import (
     AccountUser,
@@ -65,9 +67,21 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    
+    last_seen_time = serializers.SerializerMethodField()
     class Meta:
         model = AccountUser
-        fields = ["id", "username", "last_seen"]
+        fields = ["id", "username", "last_seen_time"]
+
+    def get_last_seen_time(self, instance):
+
+        dateTimeObj = instance.last_seen
+        #timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
+        current_time = timezone.now()
+        time_difference = current_time - dateTimeObj
+        print("currentr time")
+        print(time_difference)
+        return 2 #datetime.timedelta(seconds = now_aware.)
 
 class ContractUserSerializer(serializers.ModelSerializer):
     class Meta:

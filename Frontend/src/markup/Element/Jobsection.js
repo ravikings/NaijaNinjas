@@ -31,6 +31,9 @@ function Jobsection() {
   }
   useEffect(() => {
     allData()
+    return () => {
+      setTasks(null)
+    }
   }, [])
 
   const paginateTasks = async (e, req) => {

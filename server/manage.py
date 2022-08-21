@@ -2,17 +2,14 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import subprocess
 
-def run_terminal_celery():
-
-    proc = subprocess.Popen("celery -A server worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo", stdout=subprocess.PIPE)
-    output, err = proc.communicate()
-    print(output)
 
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
+    os.environ.setdefault("AWS_ACCESS_KEY_ID", "AKIA525LDBK2M3KUXK3R")
+    os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "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")
+    os.environ.setdefault("AWS_DEFAULT_REGION", "us-east-1")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -23,7 +20,6 @@ def main():
         ) from exc
 
     execute_from_command_line(sys.argv)
-    run_terminal_celery()
 
 
 if __name__ == "__main__":

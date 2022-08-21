@@ -25,6 +25,14 @@ class AccountUser(AbstractUser):
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
+    def set_last_seen(self):
+    
+        try:
+            self.save()
+            print("last seen updated")
+        
+        except Exception:
+            pass
 
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)

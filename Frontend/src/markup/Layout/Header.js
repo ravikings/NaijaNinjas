@@ -1,52 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import logo2 from "./../../images/logo.png";
-import AuthState from "./AuthState";
-import LoginDialog from "./LoginDialog";
-import { useDispatch, useSelector } from "react-redux";
-import Modal from "react-bootstrap/Modal";
-import { logout } from "../Pages/Auth/Redux/AuthActions";
-import { Hidden } from "@material-ui/core";
+import React, { useEffect, useState } from "react"
+import { Link, useHistory } from "react-router-dom"
+import logo2 from "./../../images/logoNew.png"
+import AuthState from "./AuthState"
+import LoginDialog from "./LoginDialog"
+import { useDispatch, useSelector } from "react-redux"
+import Modal from "react-bootstrap/Modal"
+import { logout } from "../Pages/Auth/Redux/AuthActions"
+import { Hidden } from "@material-ui/core"
 function Header() {
-  const userDetails = useSelector((state) => state.authReducer.currentUser);
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
-  const [lgShow, setLgShow] = useState(false);
-  const [msg, setMsg] = useState(false);
-  const dispatch = useDispatch();
-  const history = useHistory();
+  const userDetails = useSelector((state) => state.authReducer.currentUser)
+  const [showLoginDialog, setShowLoginDialog] = useState(false)
+  const [lgShow, setLgShow] = useState(false)
+  const [msg, setMsg] = useState(false)
+  const dispatch = useDispatch()
+  const history = useHistory()
   const handleClose = () => {
-    setShowLoginDialog(false);
-  };
+    setShowLoginDialog(false)
+  }
   const handleShow = () => {
-    setShowLoginDialog(true);
-  };
+    setShowLoginDialog(true)
+  }
 
   const signOut = () => {
-    dispatch(logout(handleClose));
-    history.push("/");
-  };
+    dispatch(logout(handleClose))
+    history.push("/")
+  }
 
   useEffect(() => {
     // sidebar open/close
 
-    var Navicon = document.querySelector(".navicon");
-    var sidebarmenu = document.querySelector(".myNavbar ");
+    var Navicon = document.querySelector(".navicon")
+    var sidebarmenu = document.querySelector(".myNavbar ")
 
     function toggleFunc() {
-      sidebarmenu.classList.toggle("show");
+      sidebarmenu.classList.toggle("show")
       //   Navicon.classList.toggle('open');
     }
 
-    Navicon.addEventListener("click", toggleFunc);
+    Navicon.addEventListener("click", toggleFunc)
 
     // Sidenav li open close
     var navUl = [].slice.call(
       document.querySelectorAll(".navbar-nav > li > a, .sub-menu > li > a")
-    );
+    )
     for (var y = 0; y < navUl.length; y++) {
       navUl[y].addEventListener("click", function () {
-        checkLi(this);
-      });
+        checkLi(this)
+      })
     }
 
     function checkLi(current) {
@@ -54,12 +54,12 @@ function Header() {
         .querySelectorAll("li")
         .forEach((el) =>
           current.parentElement !== el ? el.classList.remove("open") : ""
-        );
+        )
       setTimeout(() => {
-        current.parentElement.classList.toggle("open");
-      }, 100);
+        current.parentElement.classList.toggle("open")
+      }, 100)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -312,7 +312,7 @@ function Header() {
       </Modal>
       {/* message end */}
     </>
-  );
+  )
 }
 
-export default Header;
+export default Header

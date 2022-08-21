@@ -1,9 +1,9 @@
-import React from "react";
-import { Divider, Grid } from "@material-ui/core";
+import React from "react"
+import { Divider, Grid } from "@material-ui/core"
 
 function HourlyRate(props) {
   return (
-    <div style={{ marginTop: 30 }}>
+    <div className="sticky-top" style={{ marginTop: 30 }}>
       <Grid
         style={{ fontSize: 18, textAlign: "center" }}
         container
@@ -30,7 +30,7 @@ function HourlyRate(props) {
         </Grid>
       </Grid>
     </div>
-  );
+  )
 }
 
-export default HourlyRate;
+export default HourlyRate

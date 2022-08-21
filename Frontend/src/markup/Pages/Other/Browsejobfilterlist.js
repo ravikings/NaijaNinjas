@@ -12,6 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader"
 import logo from "../../../images/logo/icon1.png"
 import { Badge } from "react-bootstrap"
 import { toast } from "react-toastify"
+import TaskSidebar from "../../Element/TaskSidebar"
 var bnr = require("../../../images/banner/bnr1.jpg")
 
 function Browsejobfilterlist() {
@@ -23,6 +24,25 @@ function Browsejobfilterlist() {
     setLoading(true)
     await createRequest()
       .get(`api/v1/task/task/?page=${page}`)
+      .then((res) => {
+        setTotalCount(res?.data?.count)
+        setData(res.data.results)
+
+        setLoading(false)
+      })
+      .catch((e) => {
+        if (e.response?.status === 400) {
+          console.log(e?.response?.data?.non_field_errors[0])
+        } else {
+          console.log("Unknown Error")
+        }
+      })
+  }
+  const handleFilter = async (query) => {
+    window.scrollTo(0, 0)
+    setLoading(true)
+    await createRequest()
+      .get(`/api/v1/task/search-task/?${query}`)
       .then((res) => {
         setTotalCount(res?.data?.count)
         setData(res.data.results)
@@ -69,7 +89,7 @@ function Browsejobfilterlist() {
           <div className="section-full browse-job p-b50">
             <div className="container">
               <div className="row">
-                <Accordsidebar />
+                <TaskSidebar handleFilter={handleFilter} />
                 {!loading ? (
                   <div className="col-xl-9 col-lg-8 col-md-7">
                     <div className="job-bx-title clearfix">

@@ -42,7 +42,10 @@ function Changepasswordpage() {
           <div className="section-full bg-white browse-job p-t50 p-b20">
             <div className="container">
               <div className="row">
-                <ProfileSidebar active={"Change Password"} />
+                <ProfileSidebar
+                  showManagePropSetting={true}
+                  active={"Change Password"}
+                />
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx job-profile">
                     <div className="job-bx-title clearfix">
@@ -61,23 +64,41 @@ function Changepasswordpage() {
                         <div className="col-lg-12">
                           <div className="form-group">
                             <label>Old Password</label>
-                            <input name='old_password' value={formik.values.old_password} onChange={formik.handleChange} type="password" className="form-control" />
+                            <input
+                              name="old_password"
+                              value={formik.values.old_password}
+                              onChange={formik.handleChange}
+                              type="password"
+                              className="form-control"
+                            />
                           </div>
                         </div>
                         <div className="col-lg-6">
                           <div className="form-group">
                             <label>New Password </label>
-                            <input name='password1' value={formik.values.password1} onChange={formik.handleChange} type="password" className="form-control" />
+                            <input
+                              name="password1"
+                              value={formik.values.password1}
+                              onChange={formik.handleChange}
+                              type="password"
+                              className="form-control"
+                            />
                           </div>
                         </div>
                         <div className="col-lg-6">
                           <div className="form-group">
                             <label>Confirm New Password</label>
-                            <input name='password2' value={formik.values.password2} onChange={formik.handleChange} type="password" className="form-control" />
+                            <input
+                              name="password2"
+                              value={formik.values.password2}
+                              onChange={formik.handleChange}
+                              type="password"
+                              className="form-control"
+                            />
                           </div>
                         </div>
                         <div className="col-lg-12 m-b10">
-                          <button className="site-button" type='submit'>
+                          <button className="site-button" type="submit">
                             Update Password
                           </button>
                         </div>
@@ -92,6 +113,6 @@ function Changepasswordpage() {
       </div>
       <Footer />
     </>
-  );
+  )
 }
 export default Changepasswordpage;

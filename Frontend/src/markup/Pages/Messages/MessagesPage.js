@@ -1,25 +1,30 @@
-import React, { useEffect, useCallback, useState, Fragment } from "react";
-import Header from "../../Layout/Header";
-import { useStyles } from "./messagesStyles";
-import { Grid, Hidden } from "@material-ui/core";
-import ChatList from "./ChatList";
-import MessageWindow from "./MessageWindow";
-import Header2 from "../../Layout/Header2";
-import Footer from "../../Layout/Footer";
-import agent from "../../../api/agent";
-import { useQuery } from "react-query";
-import createRequest from "../../../utils/axios";
-import useAuth from "../../../hooks/useAuth";
+import React, { useEffect, useCallback, useState, Fragment } from "react"
+import Header from "../../Layout/Header"
+import { useStyles } from "./messagesStyles"
+import { Grid, Hidden } from "@material-ui/core"
+import ChatList from "./ChatList"
+import MessageWindow from "./MessageWindow"
+import Header2 from "../../Layout/Header2"
+import Footer from "../../Layout/Footer"
+import agent from "../../../api/agent"
+import { useQuery } from "react-query"
+import createRequest from "../../../utils/axios"
+import useAuth from "../../../hooks/useAuth"
+import { useSelector } from "react-redux"
 
 function MessagesPage(props) {
-  const classes = useStyles();
-  const [userDetails, setUserDetails] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const auth = useAuth();
+  // Current User =>
+
+  const classes = useStyles()
+  const [userDetails, setUserDetails] = useState(null)
+  const [userData, setUserData] = useState(null)
+  const auth = useAuth()
+  const { currentUser } = useSelector((state) => state.authReducer)
+
   const getOnlineState = async () => {
     try {
       const { data } = await createRequest().get(
-        `/api/v1/account/user-profile/${localStorage.getItem("userID")}/`
+        `/api/v1/account/user-profile/${currentUser?.pk}/`
       )
       const status = data.user_set_status === false ? true : false
       setUserData(data)
@@ -32,17 +37,18 @@ function MessagesPage(props) {
     getOnlineState()
   }, [])
 
-  const { data: rowData, refetch } = useQuery(["chat-row-data", userData], () => agent.Chat.getAllConversation(userData.author),
+  const { data: rowData, refetch } = useQuery(
+    ["chat-row-data", userData],
+    () => agent.Chat.getAllConversation(userData.author),
     {
-      refetchOnWindowFocus: false,//turned off on window focus refetch option
+      refetchOnWindowFocus: false, //turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
-      onSuccess: (d) => {
-      }
+      onSuccess: (d) => {},
     }
-  );
+  )
 
   useEffect(() => {
-    refetch();
+    refetch()
   }, [userData])
   return (
     <div
@@ -58,22 +64,28 @@ function MessagesPage(props) {
           <Grid container style={{}}>
             <Hidden smDown>
               <Grid item style={{ borderRight: "1px solid #ccc" }}>
-                {
-                  rowData &&
-                  <ChatList userDetails={userDetails} setUserDetails={setUserDetails} rowData={rowData} />
-                }
-
+                {rowData && (
+                  <ChatList
+                    userDetails={userDetails}
+                    setUserDetails={setUserDetails}
+                    rowData={rowData}
+                  />
+                )}
               </Grid>
             </Hidden>
             <Grid item xs={true}>
-              <MessageWindow userDetails={userDetails} setUserDetails={setUserDetails} userRefetch={refetch} />
+              <MessageWindow
+                userDetails={userDetails}
+                setUserDetails={setUserDetails}
+                userRefetch={refetch}
+              />
             </Grid>
           </Grid>
         </div>
       </div>
       <Footer />
     </div>
-  );
+  )
 }
 
-export default MessagesPage;
+export default MessagesPage

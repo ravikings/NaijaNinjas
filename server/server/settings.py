@@ -244,10 +244,10 @@ SITE_ID = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = "/static/"
+# STATIC_URL = "/static/"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
@@ -321,6 +321,7 @@ YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
 DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
 AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
+AWS_S3_MAX_AGE_SECONDS_STATIC = "94608000"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'),
