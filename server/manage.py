@@ -7,6 +7,9 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
+    os.environ.setdefault("AWS_ACCESS_KEY_ID", "AKIA525LDBK2M3KUXK3R")
+    os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "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")
+    os.environ.setdefault("AWS_DEFAULT_REGION", "us-east-1")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

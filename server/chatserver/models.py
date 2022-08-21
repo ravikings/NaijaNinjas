@@ -31,9 +31,13 @@ class Conversation(models.Model):
 
     def on_message_alert(self):
 
-        self.new_message_alert = True
-        self.save()
-        print("conversation alert updated")
+        try:
+            self.new_message_alert = True
+            self.save()
+            print("conversation alert updated")
+
+        except Exception:
+            pass
 
 def upload_to(instance, filename):
     now = timezone.now()
