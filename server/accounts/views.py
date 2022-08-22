@@ -247,9 +247,14 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     uses to upload video to ui dashboard
     """
 
-    queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
-    permissions_classes = [IsAuthenticated and IsRunner]
+    #permissions_classes = [IsAuthenticated and IsRunner]
+
+    def get_queryset(self):
+
+        user_id = self.request.query_params.get('user_id')
+
+        return Projects.objects.filter(author=user_id)
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ReviewView(viewsets.ModelViewSet):
@@ -355,16 +360,15 @@ class ServiceView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    permissions_classes = [IsAuthenticated and IsOwner]
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
+    def get_queryset(self):
 
-    def retrieve(self, request, pk=None):
-        
-        data = Service.objects.get_or_create(author_id=pk)
-        serializer = ServiceSerializer(data[0])
-        return Response(serializer.data)
+        user_id = self.request.query_params.get('user_id')
+    
+        return Service.objects.filter(author=user_id)
+
 
 class TestView(viewsets.ModelViewSet):
 
@@ -560,9 +564,13 @@ class SetNewPasswordAPIView(APIView):
 
 
 class ProjectImageAPIView(viewsets.ModelViewSet):
-    queryset = ProjectPhoto.objects.all()
+
     serializer_class = ProjectPhotoSerializer
     parser_classes = (MultiPartParser, FormParser)
+
+    def get_queryset(self):
+
+        return ProjectPhoto.objects.filter(author=self.request.user.id)
 
     def create(self, request, pk=None):
         property_id = request.data['project']

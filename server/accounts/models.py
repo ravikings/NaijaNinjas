@@ -225,7 +225,7 @@ class Projects(models.Model):
 
 class ProjectPhoto(models.Model):
     
-    task = models.ForeignKey(
+    project = models.ForeignKey(
         Projects, on_delete=models.CASCADE, related_name="project_photos"
     )
 

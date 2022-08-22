@@ -233,15 +233,20 @@ class ServiceSerializer(serializers.ModelSerializer):
         model = Service
         fields = "__all__"
 
-
 class ProjectsSerializer(serializers.ModelSerializer):
     
+    photos = serializers.SerializerMethodField()
     class Meta:
         model = Projects
         fields = "__all__"
 
+    def get_photos(self, instance):
+
+        return ProjectPhoto.objects.filter(project=instance.id)
+
 class ProjectPhotoSerializer(serializers.ModelSerializer):
     
+    image = serializers.ImageField()
     class Meta:
         model = ProjectPhoto
         fields = "__all__"
