@@ -43,6 +43,14 @@ class TaskBidderSerializer(serializers.ModelSerializer):
         model = TaskBidder
         fields = "__all__"
 
+class ContractSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+    class Meta:
+        model = TaskBidder
+        fields = ("bidder_profile", "payment_author", "offer", "description", "delivery_date", "bid_approve_status")
+
 class TaskBidderprofileSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve

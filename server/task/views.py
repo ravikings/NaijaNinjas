@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
-from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
+from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer, ContractSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
 from django.db.models import Count
@@ -55,6 +55,16 @@ class TaskOwnerView(viewsets.ModelViewSet):
 
         user_id = self.request.query_params.get('user_id')
         return Task.objects.filter(author_id=user_id)
+
+
+class ContractView(viewsets.ModelViewSet):
+
+    serializer_class = ContractSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+        
+        return TaskBidder.objects.filter(payment_author=self.request.query_params.get('userId'))
 
 
 class TaskBidderView(viewsets.ModelViewSet):

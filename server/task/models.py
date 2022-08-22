@@ -61,7 +61,8 @@ class TaskBidder(models.Model):
     The junction table for task and bid models/tables. Contains every instance of a task for a placement
     """
 
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned", blank=True,
+        null=True)
     bidder_profile = models.ForeignKey(
         RunnerProfile, on_delete=models.CASCADE, related_name="task_profile_bidder", blank=True,
         null=True
