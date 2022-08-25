@@ -182,6 +182,12 @@ class Comment(models.Model):
     class Meta:
         ordering = ("created",)
 
+
+    def update_timeline_status(self):
+
+        obj = Timeline.objects.get(id=self.task_timeline.id)
+        obj.set_timeline_status(self.status)
+
 class TaskBookmarks(models.Model):
 
     author = models.ForeignKey(
