@@ -61,7 +61,8 @@ class TaskBidder(models.Model):
     The junction table for task and bid models/tables. Contains every instance of a task for a placement
     """
 
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="task_assigned", blank=True,
+        null=True)
     bidder_profile = models.ForeignKey(
         RunnerProfile, on_delete=models.CASCADE, related_name="task_profile_bidder", blank=True,
         null=True
@@ -71,6 +72,7 @@ class TaskBidder(models.Model):
     )
     payment_submitted = models.BooleanField(default=False, null=True)
     offer = models.IntegerField(null=True, blank=True)
+    offer_charge = models.IntegerField(null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=upload_to, blank=True)
     bid_approve_status = models.BooleanField(default=False)
@@ -107,7 +109,7 @@ class TaskBidder(models.Model):
         status, result = paystack.verify_payment(self.transaction_id, self.offer)
         if status:
             self.payment_submitted = True
-            if result["amount"] / 100 == self.offer:
+            if result["amount"] / 100 == self.offer_charge:
                 self.transaction_verified = True
             self.save()
             return True
@@ -124,6 +126,16 @@ class Photo(models.Model):
 
 class Timeline(models.Model):
 
+    STATUS = [
+        ("CONTRACT", "CONTRACT"),
+        ("STARTED", "STARTED"),
+        ("PROGRESS", "PROGRESS"),
+        ("DELIVERED", "DELIVERED"),
+        ("CLIENT_REVIEW", "CLIENT_REVIEW"),
+        ("PRO_REVIEW", "PRO_REVIEW"),
+        ("APPROVED", "APPROVED")
+    ]
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timeline_author"
     )
@@ -134,6 +146,12 @@ class Timeline(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=255,choices=STATUS, default="STARTED")
+
+    def set_timeline_status(self, type):
+
+        self.status = type
+        self.save()
 
 class Comment(models.Model):
 

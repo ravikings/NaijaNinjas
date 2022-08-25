@@ -24,12 +24,14 @@ from accounts.models import (
     Photo,
     Vidoe,
     Review,
+    ClientReview,
     Service,
     Projects,
     ProjectPhoto,
     PublicQuotes,
+    IpModel,
 )
-from .models import IpModel, RunnerProfile, Review
+#from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
 import arrow
 
@@ -199,6 +201,14 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = "__all__"
 
+class ClientReviewSerializer(serializers.ModelSerializer):
+    """
+    Review serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = ClientReview
+        fields = "__all__"
 
 class RunnerProfileSerializer(serializers.ModelSerializer):
     """
@@ -229,22 +239,32 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     
+    service_image = serializers.SerializerMethodField()
     class Meta:
         model = Service
         fields = "__all__"
 
+    def get_service_image(self, instance):
+
+        return instance.image.url
+
+class ProjectPhotoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProjectPhoto
+        fields = "__all__"
 
 class ProjectsSerializer(serializers.ModelSerializer):
     
+    photos = serializers.SerializerMethodField()
     class Meta:
         model = Projects
         fields = "__all__"
 
-class ProjectPhotoSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = ProjectPhoto
-        fields = "__all__"
+    def get_photos(self, instance):
+
+        query =  ProjectPhoto.objects.filter(project=instance.id)
+        return [objects.image.url for objects in query]
 
 # class UserOnlineSerializer(serializers.ModelSerializer):
     

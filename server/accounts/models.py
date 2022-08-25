@@ -26,7 +26,7 @@ class AccountUser(AbstractUser):
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
     def set_last_seen(self):
-    
+        
         try:
             self.save()
             print("last seen updated")
@@ -167,11 +167,41 @@ class Review(models.Model):
     on_budget = models.BooleanField(default=False)
     on_time = models.BooleanField(default=False)
     profile = models.ForeignKey(
-        RunnerProfile, on_delete=models.CASCADE, related_name="profile_review", default=False
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_profile_review", null=True, blank=True
     )
     class Meta:
         ordering = ("created",)
-        
+
+
+class ClientReview(models.Model):
+    client_review = models.OneToOneField(
+        Review,
+        on_delete=models.CASCADE, related_name="client_review_model")
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_review_author"
+    )
+    body = RichTextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    Platform_rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    Platform_suggestion = RichTextField()
+    budget = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    communcation_rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    client_account = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="client_profile", null=True, blank=True
+    )
+    class Meta:
+        ordering = ("created",)
+
 class Photo(models.Model):
 
     author = models.ForeignKey(
@@ -225,7 +255,7 @@ class Projects(models.Model):
 
 class ProjectPhoto(models.Model):
     
-    task = models.ForeignKey(
+    project = models.ForeignKey(
         Projects, on_delete=models.CASCADE, related_name="project_photos"
     )
 

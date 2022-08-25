@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
-from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer
+from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer, ContractSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
 from django.db.models import Count
@@ -55,6 +55,16 @@ class TaskOwnerView(viewsets.ModelViewSet):
 
         user_id = self.request.query_params.get('user_id')
         return Task.objects.filter(author_id=user_id)
+
+
+class ContractView(viewsets.ModelViewSet):
+
+    serializer_class = ContractSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+        
+        return TaskBidder.objects.filter(payment_author=self.request.query_params.get('userId'))
 
 
 class TaskBidderView(viewsets.ModelViewSet):
@@ -267,7 +277,7 @@ class SearchTask(viewsets.ModelViewSet):
     ordering_fields = "__all__"
 
 @api_view(["GET", "POST"])
-@permission_classes([AllowAny])
+#@permission_classes([AllowAny])
 def accept_bid(request):
 
     task_id = request.query_params.get('task_id')
@@ -281,16 +291,18 @@ def accept_bid(request):
         owner = bid.bidder_profile.author.id
         #TODO: Uncomment in the future
         if bid.payment_author.id == owner:
-            raise ("user not allowed perform action")
+           raise ("user not allowed perform action")
         response_data = {}
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
-
-        bid.approve_bids()
-        bid.set_task_status()
-        task_owner= AccountUser.objects.get(id=owner)
+        response_data["offer"] = bid.offer
+        task_owner, client_info = AccountUser.objects.filter(id__in=[owner, bid.payment_author.id])
         print("creating timeline")
         query_set = Timeline.objects.create(author=bid.payment_author,task_owner=task_owner,task=bid.task)
+        print("update task status")
+        bid.approve_bids()
+        bid.set_task_status()
+        response_data["payment_email"] = client_info.email
         print("timeline created")
         serializer = TimelineStartSerializer(query_set)
         response_data.update(serializer.data)
