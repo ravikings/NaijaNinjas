@@ -26,7 +26,7 @@ class AccountUser(AbstractUser):
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
     def set_last_seen(self):
-    
+        
         try:
             self.save()
             print("last seen updated")
@@ -167,7 +167,7 @@ class Review(models.Model):
     on_budget = models.BooleanField(default=False)
     on_time = models.BooleanField(default=False)
     profile = models.ForeignKey(
-        RunnerProfile, on_delete=models.CASCADE, related_name="profile_review", null=True, blank=True
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_profile_review", null=True, blank=True
     )
     class Meta:
         ordering = ("created",)

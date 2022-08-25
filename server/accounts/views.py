@@ -575,22 +575,33 @@ class SetNewPasswordAPIView(APIView):
 
 class ProjectImageAPIView(viewsets.ModelViewSet):
 
+    """
+        this requires form data field
+        title, description, author    
+        image for image files to upload 
+    
+    """
+
+    queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
     parser_classes = (MultiPartParser, FormParser)
 
-    def get_queryset(self):
-
-        return ProjectPhoto.objects.filter(author=self.request.user.id)
 
     def create(self, request, pk=None):
-        property_id = request.data['project']
+        
+        title = request.data['title']
+        description = request.data['description']
+        author_id = request.data['author']
         form_data = {}
-        form_data['forum']= property_id
+        user_info = AccountUser.objects.get(id=author_id)
+        project = Projects.objects.create(author=user_info, title=title, description=description)
+        form_data['project']= project.id
         success = True
         response = []
 
         for images in request.FILES.getlist('image'):
-            form_data['image']=images   
+            form_data['image']=images  
+            print 
             serializer = ProjectPhotoSerializer(data=form_data)
             if serializer.is_valid():
                 serializer.save()

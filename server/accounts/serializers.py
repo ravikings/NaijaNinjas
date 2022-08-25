@@ -239,8 +239,19 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     
+    service_image = serializers.SerializerMethodField()
     class Meta:
         model = Service
+        fields = "__all__"
+
+    def get_service_image(self, instance):
+
+        return instance.image.url
+
+class ProjectPhotoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProjectPhoto
         fields = "__all__"
 
 class ProjectsSerializer(serializers.ModelSerializer):
@@ -252,14 +263,8 @@ class ProjectsSerializer(serializers.ModelSerializer):
 
     def get_photos(self, instance):
 
-        return ProjectPhoto.objects.filter(project=instance.id)
-
-class ProjectPhotoSerializer(serializers.ModelSerializer):
-    
-    image = serializers.ImageField()
-    class Meta:
-        model = ProjectPhoto
-        fields = "__all__"
+        query =  ProjectPhoto.objects.filter(project=instance.id)
+        return [objects.image.url for objects in query]
 
 # class UserOnlineSerializer(serializers.ModelSerializer):
     

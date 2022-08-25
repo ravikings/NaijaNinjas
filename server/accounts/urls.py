@@ -40,7 +40,7 @@ router.register(r"user-resume", UserDashboardResume, basename="user-resume")
 router.register(r"image", PhotoUpload, basename="dashboard-images")
 router.register(r"video", VideoUpload, basename="dashboard-videos")
 router.register(r"search", SearchProfile, basename="search")
-router.register(r"user-review", ReviewView, basename="user-review")
+router.register(r"client-review", ReviewView, basename="user-review")
 router.register(r"test", TestView, basename="test-view")
 router.register(
     r"user-search-detials", UserSearchDetails, basename="user-search-detials"
@@ -51,9 +51,9 @@ router.register(
 router.register(
     r"projects", ProjectsViewSet, basename="runners-project"
 )
-router.register(r"project-images", ProjectImageAPIView, basename="project-images")
+router.register(r"project-create", ProjectImageAPIView, basename="project-images")
 router.register(r"dashboard-profile-bookmarks", DashboardProfileFavorite, basename="dashboard-profile-bookmarks")
-router.register(r"client-review", ClientReviewView, basename="client-review")
+router.register(r"freelancer-review", ClientReviewView, basename="client-review")
 
 
 urlpatterns = [
