@@ -89,6 +89,12 @@ class TimelineCommentSerializer(serializers.ModelSerializer):
         model = Comment
         exclude = ("updated", "created")
 
+    def create(self, validate_data):
+
+        comment = Comment.objects.create(**validate_data)
+        comment.update_timeline_status()
+        return comment
+
     def get_time_created(self, instance):
         dateTimeObj = instance.created
         timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
