@@ -7,6 +7,7 @@ from accounts.views import (
     DashboardProfile,
     account_status,
     ReviewView,
+    ClientReviewView,
     UserSearchDetails,
     DashboardResume,
     ActivateAccountView,
@@ -52,6 +53,7 @@ router.register(
 )
 router.register(r"project-images", ProjectImageAPIView, basename="project-images")
 router.register(r"dashboard-profile-bookmarks", DashboardProfileFavorite, basename="dashboard-profile-bookmarks")
+router.register(r"client-review", ClientReviewView, basename="client-review")
 
 
 urlpatterns = [

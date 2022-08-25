@@ -39,7 +39,8 @@ from .models import (
     Service,
     Projects,
     ProjectPhoto,
-    PublicQuotes
+    PublicQuotes,
+    ClientReview
 )
 from .serializers import (
     PhotosSerializer,
@@ -60,6 +61,7 @@ from .serializers import (
     PublicQuotesSerializer,
     BiddersProfileSerializer,
     PublicProfileSerializer,
+    ClientReviewSerializer
 )
 from notifications.signals import notify
 
@@ -270,7 +272,15 @@ class ReviewView(viewsets.ModelViewSet):
     
         return Review.objects.filter(profile=self.request.user.id)
 
+class ClientReviewView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
 
+    queryset = ClientReview.objects.all()
+    serializer_class = ClientReviewSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class SearchProfile(viewsets.ModelViewSet):

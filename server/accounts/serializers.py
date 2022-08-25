@@ -24,12 +24,14 @@ from accounts.models import (
     Photo,
     Vidoe,
     Review,
+    ClientReview,
     Service,
     Projects,
     ProjectPhoto,
     PublicQuotes,
+    IpModel,
 )
-from .models import IpModel, RunnerProfile, Review
+#from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
 import arrow
 
@@ -199,6 +201,14 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = "__all__"
 
+class ClientReviewSerializer(serializers.ModelSerializer):
+    """
+    Review serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = ClientReview
+        fields = "__all__"
 
 class RunnerProfileSerializer(serializers.ModelSerializer):
     """
