@@ -63,7 +63,7 @@ urlpatterns = [
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('notifications/', include('notifications_rest.urls')),
     path('celery-progress/', include('celery_progress.urls')),
-    path('Marketing/', include('Marketing.urls')),
+    path('marketing/', include('Marketing.urls')),
 
 ]
 
