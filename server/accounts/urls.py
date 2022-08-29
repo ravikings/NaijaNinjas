@@ -28,6 +28,7 @@ from accounts.views import (
     public_quotes,
     profile_mode_status,
     profile_favorite,
+    DashboardServiceView,
     #start_celery_work,
 )
 
@@ -54,6 +55,7 @@ router.register(
 router.register(r"project-create", ProjectImageAPIView, basename="project-images")
 router.register(r"dashboard-profile-bookmarks", DashboardProfileFavorite, basename="dashboard-profile-bookmarks")
 router.register(r"freelancer-review", ClientReviewView, basename="client-review")
+router.register(r"service-dashboard", DashboardServiceView, basename="service-dashboard")
 
 
 urlpatterns = [
