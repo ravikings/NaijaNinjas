@@ -1,0 +1,1124 @@
+{% extends 'marketing/base.html' %}
+
+{% block title %}Create User{% endblock %}
+{% block content %}
+<style>
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins" , sans-serif;
+}
+body{
+  min-height: 100vh;
+  width: 100%;
+  background: #EEECEB;
+}
+footer{
+  background: #140B5C;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+footer::before{
+  content: '';
+  left: 0;
+  top: 100px;
+  height: 1px;
+  width: 100%;
+  background: #AFAFB6;
+}
+footer .content{
+  max-width: 1250px;
+  margin: auto;
+  padding: 30px 40px 40px 40px;
+}
+footer .content .top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+.content .top .logo-details{
+  color: #fff;
+  font-size: 30px;
+}
+.content .top .media-icons{
+  display: flex;
+}
+.content .top .media-icons a{
+  height: 40px;
+  width: 40px;
+  margin: 0 8px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+  font-size: 17px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+}
+.top .media-icons a:nth-child(1){
+  background: #4267B2;
+}
+.top .media-icons a:nth-child(1):hover{
+  color: #4267B2;
+  background: #fff;
+}
+.top .media-icons a:nth-child(2){
+  background: #1DA1F2;
+}
+.top .media-icons a:nth-child(2):hover{
+  color: #1DA1F2;
+  background: #fff;
+}
+.top .media-icons a:nth-child(3){
+  background: #E1306C;
+}
+.top .media-icons a:nth-child(3):hover{
+  color: #E1306C;
+  background: #fff;
+}
+.top .media-icons a:nth-child(4){
+  background: #0077B5;
+}
+.top .media-icons a:nth-child(4):hover{
+  color: #0077B5;
+  background: #fff;
+}
+.top .media-icons a:nth-child(5){
+  background: #FF0000;
+}
+.top .media-icons a:nth-child(5):hover{
+  color: #FF0000;
+  background: #fff;
+}
+footer .content .link-boxes{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+footer .content .link-boxes .box{
+  width: calc(100% / 5 - 10px);
+}
+.content .link-boxes .box .link_name{
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  position: relative;
+}
+.link-boxes .box .link_name::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 35px;
+  background: #fff;
+}
+.content .link-boxes .box li{
+  margin: 6px 0;
+  list-style: none;
+}
+.content .link-boxes .box li a{
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: all 0.4s ease
+}
+.content .link-boxes .box li a:hover{
+  opacity: 1;
+  text-decoration: underline;
+}
+.content .link-boxes .input-box{
+  margin-right: 55px;
+}
+.link-boxes .input-box input{
+  height: 40px;
+  width: calc(100% + 55px);
+  outline: none;
+  border: 2px solid #AFAFB6;
+  background: #140B5C;
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 15px;
+  color: #fff;
+  margin-top: 5px;
+}
+.link-boxes .input-box input::placeholder{
+  color: #AFAFB6;
+  font-size: 16px;
+}
+.link-boxes .input-box input[type="button"]{
+  background: #fff;
+  color: #140B5C;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 4px 0;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.input-box input[type="button"]:hover{
+  opacity: 1;
+}
+footer .bottom-details{
+  width: 100%;
+  background: #0F0844;
+}
+footer .bottom-details .bottom_text{
+  max-width: 1250px;
+  margin: auto;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+}
+.bottom-details .bottom_text span,
+.bottom-details .bottom_text a{
+  font-size: 14px;
+  font-weight: 300;
+  color: #fff;
+  opacity: 0.8;
+  text-decoration: none;
+}
+.bottom-details .bottom_text a:hover{
+  opacity: 1;
+  text-decoration: underline;
+}
+.bottom-details .bottom_text a{
+  margin-right: 10px;
+}
+@media (max-width: 900px) {
+  footer .content .link-boxes{
+    flex-wrap: wrap;
+  }
+  footer .content .link-boxes .input-box{
+    width: 40%;
+    margin-top: 10px;
+  }
+}
+@media (max-width: 700px){
+  footer{
+    position: relative;
+  }
+  .content .top .logo-details{
+    font-size: 26px;
+  }
+  .content .top .media-icons a{
+    height: 35px;
+    width: 35px;
+    font-size: 14px;
+    line-height: 35px;
+  }
+  footer .content .link-boxes .box{
+    width: calc(100% / 3 - 10px);
+  }
+  footer .content .link-boxes .input-box{
+    width: 60%;
+  }
+  .bottom-details .bottom_text span,
+  .bottom-details .bottom_text a{
+    font-size: 12px;
+  }
+}
+@media (max-width: 520px){
+  footer::before{
+    top: 145px;
+  }
+  footer .content .top{
+    flex-direction: column;
+  }
+  .content .top .media-icons{
+    margin-top: 16px;
+  }
+  footer .content .link-boxes .box{
+    width: calc(100% / 2 - 10px);
+  }
+  footer .content .link-boxes .input-box{
+    width: 100%;
+  }
+}
+
+
+         ::placeholder {
+            color: black;
+            opacity: 1;
+        }
+
+
+        html {
+
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+
+            background-image: url("/static/image/pexels-felix-mittermeier-1039083.jpg");
+        }
+
+        .container {
+            background: #3c3c42;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: auto;
+            width: 80%;
+            box-shadow: -3px -2px 6px #6c6565, 7px 9px 25px #0b0b0b;
+            padding-bottom : 30px;
+            margin-bottom : 100px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+
+        .accept-box {
+            display: flex;
+            align-items: center;
+            margin: auto;
+            font-size: 15px;
+        }
+
+        a {
+            color: white;
+        }
+
+        a:hover {
+            color: grey
+        }
+
+        .form-btns {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+        }
+
+        .form-btns button {
+            margin: auto;
+            font-size: 20px;
+            padding: 8px;
+            width: 280px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: rgb(75, 61, 61);
+            background: #fbba50;
+        }
+
+        .form-btns button:disabled {
+            cursor: not-allowed;
+            background: #8f8b85 !important;
+            color: rgb(131, 120, 120) !important;
+        }
+
+        .form-btns button:hover {
+            background: #d88a0c;
+            color: antiquewhite;
+        }
+
+        .options {
+            padding-top: 15px;
+            margin: auto;
+            font-size: 13px;
+        }
+
+        p {
+            font-size: 12px;
+        }
+
+        .pwd-format {
+            position: relative;
+            color: rgb(65, 62, 62);
+            background: rgb(243, 234, 243);
+            font-size: 11px;
+            width: 150px;
+            padding: 5px;
+            border-radius: 5px;
+            top: 112px;
+            right: -81px;
+            z-index: 2;
+            display: none;
+        }
+
+</style>
+
+
+<div class="container" style="margin-top:60px;">
+
+<h2 style="margin-top: 35px;margin-bottom: 35px;color:white;">Create user form</h2>
+
+        {% if messages %}
+            {% for i in  messages %}
+              <div class="alert alert-success" role="alert">
+                  {{i}}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+       {% if var_error %}
+        <div class="alert alert-danger" role="alert">
+          {{var_error}}
+        </div>
+
+        {% endif %}
+
+<form method="POST" action="">{% csrf_token %}
+  <div class="form-row">
+
+    <div class="form-group col-md-6 col-lg-4">
+      <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="runner_status" required>
+        <option value="" selected>Choose...</option>
+        <option value="Employer">Employer</option>
+        <option value="Freelancer">Freelancer</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="First Name" name="first_name" required>
+    </div>
+
+
+
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Last Name" name="last_name" required>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="email" class="form-control" placeholder="Email" name="sign_email" required>
+    </div>
+
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="number" class="form-control" placeholder="Phone Number" name="sign_number" required min="11">
+    </div>
+    <!-- <div class="form-group col-md-6 col-lg-4">
+      <input type="password" class="form-control" placeholder="Password" name="sign_pass" required>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="password" class="form-control" placeholder="Password" name="sign_confirm_pass" required>
+    </div> -->
+  </div>
+
+
+<h3 style="margin-top: 35px;margin-bottom: 35px;color:white;">Basic Information</h3>
+    <div class="form-row">
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Title" name="title" required>
+    </div>
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Language" name="language" required>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="number" class="form-control" placeholder="Salary" name="salary" required>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-4">
+        <select class="custom-select" id="id_sector" name="sector" onchange="choose_select_func()" required>
+            <option value="" selected>Choose Sector...</option>
+            <option value="Home Improvement">Home Improvement</option>
+            <option value="Wellness">Wellness</option>
+            <option value="Pets">Pets</option>
+            <option value="Business">Business</option>
+            <option value="Events">Events</option>
+            <option value="Lessons">Lessons</option>
+            <option value="Crafts">Crafts</option>
+            <option value="Design And Web">Design And Web</option>
+            <option value="Legal">Legal</option>
+            <option value="Personal">Personal</option>
+            <option value="Photography">Photography</option>
+            <option value="Repair And Technical Support">Repair And Technical Support</option>
+          </select>
+    </div>
+
+
+    <div class="form-group col-md-6 col-lg-4">
+        <select class="custom-select" id="id_department" name="department" required>
+            <option value="" selected>Choose Department...</option>
+
+          </select>
+    </div>
+
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input class="form-control" placeholder="Description" name="Description" required>
+    </div>
+  </div>
+
+
+
+<h3 style="margin-top: 35px;margin-bottom: 35px;color:white;">Contact Information</h3>
+    <div class="form-row">
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="County" name="county" required>
+    </div>
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="State" name="State" required>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="number" class="form-control" placeholder="Postcode" name="Postcode" required>
+    </div>
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="City" name="City" required>
+    </div>
+
+
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Address" name="Address" required>
+    </div>
+    <div class="form-group col-md-6 col-lg-4">
+      <input type="text" class="form-control" placeholder="Local Government Zone" name="local_government_zone" required>
+    </div>
+
+  </div>
+
+
+
+
+            <div class="form-btns">
+                <button class="signup" type="submit">Create user</button>
+<!--                <div class="options">-->
+<!--                   Don't have an account? <a href="">Sign Up</a>-->
+<!--                </div>-->
+            </div>
+
+        </form>
+
+<!--        <a href=""><img src="/static/image/background-image.jpg" style="width: 132px;margin-top: 32px;"></a>-->
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+<script>
+    function choose_select_func(){
+        console.log(document.getElementById('id_sector').value);
+        var var_sector = document.getElementById('id_sector').value;
+
+        if (var_sector == 'Home Improvement'){
+            console.log('1');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Home Improvement)...</option>
+            <option value="Above Ground Pool Companies">Above Ground Pool Companies</option>
+            <option value="Air Quality Testing">Air Quality Testing</option>
+            <option value="Appliance Install And Repair">Appliance Install And Repair</option>
+            <option value="Appliance Repair">Appliance Repair</option>
+            <option value="Architects">Architects</option>
+            <option value="Artificial Turf Installation">Artificial Turf Installation</option>
+            <option value="Asbestos Abatement Contractors">Asbestos Abatement Contractors</option>
+            <option value="Asphalt Pavers">Asphalt Pavers</option>
+            <option value="Sealcoating">Sealcoating</option>
+            <option value="Basements">Basements</option>
+            <option value="Bathroom Remodeling">Bathroom Remodeling</option>
+            <option value="Bed Bugs">Bed Bugs</option>
+            <option value="Masonry Contractors">Masonry Contractors</option>
+            <option value="Cabinet Installation">Cabinet Installation</option>
+            <option value="Kitchen Cabinet Painters">Kitchen Cabinet Painters</option>
+            <option value="Cabinet Refinishing">Cabinet Refinishing</option>
+            <option value="BCarpenters">Carpenters</option>
+            <option value="Carpet Cleaning">Carpet Cleaning</option>
+            <option value="Carpet Installation">Carpet Installation</option>
+            <option value="Carpet Removal Companies">Carpet Removal Companies</option>
+            <option value="Carpet Repair">Carpet Repair</option>
+            <option value="Central Air Conditioning Installation">Central Air Conditioning Installation</option>
+            <option value="Central Air Conditioning Repair">Central Air Conditioning Repair</option>
+            <option value="Electrical Wiring And Panel Upgrade">Electrical Wiring And Panel Upgrade</option>
+            <option value="Circuit Breaker Companies">Circuit Breaker Companies</option>
+            <option value="Closet Builders">Closet Builders</option>
+            <option value="Closets">Closets</option>
+            <option value="Commercial Carpet Cleaning">Commercial Carpet Cleaning</option>
+            <option value="Commercial Cleaning">Commercial Cleaning</option>
+            <option value="Concrete Contractors">Concrete Contractors</option>
+            <option value="Concrete Removal">Concrete Removal</option>
+            <option value="Concrete Contractors">Concrete Contractors</option>
+            <option value="Construction Estimating">Construction Estimating</option>
+            <option value="Countertop Installation">Countertop Installation</option>
+            <option value="Granite Countertop Repair">Granite Countertop Repair</option>
+            <option value="Cabinet Makers">Cabinet Makers</option>
+            <option value="Woodworkers">Woodworkers</option>
+            <option value="Decks">Decks</option>
+            <option value="Decks">Decks</option>
+            <option value="Deck Repair">Deck Repair</option>
+            <option value="Demolition Contractors">Demolition Contractors</option>
+            <option value="Dishwasher Installation">Dishwasher Installation</option>
+            <option value="Doors">Doors</option>
+            <option value="Door Repair">Door Repair</option>
+            <option value="Drywall Repair">Drywall Repair</option>
+            <option value="Drywall Repair">Drywall Repair</option>
+            <option value="Duct Cleaning">Duct Cleaning</option>
+            <option value="Roof Vent Installers">Roof Vent Installers</option>
+            <option value="Ducts And Vents">Ducts And Vents</option>
+            <option value="Dumpster Rentals">Dumpster Rentals</option>
+            <option value="Electrical Repairs">Electrical Repairs</option>
+            <option value="24 Hour Plumbers">24 Hour Plumbers</option>
+            <option value="Engraving">Engraving</option>
+            <option value="Epoxy Flooring">Epoxy Flooring</option>
+            <option value="Excavation">Excavation</option>
+            <option value="Exterior Painting">Exterior Painting</option>
+            <option value="Attic Or Whole House Fan Installation">Attic Or Whole House Fan Installation</option>
+            <option value="Faux Finishes">Faux Finishes</option>
+            <option value="Fence Painters">Fence Painters</option>
+            <option value="Fences">Fences</option>
+            <option value="Fences">Fences</option>
+            <option value="Finish Carpentry">Finish Carpentry</option>
+            <option value="Fireplace Repair">Fireplace Repair</option>
+            <option value="Fireplace Installation">Fireplace Installation</option>
+            <option value="Fitness Equipment Assembly">Fitness Equipment Assembly</option>
+            <option value="Floor Cleaning">Floor Cleaning</option>
+            <option value="Hardwood Floor Installation">Hardwood Floor Installation</option>
+            <option value="Garage Floor Painters">Garage Floor Painters</option>
+            <option value="Stone Restoration And Polishing">Stone Restoration And Polishing</option>
+            <option value="Subfloor Repair Contractors">Subfloor Repair Contractors</option>
+            <option value="House Foundation Repair Companies">House Foundation Repair Companies</option>
+            <option value="Framing Contractors">Framing Contractors</option>
+            <option value="Lawn Care">Lawn Care</option>
+            <option value="Furniture Assembly">Furniture Assembly</option>
+            <option value="Furniture Delivery">Furniture Delivery</option>
+            <option value="Movers">Movers</option>
+            <option value="Furniture Refinishing">Furniture Refinishing</option>
+            <option value="Furniture Repair">Furniture Repair</option>
+            <option value="Upholstery Repair">Upholstery Repair</option>
+            <option value="Garage Addition">Garage Addition</option>
+            <option value="Garage Doors">Garage Doors</option>
+            <option value="Garage Door Repair">Garage Door Repair</option>
+            <option value="Basement Cleaning Services">Basement Cleaning Services</option>
+            <option value="Garbage Disposal Installation">Garbage Disposal Installation</option>
+            <option value="Garbage Disposal Repair">Garbage Disposal Repair</option>
+            <option value="Gardening">Gardening</option>
+            <option value="Pipe Fitting Companies">Pipe Fitting Companies</option>
+            <option value="Gazebos">Gazebos</option>
+            <option value="Carpenters">Carpenters</option>
+            <option value="General Contractors">General Contractors</option>
+            <option value="Generators">Generators</option>
+            <option value="Generators">Generators</option>
+            <option value="Gutter Cleaners">Gutter Cleaners</option>
+            <option value="Gutters">Gutters</option>
+            <option value="Gutter Repair">Gutter Repair</option>
+            <option value="Handyman">Handyman</option>
+            <option value="Hardwood Floor Refinishing">Hardwood Floor Refinishing</option>
+            <option value="Furnace Installation">Furnace Installation</option>
+            <option value="Furnace Repair">Furnace Repair</option>
+            <option value="Holiday Lighting Installation">Holiday Lighting Installation</option>
+            <option value="Home Inspection">Home Inspection</option>
+            <option value="Disability Retrofit">Disability Retrofit</option>
+            <option value="Personal Organizers">Personal Organizers</option>
+            <option value="General Contractors">General Contractors</option>
+            <option value="Home Security">Home Security</option>
+            <option value="Security Camera Install">Security Camera Install</option>
+            <option value="Home Staging">Home Staging</option>
+            <option value="Home Theater Installation">Home Theater Installation</option>
+            <option value="Home Theater Repair">Home Theater Repair</option>
+            <option value="Waterproofing">Waterproofing</option>
+            <option value="Hot Tub Moving">Hot Tub Moving</option>
+            <option value="Hot Tub Cleaners">Hot Tub Cleaners</option>
+            <option value="Hot Tubs And Spas">Hot Tubs And Spas</option>
+            <option value="Hot Tubs And Spas">Hot Tubs And Spas</option>
+            <option value="House Cleaning">House Cleaning</option>
+            <option value="House Sitting">House Sitting</option>
+            <option value="Pool Builders">Pool Builders</option>
+            <option value="Insulation">Insulation</option>
+            <option value="Interior Designers">Interior Designers</option>
+            <option value="Interior Painting">Interior Painting</option>
+            <option value="Junk Removal">Junk Removal</option>
+            <option value="Kitchen Remodeling">Kitchen Remodeling</option>
+            <option value="Brush Removal Services">Brush Removal Services</option>
+            <option value="Landscape Grading Contractors">Landscape Grading Contractors</option>
+            <option value="Land Surveyors">Land Surveyors</option>
+            <option value=Lawn Mower Repairs">Lawn Mower Repairs</option>
+            <option value="Lawn Care">Lawn Care</option>
+            <option value="Lighting">Lighting</option>
+            <option value="Movers">Movers</option>
+            <option value="Locksmiths">Locksmiths</option>
+            <option value="Long Distance Movers">Long Distance Movers</option>
+            <option value="Masonry Contractors">Masonry Contractors</option>
+            <option value="Metal Fabricators">Metal Fabricators</option>
+            <option value="Mold Remediation">Mold Remediation</option>
+            <option value="Tree Services">Tree Services</option>
+            <option value="Mural Painter">Mural Painter</option>
+            <option value="Custom Home Building">Custom Home Building</option>
+            <option value="Odor Removal">Odor Removal</option>
+            <option value="Office Movers">Office Movers</option>
+            <option value="Landscaping">Landscaping</option>
+            <option value="Fly Control">Fly Control</option>
+            <option value="Exterminators">Exterminators</option>
+            <option value="Packing Services">Packing Services</option>
+            <option value="Paint Removal">Paint Removal</option>
+            <option value="Patios">Patios</option>
+            <option value="Patios">Patios</option>
+            <option value="Exterminators">Exterminators</option>
+            <option value="Pest Inspection">Pest Inspection</option>
+            <option value="Piano Movers">Piano Movers</option>
+            <option value="Picture Hanging">Picture Hanging</option>
+            <option value="Plastering">Plastering</option>
+            <option value="Play Equipment">Play Equipment</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Plumbing Inspection">Plumbing Inspection</option>
+            <option value="Repiping Specialists">Repiping Specialists</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Pool Table Moving">Pool Table Moving</option>
+            <option value="Pool Table Repairs">Pool Table Repairs</option>
+            <option value="Popcorn Removal">Popcorn Removal</option>
+            <option value="Powder Coating">Powder Coating</option>
+            <option value="Pressure Washing">Pressure Washing</option>
+            <option value="Property Management">Property Management</option>
+            <option value="Radon Mitigation">Radon Mitigation</option>
+            <option value="Stairs And Railings">Stairs And Railings</option>
+            <option value="Real Estate Agents">Real Estate Agents</option>
+            <option value="Appraisers">Appraisers</option>
+            <option value="Animal Removal Services">Animal Removal Services</option>
+            <option value="Roof Cleaning">Roof Cleaning</option>
+            <option value="Roof Inspection Services">Roof Inspection Services</option>
+            <option value="Roofing">Roofing</option>
+            <option value="Roofing">Roofing</option>
+            <option value="Remodeling Contractors">Remodeling Contractors</option>
+            <option value="Rug Cleaning">Rug Cleaning</option>
+            <option value="Satellite Dish">Satellite Dish</option>
+            <option value="Window Screen Companies">Window Screen Companies</option>
+            <option value="Septic Systems">Septic Systems</option>
+            <option value="Septic Tank Cleaning">Septic Tank Cleaning</option>
+            <option value="Shower Installation">Shower Installation</option>
+            <option value="Bathtub Refinishing">Bathtub Refinishing</option>
+            <option value="Hedge Trimming Services">Hedge Trimming Services</option>
+            <option value="Vinyl Siding Install">Vinyl Siding Install</option>
+            <option value="Siding Contractors">Siding Contractors</option>
+            <option value="Vinyl Siding Repair">Vinyl Siding Repair</option>
+            <option value="Faucets And Fixtures">Faucets And Fixtures</option>
+            <option value="Faucet Repairs">Faucet Repairs</option>
+            <option value="Home Automation">Home Automation</option>
+            <option value="Snow Plow Services">Snow Plow Services</option>
+            <option value="Sodding">Sodding</option>
+            <option value="Solar Panel Cleaning">Solar Panel Cleaning</option>
+            <option value="Solar Panel Installation">Solar Panel Installation</option>
+            <option value="Soundproofing">Soundproofing</option>
+            <option value="Irrigation System Companies">Irrigation System Companies</option>
+            <option value="Sprinkler Systems Repair">Sprinkler Systems Repair</option>
+            <option value="Stairs And Railings">Stairs And Railings</option>
+            <option value="Structural Engineers">Structural Engineers</option>
+            <option value="Stucco Contractors">Stucco Contractors</option>
+            <option value="Stucco Repair">Stucco Repair</option>
+            <option value="Sump Pump Installation">Sump Pump Installation</option>
+            <option value="Swimming Pool Maintenance">Swimming Pool Maintenance</option>
+            <option value="Swimming Pools">Swimming Pools</option>
+            <option value="Swimming Pool Removal">Swimming Pool Removal</option>
+            <option value="Swimming Pool Repair">Swimming Pool Repair</option>
+            <option value="Electrical Outlet Installation">Electrical Outlet Installation</option>
+            <option value="24 Hour Electricians">24 Hour Electricians</option>
+            <option value="Tv Wall Mount Install">Tv Wall Mount Install</option>
+            <option value="Tv Repair">Tv Repair</option>
+            <option value="Termites">Termites</option>
+            <option value="Termite Inspection">Termite Inspection</option>
+            <option value="Thermostat Installation">Thermostat Installation</option>
+            <option value="Tile">Tile</option>
+            <option value="Granite Marble And Slate Tile Repair">Granite Marble And Slate Tile Repair</option>
+            <option value="Tile And Grout Cleaning">Tile And Grout Cleaning</option>
+            <option value="Toilet Installation">Toilet Installation</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Tree Movers">Tree Movers</option>
+            <option value="Stump Grinding">Stump Grinding</option>
+            <option value="Tree Trimming">Tree Trimming</option>
+            <option value="Crown Moldings Installation">Crown Moldings Installation</option>
+            <option value="Upholstery Cleaning">Upholstery Cleaning</option>
+            <option value="Wallpaper Installation">Wallpaper Installation</option>
+            <option value="Wallpaper Removal">Wallpaper Removal</option>
+            <option value="Water Damage">Water Damage</option>
+            <option value="Water Features">Water Features</option>
+            <option value="Water Features">Water Features</option>
+            <option value="Water Heater Installation">Water Heater Installation</option>
+            <option value="Water Heater Repair">Water Heater Repair</option>
+            <option value="Water Softener Repair">Water Softener Repair</option>
+            <option value="Water Softening">Water Softening</option>
+            <option value="Window Caulking Contractors">Window Caulking Contractors</option>
+            <option value="Weeding">Weeding</option>
+            <option value="Well Pump Installation">Well Pump Installation</option>
+            <option value="Window Cleaners">Window Cleaners</option>
+            <option value="Window Installation">Window Installation</option>
+            <option value="Window Repair">Window Repair</option>
+            <option value="Residential Window Tinting">Residential Window Tinting</option>
+            <option value="Blind And Shade Install">Blind And Shade Install</option>
+            <option value="Window Air Conditioner Repair">Window Air Conditioner Repair</option>
+            <option value="Wiring Installation">Wiring Installation</option>
+            `;
+        }
+        else if(var_sector == 'Wellness'){
+            console.log('2');
+
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Wellness)...</option>
+
+            <option value="Holistic Medicine">Holistic Medicine</option>
+            <option value="Astrologers">Astrologers</option>
+            <option value="Facial">Facial</option>
+            <option value="Family Counselors">Family Counselors</option>
+            <option value="Health Coaches">Health Coaches</option>
+            <option value="Hypnosis">Hypnosis</option>
+            <option value="Life Coach">Life Coach</option>
+            <option value="Marriage Counselors">Marriage Counselors</option>
+            <option value="Massage">Massage</option>
+            <option value="Nutritionists">Nutritionists</option>
+            <option value="Palm Readers">Palm Readers</option>
+            <option value="Personal Trainers">Personal Trainers</option>
+            <option value="Physical Therapy">Physical Therapy</option>
+            <option value="Pilates">Pilates</option>
+            <option value="Tai Chi Lessons">Tai Chi Lessons</option>
+            <option value="Yoga">Yoga</option>
+            <option value="Spiritual Counselors">Spiritual Counselors</option>
+            <option value="Tarot Card Readings">Tarot Card Readings</option>
+            <option value="Therapists">Therapists</option>`;
+        }
+        else if(var_sector == 'Pets'){
+            console.log('3');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Pets)...</option>
+            <option value="Animal Behavior">Animal Behavior</option>
+            <option value="Aquarium Service">Aquarium Service</option>
+            <option value="Cat Grooming">Cat Grooming</option>
+            <option value="Dog Day Care">Dog Day Care</option>
+            <option value="Pet Fence Installers">Pet Fence Installers</option>
+            <option value="Mobile Dog Grooming">Mobile Dog Grooming</option>
+            <option value="Dog Training">Dog Training</option>
+            <option value="Dog Walking">Dog Walking</option>
+            <option value="Pet Boarding">Pet Boarding</option>
+            <option value="Pet Sitting">Pet Sitting</option>
+            `;
+
+        }
+        else if(var_sector == 'Business'){
+            console.log('4');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Business)...</option>
+            <option value="Cad Design">Cad Design</option>
+            <option value="Accounting">Accounting</option>
+            <option value="Personal Assistants">Personal Assistants</option>
+            <option value="Animators">Animators</option>
+            <option value="Business Consulting">Business Consulting</option>
+            <option value="Tax Preparation">Tax Preparation</option>
+            <option value="Computer Repair">Computer Repair</option>
+            <option value="Contract Attorneys">Contract Attorneys</option>
+            <option value="Corporate Law Attorneys">Corporate Law Attorneys</option>
+            <option value="Translation">Translation</option>
+            <option value="Criminal Defense Attorneys">Criminal Defense Attorneys</option>
+            <option value="Dui Attorney">Dui Attorney</option>
+            <option value="Data Recovery">Data Recovery</option>
+            <option value="Elder Law Attorneys">Elder Law Attorneys</option>
+            <option value="Divorce Lawyers">Divorce Lawyers</option>
+            <option value="Business Intelligence Consultants">Business Intelligence Consultants</option>
+            <option value="Coin Operated Machine Repair">Coin Operated Machine Repair</option>
+            <option value="Civil Engineers">Civil Engineers</option>
+            <option value="Probate Attorneys">Probate Attorneys</option>
+            <option value="Fitness Equipment Repair">Fitness Equipment Repair</option>
+            <option value="Family Law Attorneys">Family Law Attorneys</option>
+            <option value="Investigators">Investigators</option>
+            <option value="Graphic Designers">Graphic Designers</option>
+            <option value="Illustrators">Illustrators</option>
+            <option value="Immigration Attorney">Immigration Attorney</option>
+            <option value="Tax Preparation">Tax Preparation</option>
+            <option value="Patent Attorneys">Patent Attorneys</option>
+            <option value="International Law Attorneys">International Law Attorneys</option>
+            <option value="Employment Law Attorneys">Employment Law Attorneys</option>
+            <option value="Paralegals">Paralegals</option>
+            <option value="Logo Design">Logo Design</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Mediators">Mediators</option>
+            <option value="Freelance Web Designers">Freelance Web Designers</option>
+            <option value="Router Setup Install And Repair">Router Setup Install And Repair</option>
+            <option value="Notary Public">Notary Public</option>
+            <option value="Payroll Services">Payroll Services</option>
+            <option value="Bankruptcy Attorneys">Bankruptcy Attorneys</option>
+            <option value="Financial Planners">Financial Planners</option>
+            <option value="Personal Injury Lawyers">Personal Injury Lawyers</option>
+            <option value="Phone Repair">Phone Repair</option>
+            <option value="Presentation Design">Presentation Design</option>
+            <option value="Copier Repair">Copier Repair</option>
+            <option value="Private Investigators">Private Investigators</option>
+            <option value="Process Servers">Process Servers</option>
+            <option value="Project Management Services">Project Management Services</option>
+            <option value="Pr Consultants">Pr Consultants</option>
+            <option value="Real Estate Lawyers">Real Estate Lawyers</option>
+            <option value="Recruiters">Recruiters</option>
+            <option value="Resume Writers And Editors">Resume Writers And Editors</option>
+            <option value="Security Guards">Security Guards</option>
+            <option value="Social Media Marketing">Social Media Marketing</option>
+            <option value="Software Developers">Software Developers</option>
+            <option value="Data Analysis Services">Data Analysis Services</option>
+            <option value="Tax Attorneys">Tax Attorneys</option>
+            <option value="Telemarketing Companies">Telemarketing Companies</option>
+            <option value="Traffic Attorneys">Traffic Attorneys</option>
+            <option value="Translation">Translation</option>
+            <option value="Virus Removal">Virus Removal</option>
+            <option value="Web Design">Web Design</option>
+            <option value="Web Hosting">Web Hosting</option>
+            <option value="Wills Attorneys">Wills Attorneys</option>
+            <option value="Writers">Writers</option>
+            `;
+        }
+        else if(var_sector == 'Events'){
+            console.log('4.1');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Events)...</option>
+            <option value="Aerial Photography">Aerial Photography</option>
+            <option value="Tailors And Seamstresses">Tailors And Seamstresses</option>
+            <option value="Animal Show">Animal Show</option>
+            <option value="Recording Studio">Recording Studio</option>
+            <option value="Balloon Decorators">Balloon Decorators</option>
+            <option value="Balloon Twisting">Balloon Twisting</option>
+            <option value="Grill Repair">Grill Repair</option>
+            <option value="Bartenders">Bartenders</option>
+            <option value="Boudoir Photography">Boudoir Photography</option>
+            <option value="Bouncy Houses">Bouncy Houses</option>
+            <option value="Bridal Consultants">Bridal Consultants</option>
+            <option value="Calligraphers">Calligraphers</option>
+            <option value="Candy Buffet Planner">Candy Buffet Planner</option>
+            <option value="Caricaturists">Caricaturists</option>
+            <option value="Bus Charters">Bus Charters</option>
+            <option value="Entertainers">Entertainers</option>
+            <option value="Clowns">Clowns</option>
+            <option value="Comedians For Hire">Comedians For Hire</option>
+            <option value="Commercial Photographers">Commercial Photographers</option>
+            <option value="Costume Character Entertainers">Costume Character Entertainers</option>
+            <option value="Custom Airbrushing">Custom Airbrushing</option>
+            <option value="Djs">Djs</option>
+            <option value="Burlesque Dancers">Burlesque Dancers</option>
+            <option value="Custom Embroidery">Custom Embroidery</option>
+            <option value="Engagement Photographers">Engagement Photographers</option>
+            <option value="Florists">Florists</option>
+            <option value="Waitstaff">Waitstaff</option>
+            <option value="Party Planners">Party Planners</option>
+            <option value="Bouncer">Bouncer</option>
+            <option value="Face Painting">Face Painting</option>
+            <option value="Fishing Guides">Fishing Guides</option>
+            <option value="Mobile Food Trucks">Mobile Food Trucks</option>
+            <option value="Concession Rentals">Concession Rentals</option>
+            <option value="Hair Stylists">Hair Stylists</option>
+            <option value="Headshots">Headshots</option>
+            <option value="Henna Artists">Henna Artists</option>
+            <option value="Impersonators">Impersonators</option>
+            <option value="Handmade Jewelry">Handmade Jewelry</option>
+            <option value="Karaoke Rental">Karaoke Rental</option>
+            <option value="Limousines">Limousines</option>
+            <option value="Emcees">Emcees</option>
+            <option value="Magicians">Magicians</option>
+            <option value="Motivational Speaker">Motivational Speaker</option>
+            <option value="Bands For Hire">Bands For Hire</option>
+            <option value="Nature Photography">Nature Photography</option>
+            <option value="Party Bus">Party Bus</option>
+            <option value="Custom Gift Baskets">Custom Gift Baskets</option>
+            <option value="Pastry Chefs For Hire">Pastry Chefs For Hire</option>
+            <option value="Personal Chefs">Personal Chefs</option>
+            <option value="Animal Photography">Animal Photography</option>
+            <option value="Photo Booth Rentals">Photo Booth Rentals</option>
+            <option value="Photo Restoration">Photo Restoration</option>
+            <option value="Art Services">Art Services</option>
+            <option value="Portrait Photographers">Portrait Photographers</option>
+            <option value="Quilt Makers">Quilt Makers</option>
+            <option value="Real Estate Photographers">Real Estate Photographers</option>
+            <option value="Scrapbook Makers">Scrapbook Makers</option>
+            <option value="Singing Telegrams">Singing Telegrams</option>
+            <option value="Sommeliers">Sommeliers</option>
+            <option value="Songwriters">Songwriters</option>
+            <option value="Sports Photography">Sports Photography</option>
+            <option value="Tarot Card Readings">Tarot Card Readings</option>
+            <option value="Temporary Tattoo">Temporary Tattoo</option>
+            <option value="Travel Agency">Travel Agency</option>
+            <option value="Valet Parking">Valet Parking</option>
+            <option value="Entertainers">Entertainers</option>
+            <option value="Photo Booth Rentals">Photo Booth Rentals</option>
+            <option value="Video Editors">Video Editors</option>
+            <option value="Video Production">Video Production</option>
+            <option value="Streaming Services">Streaming Services</option>
+            <option value="Video Transfer Services">Video Transfer Services</option>
+            <option value="Fashion Stylists">Fashion Stylists</option>
+            <option value="Wedding Cake">Wedding Cake</option>
+            <option value="Day Of Wedding Coordinators">Day Of Wedding Coordinators</option>
+            <option value="Wedding Dance Lessons">Wedding Dance Lessons</option>
+            <option value="Florists">Florists</option>
+            <option value="Wedding Officiants">Wedding Officiants</option>
+            <option value="Wedding Planning">Wedding Planning</option>
+            <option value="Catering">Catering</option>
+            <option value="Event Decorators">Event Decorators</option>
+            <option value="Hair Stylists">Hair Stylists</option>
+            <option value="Printing Services">Printing Services</option>
+            <option value="Makeup Artists">Makeup Artists</option>
+            <option value="Event Photographers">Event Photographers</option>
+            <option value="Venue Management">Venue Management</option>
+            <option value="Videographers">Videographers</option>
+            <option value="Wine Tasting Lessons">Wine Tasting Lessons</option>
+            `;
+        }
+        else if(var_sector == 'Lessons'){
+            console.log('5');
+
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Lessons)...</option>
+            <option value="Acting Lessons">Acting Lessons</option>
+            <option value="Arabic Lessons">Arabic Lessons</option>
+            <option value="Audio Production Classes">Audio Production Classes</option>
+            <option value="Banjo Lessons">Banjo Lessons</option>
+            <option value="Baseball Instruction">Baseball Instruction</option>
+            <option value="Basketball Training">Basketball Training</option>
+            <option value="Bass Guitar Lessons">Bass Guitar Lessons</option>
+            <option value="Cpr Training">Cpr Training</option>
+            <option value="Cello Lessons">Cello Lessons</option>
+            <option value="Chess Lessons">Chess Lessons</option>
+            <option value="College Application Assistance">College Application Assistance</option>
+            <option value="Excel Training">Excel Training</option>
+            <option value="Drawing Lessons">Drawing Lessons</option>
+            <option value="Driving Lessons">Driving Lessons</option>
+            <option value="Drum Lessons">Drum Lessons</option>
+            <option value="English Lessons">English Lessons</option>
+            <option value="Flute Lessons">Flute Lessons</option>
+            <option value="French Lessons">French Lessons</option>
+            <option value="German Lessons">German Lessons</option>
+            <option value="Golf Lessons">Golf Lessons</option>
+            <option value="Graphic Design Classes">Graphic Design Classes</option>
+            <option value="Guitar Lessons">Guitar Lessons</option>
+            <option value="Italian Lessons">Italian Lessons</option>
+            <option value="Japanese Lessons">Japanese Lessons</option>
+            <option value="Korean Lessons">Korean Lessons</option>
+            <option value="Make Up Classes">Make Up Classes</option>
+            <option value="Mandarin Lessons">Mandarin Lessons</option>
+            <option value="Math Tutors">Math Tutors</option>
+            <option value="Meditation Teachers">Meditation Teachers</option>
+            <option value="Music Theory Lessons">Music Theory Lessons</option>
+            <option value="Photography Lessons">Photography Lessons</option>
+            <option value="Photography Lessons">Photography Lessons</option>
+            <option value="Piano Lessons For Kids">Piano Lessons For Kids</option>
+            <option value="Piano Tuners">Piano Tuners</option>
+            <option value="Portuguese Lessons">Portuguese Lessons</option>
+            <option value="Cooking Classes">Cooking Classes</option>
+            <option value="Dance Lessons">Dance Lessons</option>
+            <option value="Horseback Riding">Horseback Riding</option>
+            <option value="Self Defense">Self Defense</option>
+            <option value="Private Swim Lessons">Private Swim Lessons</option>
+            <option value="Tennis Lessons">Tennis Lessons</option>
+            <option value="Public Speaking Training">Public Speaking Training</option>
+            <option value="Reading And Writing Tutoring">Reading And Writing Tutoring</option>
+            <option value="Reiki Lessons">Reiki Lessons</option>
+            <option value="Saxophone Lessons">Saxophone Lessons</option>
+            <option value="Science Tutoring">Science Tutoring</option>
+            <option value="Sewing Instruction">Sewing Instruction</option>
+            <option value="Sign Language Lessons">Sign Language Lessons</option>
+            <option value="Singing Lessons">Singing Lessons</option>
+            <option value="Soccer Training">Soccer Training</option>
+            <option value="Social Studies Tutor">Social Studies Tutor</option>
+            <option value="Softball Training">Softball Training</option>
+            <option value="Spanish Lessons">Spanish Lessons</option>
+            <option value="Test Prep">Test Prep</option>
+            <option value="Violin Lessons">Violin Lessons</option>
+            <option value="Voice Over Lessons">Voice Over Lessons</option>
+            <option value="Volleyball Training">Volleyball Training</option>
+            `;
+
+        }
+        else if(var_sector == 'Crafts'){
+            console.log('6');
+
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Crafts)...</option>
+
+            <option value="Custom Airbrushing">Custom Airbrushing</option>
+            <option value="Custom Embroidery">Custom Embroidery</option>
+            <option value="Engraving">Engraving</option>
+            <option value="Illustrators">Illustrators</option>
+            <option value="Art Services">Art Services</option>
+            <option value="Powder Coating">Powder Coating</option>
+            <option value="Scrapbook Makers">Scrapbook Makers</option>
+            <option value="Songwriters">Songwriters</option>
+            `;
+        }
+        else if(var_sector == 'Design And Web'){
+            console.log('7');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Design And Web)...</option>
+
+            <option value="Animators">Animators</option>
+            <option value="Civil Engineers">Civil Engineers</option>
+            <option value="Graphic Designers">Graphic Designers</option>
+            <option value="Illustrators">Illustrators</option>
+            <option value="Logo Design">Logo Design</option>
+            <option value="Presentation Design">Presentation Design</option>
+            <option value="Software Developers">Software Developers</option>
+            `;
+        }
+        else if(var_sector == 'Legal'){
+            console.log('8');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Legal)...</option>
+            <option value="Contract Attorneys">Contract Attorneys</option>
+            <option value="Corporate Law Attorneys">Corporate Law Attorneys</option>
+            <option value="Translation">Translation</option>
+            <option value="Elder Law Attorneys">Elder Law Attorneys</option>
+            <option value="Probate Attorneys">Probate Attorneys</option>
+            <option value="Immigration Attorney">Immigration Attorney</option>
+            <option value="Patent Attorneys">Patent Attorneys</option>
+            <option value="International Law Attorneys">International Law Attorneys</option>
+            <option value="Employment Law Attorneys">Employment Law Attorneys</option>
+            <option value="Paralegals">Paralegals</option>
+            <option value="Mediators">Mediators</option>
+            <option value="Personal Injury Lawyers">Personal Injury Lawyers</option>
+            <option value="Process Servers">Process Servers</option>
+            <option value="Radon Mitigation">Radon Mitigation</option>
+            <option value="Real Estate Lawyers">Real Estate Lawyers</option>
+            <option value="Tax Attorneys">Tax Attorneys</option>
+            <option value="Traffic Attorneys">Traffic Attorneys</option>
+            <option value="Wills Attorneys">Wills Attorneys</option>
+            `;
+        }
+        else if(var_sector == 'Personal'){
+            console.log('9');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Personal)...</option>
+            <option value="Astrologers">Astrologers</option>
+            <option value="Family Counselors">Family Counselors</option>
+            <option value="Investigators">Investigators</option>
+            <option value="House Sitting">House Sitting</option>
+            <option value="Life Coach">Life Coach</option>
+            <option value="Mediators">Mediators</option>
+            <option value="Palm Readers">Palm Readers</option>
+            <option value="Private Investigators">Private Investigators</option>
+            <option value="Spiritual Counselors">Spiritual Counselors</option>
+            <option value="Tarot Card Readings">Tarot Card Readings</option>
+            <option value="Fashion Stylists">Fashion Stylists</option>
+            `;
+        }
+        else if(var_sector == 'Photography'){
+            console.log('10');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Photography)...</option>
+            <option value="Aerial Photography">Aerial Photography</option>
+            <option value="Boudoir Photography">Boudoir Photography</option>
+            <option value="Commercial Photographers">Commercial Photographers</option>
+            <option value="Engagement Photographers">Engagement Photographers</option>
+            <option value="Headshots">Headshots</option>
+            <option value="Nature Photography">Nature Photography</option>
+            <option value="Animal Photography">Animal Photography</option>
+            <option value="Portrait Photographers">Portrait Photographers</option>
+            <option value="Sports Photography">Sports Photography</option>
+            <option value="Video Editors">Video Editors</option>
+
+            `;
+        }
+        else if(var_sector == 'Repair And Technical Support'){
+            console.log('11');
+            document.getElementById('id_department').innerHTML = `<option selected>Choose Department(Repair And Technical Support)...</option>
+            <option value="Appliance Install And Repair">Appliance Install And Repair</option>
+            <option value="Computer Repair">Computer Repair</option>
+            <option value="Data Recovery">Data Recovery</option>
+            <option value="Fitness Equipment Repair">Fitness Equipment Repair</option>
+            <option value="Router Setup Install And Repair">Router Setup Install And Repair</option>
+            <option value="Phone Repair">Phone Repair</option>
+            <option value="Pool Table Repairs">Pool Table Repairs</option>
+            <option value="Copier Repair">Copier Repair</option>
+            <option value="Writing, Translation, And Transcription">Writing, Translation, And Transcription</option>
+            <option value="Resume Writers And Editors">Resume Writers And Editors</option>
+            <option value="Translation">Translation</option>
+            `;
+        }
+    }
+</script>
+
+{% endblock %}
