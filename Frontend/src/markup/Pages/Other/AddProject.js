@@ -45,12 +45,13 @@ function AddProject() {
     console.log("image " + attachFile)
 
     var formdata = new FormData()
-    formdata.append("title", e.target[0].value)
-    formdata.append("body", detailsValue)
-    formdata.append("tags", e.target[1].value)
-    formdata.append("category", e.target[2].value)
-    formdata.append("attachment", attachFile)
-    formdata.append("author", userId)
+    // formdata.append("title", e.target[0].value)
+    // formdata.append("body", detailsValue)
+    // formdata.append("tags", e.target[1].value)
+    // formdata.append("category", e.target[2].value)
+    formdata.append("project", 1)
+    formdata.append("image", attachFile)
+    // formdata.append("author", userId)
     // axios({
     // 	method: 'POST',
     // 	url: `${url.baseURL}forum/list/`,
@@ -61,21 +62,23 @@ function AddProject() {
 
     // 	},
     // })
-    axiosPrivate.post(`${url.baseURL}forum/list/`, formdata).then(
-      (response) => {
-        console.log("the response is ", response)
+    axiosPrivate
+      .post(`${url.baseURL}/api/v1/account/project-create/`, formdata)
+      .then(
+        (response) => {
+          console.log("the response is ", response)
 
-        if (response.status === 201) {
-          history.push(
-            `/blog-details/${response.data.id}/${response.data.title}`
-          )
+          if (response.status === 201) {
+            history.push(
+              `/blog-details/${response.data.id}/${response.data.title}`
+            )
+          }
+          //console.log(response.data);
+        },
+        (error) => {
+          console.log(error)
         }
-        //console.log(response.data);
-      },
-      (error) => {
-        console.log(error)
-      }
-    )
+      )
   }
   return (
     <>

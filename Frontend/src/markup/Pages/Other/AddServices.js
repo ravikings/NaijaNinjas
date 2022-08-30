@@ -54,7 +54,7 @@ function AddServices() {
     //    },
     //  })
     axiosPrivate
-      .post(`${url.baseURL}api/v1/account/professional-services/`, formdata)
+      .post(`${url.baseURL}api/v1/account/service-dashboard/`, formdata)
       .then(
         (response) => {
           if (response.status === 201) {

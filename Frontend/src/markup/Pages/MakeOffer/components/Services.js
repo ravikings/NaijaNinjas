@@ -25,7 +25,7 @@ function Services({ id }) {
 
     // })
     axiosPrivate
-      .get(`${url.baseURL}api/v1/account/professional-services/?user_id=${id}`)
+      .get(`${url.baseURL}api/v1/account/service-dashboard/?user_id=${id}`)
       .then((res) => {
         console.log(res.data.results)
         setServices(res.data.results)

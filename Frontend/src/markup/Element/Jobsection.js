@@ -19,7 +19,7 @@ function Jobsection() {
     setLoading(true)
     try {
       // const res = await axios.get(BASE_URL + `api/v1/task/task/?page=${page}`)
-      const res = await createRequest().get(`api/v1/task/task/?page=${page}`)
+      const res = await axios.get(`api/v1/task/task/?page=${page}`)
       setTasks(res.data.results)
       setLoading(false)
       res.data.next && setNext(res.data.next)
@@ -44,7 +44,8 @@ function Jobsection() {
     e.preventDefault()
     console.log("cliked")
     try {
-      const { data } = await createRequestWithoutBase().get(req)
+      // const { data } = await createRequestWithoutBase().get(req)
+      const { data } = await axios.get(req)
 
       if (data.results) {
         // Scroll to specific element when pagination is clicked

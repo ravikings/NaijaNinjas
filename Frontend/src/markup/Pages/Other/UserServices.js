@@ -10,6 +10,7 @@ import baseURL from "../../../utils/baseUrl"
 import url from "../../../utils/baseUrl"
 
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import { useSelector } from "react-redux"
 function UserServices() {
   const [data, setData] = useState([])
   const [viewData, setViewData] = useState([])
@@ -17,7 +18,7 @@ function UserServices() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const axiosPrivate = useAxiosPrivate()
-
+  const { currentUser } = useSelector((state) => state.authReducer)
   let token = `Bearer ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
 
@@ -29,7 +30,9 @@ function UserServices() {
 
     // })
     axiosPrivate
-      .get(`${url.baseURL}api/v1/account/professional-services/`)
+      .get(
+        `${url.baseURL}api/v1/account/professional-services/?user_id=${currentUser?.pk}`
+      )
       .then((res) => {
         //   console.log(res)
         setData(res.data.results)
@@ -45,21 +48,23 @@ function UserServices() {
   }
   // delete item start
   const deleteData = (e) => {
-    axios({
-      method: "DELETE",
-      url: `${baseURL}api/v1/account/professional-services/${e}`,
+    // axios({
+    //   method: "DELETE",
+    //   url: `${baseURL}api/v1/account/professional-services/${e}`,
 
-      headers: {
-        Authorization: token,
-      },
-    }).then(
-      (response) => {
-        allData()
-      },
-      (error) => {
-        console.log(error)
-      }
-    )
+    //   headers: {
+    //     Authorization: token,
+    //   } }),
+    axiosPrivate
+      .delete(`${baseURL}api/v1/account/professional-services/${e}`)
+      .then(
+        (response) => {
+          allData()
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }
   // delete item end
   useEffect(() => {
