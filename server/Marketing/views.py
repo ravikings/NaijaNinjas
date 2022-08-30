@@ -30,8 +30,8 @@ def marketing_func(request):
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             sign_email = request.POST.get('sign_email')
-            sign_pass = "correcthustle23" #request.POST.get('sign_pass') 
-            sign_confirm_pass = "correcthustle23" #request.POST.get('sign_confirm_pass')
+            #sign_pass = "correcthustle23" #request.POST.get('sign_pass') 
+            #sign_confirm_pass = "correcthustle23" #request.POST.get('sign_confirm_pass')
             sign_number = request.POST.get('sign_number')
             runner_status = request.POST.get('runner_status')
 
@@ -39,7 +39,6 @@ def marketing_func(request):
                 var_runner = False
             else:
                 var_runner = True
-
 
 
             title = request.POST.get('title')
@@ -55,10 +54,7 @@ def marketing_func(request):
             Address = request.POST.get('Address')
             local_government_zone = request.POST.get('local_government_zone')
 
-
-
-
-            if sign_pass == sign_confirm_pass:
+            if sign_number:
 
                 # create user
                 myuser = AccountUser.objects.create_user(sign_email, sign_email, sign_number)
@@ -73,15 +69,8 @@ def marketing_func(request):
                 var_RunnerProfile = RunnerProfile(author=myuser, first_name=first_name, last_name=last_name, title=title, language=language, salary=salary, country=county, address=Address, postcode=Postcode, sector=sector, department=department, description=Description, state=State, city=City, local_goverment_zone=local_government_zone )
                 var_RunnerProfile.save()
 
-
                 messages.success(request, "Your Account has been created !")
                 return redirect('marketing_func')
-
-                # var_User_Account = User_Account(first_name=first_name, last_name=last_name, Email=sign_email, Number=sign_number, Password=sign_pass)
-                # var_User_Account.save()
-                #
-                # var_User_Profile = User_Profile(User=var_User_Account, title=title, language=language, salary=salary, sector=sector, department=department, Description=Description, county=county, State=State, Postcode=Postcode, City=City, Address=Address, local_government_zone=local_government_zone)
-                # var_User_Profile.save()
 
             else:
                 var_error = "Password is not match !"
