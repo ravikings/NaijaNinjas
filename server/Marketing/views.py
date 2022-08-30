@@ -30,8 +30,8 @@ def marketing_func(request):
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             sign_email = request.POST.get('sign_email')
-            sign_pass = request.POST.get('sign_pass')
-            sign_confirm_pass = request.POST.get('sign_confirm_pass')
+            sign_pass = "correcthustle23" #request.POST.get('sign_pass') 
+            sign_confirm_pass = "correcthustle23" #request.POST.get('sign_confirm_pass')
             sign_number = request.POST.get('sign_number')
             runner_status = request.POST.get('runner_status')
 
@@ -61,12 +61,13 @@ def marketing_func(request):
             if sign_pass == sign_confirm_pass:
 
                 # create user
-                myuser = AccountUser.objects.create_user(sign_email, sign_email, sign_pass)
+                myuser = AccountUser.objects.create_user(sign_email, sign_email, sign_number)
                 myuser.first_name = first_name
                 myuser.last_name = last_name
                 myuser.phone_number = sign_number
                 myuser.is_active = True
                 myuser.is_a_runner = var_runner
+                myuser.password_reset_required = True
                 myuser.save()
 
                 var_RunnerProfile = RunnerProfile(author=myuser, first_name=first_name, last_name=last_name, title=title, language=language, salary=salary, country=county, address=Address, postcode=Postcode, sector=sector, department=department, description=Description, state=State, city=City, local_goverment_zone=local_government_zone )
