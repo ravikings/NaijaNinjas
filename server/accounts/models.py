@@ -21,6 +21,7 @@ class AccountUser(AbstractUser):
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
     last_seen = models.DateTimeField(auto_now=True)
+    password_reset_required = models.BooleanField(default=False, verbose_name="reset_password") 
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
