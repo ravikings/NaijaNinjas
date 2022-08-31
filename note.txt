@@ -61,8 +61,11 @@ python manage.py migrate notifications
 
 
 test credentials
-admintest@gmail.com
-123Tcorrect8@
+email: admintest@gmail.com
+password: 123Tcorrect8@
+
+email: testseun1@gmail.com
+password: 09012347896
 
 change directory into server folder from terminal,
 folder: GitHub\NaijaNinjas\server

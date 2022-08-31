@@ -74,7 +74,7 @@ class TaskBidder(models.Model):
     offer = models.IntegerField(null=True, blank=True)
     offer_charge = models.IntegerField(null=True, blank=True)
     description = RichTextField(null=True, blank=True)
-    image = models.ImageField(upload_to=upload_to, null=True, blank=True, storage=storage)
+    attachment = models.FileField(upload_to=upload_to, null=True, blank=True, storage=storage)
     bid_approve_status = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True, unique=True)
     transaction_verified = models.BooleanField(default=False, null=True)

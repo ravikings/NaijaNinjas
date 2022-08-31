@@ -91,15 +91,21 @@ class TaskBidderView(viewsets.ModelViewSet):
         offer = data.get('offer')
         bidder_id = data.get('bidder')
         offer_charge = data.get('offer_charge')
+        description = data.get('description')
+        attachment = data.get('attachment')
+        delivery_date = data.get('delivery_date')
         if not offer:
             raise("please add offer")
         bid_queryset = Task.objects.get(id=task_id, post_status="OPEN")
         profile_odj = RunnerProfile.objects.get(author=bidder_id)
         if bid_queryset:
             obj, _created = TaskBidder.objects.get_or_create(bidder_profile=profile_odj, 
-                                            task=bid_queryset)
+                                            task=bid_queryset, payment_author=bid_queryset.author)
             obj.offer = offer
             obj.offer_charge = offer_charge
+            obj.description = description
+            obj.attachment = attachment
+            obj.delivery_date = delivery_date
             obj.save()
             return Response({"message": "Your bid was successfully processed"})
 
