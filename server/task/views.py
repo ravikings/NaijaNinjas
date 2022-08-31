@@ -90,7 +90,7 @@ class TaskBidderView(viewsets.ModelViewSet):
         task_id = data.get('task')
         offer = data.get('offer')
         bidder_id = data.get('bidder')
-        offer_charge = data.get('offer_charge')
+        total_charge = data.get('total_charge')
         description = data.get('description')
         attachment = data.get('attachment')
         delivery_date = data.get('delivery_date')
@@ -102,7 +102,7 @@ class TaskBidderView(viewsets.ModelViewSet):
             obj, _created = TaskBidder.objects.get_or_create(bidder_profile=profile_odj, 
                                             task=bid_queryset, payment_author=bid_queryset.author)
             obj.offer = offer
-            obj.offer_charge = offer_charge
+            obj.total_charge = total_charge
             obj.description = description
             obj.attachment = attachment
             obj.delivery_date = delivery_date
@@ -303,7 +303,7 @@ def accept_bid(request):
         response_data = {}
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
-        response_data["offer"] = bid.offer
+        response_data["total_charge"] = bid.total_charge
         task_owner, client_info = AccountUser.objects.filter(id__in=[owner, bid.payment_author.id])
         print("creating timeline")
         query_set = Timeline.objects.create(author=bid.payment_author,task_owner=task_owner,task=bid.task)
