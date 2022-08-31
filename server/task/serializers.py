@@ -1,3 +1,4 @@
+from dataclasses import field
 from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks
 from rest_framework import serializers
 from accounts.serializers import ContractUserSerializer, ProfileSerializer, BiddersProfileSerializer
@@ -59,7 +60,7 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     bidder_info = serializers.SerializerMethodField()
     class Meta:
         model = TaskBidder
-        exclude = ("task", "bidder_profile", "image")
+        exclude = ["total_charge", "payment_author", "runner_confirmed", "webhook_transaction_verified", "bid_approve_status", "payment_submitted", "transaction_id", "transaction_verified", ]
 
     def get_bidder_info(self, instance):
 

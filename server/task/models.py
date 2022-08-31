@@ -36,7 +36,7 @@ class Task(models.Model):
     description = RichTextField(blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
-    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True, storage=storage)
+    attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True,null=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
@@ -72,9 +72,9 @@ class TaskBidder(models.Model):
     )
     payment_submitted = models.BooleanField(default=False, null=True)
     offer = models.IntegerField(null=True, blank=True)
-    offer_charge = models.IntegerField(null=True, blank=True)
+    total_charge = models.IntegerField(null=True, blank=True)
     description = RichTextField(null=True, blank=True)
-    image = models.ImageField(upload_to=upload_to, blank=True)
+    attachment = models.FileField(upload_to=upload_to, null=True, blank=True, storage=storage)
     bid_approve_status = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=255, blank=True, null=True, db_index=True, unique=True)
     transaction_verified = models.BooleanField(default=False, null=True)
@@ -82,7 +82,7 @@ class TaskBidder(models.Model):
     runner_confirmed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    delivery_date = models.DateTimeField(null=True)
+    delivery_date = models.DateTimeField(null=True, blank=True)
 
     class Meta: 
         ordering = ["-created", "-modified"] 
@@ -98,6 +98,10 @@ class TaskBidder(models.Model):
         self.bid_approve_status = True
         self.save()
 
+    def set_total_offer(self, total_charge):
+        self.total_charge = total_charge
+        self.save()
+
     def set_task_status(self):
 
         status = Task.objects.get(id=self.task.id)
@@ -109,7 +113,7 @@ class TaskBidder(models.Model):
         status, result = paystack.verify_payment(self.transaction_id, self.offer)
         if status:
             self.payment_submitted = True
-            if result["amount"] / 100 == self.offer_charge:
+            if result["amount"] / 100 == self.total_charge:
                 self.transaction_verified = True
             self.save()
             return True
@@ -121,7 +125,7 @@ class Photo(models.Model):
         Task, on_delete=models.CASCADE, related_name="task_photos"
     )
 
-    image = models.ImageField(upload_to=upload_to)
+    image = models.ImageField(upload_to=upload_to, blank=True, null=True, storage=storage)
 
 
 class Timeline(models.Model):
@@ -175,7 +179,7 @@ class Comment(models.Model):
     title = models.CharField(max_length=255, null=True, blank=True)
     delivery_date = models.DateTimeField(null=True, blank=True)
     body = RichTextField()
-    attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True, storage=storage)
+    attachment = models.FileField(upload_to="tasktimeline/documents/%Y/%m/%d/", blank=True,null=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True, db_index=True)
 

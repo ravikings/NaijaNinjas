@@ -363,6 +363,12 @@ class UserSearchDetails(viewsets.ModelViewSet):
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 
+class DashboardServiceView(viewsets.ModelViewSet):
+
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ServiceView(viewsets.ModelViewSet):
     
@@ -374,7 +380,7 @@ class ServiceView(viewsets.ModelViewSet):
     #permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
-
+    
         user_id = self.request.query_params.get('user_id')
     
         return Service.objects.filter(author=user_id)

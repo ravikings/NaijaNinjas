@@ -1,3 +1,4 @@
+pip-tools
 dj-rest-auth
 django-allauth
 django==4.0
@@ -32,4 +33,5 @@ redis
 django-celery-results
 celery-progress
 django-fsm
+daphne
 eventlet

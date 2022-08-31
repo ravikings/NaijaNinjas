@@ -444,8 +444,8 @@ function AuthState({ userDetails }) {
             <div>Dashboard</div>
           </div>
           <div
-            onClick={signOut}
             className={classes.listItem}
+            onClick={() => history.push("/category-all-jobs")}
             style={{
               marginTop: 12,
             }}

@@ -24,6 +24,9 @@ Scripts\activate.bat
 # use command to start backend application
 docker-compose up -d --build
 
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["daphne", "server.asgi:application"]
+
 "kasun:2{c%v~TtV?_SFCer"
 
 
@@ -58,8 +61,11 @@ python manage.py migrate notifications
 
 
 test credentials
-admintest@gmail.com
-123Tcorrect8@
+email: admintest@gmail.com
+password: 123Tcorrect8@
+
+email: testseun1@gmail.com
+password: 09012347896
 
 change directory into server folder from terminal,
 folder: GitHub\NaijaNinjas\server
@@ -91,9 +97,9 @@ python -m celery -A server worker -l info
 celery -A server worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo
 
 
-#daphe support
+#daphne support
 daphne server.asgi:application
-daphne -b 0.0.0.0 -p 8001 server.asgi:application  
+daphne -b 0.0.0.0 -p 8000 server.asgi:application  
 
 #for public websocket use ngrok tcp 8001
 
@@ -101,3 +107,12 @@ ngrok tcp 8001
 ws://8.tcp.ngrok.io:10343/ws/chat/room/32/1/
 
 #reocrd window button + r
+
+        "slim_handler": true,
+
+push image to aws ecr
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 951157197492.dkr.ecr.us-east-1.amazonaws.com
+docker build -t gigxnow .
+docker tag gigxnow:latest 951157197492.dkr.ecr.us-east-1.amazonaws.com/gigxnow:latest
+docker push 951157197492.dkr.ecr.us-east-1.amazonaws.com/gigxnow:latest
