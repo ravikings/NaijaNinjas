@@ -53,7 +53,7 @@ class Message(models.Model):
         null=True,
     )
     text = RichTextField()
-    attachment = models.FileField(upload_to=upload_to, blank=True, storage=storage)
+    attachment = models.FileField(upload_to=upload_to, blank=True, null=True, storage=storage)
     conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 

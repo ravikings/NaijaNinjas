@@ -239,14 +239,15 @@ class UserProfileSearchSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     
-    service_image = serializers.SerializerMethodField()
+    #service_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
         fields = "__all__"
 
-    def get_service_image(self, instance):
+    # def get_service_image(self, instance):
 
-        return instance.image.url
+    #     return instance.image.url
 
 class ProjectPhotoSerializer(serializers.ModelSerializer):
 
