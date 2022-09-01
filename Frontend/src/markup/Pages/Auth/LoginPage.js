@@ -66,6 +66,11 @@ function LoginPage() {
         const redirectURL = new URLSearchParams(location.search).get(
           "redirect"
         );
+        if (res?.data?.user?.pk) {
+          createRequest().post(
+            `/api/v1/user-status/${res?.data?.user?.pk}/login/`
+          );
+        }
         if (redirectURL) {
           history.push(redirectURL);
         } else {

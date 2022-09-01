@@ -195,9 +195,9 @@ def account_status(request, pk, type):
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
-    queryset.set_online_status(str(type).upper()) # pass type, either login or logout
-    return Response({"message": f"status updated to {queryset.status}"})
+    queryset = RunnerProfile.objects.filter(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset[0].set_online_status(str(type).upper()) # pass type, either login or logout
+    return Response({"message": f"status updated to {type}"})
     
 
 @api_view(["POST","GET"])
