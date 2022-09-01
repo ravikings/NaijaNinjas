@@ -29,6 +29,7 @@ from accounts.views import (
     profile_mode_status,
     profile_favorite,
     DashboardServiceView,
+    PrivateServiceView,
     #start_celery_work,
 )
 
@@ -48,6 +49,9 @@ router.register(
 )
 router.register(
     r"professional-services", ServiceView, basename="professional-services"
+)
+router.register(
+    r"private-services", PrivateServiceView, basename="private-services"
 )
 router.register(
     r"projects", ProjectsViewSet, basename="runners-project"

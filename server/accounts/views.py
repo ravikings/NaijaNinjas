@@ -386,6 +386,23 @@ class ServiceView(viewsets.ModelViewSet):
         return Service.objects.filter(author=user_id)
 
 
+class PrivateServiceView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = ServiceSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        user_id = self.request.query_params.get('user_id')
+    
+        return Service.objects.filter(author=user_id)
+
+
+
 class TestView(viewsets.ModelViewSet):
 
     """
