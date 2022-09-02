@@ -99,6 +99,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+class PrivateProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
 
 class PublicProfileSerializer(serializers.ModelSerializer):
     """
@@ -161,7 +169,6 @@ class PhotosSerializer(serializers.ModelSerializer):
     """
     Photo serializers use profile for picture uploads and retrieve
     """
-
     class Meta:
         model = Photo
         fields = "__all__"

@@ -60,8 +60,8 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     bidder_info = serializers.SerializerMethodField()
     class Meta:
         model = TaskBidder
-        exclude = ["total_charge", "payment_author", "runner_confirmed", "webhook_transaction_verified", "transaction_verified", ]
-        read_only_fields = ('bid_approve_status', 'payment_submitted', 'transaction_id')
+        exclude = ["payment_author", "runner_confirmed", "webhook_transaction_verified", "transaction_verified", ]
+        read_only_fields = ('bid_approve_status', 'payment_submitted', 'transaction_id', "total_charge")
 
     def get_bidder_info(self, instance):
 

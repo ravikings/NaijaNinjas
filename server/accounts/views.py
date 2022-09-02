@@ -61,7 +61,8 @@ from .serializers import (
     PublicQuotesSerializer,
     BiddersProfileSerializer,
     PublicProfileSerializer,
-    ClientReviewSerializer
+    ClientReviewSerializer,
+    PrivateProfileSerializer
 )
 from notifications.signals import notify
 
@@ -88,7 +89,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = PublicProfileSerializer
+    serializer_class = PrivateProfileSerializer
 
     def retrieve(self, request, pk=None):
         
