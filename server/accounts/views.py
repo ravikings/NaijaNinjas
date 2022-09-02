@@ -89,7 +89,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = PrivateProfileSerializer
+    serializer_class = PublicProfileSerializer
 
     def retrieve(self, request, pk=None):
         
@@ -99,7 +99,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
         #print("im sending notification dashboard")
         #notify.send(user,recipient=recipient, verb='hello come to dashboard')
 
-        serializer = PublicProfileSerializer(data[0])
+        serializer = PrivateProfileSerializer(data[0])
         return Response(serializer.data)
         
 
