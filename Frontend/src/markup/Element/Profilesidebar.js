@@ -67,8 +67,8 @@ function ProfileSidebar({
   const sendImage = async () => {
     if (imageState) {
       try {
-        const formData = new FormData();
-        formData.append("photo", imageState);
+        const formData = new FormData()
+        formData.append("photo", imageState)
         //formData.append("author", userProfile?.author);
         await imageSendAPI.patch(
           `/api/v1/account/user-profile/${currentUser?.pk}/`,
@@ -239,6 +239,24 @@ function ProfileSidebar({
               </li>
             </Collapse>
             {/* start ask question end */}
+            <li>
+              <Link
+                to={"/user-projects"}
+                className={active === "My Projects" ? "active" : ""}
+              >
+                <i className="fa-solid fa-list-check" aria-hidden="true"></i>
+                <span>My Projects</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/user-services"}
+                className={active === "My Services" ? "active" : ""}
+              >
+                <i className="fa-solid fa-ticket-simple" aria-hidden="true"></i>
+                <span>My Serivces</span>
+              </Link>
+            </li>
             <li>
               <Link
                 to={"/jobs-saved-jobs"}

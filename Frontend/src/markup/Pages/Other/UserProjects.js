@@ -8,11 +8,11 @@ import { Modal } from "react-bootstrap"
 import ClipLoader from "react-spinners/ClipLoader"
 import baseURL from "../../../utils/baseUrl"
 import url from "../../../utils/baseUrl"
-
+import Carousel from "react-bootstrap/Carousel"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import { useSelector } from "react-redux"
 import { BASE_URL } from "../../../utils/axios"
-function UserServices() {
+function UserProjects() {
   const [data, setData] = useState([])
   const [viewData, setViewData] = useState([])
   const [company, setCompany] = useState(false)
@@ -22,6 +22,11 @@ function UserServices() {
   const { currentUser } = useSelector((state) => state.authReducer)
   let token = `Bearer ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
+  const [index, setIndex] = useState(0)
+
+  const handleSelect = (selectedIndex, e) => {
+    setIndex(selectedIndex)
+  }
 
   const allData = () => {
     setLoading(true)
@@ -31,11 +36,8 @@ function UserServices() {
 
     // })
     axiosPrivate
-      .get(
-        `${url.baseURL}api/v1/account/private-services/?user_id=${currentUser?.pk}`
-      )
+      .get(`${url.baseURL}api/v1/account/projects/?user_id=${currentUser?.pk}`)
       .then((res) => {
-        //   console.log(res)
         setData(res.data.results)
         setLoading(false)
       })
@@ -47,8 +49,10 @@ function UserServices() {
         }
       })
   }
+
+  // Delete Project
   // delete item start
-  const deleteData = (item) => {
+  const deleteProject = (item) => {
     // axios({
     //   method: "DELETE",
     //   url: `${baseURL}api/v1/account/service-dashboard/${e}`,
@@ -56,11 +60,26 @@ function UserServices() {
     //   headers: {
     //     Authorization: token,
     //   } }),
+    console.log(item)
+    axiosPrivate.post(`${BASE_URL}/api/v1/delete-project/${item.id}/`).then(
+      (response) => {
+        allData()
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+  }
+
+  // delete Image
+  const deleteImage = (item) => {
+    console.log(item)
     axiosPrivate
-      .delete(`${BASE_URL}/api/v1/account/service-dashboard/${item.id}/`)
+      .delete(`${BASE_URL}/api/v1/account/delete-project-image/${item.id}/`)
       .then(
         (response) => {
           allData()
+          setCompany(false)
         },
         (error) => {
           console.log(error)
@@ -79,18 +98,18 @@ function UserServices() {
           <div className="section-full bg-white p-t50 p-b20">
             <div className="container">
               <div className="row">
-                <ProfileSidebar active={"My Services"} />
+                <ProfileSidebar active={"My Projects"} />
                 <div className="col-xl-9 col-lg-8 m-b30 browse-job">
                   <div className="job-bx clearfix">
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        Services
+                        Projects
                       </h5>
                       <Link
-                        to={"/add-services"}
-                        className="site-button left-arrow button-md float-right"
+                        to={"/add-projects"}
+                        className="site-button  button-md float-right"
                       >
-                        Add Service
+                        Add Project
                       </Link>
                     </div>
                     {!loading ? (
@@ -100,27 +119,28 @@ function UserServices() {
                             <div className="post-bx">
                               <div className="d-flex m-b20">
                                 <div className="job-post-info">
+                                  <img
+                                    src={
+                                      item?.photos.length > 0 &&
+                                      item?.photos?.[0].image
+                                    }
+                                    alt=""
+                                    height={"150px"}
+                                    width={"150px"}
+                                  />
+
                                   <h5 className="m-b0">
-                                    <Link to={"/jobs-profile"}>
+                                    <Link
+                                      to={"#"}
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        setViewData(item)
+                                        setCompany(true)
+                                      }}
+                                    >
                                       {item.title}
                                     </Link>
                                   </h5>
-                                  <p className="m-b5 font-13">
-                                    <Link to={"#"} className="text-primary">
-                                      UX / UI Designer{" "}
-                                    </Link>
-                                    at Atract Solutions
-                                  </p>
-                                  <ul>
-                                    <li>
-                                      <i className="fa fa-map-marker"></i>
-                                      {item?.location}
-                                    </li>
-                                    <li>
-                                      <i className="fa fa-money"></i> ${" "}
-                                      {item?.amount}
-                                    </li>
-                                  </ul>
                                 </div>
                               </div>
                               <div className="service-tag m-t15 m-b10">
@@ -134,13 +154,13 @@ function UserServices() {
 															<i className="fa fa-pencil"></i>
 														</Link> */}
                               <button
-                                onClick={() => deleteData(item)}
+                                onClick={() => deleteProject(item)}
                                 className="btn rounded btn-danger float-right mr-2"
                               >
                                 <i className="fa fa-trash"></i>
                               </button>
                               <Link
-                                to={`/update-services/${item.id}`}
+                                to={`/update-projects/${item.id}`}
                                 className="btn rounded btn-primary float-right mr-2"
                               >
                                 <i className="fa fa-pencil"></i>
@@ -208,7 +228,7 @@ function UserServices() {
               <div className="logo-img">
                 <img alt="" src={require("../../../images/logo/icon2.png")} />
               </div>
-              <h5 className="modal-title">Services Details</h5>
+              <h5 className="modal-title">Project Details</h5>
 
               <button
                 type="button"
@@ -219,38 +239,43 @@ function UserServices() {
               </button>
             </div>
             <div className="modal-body">
-              <img src={viewData.image} />
+              {/* ============================================= */}
+              <Carousel
+                activeIndex={index}
+                onSelect={handleSelect}
+                className="carousel slide"
+                data-ride="carousel"
+                interval={4000}
+                indicators={false}
+              >
+                {viewData?.photos?.map((item, index) => (
+                  <Carousel.Item key={index}>
+                    <img
+                      className="d-block w-100"
+                      src={item.image}
+                      alt="First slide"
+                    />
+                    <button
+                      onClick={() => deleteImage(item)}
+                      className="btn rounded btn-danger mt-2 w-100"
+                    >
+                      <i className="fa fa-trash"> Delete Image</i>
+                    </button>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              {/* ============================================= */}
               <ul>
                 <li>
-                  <strong>Job Title :</strong>
+                  <strong>Project Title :</strong>
                   <p> {viewData?.title} </p>
-                </li>
-                <li>
-                  <strong>Date :</strong>
-                  <p> {viewData?.created || viewData?.updated} </p>
-                </li>
-                <li>
-                  <strong>Amount :</strong>
-                  <p> ${viewData?.amount} </p>
-                </li>
-                <li>
-                  <strong>Location :</strong>
-                  <p>{viewData?.location}</p>
-                </li>
-                <li>
-                  <strong style={{ width: "30%" }}>Delivery Method :</strong>
-                  <p>{viewData?.delivery_method}</p>
                 </li>
 
                 <li>
-                  <strong>Deseription :</strong>
+                  <strong>Description :</strong>
                   <p
                     dangerouslySetInnerHTML={{ __html: viewData?.description }}
                   />
-                </li>
-                <li>
-                  <strong>Tags :</strong>
-                  <p>{viewData?.tag}</p>
                 </li>
               </ul>
             </div>
@@ -270,4 +295,4 @@ function UserServices() {
     </>
   )
 }
-export default UserServices
+export default UserProjects

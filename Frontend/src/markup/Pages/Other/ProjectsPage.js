@@ -19,10 +19,10 @@ import url from "../../../utils/baseUrl"
 //Images
 var bnr = require("../../../images/banner/bnr1.jpg")
 
-function Blogdetail() {
+function ProjectsPage() {
   const location = useLocation()
   const [loading, setLoading] = useState(false)
-  let { id, title } = useParams()
+  let { id } = useParams()
 
   let token = `Bearer ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
@@ -43,7 +43,7 @@ function Blogdetail() {
       .then((res) => {
         console.log("my vot is ", res)
 
-        ForumData()
+        getProjects()
       })
       .catch((e) => {
         if (e.response?.status === 400) {
@@ -57,15 +57,12 @@ function Blogdetail() {
 
   // geting data from api for fourm start
 
-  const ForumData = async () => {
+  const getProjects = async () => {
     setLoading(true)
     await createRequest()
-      .get(`/forum/list/${id}/`)
+      .get(`/api/v1/account/projects/?user_id=${id}`)
       .then((res) => {
-        //  const filterData= res.data.results.filter((e)=>{
-        // 	 return e.id == id
-        //  })
-        console.log("yo " + res.data.tags)
+
         setData(res.data)
         var mytags = []
         if (res.data.tags.includes(",")) {
@@ -108,7 +105,7 @@ function Blogdetail() {
         console.log("the response is ", response)
 
         if (response.statusText == "Created") {
-          ForumData()
+          getProjects()
           setDetailsValue("")
         }
         //console.log(response.data);
@@ -140,7 +137,7 @@ function Blogdetail() {
       (response) => {
         console.log(response.data.author)
         if (response.data.author) {
-          ForumData()
+          getProjects()
           setDetailsValue("")
           setCommentId(null)
         }
@@ -168,7 +165,7 @@ function Blogdetail() {
   // Attachment slider end
   // effect start
   useEffect(() => {
-    ForumData()
+    getProjects()
   }, [location.key])
 
   // effect end
@@ -481,4 +478,4 @@ function Blogdetail() {
     </>
   )
 }
-export default Blogdetail
+export default ProjectsPage

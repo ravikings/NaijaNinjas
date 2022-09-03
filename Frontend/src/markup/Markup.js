@@ -80,6 +80,9 @@ import LinkedAccount from "./Pages/Other/LinkedAccounts"
 import AccountSecurity from "./Pages/Other/AccountSecurity"
 import UploadID from "./Pages/Other/UploadID"
 import Transactions from "./Pages/Other/Transactions"
+import ProjectsPage from "./Pages/Other/ProjectsPage"
+import UserProjects from "./Pages/Other/UserProjects"
+import UpdateProject from "./Pages/Other/UpdateProject"
 
 class Markup extends Component {
   render() {
@@ -89,7 +92,7 @@ class Markup extends Component {
           <Switch>
             <Route path="/" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
-            <Route path="/messages" exact component={MessagesPage} /> 
+            <Route path="/messages" exact component={MessagesPage} />
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute
@@ -279,6 +282,7 @@ class Markup extends Component {
               exact
               component={Blogdetail}
             />
+            <Route path="/projects/:id" exact component={ProjectsPage} />
             <Route path="/search/:query" exact component={Search} />
 
             <Route path="/browse-ads-grid" exact component={BrowseAdsgrid} />
@@ -290,12 +294,26 @@ class Markup extends Component {
             />
 
             <PrivateRoute path="/add-services" exact component={AddServices} />
-            <Route
+            <PrivateRoute
+              path="/update-projects/:id"
+              exact
+              component={UpdateProject}
+            />
+            <PrivateRoute
               path="/update-services/:id"
               exact
               component={UpdateServices}
             />
-            <Route path="/user-services" exact component={UserServices} />
+            <PrivateRoute
+              path="/user-services"
+              exact
+              component={UserServices}
+            />
+            <PrivateRoute
+              path="/user-projects"
+              exact
+              component={UserProjects}
+            />
             <PrivateRoute path="/add-projects" exact component={AddProject} />
             <Route path="/user-projects" exact component={UserProject} />
 

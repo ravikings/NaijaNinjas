@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
@@ -8,8 +9,8 @@ const ProjectCard = ({ item }) => {
     <div className="services-box cursor-pointer">
       <img
         src={
-          item.attachment
-            ? item.attachment
+          (item.photos && item.photos.length > 0) 
+            ? item.photos[0].image
             : "https://images.unsplash.com/photo-1426170042593-200f250dfdaf?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg"
         }
       />

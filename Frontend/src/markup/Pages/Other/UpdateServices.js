@@ -19,13 +19,7 @@ function UpdateServices() {
   let token = `Bearer ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [data, setData] = useState([])
-  const [detailsValue, setDetailsValue] = useState()
   const [attachFile, setAttachFile] = useState(null)
-  const [title, setTitle] = useState("")
-  const [amount, setAmount] = useState("")
-  const [location, setLocation] = useState("")
-  const [tag, setTag] = useState("")
-  const [deliveryMethod, setDeliveryMethod] = useState("")
   const [loading, setLoading] = useState(false)
   const { currentUser } = useSelector((state) => state.authReducer)
 
@@ -40,12 +34,12 @@ function UpdateServices() {
     setLoading(true)
     // axios({
     // 	method: 'GET',
-    // 	url: `${baseURL}api/v1/account/professional-services/${id}`,
+    // 	url: `${baseURL}api/v1/account/service-dashboard/${id}`,
 
     // })
     axiosPrivate
       .get(
-        `${BASE_URL}/api/v1/account/service-dashboard/?user_id=${currentUser?.pk}`
+        `${BASE_URL}/api/v1/account/professional-services/?user_id=${currentUser?.pk}`
       )
       .then((res) => {
         let data = res?.data?.results?.filter(
@@ -89,17 +83,14 @@ function UpdateServices() {
     formdata.append("author", currentUser?.pk)
     // axios({
     //   method: "POST",
-    //   url: `${baseURL}api/v1/account/professional-services/`,
+    //   url: `${baseURL}api/v1/account/service-dashboard/`,
     //   data: formdata,
     //   headers: {
     //     Authorization: token,
     //   },
     // })
     axiosPrivate
-      .patch(
-        `${BASE_URL}/api/v1/account/professional-services/${id}/`,
-        formdata
-      )
+      .put(`${BASE_URL}/api/v1/account/service-dashboard/${id}/`, formdata)
       .then(
         (response) => {
           if (response.status === 200) {
@@ -111,7 +102,8 @@ function UpdateServices() {
         (error) => {
           console.log(error)
         }
-      )
+    )
+    
   }
   useEffect(() => {
     formData()

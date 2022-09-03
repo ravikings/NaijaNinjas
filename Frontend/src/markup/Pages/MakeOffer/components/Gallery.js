@@ -4,14 +4,23 @@ import { axiosPrivate } from "../../../../utils/axios"
 import url from "../../../../utils/baseUrl"
 import "react-image-lightbox/style.css"
 import ProjectCard from "./ProjectCard"
+import Carousel from "react-bootstrap/Carousel"
 
 function Gallery({ id }) {
   const [lgShow, setLgShow] = useState(false)
+  const [viewData, setViewData] = useState([])
+  const [company, setCompany] = useState(false)
   const [modelItem, setModelItem] = useState({})
   const [projects, setProjects] = React.useState([])
+  const [index, setIndex] = useState(0)
+
+  const handleSelect = (selectedIndex, e) => {
+    setIndex(selectedIndex)
+  }
+
   const allData = () => {
     axiosPrivate
-      .get(`${url.baseURL}forum/list/?user_id=${id}`)
+      .get(`${url.baseURL}api/v1/account/projects/?user_id=${id}`)
       .then((res) => {
         console.log(res.data.results)
         setProjects(res.data.results)
@@ -35,9 +44,9 @@ function Gallery({ id }) {
         {projects.length > 0 &&
           projects.map((item, index) => (
             <div
-              onClick={() => {
-                setLgShow(true)
-                setModelItem(item)
+              onClick={(e) => {
+                setViewData(item)
+                setCompany(true)
               }}
               className="col-lg-4 col-sm-12 col-12 m-b20"
             >
@@ -46,38 +55,68 @@ function Gallery({ id }) {
           ))}
       </div>
       <Modal
-        size="lg"
-        show={lgShow}
-        onHide={() => setLgShow(false)}
-        aria-labelledby="example-modal-sizes-title-lg"
-        backdropClassName="project-modal"
+        show={company}
+        onHide={setCompany}
+        className="modal fade modal-bx-info"
       >
-        <Modal.Header className="project-modal-header" closeButton>
-          <Modal.Title id="example-modal-sizes-title-lg">
-            {modelItem.title}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <img
-            className="img-fluid"
-            src={
-              modelItem.attachment
-                ? modelItem.attachment
-                : require("./../../../../images/blog/grid/pic1.jpg")
-            }
-            alt=""
-          />
+        <div className="" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <div className="logo-img">
+                <img
+                  alt=""
+                  src={require("../../../../images/logo/icon2.png")}
+                />
+              </div>
+              <h5 className="modal-title">Project Details</h5>
 
-          <div className="project-model-description p-2">
-            {modelItem.body && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: modelItem.body,
-                }}
-              />
-            )}
+              <button
+                type="button"
+                className="close"
+                onClick={() => setCompany(false)}
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              {/* ============================================= */}
+              <Carousel activeIndex={index} onSelect={handleSelect}>
+                {viewData?.photos?.map((item, index) => (
+                  <Carousel.Item key={index}>
+                    <img
+                      className="d-block w-100"
+                      src={item.image}
+                      alt="First slide"
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              {/* ============================================= */}
+              <ul>
+                <li>
+                  <strong>Project Title :</strong>
+                  <p> {viewData?.title} </p>
+                </li>
+
+                <li>
+                  <strong>Deseription :</strong>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: viewData?.description }}
+                  />
+                </li>
+              </ul>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setCompany(false)}
+              >
+                Close
+              </button>
+            </div>
           </div>
-        </Modal.Body>
+        </div>
       </Modal>
     </div>
   )
