@@ -69,8 +69,10 @@ function UserServices() {
   }
   // delete item end
   useEffect(() => {
-    allData()
-  }, [])
+    if (currentUser?.pk) {
+      allData()
+    }
+  }, [currentUser])
   return (
     <>
       <Header2 />

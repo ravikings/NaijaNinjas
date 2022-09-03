@@ -102,12 +102,13 @@ function UpdateServices() {
         (error) => {
           console.log(error)
         }
-    )
-    
+      )
   }
   useEffect(() => {
-    formData()
-  }, [])
+    if (currentUser?.pk && id) {
+      formData()
+    }
+  }, [currentUser])
   return (
     <>
       <Header2 />

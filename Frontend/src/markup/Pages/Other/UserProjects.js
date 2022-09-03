@@ -20,8 +20,6 @@ function UserProjects() {
   const history = useHistory()
   const axiosPrivate = useAxiosPrivate()
   const { currentUser } = useSelector((state) => state.authReducer)
-  let token = `Bearer ` + localStorage.getItem("access_token")
-  let userId = parseInt(localStorage.getItem("userID"))
   const [index, setIndex] = useState(0)
 
   const handleSelect = (selectedIndex, e) => {
@@ -30,11 +28,6 @@ function UserProjects() {
 
   const allData = () => {
     setLoading(true)
-    // axios({
-    // 	method: 'GET',
-    // 	url: `${baseURL}api/v1/account/service-dashboard/`,
-
-    // })
     axiosPrivate
       .get(`${url.baseURL}api/v1/account/projects/?user_id=${currentUser?.pk}`)
       .then((res) => {
@@ -88,8 +81,10 @@ function UserProjects() {
   }
   // delete item end
   useEffect(() => {
-    allData()
-  }, [])
+    if (currentUser?.pk) {
+      allData()
+    }
+  }, [currentUser])
   return (
     <>
       <Header2 />

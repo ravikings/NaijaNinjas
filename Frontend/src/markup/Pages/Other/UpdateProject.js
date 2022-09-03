@@ -13,6 +13,7 @@ import "react-dropzone-uploader/dist/styles.css"
 import Dropzone from "react-dropzone-uploader"
 import { axiosPrivate } from "../../../utils/axios"
 import { useSelector } from "react-redux"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 const postBlog = [
   { title: "PHP Web Developer" },
   { title: "Software Developer" },
@@ -22,6 +23,7 @@ const postBlog = [
 function UpdateProject() {
   var { id } = useParams()
   const history = useHistory()
+  const axiosPriv = useAxiosPrivate()
   let token = `Bearer ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [title, setTitle] = useState("")
@@ -58,10 +60,10 @@ function UpdateProject() {
   }
 
   useEffect(() => {
-    if (id) {
+    if (currentUser?.pk && id) {
       allData()
     }
-  }, [id])
+  }, [id, currentUser])
 
   // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {
@@ -78,6 +80,8 @@ function UpdateProject() {
   // upload image end
   const updateProject = (e) => {
     e.preventDefault()
+    let isMounted = true
+    const controller = new AbortController()
 
     var formdata = new FormData()
     formdata.append("id", parseInt(id))
@@ -87,8 +91,14 @@ function UpdateProject() {
     attachFile.forEach((file) => {
       formdata.append("image", file)
     })
-    axiosPrivate
-      .post(`${url.baseURL}/api/v1/account/project-create/`, formdata)
+
+    // axiosPrivate
+    //   .post(`${url.baseURL}api/v1/account/project-create/`, formdata)
+
+    axiosPriv
+      .post(`/api/v1/account/project-create/`, formdata, {
+        signal: controller.signal,
+      })
       .then(
         (response) => {
           console.log("the response is ", response)

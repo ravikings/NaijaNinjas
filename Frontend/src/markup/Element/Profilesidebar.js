@@ -198,18 +198,6 @@ function ProfileSidebar({
                   <span>Resume</span>
                 </Link>
               </li>
-              <li>
-                <Link className={"ml-4"} to={"/add-projects"}>
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                  <span>Add Projects</span>
-                </Link>
-              </li>
-              <li>
-                <Link className={"ml-4"} to={"/add-services"}>
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                  <span>Add Services</span>
-                </Link>
-              </li>
             </Collapse>
 
             {/* start ask question start */}
@@ -395,13 +383,13 @@ function ProfileSidebar({
                   <span>Change Password</span>
                 </Link>
               </li>
-              <li>
-                <Link className="ml-4" to={"./"}>
-                  <i className="fa fa-sign-out" aria-hidden="true"></i>
-                  <span>Log Out</span>
-                </Link>
-              </li>
             </Collapse>
+            <li>
+              <Link to={"./"}>
+                <i className="fa fa-sign-out" aria-hidden="true"></i>
+                <span>Log Out</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
