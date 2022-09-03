@@ -61,7 +61,8 @@ from .serializers import (
     PublicQuotesSerializer,
     BiddersProfileSerializer,
     PublicProfileSerializer,
-    ClientReviewSerializer
+    ClientReviewSerializer,
+    PrivateProfileSerializer
 )
 from notifications.signals import notify
 
@@ -98,7 +99,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
         #print("im sending notification dashboard")
         #notify.send(user,recipient=recipient, verb='hello come to dashboard')
 
-        serializer = PublicProfileSerializer(data[0])
+        serializer = PrivateProfileSerializer(data[0])
         return Response(serializer.data)
         
 
@@ -195,9 +196,9 @@ def account_status(request, pk, type):
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
-    queryset.set_online_status(str(type).upper()) # pass type, either login or logout
-    return Response({"message": f"status updated to {queryset.status}"})
+    queryset = RunnerProfile.objects.filter(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset[0].set_online_status(str(type).upper()) # pass type, either login or logout
+    return Response({"message": f"status updated to {type}"})
     
 
 @api_view(["POST","GET"])
@@ -384,6 +385,23 @@ class ServiceView(viewsets.ModelViewSet):
         user_id = self.request.query_params.get('user_id')
     
         return Service.objects.filter(author=user_id)
+
+
+class PrivateServiceView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = ServiceSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        user_id = self.request.query_params.get('user_id')
+    
+        return Service.objects.filter(author=user_id)
+
 
 
 class TestView(viewsets.ModelViewSet):
@@ -598,9 +616,18 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
         title = request.data['title']
         description = request.data['description']
         author_id = request.data['author']
-        form_data = {}
         user_info = AccountUser.objects.get(id=author_id)
-        project = Projects.objects.create(author=user_info, title=title, description=description)
+        
+        try:
+            id = request.data['id']
+            project= Projects.objects.get(id=id, author=user_info)
+            project.title = title
+            project.description = description
+            project.save()
+        except:
+            project = Projects.objects.create(author=user_info, title = title, description = description)
+        
+        form_data = {}
         form_data['project']= project.id
         success = True
         response = []
@@ -615,9 +642,32 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
             else:
                 success = False
         if success:
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response({"message": f"action completed successfull! {response}"}, status=status.HTTP_201_CREATED)
             
         return Response(response,status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteProjectReview(viewsets.ModelViewSet):
+    
+    """
+    uses to delete images attached to projects
+    """
+
+    queryset = ProjectPhoto.objects.all()
+    serializer_class = ProjectPhotoSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+@api_view(["GET", "POST"])
+def delete_projects(request, pk):
+    try:
+        query = Projects.objects.get(pk=pk)
+        query.delete()
+        photo = ProjectPhoto.objects.filter(project=pk)
+        photo.delete()
+        return Response({"message": f"project deletion was successfull!"})
+
+    except:
+        return Response({"error": f"Record doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])

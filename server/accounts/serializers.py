@@ -99,6 +99,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = RunnerProfile
         fields = "__all__"
 
+class PrivateProfileSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+
+    class Meta:
+        model = RunnerProfile
+        fields = "__all__"
 
 class PublicProfileSerializer(serializers.ModelSerializer):
     """
@@ -161,7 +169,6 @@ class PhotosSerializer(serializers.ModelSerializer):
     """
     Photo serializers use profile for picture uploads and retrieve
     """
-
     class Meta:
         model = Photo
         fields = "__all__"
@@ -265,7 +272,8 @@ class ProjectsSerializer(serializers.ModelSerializer):
     def get_photos(self, instance):
 
         query =  ProjectPhoto.objects.filter(project=instance.id)
-        return [objects.image.url for objects in query]
+        serializer = ProjectPhotoSerializer(query, many=True)
+        return serializer.data
 
 # class UserOnlineSerializer(serializers.ModelSerializer):
     

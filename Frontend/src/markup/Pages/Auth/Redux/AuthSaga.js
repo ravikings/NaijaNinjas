@@ -129,7 +129,7 @@ export function* logout({ handleClose }) {
   try {
     const id = localStorage.getItem("userID");
     yield createRequest().post("/dj-rest-auth/logout/");
-    yield createRequest().get(`/api/v1/user-status/${id}/logout`);
+    yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
     yield call(handleClose);
     // yield call(getCurrentUser);
     Cookies.remove("access_token", { path: "/" });
