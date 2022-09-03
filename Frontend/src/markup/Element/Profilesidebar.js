@@ -67,11 +67,11 @@ function ProfileSidebar({
   const sendImage = async () => {
     if (imageState) {
       try {
-        const formData = new FormData();
-        formData.append("photo", imageState);
+        const formData = new FormData()
+        formData.append("photo", imageState)
         //formData.append("author", userProfile?.author);
         await imageSendAPI.patch(
-          `/api/v1/account/user-profile/${currentUser?.pk}/`,
+          `/api/v1/account/user-profile/${userProfile?.id}/`,
           formData
         )
         setImageState("")
@@ -84,6 +84,8 @@ function ProfileSidebar({
       }
     }
   }
+
+  console.log(currentUser)
 
   useEffect(() => {
     if (imageState) {
@@ -179,38 +181,13 @@ function ProfileSidebar({
                 </Link>
               </li>
             )} */}
-            <li onClick={() => setShowResume(!showResume)}>
-              <Link to={"#"} className={active === "question" ? "active" : ""}>
-                <i
-                  className={
-                    showResume ? "fa fa-arrow-down" : "fa fa-arrow-right"
-                  }
-                  aria-hidden="true"
-                  onClick={() => showResume(!showResume)}
-                ></i>
-                <span>My Resume</span>
+
+            <li>
+              <Link to={"/jobs-my-resume"}>
+                <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                <span>Resume</span>
               </Link>
             </li>
-            <Collapse in={showResume}>
-              <li>
-                <Link className={"ml-4"} to={"/jobs-my-resume"}>
-                  <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                  <span>Resume</span>
-                </Link>
-              </li>
-              <li>
-                <Link className={"ml-4"} to={"/add-projects"}>
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                  <span>Add Projects</span>
-                </Link>
-              </li>
-              <li>
-                <Link className={"ml-4"} to={"/add-services"}>
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                  <span>Add Services</span>
-                </Link>
-              </li>
-            </Collapse>
 
             {/* start ask question start */}
             <li onClick={() => setShowQuestion(!showQuestion)}>
@@ -239,6 +216,24 @@ function ProfileSidebar({
               </li>
             </Collapse>
             {/* start ask question end */}
+            <li>
+              <Link
+                to={"/user-projects"}
+                className={active === "My Projects" ? "active" : ""}
+              >
+                <i className="fa-solid fa-list-check" aria-hidden="true"></i>
+                <span>My Projects</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/user-services"}
+                className={active === "My Services" ? "active" : ""}
+              >
+                <i className="fa-solid fa-ticket-simple" aria-hidden="true"></i>
+                <span>My Serivces</span>
+              </Link>
+            </li>
             <li>
               <Link
                 to={"/jobs-saved-jobs"}
@@ -323,9 +318,10 @@ function ProfileSidebar({
             <li onClick={() => setShowSettings(!showSettings)}>
               <Link to={"#"} className={active === "question" ? "active" : ""}>
                 {/* <i class="fa-solid fa-gear"></i> */}
+                {/* "fa fa-arrow-down" : "fa fa-arrow-right" */}
                 <i
                   className={
-                    !showSettings ? "fa-solid fa-gear" : "fa fa-arrow-up"
+                    !showSettings ? "fa fa-arrow-right" : "fa fa-arrow-down"
                   }
                   aria-hidden="true"
                 ></i>
@@ -377,13 +373,13 @@ function ProfileSidebar({
                   <span>Change Password</span>
                 </Link>
               </li>
-              <li>
-                <Link className="ml-4" to={"./"}>
-                  <i className="fa fa-sign-out" aria-hidden="true"></i>
-                  <span>Log Out</span>
-                </Link>
-              </li>
             </Collapse>
+            <li>
+              <Link to={"./"}>
+                <i className="fa fa-sign-out" aria-hidden="true"></i>
+                <span>Log Out</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

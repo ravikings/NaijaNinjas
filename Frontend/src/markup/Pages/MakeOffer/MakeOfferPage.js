@@ -125,7 +125,7 @@ function MakeOfferPage() {
           <div className={classes.main}>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12} md={7} lg={8}>
-                <TabsGroup data={user.description} resume={resume} />
+                <TabsGroup data={user.description} resume={resume} id={id} />
                 <Feedback />
                 <Feedback />
                 <Feedback />

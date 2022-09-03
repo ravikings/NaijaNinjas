@@ -1,4 +1,5 @@
 import { authActionTypes } from "./AuthActions"
+import Cookies from "js-cookie"
 
 const initialState = {
   currentUser: null,
@@ -138,6 +139,7 @@ function reducer(state = initialState, action) {
     case authActionTypes.LOGOUT_SUCCESS:
       localStorage.removeItem("access_token")
       localStorage.removeItem("userID")
+      Cookies.remove("access_token")
 
       return {
         ...state,

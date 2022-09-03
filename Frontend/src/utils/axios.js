@@ -77,4 +77,6 @@ export const axiosPrivate = axios.create({
     Authorization: `Bearer ${Cookies.get("access_token")}`,
   },
   withCredentials: true,
+  xsrfCookieName: "csrftoken",
+  xsrfHeaderName: "X-CSRFToken",
 })

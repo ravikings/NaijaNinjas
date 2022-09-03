@@ -1,84 +1,125 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Modal from 'react-bootstrap/Modal'
-import 'react-image-lightbox/style.css';
-import ProjectCard from "./ProjectCard";
+import React, { useState, useEffect } from "react"
+import Modal from "react-bootstrap/Modal"
+import { axiosPrivate } from "../../../../utils/axios"
+import url from "../../../../utils/baseUrl"
+import "react-image-lightbox/style.css"
+import ProjectCard from "./ProjectCard"
+import Carousel from "react-bootstrap/Carousel"
 
-const photos = [
-  {
-    url: require("./../../../../images/blog/grid/pic1.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic2.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic3.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic4.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic5.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic3.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic5.jpg"),
-  },
-  {
-    url: require("./../../../../images/blog/grid/pic4.jpg"),
-  },
-];
+function Gallery({ id }) {
+  const [lgShow, setLgShow] = useState(false)
+  const [viewData, setViewData] = useState([])
+  const [company, setCompany] = useState(false)
+  const [modelItem, setModelItem] = useState({})
+  const [projects, setProjects] = React.useState([])
+  const [index, setIndex] = useState(0)
 
-function Gallery(props) {
+  const handleSelect = (selectedIndex, e) => {
+    setIndex(selectedIndex)
+  }
 
- 
-  const [lgShow, setLgShow] = useState(false);
+  const allData = () => {
+    axiosPrivate
+      .get(`${url.baseURL}api/v1/account/projects/?user_id=${id}`)
+      .then((res) => {
+        console.log(res.data.results)
+        setProjects(res.data.results)
+      })
+      .catch((e) => {
+        if (e.response?.status === 400) {
+          console.log(e?.response?.data?.non_field_errors[0])
+        } else {
+          console.log("Unknown Error")
+        }
+      })
+  }
 
-
-
+  useEffect(() => {
+    allData()
+  }, [])
 
   return (
     <div className="container project-data">
-     
-  
- 
       <div className="row">
-      {photos.map((e)=>(
-      <div   onClick={() => setLgShow(true)} className="col-lg-4 col-sm-12 col-12 m-b20">
-      <ProjectCard/>
-      </div>
-    ))}
-
+        {projects.length > 0 &&
+          projects.map((item, index) => (
+            <div
+              onClick={(e) => {
+                setViewData(item)
+                setCompany(true)
+              }}
+              className="col-lg-4 col-sm-12 col-12 m-b20"
+            >
+              <ProjectCard key={index} item={item} />
+            </div>
+          ))}
       </div>
       <Modal
-    size="lg"
-    show={lgShow}
-    onHide={() => setLgShow(false)}
-    aria-labelledby="example-modal-sizes-title-lg"
-    backdropClassName="project-modal"
-  >
-    <Modal.Header  className="project-modal-header" closeButton>
-      <Modal.Title id="example-modal-sizes-title-lg">
-        Project Title
-      </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-    <img className="img-fluid" src="https://images.unsplash.com/photo-1426170042593-200f250dfdaf?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg"/>
-    
+        show={company}
+        onHide={setCompany}
+        className="modal fade modal-bx-info"
+      >
+        <div className="" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <div className="logo-img">
+                <img
+                  alt=""
+                  src={require("../../../../images/logo/icon2.png")}
+                />
+              </div>
+              <h5 className="modal-title">Project Details</h5>
 
-    <div className="project-model-description p-2">
-     <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis numquam, quibusdam ipsam deserunt maiores voluptate blanditiis. Dolorum facere nobis voluptatem quasi, saepe quia! Eligendi, explicabo quam error modi perspiciatis architecto?</p>
-     <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis numquam, quibusdam ipsam deserunt maiores voluptate blanditiis. Dolorum facere nobis voluptatem quasi, saepe quia! Eligendi, explicabo quam error modi perspiciatis architecto?</p>
+              <button
+                type="button"
+                className="close"
+                onClick={() => setCompany(false)}
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              {/* ============================================= */}
+              <Carousel activeIndex={index} onSelect={handleSelect}>
+                {viewData?.photos?.map((item, index) => (
+                  <Carousel.Item key={index}>
+                    <img
+                      className="d-block w-100"
+                      src={item.image}
+                      alt="First slide"
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              {/* ============================================= */}
+              <ul>
+                <li>
+                  <strong>Project Title :</strong>
+                  <p> {viewData?.title} </p>
+                </li>
+
+                <li>
+                  <strong>Deseription :</strong>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: viewData?.description }}
+                  />
+                </li>
+              </ul>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setCompany(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
-      
-  
-    </Modal.Body>
-  </Modal>
-     
-    </div>
-  );
+  )
 }
 
-export default Gallery;
+export default Gallery
