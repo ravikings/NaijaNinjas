@@ -179,26 +179,13 @@ function ProfileSidebar({
                 </Link>
               </li>
             )} */}
-            <li onClick={() => setShowResume(!showResume)}>
-              <Link to={"#"} className={active === "question" ? "active" : ""}>
-                <i
-                  className={
-                    showResume ? "fa fa-arrow-down" : "fa fa-arrow-right"
-                  }
-                  aria-hidden="true"
-                  onClick={() => showResume(!showResume)}
-                ></i>
-                <span>My Resume</span>
+
+            <li>
+              <Link to={"/jobs-my-resume"}>
+                <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                <span>Resume</span>
               </Link>
             </li>
-            <Collapse in={showResume}>
-              <li>
-                <Link className={"ml-4"} to={"/jobs-my-resume"}>
-                  <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                  <span>Resume</span>
-                </Link>
-              </li>
-            </Collapse>
 
             {/* start ask question start */}
             <li onClick={() => setShowQuestion(!showQuestion)}>
@@ -329,9 +316,10 @@ function ProfileSidebar({
             <li onClick={() => setShowSettings(!showSettings)}>
               <Link to={"#"} className={active === "question" ? "active" : ""}>
                 {/* <i class="fa-solid fa-gear"></i> */}
+                {/* "fa fa-arrow-down" : "fa fa-arrow-right" */}
                 <i
                   className={
-                    !showSettings ? "fa-solid fa-gear" : "fa fa-arrow-up"
+                    !showSettings ? "fa fa-arrow-right" : "fa fa-arrow-down"
                   }
                   aria-hidden="true"
                 ></i>

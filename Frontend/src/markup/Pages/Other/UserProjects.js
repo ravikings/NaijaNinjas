@@ -108,71 +108,85 @@ function UserProjects() {
                       </Link>
                     </div>
                     {!loading ? (
-                      <ul className="post-job-bx browse-job-grid post-resume row">
-                        {data?.map((item, index) => (
-                          <li className="col-lg-6 col-md-6" key={index}>
-                            <div className="post-bx">
-                              <div className="d-flex m-b20">
-                                <div className="job-post-info">
-                                  <img
-                                    src={
-                                      item?.photos.length > 0 &&
-                                      item?.photos?.[0].image
-                                    }
-                                    alt=""
-                                    height={"150px"}
-                                    width={"150px"}
-                                  />
+                      <>
+                        <ul className="post-job-bx browse-job-grid post-resume row">
+                          {data.length > 0 ? (
+                            data?.map((item, index) => (
+                              <li className="col-lg-6 col-md-6" key={index}>
+                                <div className="post-bx">
+                                  <div className="d-flex m-b20">
+                                    <div className="job-post-info">
+                                      <img
+                                        src={
+                                          item?.photos.length > 0 &&
+                                          item?.photos?.[0].image
+                                        }
+                                        alt=""
+                                        height={"150px"}
+                                        width={"150px"}
+                                      />
 
-                                  <h5 className="m-b0">
-                                    <Link
-                                      to={"#"}
-                                      onClick={(e) => {
-                                        e.preventDefault()
-                                        setViewData(item)
-                                        setCompany(true)
-                                      }}
-                                    >
-                                      {item.title}
-                                    </Link>
-                                  </h5>
-                                </div>
-                              </div>
-                              <div className="service-tag m-t15 m-b10">
-                                {item?.tag?.split(",")?.map((e) => (
-                                  <Link to={"#"} className="mr-1">
-                                    <span>{e}</span>
-                                  </Link>
-                                ))}
-                              </div>
-                              {/* <Link to={"/files/pdf-sample.pdf"} target="blank" className="job-links">
+                                      <h5 className="m-b0">
+                                        <Link
+                                          to={"#"}
+                                          onClick={(e) => {
+                                            e.preventDefault()
+                                            setViewData(item)
+                                            setCompany(true)
+                                          }}
+                                        >
+                                          {item.title}
+                                        </Link>
+                                      </h5>
+                                    </div>
+                                  </div>
+                                  <div className="service-tag m-t15 m-b10">
+                                    {item?.tag?.split(",")?.map((e) => (
+                                      <Link to={"#"} className="mr-1">
+                                        <span>{e}</span>
+                                      </Link>
+                                    ))}
+                                  </div>
+                                  {/* <Link to={"/files/pdf-sample.pdf"} target="blank" className="job-links">
 															<i className="fa fa-pencil"></i>
 														</Link> */}
-                              <button
-                                onClick={() => deleteProject(item)}
-                                className="btn rounded btn-danger float-right mr-2"
-                              >
-                                <i className="fa fa-trash"></i>
-                              </button>
-                              <Link
-                                to={`/update-projects/${item.id}`}
-                                className="btn rounded btn-primary float-right mr-2"
-                              >
-                                <i className="fa fa-pencil"></i>
-                              </Link>
-                              <button
-                                onClick={() => {
-                                  setViewData(item)
-                                  setCompany(true)
-                                }}
-                                className="btn rounded btn-info float-right mr-2"
-                              >
-                                <i className="fa fa-eye"></i>
-                              </button>
+                                  <button
+                                    onClick={() => deleteProject(item)}
+                                    className="btn rounded btn-danger float-right mr-2"
+                                  >
+                                    <i className="fa fa-trash"></i>
+                                  </button>
+                                  <Link
+                                    to={`/update-projects/${item.id}`}
+                                    className="btn rounded btn-primary float-right mr-2"
+                                  >
+                                    <i className="fa fa-pencil"></i>
+                                  </Link>
+                                  <button
+                                    onClick={() => {
+                                      setViewData(item)
+                                      setCompany(true)
+                                    }}
+                                    className="btn rounded btn-info float-right mr-2"
+                                  >
+                                    <i className="fa fa-eye"></i>
+                                  </button>
+                                </div>
+                              </li>
+                            ))
+                          ) : (
+                            <div className="col-lg-12 col-md-12">
+                              <div className="post-bx">
+                                <div className="d-flex m-b20 justify-content-center">
+                                  <div className="job-post-info">
+                                    <h1 className="m-b0">No Projects Found</h1>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </li>
-                        ))}
-                      </ul>
+                          )}
+                        </ul>
+                      </>
                     ) : (
                       <div className="loader">
                         <ClipLoader
@@ -182,29 +196,31 @@ function UserProjects() {
                         />
                       </div>
                     )}
-                    <div className="pagination-bx float-right">
-                      <ul className="pagination">
-                        <li className="previous">
-                          <Link to={"#"}>
-                            <i className="ti-arrow-left"></i> Prev
-                          </Link>
-                        </li>
-                        <li className="active">
-                          <Link to={"#"}>1</Link>
-                        </li>
-                        <li>
-                          <Link to={"#"}>2</Link>
-                        </li>
-                        <li>
-                          <Link to={"#"}>3</Link>
-                        </li>
-                        <li className="next">
-                          <Link to={"#"}>
-                            Next <i className="ti-arrow-right"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
+                    {data.length > 0 && (
+                      <div className="pagination-bx float-right">
+                        <ul className="pagination">
+                          <li className="previous">
+                            <Link to={"#"}>
+                              <i className="ti-arrow-left"></i> Prev
+                            </Link>
+                          </li>
+                          <li className="active">
+                            <Link to={"#"}>1</Link>
+                          </li>
+                          <li>
+                            <Link to={"#"}>2</Link>
+                          </li>
+                          <li>
+                            <Link to={"#"}>3</Link>
+                          </li>
+                          <li className="next">
+                            <Link to={"#"}>
+                              Next <i className="ti-arrow-right"></i>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
