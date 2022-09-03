@@ -272,7 +272,8 @@ class ProjectsSerializer(serializers.ModelSerializer):
     def get_photos(self, instance):
 
         query =  ProjectPhoto.objects.filter(project=instance.id)
-        return [objects.image.url for objects in query]
+        serializer = ProjectPhotoSerializer(query, many=True)
+        return serializer.data
 
 # class UserOnlineSerializer(serializers.ModelSerializer):
     

@@ -616,9 +616,18 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
         title = request.data['title']
         description = request.data['description']
         author_id = request.data['author']
-        form_data = {}
         user_info = AccountUser.objects.get(id=author_id)
-        project, _created = Projects.objects.get_or_create(author=user_info, title=title, description=description)
+        
+        try:
+            id = request.data['id']
+            project= Projects.objects.get(id=id, author=user_info)
+            project.title = title
+            project.description = description
+            project.save()
+        except:
+            project = Projects.objects.create(author=user_info, title = title, description = description)
+        
+        form_data = {}
         form_data['project']= project.id
         success = True
         response = []
@@ -633,7 +642,7 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
             else:
                 success = False
         if success:
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response({"message": f"action completed successfull! {response}"}, status=status.HTTP_201_CREATED)
             
         return Response(response,status=status.HTTP_400_BAD_REQUEST)
 
