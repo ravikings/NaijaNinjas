@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "task",
     "payment",
+    "Marketing",
 ]
 
 REST_FRAMEWORK = {
@@ -78,12 +79,12 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        #"rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",  # new
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
+    "PAGE_SIZE": 15,
     "ORDERING_PARAM": "ordering",
 }
 
@@ -200,10 +201,10 @@ WSGI_APPLICATION = "server.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lastestgigxdb', 
-        'USER': 'postgres', 
+        'NAME': 'lastestgigxdb',
+        'USER': 'postgres',
         'PASSWORD': '2{c%v~TtV?_SFCer',
-        'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
+        'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -244,10 +245,10 @@ SITE_ID = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = "/static/"
+# STATIC_URL = "/static/"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
@@ -321,6 +322,7 @@ YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
 DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
 AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
+AWS_S3_MAX_AGE_SECONDS_STATIC = "94608000"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'),

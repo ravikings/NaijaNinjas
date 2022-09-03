@@ -39,7 +39,8 @@ from .models import (
     Service,
     Projects,
     ProjectPhoto,
-    PublicQuotes
+    PublicQuotes,
+    ClientReview
 )
 from .serializers import (
     PhotosSerializer,
@@ -60,6 +61,7 @@ from .serializers import (
     PublicQuotesSerializer,
     BiddersProfileSerializer,
     PublicProfileSerializer,
+    ClientReviewSerializer
 )
 from notifications.signals import notify
 
@@ -247,9 +249,14 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     uses to upload video to ui dashboard
     """
 
-    queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
-    permissions_classes = [IsAuthenticated and IsRunner]
+    #permissions_classes = [IsAuthenticated and IsRunner]
+
+    def get_queryset(self):
+
+        user_id = self.request.query_params.get('user_id')
+
+        return Projects.objects.filter(author=user_id)
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ReviewView(viewsets.ModelViewSet):
@@ -265,7 +272,15 @@ class ReviewView(viewsets.ModelViewSet):
     
         return Review.objects.filter(profile=self.request.user.id)
 
+class ClientReviewView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
 
+    queryset = ClientReview.objects.all()
+    serializer_class = ClientReviewSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class SearchProfile(viewsets.ModelViewSet):
@@ -348,6 +363,12 @@ class UserSearchDetails(viewsets.ModelViewSet):
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 
+class DashboardServiceView(viewsets.ModelViewSet):
+
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ServiceView(viewsets.ModelViewSet):
     
@@ -355,16 +376,15 @@ class ServiceView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    permissions_classes = [IsAuthenticated and IsOwner]
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
+    def get_queryset(self):
+    
+        user_id = self.request.query_params.get('user_id')
+    
+        return Service.objects.filter(author=user_id)
 
-    def retrieve(self, request, pk=None):
-        
-        data = Service.objects.get_or_create(author_id=pk)
-        serializer = ServiceSerializer(data[0])
-        return Response(serializer.data)
 
 class TestView(viewsets.ModelViewSet):
 
@@ -560,19 +580,34 @@ class SetNewPasswordAPIView(APIView):
 
 
 class ProjectImageAPIView(viewsets.ModelViewSet):
+
+    """
+        this requires form data field
+        title, description, author    
+        image for image files to upload 
+    
+    """
+
     queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
     parser_classes = (MultiPartParser, FormParser)
 
+
     def create(self, request, pk=None):
-        property_id = request.data['project']
+        
+        title = request.data['title']
+        description = request.data['description']
+        author_id = request.data['author']
         form_data = {}
-        form_data['forum']= property_id
+        user_info = AccountUser.objects.get(id=author_id)
+        project = Projects.objects.create(author=user_info, title=title, description=description)
+        form_data['project']= project.id
         success = True
         response = []
 
         for images in request.FILES.getlist('image'):
-            form_data['image']=images   
+            form_data['image']=images  
+            print 
             serializer = ProjectPhotoSerializer(data=form_data)
             if serializer.is_valid():
                 serializer.save()

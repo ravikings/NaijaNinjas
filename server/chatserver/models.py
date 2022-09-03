@@ -22,10 +22,22 @@ class Conversation(models.Model):
         related_name="convo_participant",
         null=True,
     )
+    new_message_alert = models.BooleanField(default=False, verbose_name="new_message_alert", blank=True)
     start_time = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("-start_time",)
+        ordering = ("-updated",)
+
+    def on_message_alert(self):
+
+        try:
+            self.new_message_alert = True
+            self.save()
+            print("conversation alert updated")
+
+        except Exception:
+            pass
 
 def upload_to(instance, filename):
     now = timezone.now()
@@ -41,7 +53,7 @@ class Message(models.Model):
         null=True,
     )
     text = RichTextField()
-    attachment = models.FileField(upload_to=upload_to, blank=True, storage=storage)
+    attachment = models.FileField(upload_to=upload_to, blank=True, null=True, storage=storage)
     conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 

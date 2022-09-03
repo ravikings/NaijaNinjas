@@ -21,10 +21,19 @@ class AccountUser(AbstractUser):
     is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
     is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
     last_seen = models.DateTimeField(auto_now=True)
+    password_reset_required = models.BooleanField(default=False, verbose_name="reset_password") 
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
 
+    def set_last_seen(self):
+        
+        try:
+            self.save()
+            print("last seen updated")
+        
+        except Exception:
+            pass
 
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)
@@ -144,7 +153,7 @@ class RunnerResume(models.Model):
     career_profile = models.JSONField(null=True, blank=True)
     postcode = models.CharField(max_length=55, blank=True, db_index=True)
     description = models.TextField(null=True, db_index=True, blank=True)
-    attachment = models.FileField(upload_to=upload_to_resume, blank=True, storage=storage)
+    attachment = models.FileField(upload_to=upload_to_resume,null=True, blank=True, storage=storage)
 
 class Review(models.Model):
     author = models.ForeignKey(
@@ -159,18 +168,48 @@ class Review(models.Model):
     on_budget = models.BooleanField(default=False)
     on_time = models.BooleanField(default=False)
     profile = models.ForeignKey(
-        RunnerProfile, on_delete=models.CASCADE, related_name="profile_review", default=False
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_profile_review", null=True, blank=True
     )
     class Meta:
         ordering = ("created",)
-        
+
+
+class ClientReview(models.Model):
+    client_review = models.OneToOneField(
+        Review,
+        on_delete=models.CASCADE, related_name="client_review_model")
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_review_author"
+    )
+    body = RichTextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    Platform_rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    Platform_suggestion = RichTextField()
+    budget = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    communcation_rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    client_account = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="client_profile", null=True, blank=True
+    )
+    class Meta:
+        ordering = ("created",)
+
 class Photo(models.Model):
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="photo_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    image = models.ImageField(upload_to="users/%Y/%m/%d/", storage=storage)
+    image = models.ImageField(upload_to="users/%Y/%m/%d/", null=True, blank=True, storage=storage)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
@@ -181,7 +220,7 @@ class Vidoe(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="video_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True, storage=storage)
+    video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True, null=True, storage=storage)
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
@@ -197,7 +236,7 @@ class Service(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
     )
     description = RichTextField(db_index=True, null=True)
-    image = models.ImageField(upload_to=upload_to, blank=True, storage=storage)
+    image = models.ImageField(upload_to=upload_to,null=True, blank=True, storage=storage)
     amount = models.CharField(max_length=250, null=True)
     location = models.CharField(max_length=250, null=True, db_index=True)
     title = models.CharField(max_length=250, null=True, db_index=True)
@@ -217,11 +256,11 @@ class Projects(models.Model):
 
 class ProjectPhoto(models.Model):
     
-    task = models.ForeignKey(
+    project = models.ForeignKey(
         Projects, on_delete=models.CASCADE, related_name="project_photos"
     )
 
-    image = models.ImageField(upload_to=upload_to, storage=storage)
+    image = models.ImageField(upload_to=upload_to,null=True,blank=True, storage=storage)
 
 class PublicQuotes(models.Model):
     

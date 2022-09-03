@@ -20,5 +20,5 @@ def start_celery_worker():
     thread.daemon = True
     thread.start()
 
-start_celery_worker()
+#start_celery_worker()
 #celery -A server worker --without-heartbeat --without-gossip --without-mingle

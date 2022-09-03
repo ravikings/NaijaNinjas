@@ -279,7 +279,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
             }}
           >
             <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>
-              No Conversation Selected
+              Try selecting a conversation.
             </h1>
           </div>
         </div>

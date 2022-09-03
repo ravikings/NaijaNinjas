@@ -18,7 +18,7 @@ class Forum(models.Model):
     body = RichTextField(db_index=True)
     tags = models.CharField(max_length=255, blank=True, db_index=True)
     category = models.CharField(max_length=255, blank=True, db_index=True)
-    attachment = models.FileField(upload_to="forum/documents/%Y/%m/%d/", blank=True, storage=storage)
+    attachment = models.FileField(upload_to="forum/documents/%Y/%m/%d/", blank=True,null=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True, db_index=True)
     views = models.ManyToManyField(IpModel, related_name="forum_views", blank=True)
@@ -42,7 +42,7 @@ class Photo(models.Model):
         Forum, on_delete=models.CASCADE, related_name="forum_photos"
     )
 
-    image = models.ImageField(upload_to=upload_to)
+    image = models.ImageField(upload_to=upload_to, null=True,blank=True,storage=storage)
 
 
 class Comment(models.Model):
