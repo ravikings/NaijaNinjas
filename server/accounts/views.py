@@ -618,7 +618,7 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
         author_id = request.data['author']
         form_data = {}
         user_info = AccountUser.objects.get(id=author_id)
-        project = Projects.objects.create(author=user_info, title=title, description=description)
+        project, _created = Projects.objects.get_or_create(author=user_info, title=title, description=description)
         form_data['project']= project.id
         success = True
         response = []
@@ -636,6 +636,29 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
             return Response(response, status=status.HTTP_201_CREATED)
             
         return Response(response,status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteProjectReview(viewsets.ModelViewSet):
+    
+    """
+    uses to delete images attached to projects
+    """
+
+    queryset = ProjectPhoto.objects.all()
+    serializer_class = ProjectPhotoSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+@api_view(["GET", "POST"])
+def delete_projects(request, pk):
+    try:
+        query = Projects.objects.get(pk=pk)
+        query.delete()
+        photo = ProjectPhoto.objects.filter(project=pk)
+        photo.delete()
+        return Response({"message": f"project deletion was successfull!"})
+
+    except:
+        return Response({"error": f"Record doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])

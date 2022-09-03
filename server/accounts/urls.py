@@ -28,8 +28,10 @@ from accounts.views import (
     public_quotes,
     profile_mode_status,
     profile_favorite,
+    delete_projects,
     DashboardServiceView,
     PrivateServiceView,
+    DeleteProjectReview,
     #start_celery_work,
 )
 
@@ -60,6 +62,8 @@ router.register(r"project-create", ProjectImageAPIView, basename="project-images
 router.register(r"dashboard-profile-bookmarks", DashboardProfileFavorite, basename="dashboard-profile-bookmarks")
 router.register(r"freelancer-review", ClientReviewView, basename="client-review")
 router.register(r"service-dashboard", DashboardServiceView, basename="service-dashboard")
+router.register(r"delete-project-image", DeleteProjectReview, basename="delete-project-images")
+
 
 
 urlpatterns = [
@@ -78,6 +82,7 @@ urlpatterns = [
     path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
     path("profile-mode/<str:pk>/<str:type>/", profile_mode_status, name="profile_mode_status"),
     path("public-quotes/", public_quotes, name="public-quotes"),
+    path("delete-project/<str:pk>/", delete_projects, name="delete-project"),
     path('profile-bookmark/<str:pk>/', profile_favorite, name="profile-bookmark"),
     #path("public-celery/", start_celery_work, name="start-celery"),
 
