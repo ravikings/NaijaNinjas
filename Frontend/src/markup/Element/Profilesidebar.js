@@ -71,7 +71,7 @@ function ProfileSidebar({
         formData.append("photo", imageState)
         //formData.append("author", userProfile?.author);
         await imageSendAPI.patch(
-          `/api/v1/account/user-profile/${currentUser?.pk}/`,
+          `/api/v1/account/user-profile/${userProfile?.id}/`,
           formData
         )
         setImageState("")
@@ -84,6 +84,8 @@ function ProfileSidebar({
       }
     }
   }
+
+  console.log(currentUser)
 
   useEffect(() => {
     if (imageState) {
