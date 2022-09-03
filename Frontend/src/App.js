@@ -59,10 +59,6 @@ function App() {
     }
   }, [isVerified]);
 
-  useEffect(() => {
-    console.log(loading, "loading");
-  }, [loading]);
-
   return (
     <div className='App'>
       {loading ? (
