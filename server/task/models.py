@@ -22,7 +22,7 @@ class Task(models.Model):
     ]
 
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="task_author"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="task_author", blank=True, null=True
     )
     title = models.CharField(max_length=255, blank=True, db_index=True)
     sector  = models.CharField(max_length=255, blank=True, null=True)
