@@ -5,6 +5,7 @@ import url from "../../../../utils/baseUrl"
 import "react-image-lightbox/style.css"
 import ProjectCard from "./ProjectCard"
 import Carousel from "react-bootstrap/Carousel"
+import ClipLoader from "react-spinners/ClipLoader"
 
 function Gallery({ id }) {
   const [lgShow, setLgShow] = useState(false)
@@ -13,19 +14,23 @@ function Gallery({ id }) {
   const [modelItem, setModelItem] = useState({})
   const [projects, setProjects] = React.useState([])
   const [index, setIndex] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex)
   }
 
   const allData = () => {
+    setLoading(true)
     axiosPrivate
       .get(`${url.baseURL}api/v1/account/projects/?user_id=${id}`)
       .then((res) => {
         console.log(res.data.results)
         setProjects(res.data.results)
+        setLoading(false)
       })
       .catch((e) => {
+        setLoading(false)
         if (e.response?.status === 400) {
           console.log(e?.response?.data?.non_field_errors[0])
         } else {
@@ -39,9 +44,13 @@ function Gallery({ id }) {
   }, [])
 
   return (
-    <div className="container project-data">
+    <div className="project-data">
       <div className="row">
-        {projects.length > 0 &&
+        {loading ? (
+          <div className="loader">
+            <ClipLoader color={"#2e55fa"} loading={true} size={150} />
+          </div>
+        ) : projects.length > 0 ? (
           projects.map((item, index) => (
             <div
               onClick={(e) => {
@@ -52,7 +61,14 @@ function Gallery({ id }) {
             >
               <ProjectCard key={index} item={item} />
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="col-lg-12 col-sm-12 col-12 m-b20">
+            <div className="alert alert-secondary" role="alert">
+              No Projects Found
+            </div>
+          </div>
+        )}
       </div>
       <Modal
         show={company}
