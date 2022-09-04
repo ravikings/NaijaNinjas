@@ -39,7 +39,7 @@ class Task(models.Model):
     attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True,null=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
+    views = models.ManyToManyField(IpModel, related_name="task_views", blank=True, null=True)
     post_status = models.CharField(max_length=255,choices=STATUS, default="OPEN")
 
     class Meta:
