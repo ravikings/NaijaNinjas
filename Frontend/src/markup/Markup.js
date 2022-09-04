@@ -87,7 +87,7 @@ import UpdateProject from "./Pages/Other/UpdateProject"
 class Markup extends Component {
   render() {
     return (
-      <BrowserRouter basename="/react/demo">
+      <HashRouter basename="/react/demo">
         <div className="page-wraper">
           <Switch>
             <Route path="/" exact component={Homepage} />
@@ -323,7 +323,7 @@ class Markup extends Component {
           </Switch>
         </div>
         <ScrollToTop />
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }
