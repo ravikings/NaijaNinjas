@@ -30,3 +30,4 @@ amqp
 celery
 redis
 django-celery-results
+celery_progress
