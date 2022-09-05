@@ -298,16 +298,19 @@ function ProfileSidebar({
                   to={"/jobs-applied-job"}
                 >
                   <i className="fa fa-briefcase" aria-hidden="true"></i>
+                  <span>Orders</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={active === "Applied Jobs" ? "active ml-4" : "ml-4"}
+                  to={"/jobs-applied-job"}
+                >
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>Upcoming tasks</span>
                 </Link>
               </li>
             </Collapse>
-            <li>
-              <Link to={"/transactions"}>
-                <i className="fa fa-handshake-o" aria-hidden="true"></i>
-                <span>Transactions</span>
-              </Link>
-            </li>
             <li>
               <Link to={"/post-ads"}>
                 <i className="fa fa-handshake-o" aria-hidden="true"></i>
@@ -345,6 +348,15 @@ function ProfileSidebar({
                 >
                   <i className="fa fa-lock" aria-hidden="true"></i>
                   <span>Security</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={active === "Security" ? "active ml-4" : "ml-4"}
+                  to={"/transactions"}
+                >
+                  <i className="fa fa-lock" aria-hidden="true"></i>
+                  <span>Transactions</span>
                 </Link>
               </li>
               <li>

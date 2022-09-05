@@ -96,10 +96,10 @@ class RelatedProfile(viewsets.ModelViewSet):
 
     def get_queryset(self):
         
-        sector = self.request.query_params.get('sector')
-        department = self.request.query_params.get('department')
-        city = self.request.query_params.get('city')
-        id = self.request.query_params.get('id')
+        sector = self.request.query_params.get('sector', None)
+        department = self.request.query_params.get('department', None)
+        city = self.request.query_params.get('city', None)
+        id = self.request.query_params.get('id', None)
         queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True, sector=sector, department=department, city=city).exclude(id=id)
 
         return queryset

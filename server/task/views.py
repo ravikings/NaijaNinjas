@@ -79,7 +79,7 @@ class TaskRelatedView(viewsets.ModelViewSet):
         tags = self.request.query_params.get("tags", None)
         id = self.request.query_params.get("id", None)
         tag_params = []
-        if not tags:
+        if tags:
             tag_params.extend(tags.split(","))
 
         return Task.objects.filter(
