@@ -22,7 +22,7 @@ class Task(models.Model):
     ]
 
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="task_author"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="task_author", blank=True, null=True
     )
     title = models.CharField(max_length=255, blank=True, db_index=True)
     sector  = models.CharField(max_length=255, blank=True, null=True)
@@ -39,7 +39,7 @@ class Task(models.Model):
     attachment = models.FileField(upload_to="task/documents/%Y/%m/%d/", blank=True,null=True, storage=storage)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    views = models.ManyToManyField(IpModel, related_name="task_views", blank=True)
+    views = models.ManyToManyField(IpModel, related_name="task_views", blank=True, null=True)
     post_status = models.CharField(max_length=255,choices=STATUS, default="OPEN")
 
     class Meta:

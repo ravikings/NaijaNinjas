@@ -1,6 +1,10 @@
+from importlib.metadata import packages_distributions
 import pandas as pd
 from passporteye import read_mrz
 
+#packages_distributions
+# pandas
+# passporteye
 
 def extractInfo(IdImage):
     # Process image

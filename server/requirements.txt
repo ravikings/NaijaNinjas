@@ -1,4 +1,3 @@
-pip-tools
 dj-rest-auth
 django-allauth
 django==4.0
@@ -31,9 +30,3 @@ amqp
 celery
 redis
 django-celery-results
-celery-progress
-django-fsm
-daphne
-eventlet
-pandas
-passporteye
