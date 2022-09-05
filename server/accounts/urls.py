@@ -32,6 +32,7 @@ from accounts.views import (
     DashboardServiceView,
     PrivateServiceView,
     DeleteProjectReview,
+    RelatedProfile,
     #start_celery_work,
 )
 
@@ -63,7 +64,7 @@ router.register(r"dashboard-profile-bookmarks", DashboardProfileFavorite, basena
 router.register(r"freelancer-review", ClientReviewView, basename="client-review")
 router.register(r"service-dashboard", DashboardServiceView, basename="service-dashboard")
 router.register(r"delete-project-image", DeleteProjectReview, basename="delete-project-images")
-
+router.register(r"related-profiles", RelatedProfile, basename="related-profiles")
 
 
 urlpatterns = [

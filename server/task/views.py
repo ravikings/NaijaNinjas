@@ -1,11 +1,22 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
-from task.serializers import TaskSerializer,TimelineStartSerializer, TaskBidderSerializer, TaskImageSerializer, TimelineSerializer, TimelineCommentSerializer, TaskAssignedSerializer, TaskBidderprofileSerializer, TaskWithTotalBidSerializer, ContractSerializer
+from task.serializers import (
+    TaskSerializer,
+    TimelineStartSerializer,
+    TaskBidderSerializer,
+    TaskImageSerializer,
+    TimelineSerializer,
+    TimelineCommentSerializer,
+    TaskAssignedSerializer,
+    TaskBidderprofileSerializer,
+    TaskWithTotalBidSerializer,
+    ContractSerializer,
+)
 from rest_framework.parsers import MultiPartParser, FormParser
 from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
 from django.db.models import Count
@@ -22,9 +33,10 @@ from rest_framework.decorators import api_view, permission_classes
 
 # Create your views here.
 
-@method_decorator(cache_page(60 * 30), name='dispatch')
+
+@method_decorator(cache_page(60 * 30), name="dispatch")
 class TaskView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
@@ -39,68 +51,101 @@ class TaskView(viewsets.ModelViewSet):
         task = Task.objects.get(id=pk)
         history_tracker(request, task)
         if IpModel.objects.filter(ip=ip).exists():
-                task.views.add(IpModel.objects.get(ip=ip))
+            task.views.add(IpModel.objects.get(ip=ip))
         else:
             IpModel.objects.create(ip=ip)
             task.views.add(IpModel.objects.get(ip=ip))
         serializer = TaskSerializer(task)
         return Response(serializer.data)
 
-class TaskOwnerView(viewsets.ModelViewSet):
 
-    serializer_class = TaskWithTotalBidSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+class TaskRelatedView(viewsets.ModelViewSet):
+
+    """
+    this is use for searching related task,
+    query parameters to be passed will be from current page data,
+    sector, department, location, id, tags in comma separated.
+
+    """
+
+    serializer_class = TaskSerializer
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
 
-        user_id = self.request.query_params.get('user_id')
+        sector = self.request.query_params.get("sector", None)
+        department = self.request.query_params.get("department", None)
+        location = self.request.query_params.get("location", None)
+        tags = self.request.query_params.get("tags", None)
+        id = self.request.query_params.get("id", None)
+        tag_params = []
+        if not tags:
+            tag_params.extend(tags.split(","))
+
+        return Task.objects.filter(
+            sector=sector, department=department, location=location, tags__in=tag_params
+        ).exclude(id=id)
+
+
+class TaskOwnerView(viewsets.ModelViewSet):
+
+    serializer_class = TaskWithTotalBidSerializer
+    # permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+
+        user_id = self.request.query_params.get("user_id")
         return Task.objects.filter(author_id=user_id)
 
 
 class ContractView(viewsets.ModelViewSet):
 
     serializer_class = ContractSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
-        
-        return TaskBidder.objects.filter(payment_author=self.request.query_params.get('userId'))
+
+        return TaskBidder.objects.filter(
+            payment_author=self.request.query_params.get("userId")
+        )
 
 
 class TaskBidderView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     # queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderprofileSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
-    
-        data = TaskBidder.objects.filter(task_id=self.request.query_params.get('task'))
+
+        data = TaskBidder.objects.filter(task_id=self.request.query_params.get("task"))
         active_user = data.filter(bid_approve_status=True)
         return active_user if len(active_user) != 0 else data
-
 
     def create(self, request, pk=None):
 
         data = request.data
-        task_id = data.get('task')
-        offer = data.get('offer')
-        bidder_id = data.get('bidder')
-        total_charge = data.get('total_charge')
-        description = data.get('description')
-        attachment = data.get('attachment')
-        delivery_date = data.get('delivery_date')
+        task_id = data.get("task")
+        offer = data.get("offer")
+        bidder_id = data.get("bidder")
+        total_charge = data.get("total_charge")
+        description = data.get("description")
+        attachment = data.get("attachment")
+        delivery_date = data.get("delivery_date")
         if not offer:
-            raise("please add offer")
+            raise ("please add offer")
         bid_queryset = Task.objects.get(id=task_id, post_status="OPEN")
         profile_odj = RunnerProfile.objects.get(author=bidder_id)
         if bid_queryset:
-            obj, _created = TaskBidder.objects.get_or_create(bidder_profile=profile_odj, 
-                                            task=bid_queryset, payment_author=bid_queryset.author)
+            obj, _created = TaskBidder.objects.get_or_create(
+                bidder_profile=profile_odj,
+                task=bid_queryset,
+                payment_author=bid_queryset.author,
+            )
             obj.offer = offer
             obj.total_charge = total_charge
             obj.description = description
@@ -109,7 +154,9 @@ class TaskBidderView(viewsets.ModelViewSet):
             obj.save()
             return Response({"message": "Your bid was successfully processed"})
 
-        return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class TaskImageAPIView(viewsets.ModelViewSet):
@@ -118,14 +165,14 @@ class TaskImageAPIView(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser)
 
     def create(self, request, pk=None):
-        property_id = request.data['task']
+        property_id = request.data["task"]
         form_data = {}
-        form_data['task']= property_id
+        form_data["task"] = property_id
         success = True
         response = []
 
-        for images in request.FILES.getlist('image'):
-            form_data['image']=images   
+        for images in request.FILES.getlist("image"):
+            form_data["image"] = images
             serializer = TaskImageSerializer(data=form_data)
             if serializer.is_valid():
                 serializer.save()
@@ -134,17 +181,17 @@ class TaskImageAPIView(viewsets.ModelViewSet):
                 success = False
         if success:
             return Response(response, status=status.HTTP_201_CREATED)
-            
-        return Response(response,status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
 
 class TaskApproveView(viewsets.ModelViewSet):
 
     permissions_classes = [AllowAny]
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
-    
-    #permissions_classes = [IsAuthenticated and IsOwner]
 
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     # def post(self, request, pk=None):
 
@@ -154,7 +201,7 @@ class TaskApproveView(viewsets.ModelViewSet):
 
     #         if bid_to_approve.runner_confirmed:
     #             return Response({"error": "Task already assigned"})
-                
+
     #         serializer = TaskBidderSerializer(instance=bid_to_approve, data=request.data)
     #         if serializer.is_valid():
     #             serializer.save()
@@ -170,14 +217,14 @@ class TaskApproveView(viewsets.ModelViewSet):
 
 
 class TimelineView(viewsets.ModelViewSet):
-    
+
     """
     uses to add Timeline to view task activities
     """
 
     queryset = Timeline.objects.all()
     serializer_class = TimelineSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def retrieve(self, request, pk=None):
 
@@ -185,15 +232,16 @@ class TimelineView(viewsets.ModelViewSet):
         serializer = TimelineSerializer(query)
         return Response(serializer.data)
 
+
 class TimelineCommentView(viewsets.ModelViewSet):
-    
+
     """
     uses to add Timeline to view task activities
     """
 
     queryset = Comment.objects.all()
     serializer_class = TimelineCommentSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
 
 class TaskAssigned(viewsets.ModelViewSet):
@@ -202,13 +250,15 @@ class TaskAssigned(viewsets.ModelViewSet):
     uses to get assigned tasks to professionals
     """
 
-    #queryset = TaskBidder.objects.all()
+    # queryset = TaskBidder.objects.all()
     serializer_class = TaskAssignedSerializer
-    #permissions_classes = [IsAuthenticated and Is_a_runner]
+    # permissions_classes = [IsAuthenticated and Is_a_runner]
 
     def get_queryset(self):
-    
-        return TaskBidder.objects.filter(bidder_profile=self.request.user.id, bid_approve_status=True).order_by("modified")
+
+        return TaskBidder.objects.filter(
+            bidder_profile=self.request.user.id, bid_approve_status=True
+        ).order_by("modified")
         # TODO Missing filter for task completed to be shown.
 
 
@@ -217,7 +267,7 @@ def task_favorite(request, pk):
 
     task = TaskBookmarks.objects.filter(author=request.user.id, task=pk)
     if task:
-        task.delete()        
+        task.delete()
         return Response({"message": f"task {pk} removed"})
     else:
         author = get_object_or_404(AccountUser, id=request.user.id)
@@ -227,20 +277,24 @@ def task_favorite(request, pk):
 
 
 class DashboardTaskFavorite(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     serializer_class = TaskSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
 
-        return Task.objects.filter(id__in=TaskBookmarks.objects.filter(author_id=self.request.user.id).values_list("task"))
+        return Task.objects.filter(
+            id__in=TaskBookmarks.objects.filter(
+                author_id=self.request.user.id
+            ).values_list("task")
+        )
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class SearchTask(viewsets.ModelViewSet):
 
     search_fields = [
@@ -257,7 +311,7 @@ class SearchTask(viewsets.ModelViewSet):
         "tags",
         "created",
         "updated",
-    ] 
+    ]
 
     queryset = Task.objects.filter(post_status="OPEN")
     serializer_class = TaskSerializer
@@ -280,33 +334,38 @@ class SearchTask(viewsets.ModelViewSet):
         "tags",
         "created",
         "updated",
-    ] 
+    ]
 
     ordering_fields = "__all__"
 
+
 @api_view(["GET", "POST"])
-#@permission_classes([AllowAny])
+# @permission_classes([AllowAny])
 def accept_bid(request):
 
-    task_id = request.query_params.get('task_id')
-    id = request.query_params.get('id')
+    task_id = request.query_params.get("task_id")
+    id = request.query_params.get("id")
     bid_to_approve = TaskBidder.objects.filter(task_id=task_id, id=id)
     if bid_to_approve.exists() and (bid_to_approve[0].bid_approve_status == False):
         bid = bid_to_approve[0]
         if bid.runner_confirmed:
             return Response({"error": "Task already assigned"})
-        
+
         owner = bid.bidder_profile.author.id
-        #TODO: Uncomment in the future
+        # TODO: Uncomment in the future
         if bid.payment_author.id == owner:
-           raise ("user not allowed perform action")
+            raise ("user not allowed perform action")
         response_data = {}
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
         response_data["total_charge"] = bid.total_charge
-        task_owner, client_info = AccountUser.objects.filter(id__in=[owner, bid.payment_author.id])
+        task_owner, client_info = AccountUser.objects.filter(
+            id__in=[owner, bid.payment_author.id]
+        )
         print("creating timeline")
-        query_set = Timeline.objects.create(author=bid.payment_author,task_owner=task_owner,task=bid.task)
+        query_set = Timeline.objects.create(
+            author=bid.payment_author, task_owner=task_owner, task=bid.task
+        )
         print("update task status")
         bid.approve_bids()
         bid.set_task_status()
@@ -316,10 +375,13 @@ def accept_bid(request):
         response_data.update(serializer.data)
         return Response(response_data)
 
-    return Response({"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(
+        {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST
+    )
+
 
 @api_view(["GET"])
-#@permission_classes([AllowAny])
+# @permission_classes([AllowAny])
 def get_timeiline(request, task_id, task_owner):
 
     data = Timeline.objects.get(task=task_id, task_owner=task_owner)

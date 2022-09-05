@@ -82,6 +82,28 @@ class DashboardProfile(viewsets.ModelViewSet):
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
+
+class RelatedProfile(viewsets.ModelViewSet):
+    
+    """
+    this is use for searching related profiles,
+    query parameters to be passed will be from current page data,
+    sector, department, city, id
+
+    """
+
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        
+        sector = self.request.query_params.get('sector')
+        department = self.request.query_params.get('department')
+        city = self.request.query_params.get('city')
+        id = self.request.query_params.get('id')
+        queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True, sector=sector, department=department, city=city).exclude(id=id)
+
+        return queryset
+
 class UserDashboardProfile(viewsets.ModelViewSet):
     
     """
