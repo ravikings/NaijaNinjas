@@ -30,5 +30,3 @@ amqp
 celery
 redis
 django-celery-results
-# pandas
-# passporteye
