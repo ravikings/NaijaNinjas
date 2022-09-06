@@ -33,6 +33,7 @@ from accounts.views import (
     PrivateServiceView,
     DeleteProjectReview,
     RelatedProfile,
+    ChatSearchProfile,
     #start_celery_work,
 )
 
@@ -65,6 +66,7 @@ router.register(r"freelancer-review", ClientReviewView, basename="client-review"
 router.register(r"service-dashboard", DashboardServiceView, basename="service-dashboard")
 router.register(r"delete-project-image", DeleteProjectReview, basename="delete-project-images")
 router.register(r"related-profiles", RelatedProfile, basename="related-profiles")
+router.register(r"chat-search-profiles", ChatSearchProfile, basename="chat-search-profiles")
 
 
 urlpatterns = [
