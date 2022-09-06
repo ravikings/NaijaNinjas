@@ -79,18 +79,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_last_seen_time(self, instance):
 
-        dateTimeObj = instance.last_seen
-        current_time = timezone.now()
-        time = current_time - dateTimeObj
-        day = time.total_seconds() // (24 * 3600)
-        time = time.total_seconds() % (24 * 3600)
-        hour = time // 3600
-        time %= 3600
-        minutes = time // 60
-        time %= 60
-        seconds = time
-        return {"days": day, "hour": hour, "minutes": minutes, "seconds": seconds}
+        last_login_time = instance.last_login
+        if last_login_time:
+            current_time = timezone.now()
+            time = current_time - last_login_time
+            day = time.total_seconds() // (24 * 3600)
+            time = time.total_seconds() % (24 * 3600)
+            hour = time // 3600
+            time %= 3600
+            minutes = time // 60
+            time %= 60
+            seconds = time
+            return {"days": day, "hour": hour, "minutes": minutes, "seconds": seconds}
 
+        return None
 
 class ContractUserSerializer(serializers.ModelSerializer):
     class Meta:
