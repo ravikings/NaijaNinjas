@@ -314,7 +314,7 @@ function ProfileSidebar({
             <li>
               <Link to={"/post-ads"}>
                 <i className="fa fa-handshake-o" aria-hidden="true"></i>
-                <span>Post Ad</span>
+                <span>Post Ad (Beta)</span>
               </Link>
             </li>
 
@@ -355,7 +355,7 @@ function ProfileSidebar({
                   className={active === "Security" ? "active ml-4" : "ml-4"}
                   to={"/transactions"}
                 >
-                  <i className="fa fa-lock" aria-hidden="true"></i>
+                  <i className="bi bi-arrow-down-up" aria-hidden="true"></i>
                   <span>Transactions</span>
                 </Link>
               </li>

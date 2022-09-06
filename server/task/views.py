@@ -139,6 +139,8 @@ class TaskBidderView(viewsets.ModelViewSet):
         if not offer:
             raise ("please add offer")
         bid_queryset = Task.objects.get(id=task_id, post_status="OPEN")
+        if request.user.id == bid_queryset.author.id:
+            return Response({"error":"Hey! you cannot bid on your own task"}, status=status.HTTP_403_FORBIDDEN)
         profile_odj = RunnerProfile.objects.get(author=bidder_id)
         if bid_queryset:
             obj, _created = TaskBidder.objects.get_or_create(
@@ -354,7 +356,7 @@ def accept_bid(request):
         owner = bid.bidder_profile.author.id
         # TODO: Uncomment in the future
         if bid.payment_author.id == owner:
-            raise ("user not allowed perform action")
+            return Response({"error":"user not allowed perform action"}, status=status.HTTP_403_FORBIDDEN)
         response_data = {}
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
