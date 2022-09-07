@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Conversation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from accounts.models import AccountUser
 from .serializers import (
     ConversationListSerializer,
@@ -11,6 +11,7 @@ from .serializers import (
 )
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -38,14 +39,13 @@ def start_convo(request, starter, pk):
         return Response(serializer.data)
 
 
-@api_view(["GET", "POST"])
-def get_conversation(request, convo_id):
-    conversation = Conversation.objects.filter(id=convo_id)
-    if not conversation.exists():
-        return Response({"message": "Conversation does not exist"})
-    else:
-        serializer = ConversationSerializer(instance=conversation[0])
-        return Response(serializer.data)
+class get_conversation(viewsets.ModelViewSet):
+
+    serializer_class = ConversationSerializer
+
+    def get_queryset(self):
+        convo_id = self.kwargs["convo_id"]
+        return Conversation.objects.filter(id=convo_id)
 
 
 @api_view(["GET", "POST"])
@@ -64,7 +64,7 @@ def file_upload(request):
     3. conversation_id: conversation id field
     """
     data = request.data
-    file_serializer = FileMessageUploadSerializer(data)
+    file_serializer = FileMessageUploadSerializer(data=data)
     if file_serializer.is_valid():
         file_serializer.save()
         return Response(file_serializer.data, status=status.HTTP_201_CREATED)

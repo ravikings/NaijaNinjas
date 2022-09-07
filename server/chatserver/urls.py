@@ -9,7 +9,12 @@ from chatserver.views import (
 
 urlpatterns = [
     path("start/<str:starter>/<str:pk>/", start_convo, name="start_convo"),
-    path("message_room/<int:convo_id>/", get_conversation, name="get_conversation"),
+    # path("message_room/<int:convo_id>/", get_conversation, name="get_conversation"),
+    path(
+        "message_room/<int:convo_id>/",
+        get_conversation.as_view({"get": "list"}),
+        name="get_conversations",
+    ),
     path("conversations/<str:pk>/", conversations, name="conversations"),
     path("chat_file_upload/", file_upload, name="chat_file_upload"),
     path(
