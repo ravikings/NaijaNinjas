@@ -568,7 +568,7 @@
 .submit-resume .btn.dropdown-toggle.btn-default {
   background-color: #fff !important;
   border: 0 !important;
-  box-shadow: 0 0 10px 0 rgba(0, 24, 128, 0.1) !important;
+  box-shadow: 0 0 10px 0 rgba(0, 24, 128, 0.1);
 }
 .custom-control-label:before {
   background-color: #e1e7ff;
@@ -1293,6 +1293,17 @@
 .job-profile textarea.form-control {
   height: 150px;
   line-height: 24px;
+}
+.timeline textarea.form-control {
+  height: 150px;
+  line-height: 24px;
+}
+.timeline .dzu-dropzone {
+  background-color: #fff !important;
+  border: 0 !important;
+  box-shadow: 0 0 10px 0 rgb(0 24 128 / 10%) !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
 }
 .job-profile label,
 .submit-resume label,

@@ -85,6 +85,7 @@ function LoginPage() {
 
   const handleSubmit = (values) => {
     if (checkCaptcha()) {
+      values.username = "";
       login(values);
     } else if (!value) {
       toast.error("Please enter captcha to verify");

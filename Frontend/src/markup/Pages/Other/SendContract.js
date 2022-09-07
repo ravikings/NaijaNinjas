@@ -29,6 +29,8 @@ function SendContract() {
   const [clientAmount, setClientAmount] = useState(0);
   const [cover, setCover] = useState("");
   const [deliveryTime, setDeliveryTime] = useState("");
+  const [attachment, setAttachment] = useState(null);
+  const [attachmentVal, setAttachmentVal] = useState(null);
   const [loading, setLoading] = useState(false);
   const [attachFile, setAttachFile] = useState(null);
   const axiosPrivate = useAxiosPrivate();
@@ -92,9 +94,9 @@ function SendContract() {
   // effect end
   // single data fatch end
   // badding task start
-  console.log({ location });
+  // console.log({ location });
   const addBadding = (e) => {
-    console.log("userid", userId);
+    // console.log("userid", userId);
     e.preventDefault();
     if (!auth.isAuthenticated) {
       swal("Aunauthorized", "Please login!", "warning", { buttons: false });
@@ -110,7 +112,8 @@ function SendContract() {
       formdata.append("task", id);
       formdata.append("delivery_date", deliveryTime);
       formdata.append("bidder", userId);
-
+      formdata.append("attachment", attachment);
+      // console.log("====attachment", attachment);
       axiosPrivate({
         method: "POST",
         url: `${url.baseURL}api/v1/task/task-bidding/`,
@@ -203,8 +206,7 @@ function SendContract() {
                               className="form-control py-2 border-left-0 border"
                               value={deliveryTime}
                               onChange={(e) => setDeliveryTime(e.target.value)}
-                              type="number"
-                              min="0"
+                              type="date"
                             />
                           </div>
                         </div>
@@ -325,7 +327,37 @@ function SendContract() {
                   {/* contract section start */}
                 </div>
                 {/* contract price end */}
+                <div className="container-data m-b20">
+                  {/* contract Header start */}
+                  <div class="contract-header">
+                    <h2 class="mb-0">Attechment </h2>
+                  </div>
+                  {/* contract header end */}
 
+                  {/* contract section start */}
+                  <div className="form-group mb-10">
+                    <div className="custom-file">
+                      <p className="m-a0">
+                        <i className="fa fa-upload"></i>
+                        Upload File
+                      </p>
+                      <input
+                        type="file"
+                        name="attachment"
+                        onChange={(e) => {
+                          setAttachment(e.target.files[0]);
+                          setAttachmentVal(e.target.value);
+                        }}
+                        className="site-button form-control"
+                        id="customFile"
+                        value={attachmentVal}
+                      />
+                    </div>
+                    <p class="ml-1">{attachmentVal}</p>
+                  </div>
+
+                  {/* contract section start */}
+                </div>
                 {/* contract send button Start */}
                 <div className="container-data m-b20">
                   {/* contract section start */}
