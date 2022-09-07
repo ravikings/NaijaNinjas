@@ -113,6 +113,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
 
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
+    #permissions_classes = IsAuthenticated
 
     def retrieve(self, request, pk=None):
         
