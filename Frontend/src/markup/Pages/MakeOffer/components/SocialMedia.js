@@ -1,6 +1,6 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Grid } from "@material-ui/core"
+import { Link } from "react-router-dom"
 
 function SocialMedia(props) {
   return (
@@ -36,7 +36,7 @@ function SocialMedia(props) {
         </Grid>
       </Grid>
     </div>
-  );
+  )
 }
 
-export default SocialMedia;
+export default SocialMedia

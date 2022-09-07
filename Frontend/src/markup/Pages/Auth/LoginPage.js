@@ -54,7 +54,7 @@ function LoginPage() {
         localStorage.setItem("userID", res?.data?.user?.pk);
         localStorage.setItem("access_token", res?.data?.access_token);
         Cookies.set("refresh_token", res?.data?.refresh_token, { expires: 1 });
-        const inFiveMinutes = new Date(new Date().getTime() + 5 * 60 * 1000);
+        const inFiveMinutes = new Date(new Date().getTime() + 60 * 60 * 1000);
         Cookies.set("access_token", res?.data?.access_token, {
           expires: inFiveMinutes,
         });
@@ -66,6 +66,11 @@ function LoginPage() {
         const redirectURL = new URLSearchParams(location.search).get(
           "redirect"
         );
+        if (res?.data?.user?.pk) {
+          createRequest().post(
+            `/api/v1/user-status/${res?.data?.user?.pk}/login/`
+          );
+        }
         if (redirectURL) {
           history.push(redirectURL);
         } else {

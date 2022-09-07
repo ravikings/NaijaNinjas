@@ -41,6 +41,9 @@
 .ti-trash:before {
 	content: "\e605";
 }
+.ti-write:before {
+	content: "\e605";
+}
 .ti-thought:before {
 	content: "\e606";
 }

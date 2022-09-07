@@ -87,7 +87,7 @@ export function* getCurrentUser() {
     const { data } = yield createRequest().get("/dj-rest-auth/user/");
     console.log(data, "userData");
     yield put({ type: authActionTypes.GET_CURRENT_SUCCESS, user: data });
-    yield call(getUserStatus, data.pk);
+    //yield call(getUserStatus, data.pk);
     // yield put({ type: authActionTypes.GET_USER_STATUS, id: data.pk });
   } catch (e) {
     yield put({ type: authActionTypes.GET_CURRENT_FAILED });
@@ -95,19 +95,19 @@ export function* getCurrentUser() {
   }
 }
 
-export function* getUserStatus({ id }) {
-  yield put({ type: authActionTypes.GET_USER_STATUS_START });
-  try {
-    const { data } = yield createRequest().get(
-      `/api/v1/account/user-status/${id}/`
-    );
-    console.log(data, "userStatus");
-    yield put({ type: authActionTypes.GET_USER_STATUS_SUCCESS, status: data });
-  } catch (e) {
-    yield put({ type: authActionTypes.GET_USER_STATUS_FAILED });
-    console.log(e, "userStatus");
-  }
-}
+// export function* getUserStatus({ id }) {
+//   yield put({ type: authActionTypes.GET_USER_STATUS_START });
+//   try {
+//     // const { data } = yield createRequest().get(
+//     //   `/api/v1/user-status/${id}/login`
+//     // );
+//     console.log(data, "userStatus");
+//     yield put({ type: authActionTypes.GET_USER_STATUS_SUCCESS, status: data });
+//   } catch (e) {
+//     yield put({ type: authActionTypes.GET_USER_STATUS_FAILED });
+//     console.log(e, "userStatus");
+//   }
+// }
 
 export function* setProfileData({ data }) {
   yield put({ type: authActionTypes.USER_PROFILE, data });
@@ -127,9 +127,11 @@ export function* gettingAccessToken() {
 
 export function* logout({ handleClose }) {
   try {
+    const id = localStorage.getItem("userID");
     yield createRequest().post("/dj-rest-auth/logout/");
+    yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
     yield call(handleClose);
-    yield call(getCurrentUser);
+    // yield call(getCurrentUser);
     Cookies.remove("access_token", { path: "/" });
     Cookies.remove("refresh_token", { path: "/" });
     yield put({ type: authActionTypes.LOGOUT_SUCCESS });
@@ -145,7 +147,7 @@ function* watchHomePageActionSagas() {
   yield takeEvery(authActionTypes.LOGOUT, logout);
   yield takeEvery(authActionTypes.VERIFY_TOKEN, verify);
   yield takeEvery(authActionTypes.GET_ACCESS_TOKEN, generateAccessToken);
-  yield takeEvery(authActionTypes.GET_USER_STATUS, getUserStatus);
+  // yield takeEvery(authActionTypes.GET_USER_STATUS, getUserStatus);
   // yield takeEvery(authActionTypes.USER_PROFILE, setProfileData);
 }
 

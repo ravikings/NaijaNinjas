@@ -1,21 +1,37 @@
-import React from "react";
-import { Button, TextField } from "@material-ui/core";
-import { Link, useHistory } from "react-router-dom";
-
-import useAuth from "../../../../hooks/useAuth";
+import React from "react"
+import { Button, Divider, TextField } from "@material-ui/core"
+import { Link, useHistory, useParams } from "react-router-dom"
+import { useQuery } from "react-query";
+import useAuth from "../../../../hooks/useAuth"
+import SocialMedia from "./SocialMedia"
+import { Skills } from "./ResumeComponents"
+import Attachments from "./Attachments"
+import agent from "../../../../api/agent";
 
 function MakeOfferForm(props) {
-  const auth = useAuth();
-  const history = useHistory();
+  const auth = useAuth()
+  const history = useHistory()
 
   const handleClick = (e) => {
     e.preventDefault();
     props.modal();
   };
+  let { id } = useParams();
+  const { data, refetch } = useQuery(["start-conversation", id], () => agent.Chat.startConversation(auth.currentUser.pk, id),
+    {
+      refetchOnWindowFocus: false,//turned off on window focus refetch option
+      enabled: false, // turned off by default, manual refetch is needed
+      onSuccess: (d) => {
+        console.log(d);
+        history.push("/messages/")
+      }
+    }
+  );
+
   return (
     <>
       {!auth.isAuthenticated ? (
-        <div>
+        <aside>
           <h5 style={{ textAlign: "center" }}>
             Discuss your project with David
           </h5>
@@ -59,11 +75,15 @@ function MakeOfferForm(props) {
               Sign Up
             </Link>
           </p>
-        </div>
+        </aside>
       ) : (
-        <div className="project-widget">
+        // <aside id="accordion1" className="sticky-top sidebar-filter bg-white"></aside>
+        <aside
+          className="project-widget sticky-top  sidebar-filter"
+          id="bg-widget"
+        >
           {/* Buyer Start */}
-          <div className="text-center">
+          <div className="text-center ">
             {/* <h3 className="project-widget-title">About Buyer</h3> */}
             <a href="#">
               <img
@@ -79,7 +99,7 @@ function MakeOfferForm(props) {
             <ul className="list-inline mt-2 mb-2 badges">
               <li className="list-inline-item">
                 <button
-                  onClick={() => history.push("/messages")}
+                  onClick={() => { refetch(); }}
                   className="site-button"
                 >
                   Contact Me
@@ -111,10 +131,18 @@ function MakeOfferForm(props) {
             </ul>
           </div>
           {/* Buyer end */}
-        </div>
+          <Divider style={{ margin: "30px 0px" }} />
+
+          <SocialMedia />
+
+          <Divider style={{ margin: "30px 0px" }} />
+          <Skills />
+          <Divider style={{ margin: "30px 0px" }} />
+          <Attachments />
+        </aside>
       )}
     </>
-  );
+  )
 }
 
-export default MakeOfferForm;
+export default MakeOfferForm

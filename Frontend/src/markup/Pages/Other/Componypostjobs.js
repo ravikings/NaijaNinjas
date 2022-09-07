@@ -52,7 +52,7 @@ function Componypostjobs() {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [category, setCategory] = useState("");
-  const [attachFile, setAttachFile] = useState(null);
+  const [attachFile, setAttachFile] = useState("");
   // const [postStatus,setPostStatus]=useState('');
   const addData = (e) => {
     e.preventDefault();
@@ -115,7 +115,7 @@ function Componypostjobs() {
                   <div className="job-bx submit-resume">
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        Post A Job
+                        Post A Task
                       </h5>
                       <Link
                         to={"/company-profile"}
@@ -164,7 +164,7 @@ function Componypostjobs() {
                               >
                                 <option value="FUll Time">Full Time</option>
                                 <option value="Part Time">Part Time</option>
-                                <option value="Internship">Internship</option>
+                                <option value="Internship">Ondemand</option>
                                 <option value="Freelance">Freelance</option>
                               </Form.Control>
                             </div>
@@ -184,6 +184,8 @@ function Componypostjobs() {
                                 <option>3 Years</option>
                                 <option>4 Years</option>
                                 <option>5 Years</option>
+                                <option>10 Years</option>
+                                <option>15 Years</option>
                               </Form.Control>
                             </div>
                           </div>
@@ -248,7 +250,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Department:</label>
+                              <label>Sector:</label>
                               <Autocomplete
                                 fullWidth
                                 autoSelect
@@ -268,7 +270,7 @@ function Componypostjobs() {
 
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Sector:</label>
+                              <label>Department:</label>
                               <Autocomplete
                                 fullWidth
                                 autoSelect
@@ -325,7 +327,7 @@ function Componypostjobs() {
                         <button
                           type="submit"
                           name="DRAFT"
-                          className="site-button m-b30 mr-5"
+                          className="site-button m-b30 mr-2"
                           onClick={addData}
                         >
                           Save as draft

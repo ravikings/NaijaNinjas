@@ -69,8 +69,8 @@ function MakeOfferPage() {
       <Modal
         open={show}
         onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
         style={{
           overflow: "scroll",
         }}
@@ -81,29 +81,27 @@ function MakeOfferPage() {
       </Modal>
       <Header />
       {user ? (
-        <div className='page-content bg-white'>
+        <div className="page-content bg-white">
           <div
-            className='dez-bnr-inr d-flex align-items-center flex-wrap '
+            className="dez-bnr-inr d-flex align-items-center flex-wrap "
             style={{
               backgroundImage: "url(" + bnr + ")",
             }}
           >
-            <div className='left-side'>
+            <div className="left-side">
               <Grid container spacing={2} className={classes.headerGrid}>
                 <Grid item>
                   <Avatar
                     variant={"square"}
                     className={classes.avatar}
                     src={user.photo}
-                  >
-                    
-                  </Avatar>
+                  ></Avatar>
                 </Grid>
                 <Grid item>
                   <Grid
                     container
-                    direction='column'
-                    justifyContent='space-between'
+                    direction="column"
+                    justifyContent="space-between"
                     style={{ height: "100%", padding: "5px 0px" }}
                   >
                     <Grid item>
@@ -113,11 +111,11 @@ function MakeOfferPage() {
                       <h5 style={{ color: "gray" }}>iOS Expert + Node Dev</h5>
                     </Grid>
                     <Hidden xsDown>
-                      <div className='d-flex'>
+                      <div className="d-flex">
                         {user.location && (
                           <span>
                             <BsBuilding size={26} />
-                            <span className='align-top mx-2'>
+                            <span className="align-top mx-2">
                               {user.location}
                             </span>
                           </span>
@@ -134,10 +132,10 @@ function MakeOfferPage() {
                 </Hidden>
               </Grid>
             </div>
-            <div className='right-side'>
-              <div className='salary-box'>
-                <div className='salary-type'>Project Budget</div>
-                <div className='salary-amount'>$2,500 - $4,500</div>
+            <div className="right-side">
+              <div className="salary-box">
+                <div className="salary-type">Project Budget</div>
+                <div className="salary-amount">$2,500 - $4,500</div>
               </div>
             </div>
           </div>
@@ -145,7 +143,7 @@ function MakeOfferPage() {
           <div className={classes.main}>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12} md={7} lg={8}>
-                <div className='mt-4'>
+                <div className="mt-4">
                   <div>
                     <p>{user.description}</p>
                     <p>
@@ -164,7 +162,7 @@ function MakeOfferPage() {
                     <h6>Attachments</h6>
                     <ShortImages />
                     <h6>Skills Required</h6>
-                    <div className='d-flex badge-div '>
+                    <div className="d-flex badge-div ">
                       <Badge>iOS</Badge>
                       <Badge>Android</Badge>
                       <Badge>Mobile apps</Badge>
@@ -187,7 +185,7 @@ function MakeOfferPage() {
               <Grid item xs={12} sm={12} md={5} lg={4}>
                 {/* <HourlyRate /> */}
                 {/* <Divider style={{ margin: "30px 0px" }} /> */}
-                <Alert variant={"success"} className='text-center mt-5'>
+                <Alert variant={"success"} className="text-center mt-5">
                   6 days, 23 hours left
                 </Alert>
                 <MakeOfferForm modal={handleShow} />
@@ -202,7 +200,7 @@ function MakeOfferPage() {
           </div>
         </div>
       ) : (
-        <div className='loader'>
+        <div className="loader">
           <ClipLoader color={"#2e55fa"} loading={true} size={150} />
         </div>
       )}

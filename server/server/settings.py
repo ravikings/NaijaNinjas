@@ -28,7 +28,7 @@ SECRET_KEY = "h@e3z6yev#04x)$kdhp5!+y=q0t2-&)q-#wvbt-h@%dwem=8s#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"]
+ALLOWED_HOSTS = ["*", "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev", "https://fb54-98-44-232-67.ngrok.io"]
 
 
 # Application definition
@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     "django_filters",
     'rest_framework_simplejwt',
     'django_s3_storage',
+    "django_celery_results",
+    "celery_progress",
     # "hitcount",
     # Local
     "forum",
@@ -68,6 +70,8 @@ INSTALLED_APPS = [
     "accounts",
     "debug_toolbar",
     "task",
+    "payment",
+    "Marketing",
 ]
 
 REST_FRAMEWORK = {
@@ -80,7 +84,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
+    "PAGE_SIZE": 15,
     "ORDERING_PARAM": "ordering",
 }
 
@@ -160,6 +164,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = "None"
 
 SESSION_COOKIE_HTTPONLY = "True"
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2
 
 
 ROOT_URLCONF = "server.urls"
@@ -196,10 +201,10 @@ WSGI_APPLICATION = "server.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lastestgigxdb', 
-        'USER': 'postgres', 
+        'NAME': 'lastestgigxdb',
+        'USER': 'postgres',
         'PASSWORD': '2{c%v~TtV?_SFCer',
-        'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com', 
+        'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -240,10 +245,10 @@ SITE_ID = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = "/static/"
+# STATIC_URL = "/static/"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
@@ -306,11 +311,22 @@ CACHES = {
     }
 }
 
+AWS_ACCESS_KEY_ID = 'AKIA525LDBK2M3KUXK3R'
+AWS_SECRET_ACCESS_KEY = 'mzbEVDLdWPF/Ez4eumkkBh7STtrTdVx30D+arXhM'
+AWS_DEFAULT_REGION= 'us-east-1'
+AWS_LOCATION = 'static'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+
 YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
 
+DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
 STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
 AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
+AWS_S3_MAX_AGE_SECONDS_STATIC = "94608000"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'staticfiles'),
+]
 # These next two lines will serve the static files directly 
 # from the s3 bucket
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % YOUR_S3_BUCKET
@@ -328,3 +344,19 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
 # EMAIL_HOST_PASSWORD = '123Amina4@'
+
+# Celery settings
+CELERY_BROKER_URL = "amqps://wmkxuxlw:reXDWVEj7Z0YK44d_dtEyfO_RjQX_xCe@toad.rmq.cloudamqp.com/wmkxuxlw"
+#CELERY_RESULT_BACKEND = "amqps://wmkxuxlw:reXDWVEj7Z0YK44d_dtEyfO_RjQX_xCe@toad.rmq.cloudamqp.com/wmkxuxlw"
+CELERY_IMPORTS = [
+    'payment.tasks',
+]
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_JSON = "json"
+CELERY_TIMEZONE = "Africa/Lagos"
+CELERY_ACKS_LATE=True
+
+#paystack info
+PAYSTACK_SECRET_KEY = "sk_test_200fcc984243e4e0d1ec71326d74e6a4e0750c29"
+PAYSTACK_PUBLIC_KEY  = "pk_test_b4198537c6f3c50f8fc0fccaebf4d0aae311d411"

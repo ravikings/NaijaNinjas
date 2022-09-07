@@ -39,7 +39,8 @@ from .models import (
     Service,
     Projects,
     ProjectPhoto,
-    PublicQuotes
+    PublicQuotes,
+    ClientReview
 )
 from .serializers import (
     PhotosSerializer,
@@ -58,6 +59,11 @@ from .serializers import (
     ProjectsSerializer,
     ProjectPhotoSerializer,
     PublicQuotesSerializer,
+    BiddersProfileSerializer,
+    PublicProfileSerializer,
+    ClientReviewSerializer,
+    PrivateProfileSerializer,
+    ChatSearchProfileSerializer,
 )
 from notifications.signals import notify
 
@@ -77,6 +83,28 @@ class DashboardProfile(viewsets.ModelViewSet):
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
+
+class RelatedProfile(viewsets.ModelViewSet):
+    
+    """
+    this is use for searching related profiles,
+    query parameters to be passed will be from current page data,
+    sector, department, city, id
+
+    """
+
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        
+        sector = self.request.query_params.get('sector', None)
+        department = self.request.query_params.get('department', None)
+        city = self.request.query_params.get('city', None)
+        id = self.request.query_params.get('id', None)
+        queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True, sector=sector, department=department, city=city).exclude(id=id)
+
+        return queryset
+
 class UserDashboardProfile(viewsets.ModelViewSet):
     
     """
@@ -84,20 +112,19 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
 
     queryset = RunnerProfile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = PublicProfileSerializer
 
     def retrieve(self, request, pk=None):
         
         data = RunnerProfile.objects.get_or_create(author_id=pk)
-        user = AccountUser.objects.get(id=pk)
-        recipient = AccountUser.objects.get(id=41)
-        print("im sending notification dashboard")
-        print("im checking dashboard")
-        print("im checking dashboard")
-        notify.send(user,recipient=recipient, verb='hello come to dashboard')
-        print("sent")
-        serializer = ProfileSerializer(data[0])
+        #user = AccountUser.objects.get(id=pk)
+        #recipient = AccountUser.objects.get(id=41)
+        #print("im sending notification dashboard")
+        #notify.send(user,recipient=recipient, verb='hello come to dashboard')
+
+        serializer = PrivateProfileSerializer(data[0])
         return Response(serializer.data)
+        
 
 
 def save_user_profile(profile, request):
@@ -164,6 +191,13 @@ def save_profile_resume(resume, request):
         return Response({"message": f"resume updated"})
 
 
+# def start_celery_work(request):
+#     import subprocess
+
+#     subprocess.run("celery -A server worker -l info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo")
+
+#     return Response({"message": f"workder stared"})
+
 @api_view(["POST", "PATCH"])
 def resumeUpdate(request, pk):
     resume =  RunnerResume.objects.filter(author_id=pk)
@@ -185,10 +219,21 @@ def account_status(request, pk, type):
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.get(author_id=pk)  #TODO: CHANGE TO REQUEST
-    queryset.set_online_status(str(type).upper()) # pass type, either login or logout
-    return Response({"message": f"status updated to {queryset.status}"})
+    queryset = RunnerProfile.objects.filter(author_id=pk)  #TODO: CHANGE TO REQUEST
+    queryset[0].set_online_status(str(type).upper()) # pass type, either login or logout
+    return Response({"message": f"status updated to {type}"})
     
+
+@api_view(["POST","GET"])
+def profile_mode_status(request, pk, type):
+
+    """
+    uses to upload pictures to ui dashboard.
+    """
+    queryset = RunnerProfile.objects.get(author=pk)  #TODO: CHANGE TO REQUEST
+    queryset.private_mode(type) 
+    serializer = ProfileSerializer(queryset)
+    return Response(serializer.data)
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class PhotoUpload(viewsets.ModelViewSet):
@@ -228,9 +273,14 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     uses to upload video to ui dashboard
     """
 
-    queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
-    permissions_classes = [IsAuthenticated and IsRunner]
+    #permissions_classes = [IsAuthenticated and IsRunner]
+
+    def get_queryset(self):
+
+        user_id = self.request.query_params.get('user_id')
+
+        return Projects.objects.filter(author=user_id)
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ReviewView(viewsets.ModelViewSet):
@@ -246,7 +296,15 @@ class ReviewView(viewsets.ModelViewSet):
     
         return Review.objects.filter(profile=self.request.user.id)
 
+class ClientReviewView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
 
+    queryset = ClientReview.objects.all()
+    serializer_class = ClientReviewSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class SearchProfile(viewsets.ModelViewSet):
@@ -256,6 +314,9 @@ class SearchProfile(viewsets.ModelViewSet):
     """
 
     search_fields = [
+        "first_name",
+        "last_name",
+        "address",
         "title",
         "location",
         "salary",
@@ -263,6 +324,9 @@ class SearchProfile(viewsets.ModelViewSet):
         "description",
         "state",
         "city",
+        "sector",
+        "department",
+        "postcode",
         "local_goverment_zone",
     ]
     queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
@@ -273,14 +337,47 @@ class SearchProfile(viewsets.ModelViewSet):
         filters.OrderingFilter,
     ]
     filterset_fields = [
+        "first_name",
+        "last_name",
         "title",
         "location",
         "salary",
+        "sector",
+        "department",
+        "postcode",
         "postcode",
         "description",
         "state",
         "city",
         "local_goverment_zone",
+    ]
+
+    ordering_fields = "__all__"
+
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
+class ChatSearchProfile(viewsets.ModelViewSet):
+
+    """
+    uses for search engine for the application
+    """
+
+    search_fields = [
+        "first_name",
+        "last_name",
+    ]
+    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    serializer_class = ChatSearchProfileSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "first_name",
+        "last_name",
+        "department",
+        "sector"
     ]
 
     ordering_fields = "__all__"
@@ -318,6 +415,12 @@ class UserSearchDetails(viewsets.ModelViewSet):
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
 
+class DashboardServiceView(viewsets.ModelViewSet):
+
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ServiceView(viewsets.ModelViewSet):
     
@@ -325,16 +428,32 @@ class ServiceView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    permissions_classes = [IsAuthenticated and IsOwner]
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        user_id = self.request.query_params.get('user_id')
+    
+        return Service.objects.filter(author=user_id)
 
 
-    def retrieve(self, request, pk=None):
-        
-        data = Service.objects.get_or_create(author_id=pk)
-        serializer = ServiceSerializer(data[0])
-        return Response(serializer.data)
+class PrivateServiceView(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = ServiceSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+    
+        user_id = self.request.query_params.get('user_id')
+    
+        return Service.objects.filter(author=user_id)
+
+
 
 class TestView(viewsets.ModelViewSet):
 
@@ -530,19 +649,43 @@ class SetNewPasswordAPIView(APIView):
 
 
 class ProjectImageAPIView(viewsets.ModelViewSet):
+
+    """
+        this requires form data field
+        title, description, author    
+        image for image files to upload 
+    
+    """
+
     queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
     parser_classes = (MultiPartParser, FormParser)
 
+
     def create(self, request, pk=None):
-        property_id = request.data['project']
+        
+        title = request.data['title']
+        description = request.data['description']
+        author_id = request.data['author']
+        user_info = AccountUser.objects.get(id=author_id)
+        
+        try:
+            id = request.data['id']
+            project= Projects.objects.get(id=id, author=user_info)
+            project.title = title
+            project.description = description
+            project.save()
+        except:
+            project = Projects.objects.create(author=user_info, title = title, description = description)
+        
         form_data = {}
-        form_data['forum']= property_id
+        form_data['project']= project.id
         success = True
         response = []
 
         for images in request.FILES.getlist('image'):
-            form_data['image']=images   
+            form_data['image']=images  
+            print 
             serializer = ProjectPhotoSerializer(data=form_data)
             if serializer.is_valid():
                 serializer.save()
@@ -550,9 +693,32 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
             else:
                 success = False
         if success:
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response({"message": f"action completed successfull! {response}"}, status=status.HTTP_201_CREATED)
             
         return Response(response,status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteProjectReview(viewsets.ModelViewSet):
+    
+    """
+    uses to delete images attached to projects
+    """
+
+    queryset = ProjectPhoto.objects.all()
+    serializer_class = ProjectPhotoSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+@api_view(["GET", "POST"])
+def delete_projects(request, pk):
+    try:
+        query = Projects.objects.get(pk=pk)
+        query.delete()
+        photo = ProjectPhoto.objects.filter(project=pk)
+        photo.delete()
+        return Response({"message": f"project deletion was successfull!"})
+
+    except:
+        return Response({"error": f"Record doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
@@ -574,3 +740,27 @@ def public_quotes(request):
         print(e)
         pass
     return Response({"error": f"request not completed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST", "GET"])
+def profile_favorite(request, pk):
+
+    profile = get_object_or_404(RunnerProfile, author_id=request.user.id)
+    if profile.bookmarks.filter(id=pk).exists():
+        profile.bookmarks.remove(pk)
+        return Response({"message": f"profile {pk} removed"})
+    else:
+        profile.bookmarks.add(pk)
+        return Response({"message": f"profile {pk} added"})
+
+class DashboardProfileFavorite(viewsets.ModelViewSet):
+    
+    """
+    uses to add review to profile
+    """
+
+    serializer_class = BiddersProfileSerializer
+    #permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+
+        return RunnerProfile.objects.filter(author__in=RunnerProfile.objects.filter(author_id=self.request.user.id).values_list("bookmarks"))

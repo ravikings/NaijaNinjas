@@ -117,6 +117,106 @@ function CompanyManageBids() {
                 {displayPage === "contact" && (
                   <ContactPage nextPage={timeLinePage} />
                 )}
+                <div className="col-xl-9 col-lg-8 m-b30">
+                  <div className="job-bx browse-job clearfix">
+                    <div className="job-bx-title  clearfix">
+                      <h5 className="font-weight-700 pull-left text-uppercase">
+                        Manage Bids
+                      </h5>
+                      <div className="float-right">
+                        <span className="select-title">Sort by freshness</span>
+                        <select className="custom-btn">
+                          <option>All</option>
+                          <option>None</option>
+                          <option>Read</option>
+                          <option>Unread</option>
+                          <option>Starred</option>
+                          <option>Unstarred</option>
+                        </select>
+                      </div>
+                    </div>
+                    <ul className="post-job-bx">
+                      {data.length === 0
+                        ? "Your task have no bids at the moment, kindly check by soon, Thank you!"
+                        : data.map((item, index) => (
+                            <li key={index}>
+                              <div className="post-bx">
+                                <div className="d-flex m-b30">
+                                  <div className="job-post-company">
+                                    <Link to={""}>
+                                      <span style={{ borderRadius: "50%" }}>
+                                        <img
+                                          alt=""
+                                          src={item.bidder_info.photo}
+                                        />
+                                      </span>
+                                    </Link>
+                                  </div>
+                                  <div className="job-post-info">
+                                    <h4>
+                                      <Link to={"/make-offer"}>
+                                        {`${item.bidder_info[0].first_name} ${item.bidder_info[0].last_name}`}
+                                      </Link>
+                                    </h4>
+                                    <Ratings />
+                                    <div className="mt-3">
+                                      <Button
+                                        style={{
+                                          backgroundColor: "#2e55fa",
+                                          color: "white",
+                                        }}
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-check"></i>
+                                        }
+                                      >
+                                        Accept offer
+                                      </Button>
+                                      <Button
+                                        style={{
+                                          backgroundColor: "#333333",
+                                          color: "white",
+                                        }}
+                                        className="ml-2"
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-envelope"></i>
+                                        }
+                                      >
+                                        Send message
+                                      </Button>
+                                      <IconButton
+                                        className="ml-2"
+                                        style={{
+                                          backgroundColor: "#eeeeee",
+                                          borderRadius: "10px",
+                                          height: "40px",
+                                          width: "40px",
+                                        }}
+                                        aria-label="delete"
+                                        size="large"
+                                      >
+                                        <i className="fa fa-trash"></i>
+                                      </IconButton>
+                                    </div>
+                                  </div>
+                                  <div className="rates">
+                                    <ul class="dashboard-task-info bid-info">
+                                      <li>
+                                        <strong>${item.offer}</strong>
+                                        <span>Fixed Price</span>
+                                      </li>
+                                      <li>
+                                        <strong>
+                                          {item.delivery_date
+                                            ? item.delivery_date
+                                            : "0"}
+                                        </strong>
+                                        <span>Delivery Time</span>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
 
                 {displayPage === "" && (
                   <div className="col-xl-9 col-lg-8 m-b30">

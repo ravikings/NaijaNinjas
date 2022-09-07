@@ -46,6 +46,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("api/v1/", include("accounts.urls")),
     path("api/v1/task/", include("task.urls")),
+    path("api/v1/payment/", include("payment.urls")),
     path("ws/chat/", include("chatserver.urls")),
     path("forum/", include("forum.urls")),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
@@ -61,6 +62,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('notifications/', include('notifications_rest.urls')),
+    path('celery-progress/', include('celery_progress.urls')),
+    path('marketing/', include('Marketing.urls')),
 
 ]
 

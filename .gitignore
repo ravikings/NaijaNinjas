@@ -26,7 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 note.txt
 *.pyc
-*.json
 server/db.sqlite3
 *.pyc
 *.pyc

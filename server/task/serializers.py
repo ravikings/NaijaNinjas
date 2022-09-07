@@ -1,6 +1,7 @@
-from task.models import Task, TaskBidder, Photo, Comment, Timeline
+from dataclasses import field
+from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks
 from rest_framework import serializers
-from accounts.serializers import CustomRegisterSerializer, ProfileSerializer, BiddersProfileSerializer
+from accounts.serializers import ContractUserSerializer, ProfileSerializer, BiddersProfileSerializer
 from accounts.models import RunnerProfile
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -8,10 +9,31 @@ class TaskSerializer(serializers.ModelSerializer):
     Task serializers use for creating task 
     """
     # task_author = CustomRegisterSerializer(read_only=True, many=True)
+    bookmarks = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = "__all__"
+    
+    def get_bookmarks(self, instance):
+        return TaskBookmarks.objects.filter(task=instance.id).values_list("author")
+
+class TaskWithTotalBidSerializer(serializers.ModelSerializer):
+    """
+    Task serializers use for creating task 
+    """
+    total_bids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = "__all__"
+
+
+    def get_total_bids(self, instance):
+
+        data = TaskBidder.objects.filter(task=instance.pk)
+
+        return len(data)
 
 
 class TaskBidderSerializer(serializers.ModelSerializer):
@@ -22,6 +44,14 @@ class TaskBidderSerializer(serializers.ModelSerializer):
         model = TaskBidder
         fields = "__all__"
 
+class ContractSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+    class Meta:
+        model = TaskBidder
+        fields = ("bidder_profile", "payment_author", "offer", "description", "delivery_date", "bid_approve_status")
+
 class TaskBidderprofileSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
@@ -30,7 +60,8 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     bidder_info = serializers.SerializerMethodField()
     class Meta:
         model = TaskBidder
-        exclude = ("transaction_id", "task", "bidder_profile", "image")
+        exclude = ["payment_author", "runner_confirmed", "webhook_transaction_verified", "transaction_verified", ]
+        read_only_fields = ('bid_approve_status', 'payment_submitted', 'transaction_id', "total_charge")
 
     def get_bidder_info(self, instance):
 
@@ -60,6 +91,12 @@ class TimelineCommentSerializer(serializers.ModelSerializer):
         model = Comment
         exclude = ("updated", "created")
 
+    def create(self, validate_data):
+
+        comment = Comment.objects.create(**validate_data)
+        comment.update_timeline_status()
+        return comment
+
     def get_time_created(self, instance):
         dateTimeObj = instance.created
         timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
@@ -73,19 +110,29 @@ class TimelineCommentSerializer(serializers.ModelSerializer):
 
         return data
 
+
+class TimelineStartSerializer(serializers.ModelSerializer):
+    """
+    Profile serializers use profile for picture uploads and retrieve
+    """
+    author = ContractUserSerializer()
+    class Meta:
+        model = Timeline
+        exclude = ("updated", "created",)
 
 class TimelineSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
 
-    timeline_comment = TimelineCommentSerializer(read_only=True, many=True)
+    timeline_comment = serializers.SerializerMethodField()
+    timestamps = serializers.SerializerMethodField()
    
     class Meta:
         model = Timeline
-        exclude = ("updated", "created", "comment")
+        exclude = ("updated", "created",)
 
-    def get_time_created(self, instance):
+    def get_timestamps(self, instance):
         dateTimeObj = instance.created
         timestampStr = dateTimeObj.strftime("%b-%d-%Y %I:%M%p")
         time_difference = instance.updated - dateTimeObj
@@ -97,6 +144,12 @@ class TimelineSerializer(serializers.ModelSerializer):
             data["Created"] = timestampStr
 
         return data
+
+    def get_timeline_comment(self, instance):
+
+
+        return Comment.objects.filter(task_timeline=instance.id)
+
 
 class TaskAssignedSerializer(serializers.ModelSerializer):
     """

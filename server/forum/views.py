@@ -18,8 +18,6 @@ from rest_framework.views import APIView
 
 # Create your views here.
 
-
-# class ForumList(viewsets.ViewSet):
 class ForumList(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.

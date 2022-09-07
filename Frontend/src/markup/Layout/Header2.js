@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Modal } from "react-bootstrap";
-import AuthState from "./AuthState";
-import {useSelector} from "react-redux";
+import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { Modal } from "react-bootstrap"
+import AuthState from "./AuthState"
+import { useSelector } from "react-redux"
 
-var bnr3 = require("./../../images/background/bg3.jpg");
+var bnr3 = require("./../../images/background/bg3.jpg")
 
 function Header2() {
-  const userDetails = useSelector((state) => state.authReducer.currentUser);
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const userDetails = useSelector((state) => state.authReducer.currentUser)
+  const [showLoginDialog, setShowLoginDialog] = useState(false)
 
   const handleClose = () => {
-    setShowLoginDialog(false);
-  };
+    setShowLoginDialog(false)
+  }
   const handleShow = () => {
-    setShowLoginDialog(true);
-  };
+    setShowLoginDialog(true)
+  }
 
   useEffect(() => {
-    var Navicon = document.querySelector(".navicon");
-    var sidebarmenu = document.querySelector(".myNavbar ");
+    var Navicon = document.querySelector(".navicon")
+    var sidebarmenu = document.querySelector(".myNavbar ")
 
     function toggleFunc() {
-      sidebarmenu.classList.toggle("show");
+      sidebarmenu.classList.toggle("show")
       //   Navicon.classList.toggle('open');
     }
-    Navicon.addEventListener("click", toggleFunc);
+    Navicon.addEventListener("click", toggleFunc)
 
     // Sidenav li open close
     var navUl = [].slice.call(
       document.querySelectorAll(".navbar-nav > li > a, .sub-menu > li > a")
-    );
+    )
     for (var y = 0; y < navUl.length; y++) {
       navUl[y].addEventListener("click", function () {
-        checkLi(this);
-      });
+        checkLi(this)
+      })
     }
 
     function checkLi(current) {
@@ -42,12 +42,12 @@ function Header2() {
         .querySelectorAll("li")
         .forEach((el) =>
           current.parentElement !== el ? el.classList.remove("open") : ""
-        );
+        )
       setTimeout(() => {
-        current.parentElement.classList.toggle("open");
-      }, 100);
+        current.parentElement.classList.toggle("open")
+      }, 100)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -58,7 +58,7 @@ function Header2() {
               <div className="logo-header mostion">
                 <Link to={"./"}>
                   <img
-                    src={require("./../../images/logo.png")}
+                    src={require("./../../images/logoNew.png")}
                     className="logo"
                     alt=""
                   />
@@ -96,7 +96,7 @@ function Header2() {
                     <Link to={"/browse-job-filter-list"}>marketplace</Link>
                   </li>
                   <li>
-                    <Link to={"/browse-candidates"}>Explore</Link>
+                    <Link to={"/category-all-jobs"}>Explore</Link>
                   </li>
                   <li>
                     <Link to={"/blog-detailed-grid-sidebar"}>Forum</Link>
@@ -198,7 +198,7 @@ function Header2() {
       </Modal>
       {/*  Model END */}
     </>
-  );
+  )
 }
 
-export default Header2;
+export default Header2
