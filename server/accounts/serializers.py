@@ -76,6 +76,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountUser
         fields = ["id", "username", "last_seen_time"]
+        ref_name = "User-serializer"
 
     def get_last_seen_time(self, instance):
 
