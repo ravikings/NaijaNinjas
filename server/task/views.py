@@ -348,15 +348,12 @@ def accept_bid(request):
     task_id = request.query_params.get("task_id")
     id = request.query_params.get("id")
     bid_to_approve = TaskBidder.objects.filter(task_id=task_id, id=id)
-    if bid_to_approve.exists() and (bid_to_approve[0].bid_approve_status == False):
+    if bid_to_approve.exists() and (bid_to_approve[0].task.post_status != "CLOSE"):
         bid = bid_to_approve[0]
-        if bid.runner_confirmed:
-            return Response({"error": "Task already assigned"})
-
         owner = bid.bidder_profile.author.id
         # TODO: Uncomment in the future
         if bid.payment_author.id == owner:
-            return Response({"error":"user not allowed perform action"}, status=status.HTTP_403_FORBIDDEN)
+           return Response({"error":"user not allowed perform action"}, status=status.HTTP_403_FORBIDDEN)
         response_data = {}
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
@@ -370,7 +367,7 @@ def accept_bid(request):
         )
         print("update task status")
         bid.approve_bids()
-        bid.set_task_status()
+        bid.add_bidder_to_task(task_owner)
         response_data["payment_email"] = client_info.email
         print("timeline created")
         serializer = TimelineStartSerializer(query_set)
