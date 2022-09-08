@@ -1,8 +1,6 @@
 import React, { useEffect, useCallback, useState, Fragment } from "react"
 import { Avatar, Grid, TextField, withStyles } from "@material-ui/core"
 import { useStyles } from "./messagesStyles"
-import LeftMsg from "./LeftMsg"
-import RightMsg from "./RightMsg"
 import { Button } from "@material-ui/core"
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined"
 import agent from "../../../api/agent"
@@ -10,7 +8,11 @@ import { useQuery } from "react-query"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import useAuth from "../../../hooks/useAuth"
 import { toast } from "react-toastify"
-
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import TextEditor from "./TextEditor"
+import createRequest from "../../../utils/axios"
+import { useSelector } from "react-redux"
+import MessageBox from "./MessageBox"
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -30,18 +32,34 @@ const CssTextField = withStyles({
   },
 })(TextField)
 
-function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
+function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowData,params}) {
   const classes = useStyles()
   const auth = useAuth()
+  const [userData, setUserData] = useState(null)
+  const [ messages,setMessages] = useState()
+  const { currentUser } = useSelector((state) => state.authReducer)
+  // setting message room to current url room
+  if(rowData && rowData.length > 0){
+    rowData.map((user)=>{
+      if(user.chat_room_id == params.id){
+        // console.log(user.chat_room_id,"user+")
+        setUserDetails(user)
+        
+      }
+      // setUserDetails(user)
+    })
+  }
   const [socketUrl, setSocketUrl] = useState(
-    `ws://4.tcp.ngrok.io:16901/ws/chat/room/${
+    `ws://8.tcp.ngrok.io:19259/ws/chat/room/${
       userDetails && userDetails.initiator.id
     }/${userDetails && userDetails.chat_room_id}/`
   )
+  
   const [messageHistory, setMessageHistory] = useState([])
   const [textbox, setTextbox] = useState("")
   const { sendMessage, lastMessage, readyState, sendJsonMessage } =
     useWebSocket(socketUrl)
+  
   const { data, refetch } = useQuery(
     ["chat-data", userDetails],
     () => agent.Chat.roomMessage(userDetails && userDetails.chat_room_id),
@@ -86,10 +104,11 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   }, [data])
   useEffect(() => {
     setSocketUrl(
-      `ws://4.tcp.ngrok.io:16901/ws/chat/room/${
+      `ws://8.tcp.ngrok.io:19259/ws/chat/room/${
         userDetails && userDetails.initiator.id
       }/${userDetails && userDetails.chat_room_id}/`
     )
+    
   }, [userDetails])
   const handleClickSendMessage = () => {
     sendJsonMessage({ attachment: null, message: textbox, action: "message" })
@@ -128,10 +147,12 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   const handleRemoveConversation = () => {
     removeRefetch()
   }
-
+  
   return (
     <>
-      {userDetails ? (
+  
+      
+      {userDetails? (
         <>
           <div
             style={{
@@ -167,7 +188,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                     ? userDetails.receiver_profile[0].first_name +
                       " " +
                       userDetails.receiver_profile[0].last_name
-                    : userDetails && userDetails.receiver.username}
+                    : userDetails && userDetails.receiver.username }
                 </div>
                 {userDetails && (
                   <div
@@ -201,15 +222,9 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                   height: "calc(100vh - 320px)",
                 }}
               >
-                {data && data.message_set && data.message_set.length > 0
-                  ? data.message_set.map((item, k) =>
-                      auth.currentUser.pk === item.sender ? (
-                        <RightMsg item={item} data={data} />
-                      ) : (
-                        <LeftMsg item={item} data={data} />
-                      )
-                    )
-                  : ""}
+                {data && data.results.length> 0 ?
+                  <MessageBox data={data?.results} auth={auth} />:"loading..."
+                }
               </div>
             </div>
             <div
@@ -221,7 +236,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
               }}
             >
               {userDetails ? (
-                <>
+                <div>
                   <CssTextField
                     style={{ marginRight: 15 }}
                     id="messageBox"
@@ -240,9 +255,11 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                     }}
                     disabled={readyState !== ReadyState.OPEN}
                   >
-                    Send
+                    
+                      Send
                   </Button>
-                </>
+                  
+                </div> 
               ) : (
                 <CssTextField
                   style={{ marginRight: 15 }}

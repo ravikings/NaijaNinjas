@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState, Fragment } from "react"
 import Header from "../../Layout/Header"
+import "../../../css/text-ediitor.css"
 import { useStyles } from "./messagesStyles"
 import { Grid, Hidden } from "@material-ui/core"
 import ChatList from "./ChatList"
@@ -11,7 +12,7 @@ import { useQuery } from "react-query"
 import createRequest from "../../../utils/axios"
 import useAuth from "../../../hooks/useAuth"
 import { useSelector } from "react-redux"
-
+import { useParams } from "react-router-dom"
 function MessagesPage(props) {
   // Current User =>
 
@@ -20,7 +21,7 @@ function MessagesPage(props) {
   const [userData, setUserData] = useState(null)
   const auth = useAuth()
   const { currentUser } = useSelector((state) => state.authReducer)
-
+  const params = useParams()
   const getOnlineState = async () => {
     try {
       const { data } = await createRequest().get(
@@ -46,7 +47,7 @@ function MessagesPage(props) {
       onSuccess: (d) => {},
     }
   )
-
+  console.log(userData?.author,"rOW")
   useEffect(() => {
     refetch()
   }, [userData])
@@ -69,6 +70,7 @@ function MessagesPage(props) {
                     userDetails={userDetails}
                     setUserDetails={setUserDetails}
                     rowData={rowData}
+                    userRefetch={refetch}
                   />
                 )}
               </Grid>
@@ -78,6 +80,8 @@ function MessagesPage(props) {
                 userDetails={userDetails}
                 setUserDetails={setUserDetails}
                 userRefetch={refetch}
+                rowData={rowData}
+                params={params}
               />
             </Grid>
           </Grid>
