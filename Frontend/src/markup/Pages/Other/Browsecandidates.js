@@ -181,12 +181,14 @@ function BrowseCandidates() {
                                   ) : (
                                     <></>
                                   )}
-                                  <div>
-                                    <i className="fa fa-money money"></i>
-                                    <span className="ml-1">
-                                      {/* {item.salary} */}$ 500,000
-                                    </span>
-                                  </div>
+                                  {item.salary && (
+                                    <div>
+                                      <i className="fa fa-money money"></i>
+                                      <span className="ml-1">
+                                        {(`" "`, item.salary)}
+                                      </span>
+                                    </div>
+                                  )}
 
                                   <ul>
                                     <li>

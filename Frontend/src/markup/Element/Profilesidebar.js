@@ -18,7 +18,7 @@ function ProfileSidebar({
 }) {
   const [showManage, setShowManage] = useState(showManageProp)
   const [showQuestion, setShowQuestion] = useState(false)
-  const [showResume, setShowResume] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   const [showSettings, setShowSettings] = useState(showManagePropSetting)
   const [imageState, setImageState] = useState(null)
   const [userDetails, setUserDetails] = useState(null)
@@ -158,21 +158,68 @@ function ProfileSidebar({
                 <span>Dashboard</span>
               </Link>
             </li>
-            <li>
-              <Link
-                to={"/jobs-profile"}
-                className={active === "Profile" ? "active" : ""}
-              >
-                <i className="fa fa-user-o" aria-hidden="true"></i>
+            <li onClick={() => setShowProfile(!showProfile)}>
+              <Link to={"#"} className={active === "profile" ? "active" : ""}>
+                <i
+                  className={
+                    showProfile ? "fa fa-arrow-down" : "fa fa-arrow-right"
+                  }
+                  aria-hidden="true"
+                ></i>
                 <span>Profile</span>
               </Link>
             </li>
-            <li>
-              <Link to={"/messages"}>
-                <i className="fa fa-comments-o" aria-hidden="true"></i>
-                <span>Messages</span>
-              </Link>
-            </li>
+            <Collapse in={showProfile}>
+              <li>
+                <Link
+                  to={"/jobs-profile"}
+                  className={active === "Bio" ? "active ml-4" : "ml-4"}
+                >
+                  <i className="fa fa-user-o" aria-hidden="true"></i>
+                  <span>Bio</span>
+                </Link>
+              </li>
+              {userProfile.is_a_runner && (
+                <>
+                  <li>
+                    <Link className="ml-4" to={"/jobs-my-resume"}>
+                      <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                      <span>Resume</span>
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link
+                      to={"/user-projects"}
+                      className={
+                        active === "My Projects ml-4" ? "active" : " ml-4"
+                      }
+                    >
+                      <i
+                        className="fa-solid fa-list-check"
+                        aria-hidden="true"
+                      ></i>
+                      <span>My Projects</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/user-services"}
+                      className={
+                        active === "My Services ml-4" ? "active" : " ml-4"
+                      }
+                    >
+                      <i
+                        className="fa-solid fa-ticket-simple"
+                        aria-hidden="true"
+                      ></i>
+                      <span>My Serivces</span>
+                    </Link>
+                  </li>
+                </>
+              )}
+            </Collapse>
+
             {/* {userStatus?.is_a_runner && (
               <li>
                 <Link to={"/jobs-my-resume"}>
@@ -183,9 +230,9 @@ function ProfileSidebar({
             )} */}
 
             <li>
-              <Link to={"/jobs-my-resume"}>
-                <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                <span>Resume</span>
+              <Link to={"/messages"}>
+                <i className="fa fa-comments-o" aria-hidden="true"></i>
+                <span>Messages</span>
               </Link>
             </li>
 
@@ -216,24 +263,7 @@ function ProfileSidebar({
               </li>
             </Collapse>
             {/* start ask question end */}
-            <li>
-              <Link
-                to={"/user-projects"}
-                className={active === "My Projects" ? "active" : ""}
-              >
-                <i className="fa-solid fa-list-check" aria-hidden="true"></i>
-                <span>My Projects</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={"/user-services"}
-                className={active === "My Services" ? "active" : ""}
-              >
-                <i className="fa-solid fa-ticket-simple" aria-hidden="true"></i>
-                <span>My Serivces</span>
-              </Link>
-            </li>
+
             <li>
               <Link
                 to={"/jobs-saved-jobs"}
@@ -301,15 +331,19 @@ function ProfileSidebar({
                   <span>Orders</span>
                 </Link>
               </li>
-              <li>
-                <Link
-                  className={active === "Applied Jobs" ? "active ml-4" : "ml-4"}
-                  to={"/jobs-applied-job"}
-                >
-                  <i className="fa fa-briefcase" aria-hidden="true"></i>
-                  <span>Upcoming tasks</span>
-                </Link>
-              </li>
+              {userProfile.is_a_runner && (
+                <li>
+                  <Link
+                    className={
+                      active === "Applied Jobs" ? "active ml-4" : "ml-4"
+                    }
+                    to={"/jobs-applied-job"}
+                  >
+                    <i className="fa fa-briefcase" aria-hidden="true"></i>
+                    <span>Upcoming tasks</span>
+                  </Link>
+                </li>
+              )}
             </Collapse>
             <li>
               <Link to={"/post-ads"}>
@@ -341,15 +375,17 @@ function ProfileSidebar({
                   <span>Alerts</span>
                 </Link>
               </li>
-              <li>
-                <Link
-                  className={active === "Security" ? "active ml-4" : "ml-4"}
-                  to={"/account-security"}
-                >
-                  <i className="fa fa-lock" aria-hidden="true"></i>
-                  <span>Security</span>
-                </Link>
-              </li>
+              {userProfile.is_a_runner && (
+                <li>
+                  <Link
+                    className={active === "Security" ? "active ml-4" : "ml-4"}
+                    to={"/account-security"}
+                  >
+                    <i className="fa fa-lock" aria-hidden="true"></i>
+                    <span>Security</span>
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
                   className={active === "Security" ? "active ml-4" : "ml-4"}

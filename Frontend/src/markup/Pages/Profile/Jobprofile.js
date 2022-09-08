@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import Header2 from "../../Layout/Header2"
 import Footer from "../../Layout/Footer"
 import ProfileSidebar from "../../Element/Profilesidebar"
-import { useFormik } from "formik"
+import { useFormik, useFormikContext } from "formik"
 import { useDispatch, useSelector } from "react-redux"
 import createRequest from "../../../utils/axios"
 import SingleInputField from "./SingleInputField"
@@ -11,6 +11,7 @@ import { toast } from "react-toastify"
 import { Autocomplete } from "@material-ui/lab"
 import { styled, TextField } from "@material-ui/core"
 import { sectors } from "../../../helper/sectors"
+import { states } from "../../../helper/states"
 import { makeStyles } from "@material-ui/core/styles"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import { authActionTypes, setProfileData } from "../Auth/Redux/AuthActions"
@@ -54,7 +55,6 @@ function Jobprofile() {
   const [userDetails, setUserDetails] = useState(null)
   const axiosPrivate = useAxiosPrivate()
   const [loadingData, setLoadingData] = useState(false)
-
   useEffect(() => {
     if (currentUser) {
       getUserDetails()
@@ -75,7 +75,6 @@ function Jobprofile() {
     createRequest()
       .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
       .then(({ data }) => {
-        console.log("user data api", data)
         setUserDetails(data)
         setLoadingData(false)
       })
@@ -96,7 +95,6 @@ function Jobprofile() {
         toast.error(e.response?.data?.message || "Unknown Error")
       })
   }
-  console.log(userDetails)
   const initialValues = {
     first_name: userDetails?.first_name || "",
     last_name: userDetails?.last_name || "",
@@ -123,6 +121,18 @@ function Jobprofile() {
     },
     enableReinitialize: true,
   })
+
+  useEffect(() => {
+    if (formik.values.city && formik.values.state) {
+      if (states[formik.values.state].postalCodes.length > 0) {
+        formik.values.postcode =
+          states[formik.values.state].postalCodes[
+            states[formik.values.state].cities.indexOf(formik.values.city)
+          ]
+      }
+    }
+    console.log("formik.values", formik.values)
+  }, [formik.values.city])
 
   return (
     <>
@@ -262,21 +272,62 @@ function Jobprofile() {
                               formik={formik}
                               title="Country:"
                               id={"country"}
+                              value={formik.values.country}
                             />
-                            <SingleInputField
-                              formik={formik}
-                              title="State:"
-                              id={"state"}
-                            />
+                            <div className="col-lg-6 col-md-6">
+                              <div className="form-group">
+                                <label>State:</label>
+                                <Autocomplete
+                                  fullWidth
+                                  freeSolo
+                                  autoSelect
+                                  classes={{ input: classes.root }}
+                                  value={formik.values.state}
+                                  onChange={(e, value) => {
+                                    formik.setFieldValue("state", value)
+                                  }}
+                                  options={Object.keys(states)}
+                                  renderInput={(params) => (
+                                    <CssTextField
+                                      {...params}
+                                      variant="outlined"
+                                    />
+                                  )}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="col-lg-6 col-md-6">
+                              <div className="form-group">
+                                <label>City:</label>
+                                <Autocomplete
+                                  fullWidth
+                                  freeSolo
+                                  autoSelect
+                                  classes={{ input: classes.root }}
+                                  value={formik.values.city}
+                                  onChange={(e, value) => {
+                                    formik.setFieldValue("city", value)
+                                  }}
+                                  options={
+                                    states[formik.values.state]
+                                      ? states[formik.values.state].cities
+                                      : []
+                                  }
+                                  renderInput={(params) => (
+                                    <CssTextField
+                                      {...params}
+                                      variant="outlined"
+                                    />
+                                  )}
+                                />
+                              </div>
+                            </div>
+
                             <SingleInputField
                               formik={formik}
                               title="Postcode:"
                               id={"postcode"}
-                            />
-                            <SingleInputField
-                              formik={formik}
-                              title="City:"
-                              id={"city"}
                             />
                             <SingleInputField
                               formik={formik}

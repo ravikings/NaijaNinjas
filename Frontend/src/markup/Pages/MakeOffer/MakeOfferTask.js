@@ -68,9 +68,30 @@ function MakeOfferPage() {
         }
       })
   }
+  const getRelatedTasks = async () => {
+    try {
+      const { sector, department, location, id, tags } = data
+      // separate tags by comma
+      const tagsArray = tags.split(",")
+      // get all tags
+      const tagsString = tagsArray.join("&tags=")
+
+      const res = await createRequest().get(
+        `/api/v1/task/related-tasks/?sector=${sector}&department=${department}&location=${location}&id=${id}
+        &tags=${tagsString}`
+      )
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     allData()
   }, [])
+
+  useEffect(() => {
+    getRelatedTasks()
+  }, [data])
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -171,40 +192,145 @@ function MakeOfferPage() {
                 {/* clients reives start */}
                 <div className="review">
                   <h2 className="mb-5">Related Jobs</h2>
-                  <Proposals
-                    name="Shoaib Ghulam"
-                    position="Web Developer"
-                    rating={5}
-                  />
-                  <Proposals
-                    name="Waseem Kaka"
-                    position="Graphics Desinger"
-                    rating={3}
-                  />
-                  {/* <Proposals
-                    name="Waseem Kaka"
-                    position="Graphics Desinger"
-                    rating={3}
-                  />
-                  <Proposals
-                    name="Waseem Kaka"
-                    position="Graphics Desinger"
-                    rating={3}
-                  />
-                  <Proposals
-                    name="Waseem Kaka"
-                    position="Graphics Desinger"
-                    rating={3}
-                  />
-                  <Proposals
-                    name="Waseem Kaka"
-                    position="Graphics Desinger"
-                    rating={3}
-                  /> */}
-                </div>
-                {/* clients reives end */}
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <ul className="post-job-bx browse-job">
+                        {[
+                          {
+                            attachment:
+                              "https://zappa-wnf4dp8g2.s3.amazonaws.com/task/documents/2022/09/05/Cars-Laptop-Wallpaper_JHnlJDA.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA525LDBK2M3KUXK3R%2F20220908%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220908T150438Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=194e22bfd035b489ba401a3e569a7da21b9c56964447385eb1c13716f87b4297",
+                            author: 72,
+                            bidders: [],
+                            bookmarks: [],
+                            category: "",
+                            created: "2022-09-05T12:33:49.129843+01:00",
+                            department: "Pets",
+                            description: "gigx",
+                            experience: null,
+                            fixed_salary: null,
+                            id: 37,
+                            location: "gigx",
+                            maximum_salary: "20000",
+                            minimum_salary: "10000",
+                            post_status: "OPEN",
+                            region: "",
+                            sector: "Pets",
+                            tags: "gigx",
+                            title: "gigxtest",
+                            updated: "2022-09-05T12:33:49.129875+01:00",
+                          },
+                          {
+                            attachment:
+                              "https://zappa-wnf4dp8g2.s3.amazonaws.com/task/documents/2022/09/05/Cars-Laptop-Wallpaper_JHnlJDA.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA525LDBK2M3KUXK3R%2F20220908%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220908T150438Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=194e22bfd035b489ba401a3e569a7da21b9c56964447385eb1c13716f87b4297",
+                            author: 72,
+                            bidders: [],
+                            bookmarks: [],
+                            category: "",
+                            created: "2022-09-05T12:33:49.129843+01:00",
+                            department: "Pets",
+                            description: "gigx",
+                            experience: null,
+                            fixed_salary: null,
+                            id: 37,
+                            location: "gigx",
+                            maximum_salary: "20000",
+                            minimum_salary: "10000",
+                            post_status: "OPEN",
+                            region: "",
+                            sector: "Pets",
+                            tags: "gigx",
+                            title: "gigxtest",
+                            updated: "2022-09-05T12:33:49.129875+01:00",
+                          },
+                        ]?.map((data, index) => (
+                          <li key={index}>
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-company">
+                                  <Link to={""}>
+                                    <span>
+                                      <img alt="" src={data.attachment} />
+                                    </span>
+                                  </Link>
+                                </div>
+                                <div className="job-post-info">
+                                  <h4>
+                                    <Link
+                                      to={`/make-offer-task/${data?.id}/${data?.title}`}
+                                      onClick={(e) => e.stopPropagation()}
+                                      target="_blank"
+                                    >
+                                      {data?.title}
+                                    </Link>
+                                  </h4>
+                                  <ul>
+                                    <li>
+                                      <i className="fa fa-map-marker"></i>{" "}
+                                      {data?.location}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-bookmark-o"></i>{" "}
+                                      {data?.category}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-clock-o"></i>{" "}
+                                      Published {data?.created || data?.updated}
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div className="d-flex">
+                                <div className="job-time mr-auto align-self-center">
+                                  <p className="h-100">
+                                    {data?.description?.substring(0, 150)} ...
+                                    {"  "}
+                                    <Link
+                                      to={`/make-offer-task/${data?.id}/${data?.title}`}
+                                      className="text-primary"
+                                      onClick={(e) => e.stopPropagation()}
+                                      target="_blank"
+                                    >
+                                      See more
+                                    </Link>
+                                  </p>
+                                  <div className="d-flex badge-div ">
+                                    {data?.tags?.split(",")?.map((e) => (
+                                      <Badge>{e}</Badge>
+                                    ))}
+                                  </div>
+                                  {/* <Link to={""}>
+                                <span>Full Time</span>
+                              </Link> */}
+                                </div>
 
-                {/* <RelatedJobs /> */}
+                                <div className="salary-bx d-flex flex-column text-center">
+                                  <span>
+                                    $ {data?.minimum_salary} - ${" "}
+                                    {data?.maximum_salary}
+                                  </span>
+                                  {/* <small class='text-muted'>Per hour</small> */}
+
+                                  <p className="text-muted text-capitalize">
+                                    per assignment
+                                  </p>
+                                  <Link
+                                    to={`/make-offer-task/${data?.id}/${data?.title}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    target="_blank"
+                                  >
+                                    <button className="site-button btn-block ">
+                                      Show Interest
+                                    </button>
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </Grid>
               <Grid
                 item
