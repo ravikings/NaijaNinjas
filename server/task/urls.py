@@ -33,7 +33,7 @@ router.register(
     DashboardTaskFavorite,
     basename="dashboard-task-bookmarks",
 )
-router.register(r"dashboard-contracts", ContractView, basename="dashboard-contracts")
+router.register(r"dashboard-orders", ContractView, basename="dashboard-orders")
 router.register(r"related-tasks", TaskRelatedView, basename="related-tasks")
 
 

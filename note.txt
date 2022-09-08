@@ -101,7 +101,7 @@ celery -A server worker -l info --without-gossip --without-mingle --without-hear
 daphne server.asgi:application
 daphne -b 0.0.0.0 -p 8000 server.asgi:application  
 
-#for public websocket use ngrok tcp 8001
+#for public websocket use ngrok tcp 8000
 
 ngrok tcp 8001
 ws://8.tcp.ngrok.io:10343/ws/chat/room/32/1/

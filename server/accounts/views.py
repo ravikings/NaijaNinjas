@@ -62,7 +62,8 @@ from .serializers import (
     BiddersProfileSerializer,
     PublicProfileSerializer,
     ClientReviewSerializer,
-    PrivateProfileSerializer
+    PrivateProfileSerializer,
+    ChatSearchProfileSerializer,
 )
 from notifications.signals import notify
 
@@ -112,6 +113,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
 
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
+    #permissions_classes = IsAuthenticated
 
     def retrieve(self, request, pk=None):
         
@@ -349,6 +351,34 @@ class SearchProfile(viewsets.ModelViewSet):
         "state",
         "city",
         "local_goverment_zone",
+    ]
+
+    ordering_fields = "__all__"
+
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
+class ChatSearchProfile(viewsets.ModelViewSet):
+
+    """
+    uses for search engine for the application
+    """
+
+    search_fields = [
+        "first_name",
+        "last_name",
+    ]
+    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    serializer_class = ChatSearchProfileSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "first_name",
+        "last_name",
+        "department",
+        "sector"
     ]
 
     ordering_fields = "__all__"

@@ -70,7 +70,6 @@ class ChatConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
-        self.sender.set_last_seen()
         logging.warning("chat disconnect!")
 
     # Receive message from WebSocket
