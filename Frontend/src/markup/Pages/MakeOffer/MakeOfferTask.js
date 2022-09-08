@@ -125,7 +125,7 @@ function MakeOfferPage() {
                 <Grid item>
                   <Avatar
                     variant={"square"}
-                    className={classes.avatar}
+                    className={classes.avatar + " ml-5"}
                     src={data.photo}
                   >
                     {data?.sector}
