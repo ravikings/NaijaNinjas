@@ -149,15 +149,17 @@ function ProfileSidebar({
             </div>
           </div>
           <ul>
-            <li>
-              <Link
-                to={"/dashboard"}
-                className={active === "dashboard" ? "active" : ""}
-              >
-                <i className="fas fa-chart-line"></i>
-                <span>Dashboard</span>
-              </Link>
-            </li>
+            {userProfile.is_a_runner && (
+              <li>
+                <Link
+                  to={"/dashboard"}
+                  className={active === "dashboard" ? "active" : ""}
+                >
+                  <i className="fas fa-chart-line"></i>
+                  <span>Dashboard</span>
+                </Link>
+              </li>
+            )}
             <li onClick={() => setShowProfile(!showProfile)}>
               <Link to={"#"} className={active === "profile" ? "active" : ""}>
                 <i
