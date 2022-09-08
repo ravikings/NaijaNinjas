@@ -124,7 +124,10 @@ function Jobprofile() {
 
   useEffect(() => {
     if (formik.values.city && formik.values.state) {
-      if (states[formik.values.state].postalCodes.length > 0) {
+      if (
+        states[formik.values.state] &&
+        states[formik.values.state].postalCodes?.length > 0
+      ) {
         formik.values.postcode =
           states[formik.values.state].postalCodes[
             states[formik.values.state].cities.indexOf(formik.values.city)
