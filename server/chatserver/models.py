@@ -45,7 +45,16 @@ def upload_to(instance, filename):
     milliseconds = now.microsecond // 1000
     return f"documents/user/message/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
     
+
 class Message(models.Model):
+
+    STATUS = [
+        ("FILE", "FILE"),
+        ("AUDIO", "AUDIO"),
+        ("VIDEO", "VIDEO"),
+        ("PICTURE", "PICTURE"),
+    ]
+
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -53,6 +62,7 @@ class Message(models.Model):
         null=True,
     )
     text = RichTextField()
+    attachment_type = models.CharField(max_length=255, choices=STATUS, default="FILE")
     attachment = models.FileField(upload_to=upload_to, blank=True, null=True, storage=storage)
     conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
