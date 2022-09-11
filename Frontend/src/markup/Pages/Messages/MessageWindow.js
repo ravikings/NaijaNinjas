@@ -34,8 +34,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   const classes = useStyles()
   const auth = useAuth()
   const [socketUrl, setSocketUrl] = useState(
-    `ws://4.tcp.ngrok.io:16901/ws/chat/room/${
-      userDetails && userDetails.initiator.id
+    `ws://4.tcp.ngrok.io:16849/ws/chat/room/${userDetails && userDetails.initiator.id
     }/${userDetails && userDetails.chat_room_id}/`
   )
   const [messageHistory, setMessageHistory] = useState([])
@@ -48,7 +47,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
     {
       refetchOnWindowFocus: false, //turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
-      onSuccess: (d) => {},
+      onSuccess: (d) => { },
     }
   )
   const { data: removeData, refetch: removeRefetch } = useQuery(
@@ -86,8 +85,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   }, [data])
   useEffect(() => {
     setSocketUrl(
-      `ws://4.tcp.ngrok.io:16901/ws/chat/room/${
-        userDetails && userDetails.initiator.id
+      `ws://4.tcp.ngrok.io:16849/ws/chat/room/${userDetails && userDetails.initiator.id
       }/${userDetails && userDetails.chat_room_id}/`
     )
   }, [userDetails])
@@ -162,11 +160,11 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                   }}
                 >
                   {userDetails &&
-                  userDetails.receiver_profile &&
-                  userDetails.receiver_profile[0].first_name
+                    userDetails.receiver_profile &&
+                    userDetails.receiver_profile[0].first_name
                     ? userDetails.receiver_profile[0].first_name +
-                      " " +
-                      userDetails.receiver_profile[0].last_name
+                    " " +
+                    userDetails.receiver_profile[0].last_name
                     : userDetails && userDetails.receiver.username}
                 </div>
                 {userDetails && (
@@ -203,12 +201,12 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
               >
                 {data && data.message_set && data.message_set.length > 0
                   ? data.message_set.map((item, k) =>
-                      auth.currentUser.pk === item.sender ? (
-                        <RightMsg item={item} data={data} />
-                      ) : (
-                        <LeftMsg item={item} data={data} />
-                      )
+                    auth.currentUser.pk === item.sender ? (
+                      <RightMsg item={item} data={data} />
+                    ) : (
+                      <LeftMsg item={item} data={data} />
                     )
+                  )
                   : ""}
               </div>
             </div>

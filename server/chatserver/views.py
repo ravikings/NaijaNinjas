@@ -61,7 +61,8 @@ def file_upload(request):
     fields required:
     1. sender: user id field
     2. attachment: file field
-    3. conversation_id: conversation id field
+    3. attachment_type: file type field
+    4. conversation_id: conversation id field
     """
     data = request.data
     file_serializer = FileMessageUploadSerializer(data=data)

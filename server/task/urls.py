@@ -36,8 +36,6 @@ router.register(
 router.register(r"dashboard-orders", ContractView, basename="dashboard-orders")
 router.register(r"related-tasks", TaskRelatedView, basename="related-tasks")
 
-
-
 urlpatterns = [
     path("", include(router.urls)),
     path("task-bookmark/<str:pk>/", task_favorite, name="task-bookmark"),
