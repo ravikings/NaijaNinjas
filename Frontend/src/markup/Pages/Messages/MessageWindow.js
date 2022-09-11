@@ -1,8 +1,6 @@
-import React, { useEffect, useCallback, useState, Fragment } from "react"
-import { Avatar, Grid, TextField, withStyles } from "@material-ui/core"
+import React, { useEffect, useCallback, useState, Fragment,useRef } from "react"
+import { Avatar, Grid, TextField, withStyles,Input } from "@material-ui/core"
 import { useStyles } from "./messagesStyles"
-import LeftMsg from "./LeftMsg"
-import RightMsg from "./RightMsg"
 import { Button } from "@material-ui/core"
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined"
 import agent from "../../../api/agent"
@@ -10,15 +8,25 @@ import { useQuery } from "react-query"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import useAuth from "../../../hooks/useAuth"
 import { toast } from "react-toastify"
-
-const CssTextField = withStyles({
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import TextEditor from "./TextEditor"
+import createRequest from "../../../utils/axios"
+import { useSelector } from "react-redux"
+import FileUpload from "./FileUpload/FileUpload.js"
+import FileList from "./FileUpload/FileList.js"
+import MessageBox from "./MessageBox"
+import "./message.css"
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import {Emoji} from "./TextEditor.js"
+import { IconButton } from "@mui/material"
+export const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
       color: "white",
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        border: "none",
+        border: "1px solid black",
       },
       "&:hover fieldset": {
         border: "none",
@@ -30,25 +38,49 @@ const CssTextField = withStyles({
   },
 })(TextField)
 
-function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
+function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowData,params}) {
   const classes = useStyles()
   const auth = useAuth()
+  const [userData, setUserData] = useState(null)
+  const [ messages,setMessages] = useState()
+  const { currentUser } = useSelector((state) => state.authReducer)
+  // setting message room to current url room
+  if(rowData && rowData.length > 0){
+    rowData.map((user)=>{
+      if(user.chat_room_id == params.id){
+        // console.log(user.chat_room_id,"user+")
+        setUserDetails(user)
+        
+      }
+      // setUserDetails(user)
+    })
+  }
   const [socketUrl, setSocketUrl] = useState(
-    `ws://4.tcp.ngrok.io:16901/ws/chat/room/${
+    `ws://8.tcp.ngrok.io:19259/ws/chat/room/${
       userDetails && userDetails.initiator.id
     }/${userDetails && userDetails.chat_room_id}/`
   )
+  
   const [messageHistory, setMessageHistory] = useState([])
   const [textbox, setTextbox] = useState("")
+  // files state 
+  const [files, setFiles] = useState([])
+  // remove file function 
+  const removeFile = (filename) => {
+    setFiles(files.filter(file => file.name !== filename))
+  }
   const { sendMessage, lastMessage, readyState, sendJsonMessage } =
     useWebSocket(socketUrl)
+  
   const { data, refetch } = useQuery(
     ["chat-data", userDetails],
     () => agent.Chat.roomMessage(userDetails && userDetails.chat_room_id),
     {
       refetchOnWindowFocus: false, //turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
-      onSuccess: (d) => {},
+      onSuccess: (d) => {
+        console.log(d,"d")
+      },
     }
   )
   const { data: removeData, refetch: removeRefetch } = useQuery(
@@ -86,13 +118,14 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   }, [data])
   useEffect(() => {
     setSocketUrl(
-      `ws://4.tcp.ngrok.io:16901/ws/chat/room/${
+      `ws://8.tcp.ngrok.io:19259/ws/chat/room/${
         userDetails && userDetails.initiator.id
       }/${userDetails && userDetails.chat_room_id}/`
     )
+    
   }, [userDetails])
   const handleClickSendMessage = () => {
-    sendJsonMessage({ attachment: null, message: textbox, action: "message" })
+    sendJsonMessage({ attachment: files[0], message: textbox, action: "message" })
   }
   const hitEnter = (e) => {
     if (textbox.trim() !== "") {
@@ -128,10 +161,20 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   const handleRemoveConversation = () => {
     removeRefetch()
   }
-
+  const inputRef = useRef()
+  const [cursorPosition,setCursorPosition] = useState()
+  const [openEmoji, setOpenEmoji] = React.useState(false);
+  useEffect(() => {
+    // console.log(inputRef?.current)
+    if(inputRef?.current){
+      inputRef.current.selectionEnd = cursorPosition
+    }
+  }, [cursorPosition])
   return (
     <>
-      {userDetails ? (
+  
+      
+      {userDetails? (
         <>
           <div
             style={{
@@ -163,11 +206,11 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                 >
                   {userDetails &&
                   userDetails.receiver_profile &&
-                  userDetails.receiver_profile[0].first_name
-                    ? userDetails.receiver_profile[0].first_name +
+                  userDetails.receiver_profile[0]?.first_name
+                    ? userDetails.receiver_profile[0]?.first_name +
                       " " +
-                      userDetails.receiver_profile[0].last_name
-                    : userDetails && userDetails.receiver.username}
+                      userDetails.receiver_profile[0]?.last_name
+                    : userDetails && userDetails.receiver.username }
                 </div>
                 {userDetails && (
                   <div
@@ -201,17 +244,13 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                   height: "calc(100vh - 320px)",
                 }}
               >
-                {data && data.message_set && data.message_set.length > 0
-                  ? data.message_set.map((item, k) =>
-                      auth.currentUser.pk === item.sender ? (
-                        <RightMsg item={item} data={data} />
-                      ) : (
-                        <LeftMsg item={item} data={data} />
-                      )
-                    )
-                  : ""}
+                {data && data.results.length> 0 ?
+                  <MessageBox data={data?.results} auth={auth} />:"loading..."
+                }
               </div>
             </div>
+            {files.length > 0? <FileList files={files} removeFile={removeFile}  SenderId={data?.results[0].initiator.id} RoomId={data?.results[0].id} />:""}
+            {openEmoji?<Emoji textbox={textbox} setTextbox={setTextbox} cursorPosition={cursorPosition} setCursorPosition={setCursorPosition} inputRef={inputRef}/>:""}
             <div
               style={{
                 borderTop: "1px solid #ccc",
@@ -221,18 +260,40 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
               }}
             >
               {userDetails ? (
-                <>
-                  <CssTextField
+                <> 
+                  {/* <input type="file" onClick={}/> */}
+                  <div className="sidebar-btn">
+                    <EmojiEmotionsIcon onClick={() => setOpenEmoji(!openEmoji)} />
+                    <FileUpload files={files} setFiles={setFiles} removeFile={removeFile} />
+                  </div>
+                  {/* <CssTextField
                     style={{ marginRight: 15 }}
                     id="messageBox"
+                    ref={inputRef}
+                    variant={"outlined"}
+                    placeholder={"Your Message"}
+                    // onKeyUp={(e) => {
+                    //   setTextbox(e.target.value)
+                    // }}
+                    onChange={(e) => setTextbox(e.target.value)}
+                    value={textbox}
+                    onKeyDown={(e) => hitEnter(e)}
+                    fullWidth
+                  /> */}
+                  <input 
+                    style={{ marginRight: 15 ,border:"none",outline:"none",position:"relative",width:"100%",padding:"15px",height:"100%"}}
+                    id="messageBox"
+                    ref={inputRef}
                     variant={"outlined"}
                     placeholder={"Your Message"}
                     onKeyUp={(e) => {
                       setTextbox(e.target.value)
                     }}
+                    onChange={(e) => setTextbox(e.target.value)}
+                    value={textbox}
                     onKeyDown={(e) => hitEnter(e)}
                     fullWidth
-                  />
+                    />
                   <Button
                     className={classes.sendButton}
                     onClick={() => {
@@ -240,9 +301,11 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
                     }}
                     disabled={readyState !== ReadyState.OPEN}
                   >
-                    Send
+                    
+                      Send
                   </Button>
-                </>
+                  
+                </> 
               ) : (
                 <CssTextField
                   style={{ marginRight: 15 }}

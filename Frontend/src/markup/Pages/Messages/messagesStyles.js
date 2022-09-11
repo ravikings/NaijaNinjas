@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
   main: {
-    margin: "20px 220px",
+    // margin: "20px 220px",
     [theme.breakpoints.down("sm")]: {
       margin: "0px 75px",
     },
@@ -26,6 +26,19 @@ export const useStyles = makeStyles((theme) => ({
     padding: "0px 25px",
     color: "white",
     fontSize: 16,
+    "&:hover": { background: "#cccc" },
+    "&:focus": { outline: "none" },
+  },
+  sendButtonFile: {
+    textTransform: "none",
+    background: "#2a41e8",
+    padding: "0px 25px",
+    color: "white",
+    fontSize: 16,
+    position:"relative",
+    height:"50px",
+    top:"20px",
+    left:"30px",
     "&:hover": { background: "#cccc" },
     "&:focus": { outline: "none" },
   },

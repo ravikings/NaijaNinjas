@@ -1,0 +1,39 @@
+.sidebar-btn{
+    position:relative;
+    padding-top: 15px;
+    display:flex;
+    gap: 4px;
+
+}
+.talk-bubble-bottom {
+    margin: 0px 20px 0px 0px;
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    background-color: #dedddd;
+    color: #666666;
+    border-radius: 5px;
+}
+
+
+/* Right triangle, left side slightly down */
+
+.tri-bottom.bottom-in:after {
+content: " ";
+position: absolute;
+width: 0;
+height: 0;
+left: 5px;
+/* right: -20px; */
+/* top: 15px; */
+bottom: auto;
+border: 20px solid;
+border-color: #1d1c1c1f transparent transparent transparent;
+}
+.emoji-picker{
+    position:absolute;
+    width:fit-content;
+    padding-top: 50px;
+    /* top:20px; */
+}
