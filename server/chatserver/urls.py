@@ -13,7 +13,7 @@ urlpatterns = [
     path(
         "message_room/<int:convo_id>/",
         get_conversation.as_view({"get": "list"}),
-        name="get_conversations",
+        name="get_conversation",
     ),
     path("conversations/<str:pk>/", conversations, name="conversations"),
     path("chat_file_upload/", file_upload, name="chat_file_upload"),
