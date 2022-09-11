@@ -17,7 +17,45 @@ import {
 } from "react-icons/bi"
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
+import Picker from 'emoji-picker-react';
+import { Grid } from '@material-ui/core';
+import Modal from '@mui/material/Modal';
 import "../../../css/text-ediitor.css"
+export const Emoji = (props) => {
+	const {textbox,setTextbox,inputRef,setCursorPosition,cursorPosition} = props;
+	const [chosenEmoji, setChosenEmoji] = useState(null);
+	const pickEmoji = ( e , emoji ) => {
+		const ref = inputRef.current ;
+		console.log(inputRef.current[0])
+		ref.focus();
+		const start = textbox.substring(0 ,ref.selectionStart) ;
+		const end = textbox.substring( ref.selectionStart ) ;
+		const text = start + emoji.emoji + end ;
+
+		setTextbox(text);
+
+		setCursorPosition(start.length+emoji.length);
+	}
+	return (
+	<div className="emoji-picker">
+		<Grid
+        justifyContent={"flex-end"}
+        style={{ padding: "10px 30px", display: "flex" }}
+        container
+        spacing={3}>
+			<div className="talk-bubble-bottom tri-bottom bottom-in">
+			<Picker  preload={true} onEmojiClick={pickEmoji}  groupVisibility={{flags: false,}} />
+            {/* <div className="talktext">
+
+			</div> */}
+			</div>
+
+		</Grid>
+		
+	</div>
+	// </Modal>
+	);
+};
 const TextEditor = () => {
 	const [ expandTxtEditor,setexpandTxtEditor] = useState(false)
 	function formatDoc(cmd, value=null) {

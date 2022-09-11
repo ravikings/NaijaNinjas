@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback, useState, Fragment } from "react"
-import { Avatar, Grid, TextField, withStyles } from "@material-ui/core"
+import React, { useEffect, useCallback, useState, Fragment,useRef } from "react"
+import { Avatar, Grid, TextField, withStyles,Input } from "@material-ui/core"
 import { useStyles } from "./messagesStyles"
 import { Button } from "@material-ui/core"
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined"
@@ -12,15 +12,21 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import TextEditor from "./TextEditor"
 import createRequest from "../../../utils/axios"
 import { useSelector } from "react-redux"
+import FileUpload from "./FileUpload/FileUpload.js"
+import FileList from "./FileUpload/FileList.js"
 import MessageBox from "./MessageBox"
-const CssTextField = withStyles({
+import "./message.css"
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import {Emoji} from "./TextEditor.js"
+import { IconButton } from "@mui/material"
+export const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
       color: "white",
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        border: "none",
+        border: "1px solid black",
       },
       "&:hover fieldset": {
         border: "none",
@@ -57,6 +63,12 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
   
   const [messageHistory, setMessageHistory] = useState([])
   const [textbox, setTextbox] = useState("")
+  // files state 
+  const [files, setFiles] = useState([])
+  // remove file function 
+  const removeFile = (filename) => {
+    setFiles(files.filter(file => file.name !== filename))
+  }
   const { sendMessage, lastMessage, readyState, sendJsonMessage } =
     useWebSocket(socketUrl)
   
@@ -66,7 +78,9 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
     {
       refetchOnWindowFocus: false, //turned off on window focus refetch option
       enabled: false, // turned off by default, manual refetch is needed
-      onSuccess: (d) => {},
+      onSuccess: (d) => {
+        console.log(d,"d")
+      },
     }
   )
   const { data: removeData, refetch: removeRefetch } = useQuery(
@@ -111,7 +125,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
     
   }, [userDetails])
   const handleClickSendMessage = () => {
-    sendJsonMessage({ attachment: null, message: textbox, action: "message" })
+    sendJsonMessage({ attachment: files[0], message: textbox, action: "message" })
   }
   const hitEnter = (e) => {
     if (textbox.trim() !== "") {
@@ -147,7 +161,15 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
   const handleRemoveConversation = () => {
     removeRefetch()
   }
-  
+  const inputRef = useRef()
+  const [cursorPosition,setCursorPosition] = useState()
+  const [openEmoji, setOpenEmoji] = React.useState(false);
+  useEffect(() => {
+    // console.log(inputRef?.current)
+    if(inputRef?.current){
+      inputRef.current.selectionEnd = cursorPosition
+    }
+  }, [cursorPosition])
   return (
     <>
   
@@ -184,10 +206,10 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
                 >
                   {userDetails &&
                   userDetails.receiver_profile &&
-                  userDetails.receiver_profile[0].first_name
-                    ? userDetails.receiver_profile[0].first_name +
+                  userDetails.receiver_profile[0]?.first_name
+                    ? userDetails.receiver_profile[0]?.first_name +
                       " " +
-                      userDetails.receiver_profile[0].last_name
+                      userDetails.receiver_profile[0]?.last_name
                     : userDetails && userDetails.receiver.username }
                 </div>
                 {userDetails && (
@@ -227,6 +249,8 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
                 }
               </div>
             </div>
+            {files.length > 0? <FileList files={files} removeFile={removeFile}  SenderId={data?.results[0].initiator.id} RoomId={data?.results[0].id} />:""}
+            {openEmoji?<Emoji textbox={textbox} setTextbox={setTextbox} cursorPosition={cursorPosition} setCursorPosition={setCursorPosition} inputRef={inputRef}/>:""}
             <div
               style={{
                 borderTop: "1px solid #ccc",
@@ -236,18 +260,40 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
               }}
             >
               {userDetails ? (
-                <div>
-                  <CssTextField
+                <> 
+                  {/* <input type="file" onClick={}/> */}
+                  <div className="sidebar-btn">
+                    <EmojiEmotionsIcon onClick={() => setOpenEmoji(!openEmoji)} />
+                    <FileUpload files={files} setFiles={setFiles} removeFile={removeFile} />
+                  </div>
+                  {/* <CssTextField
                     style={{ marginRight: 15 }}
                     id="messageBox"
+                    ref={inputRef}
+                    variant={"outlined"}
+                    placeholder={"Your Message"}
+                    // onKeyUp={(e) => {
+                    //   setTextbox(e.target.value)
+                    // }}
+                    onChange={(e) => setTextbox(e.target.value)}
+                    value={textbox}
+                    onKeyDown={(e) => hitEnter(e)}
+                    fullWidth
+                  /> */}
+                  <input 
+                    style={{ marginRight: 15 ,border:"none",outline:"none",position:"relative",width:"100%",padding:"15px",height:"100%"}}
+                    id="messageBox"
+                    ref={inputRef}
                     variant={"outlined"}
                     placeholder={"Your Message"}
                     onKeyUp={(e) => {
                       setTextbox(e.target.value)
                     }}
+                    onChange={(e) => setTextbox(e.target.value)}
+                    value={textbox}
                     onKeyDown={(e) => hitEnter(e)}
                     fullWidth
-                  />
+                    />
                   <Button
                     className={classes.sendButton}
                     onClick={() => {
@@ -259,7 +305,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
                       Send
                   </Button>
                   
-                </div> 
+                </> 
               ) : (
                 <CssTextField
                   style={{ marginRight: 15 }}

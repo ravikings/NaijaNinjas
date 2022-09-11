@@ -6,6 +6,18 @@ import BadgeAvatars from "../../../helper/Avatar.js"
 import {Link} from "react-router-dom"
 import {useParams} from "react-router-dom"
 import { useHistory } from "react-router-dom";
+import TimeAgo from 'javascript-time-ago'
+
+// English.
+import en from 'javascript-time-ago/locale/en'
+import Search from "@material-ui/icons/Search";
+
+TimeAgo.addDefaultLocale(en)
+const timeAgo = new TimeAgo('en-US')
+
+// timeAgo.format(new Date())
+// "just now"
+
 function ChatListItem({ selected, user, setUserDetails, userRefetch }) {
 
   const classes = useStyles();
@@ -18,20 +30,23 @@ function ChatListItem({ selected, user, setUserDetails, userRefetch }) {
   )
   console.log(socketUrl)
   const history = useHistory()
+  console.log(user)
+  console.log(selected)
+  console.log(id.id,"id")
   return (
       <Grid
         container
         spacing={1}
         className={classes.oneItem}
         style={{
-          borderLeft: selected ? "7px solid blue" : "",
+          borderLeft: selected? "7px solid blue" : "",
         }}
         alignItems={"center"}
         // onClick={() => setUserDetails(user)}
         onClick={() => history.push(`/messages/${user.initiator.id}/${user.chat_room_id}`)}
       >
           <Grid item xs={2}>
-          <BadgeAvatars profile={user.receiver_profile} reciever={user.receiver}/>
+          <BadgeAvatars  status={user.receiver_profile[0]?.status} image={user.receiver_profile[0]?.photo} name={user.username}/>
         </Grid>
         <Grid item style={{ fontSize: 14 }} xs={10}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -56,7 +71,7 @@ function ChatListItem({ selected, user, setUserDetails, userRefetch }) {
                 textAlign: "right",
               }}
             >
-              {user.last_message && ConvertDateTime(user.last_message.timestamp)}
+              {user.last_message && timeAgo.format(new Date(user.last_message.timestamp),'round-minute')}
             </div>
           </div>
           <div
@@ -74,5 +89,6 @@ function ChatListItem({ selected, user, setUserDetails, userRefetch }) {
   );
 
 }
+
 
 export default ChatListItem;

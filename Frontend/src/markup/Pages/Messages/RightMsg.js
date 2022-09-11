@@ -10,7 +10,7 @@ function RightMsg({ props, item, data }) {
         container
         spacing={3}
       >
-        <Grid item style={{ flex: 1, paddingRight: 0 }}>
+        <Grid item style={{  paddingRight: 0 }}>
           <div className="talk-bubble-right tri-right right-in">
             <div className="talktext">
               <p>

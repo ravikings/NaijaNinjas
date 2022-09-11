@@ -70,6 +70,8 @@ function MessagesPage(props) {
                     userDetails={userDetails}
                     setUserDetails={setUserDetails}
                     rowData={rowData}
+                    userData={userData}
+                    setUserData={setUserData}
                     userRefetch={refetch}
                   />
                 )}

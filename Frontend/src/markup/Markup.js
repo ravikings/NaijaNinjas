@@ -83,6 +83,7 @@ import Transactions from "./Pages/Other/Transactions"
 import ProjectsPage from "./Pages/Other/ProjectsPage"
 import UserProjects from "./Pages/Other/UserProjects"
 import UpdateProject from "./Pages/Other/UpdateProject"
+import CreateChat from "./Pages/Messages/createChat"
 class Markup extends Component {
   render() {
     return (
@@ -93,6 +94,9 @@ class Markup extends Component {
             <Route path="/index-2" exact component={Homepage2} />
             <Route path="/messages" exact component={MessagesPage} />
             <Route path="/messages/:userId/:id" exact component={MessagesPage} />
+            {/* <Route path="/messages/start/:author_id" exact component={MessagesPage} /> */}
+
+            <Route path="/messages/new/chat/:id" exact component={CreateChat} />
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute
