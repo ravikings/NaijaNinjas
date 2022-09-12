@@ -217,6 +217,12 @@ function CompanyManageBids() {
                                     </ul>
                                   </div>
                                 </div>
+                              </div>
+                            </li>
+                          ))}
+                    </ul>
+                  </div>
+                </div>
 
                 {displayPage === "" && (
                   <div className="col-xl-9 col-lg-8 m-b30">
