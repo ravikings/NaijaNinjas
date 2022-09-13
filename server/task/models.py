@@ -136,7 +136,8 @@ class TaskBidder(models.Model):
         self.bid_approve_status = True
         VAT = 7.5
         SERVICE_FEE = 1.5
-        self.total_charge = (self.offer * (VAT + SERVICE_FEE)) // 100
+        charges = (self.offer * (VAT + SERVICE_FEE)) // 100
+        self.total_charge = self.offer + charges
         self.save()
 
     def add_bidder_to_task(self, query):
