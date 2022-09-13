@@ -186,14 +186,18 @@ class Timeline(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="timeline_author",
+        null=True, 
+        blank=True
     )
     # TODO: Add validator to chech if user is a runner
     task_owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="timeline_task_owner",
+        null=True,
+        blank=True
     )
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=255, choices=STATUS, default="STARTED")
@@ -220,6 +224,7 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="timeline_comment_author",
+        null=True, blank=True
     )
     task_timeline = models.ForeignKey(
         Timeline,
@@ -256,5 +261,6 @@ class TaskBookmarks(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="task_bookmarks_author",
+        null=True, blank=True
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
