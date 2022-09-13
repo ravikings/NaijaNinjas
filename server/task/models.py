@@ -106,7 +106,7 @@ class TaskBidder(models.Model):
     )
     payment_submitted = models.BooleanField(default=False, null=True)
     offer = models.IntegerField(null=True, blank=True)
-    total_charge = models.IntegerField(null=True, blank=True)
+    total_charge = models.FloatField(null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     attachment = models.FileField(
         upload_to=upload_to, null=True, blank=True, storage=storage
@@ -129,10 +129,7 @@ class TaskBidder(models.Model):
 
         if not self.transaction_id:
             ref = secrets.token_urlsafe(50)
-            VAT = 7.5
-            SERVICE_FEE = 1.5
             self.transaction_id = ref
-            self.total_charge = (self.offer * (VAT + SERVICE_FEE)) // 100
         super().save(*args, **kwargs)
 
     def approve_bids(self):
