@@ -31,15 +31,14 @@ def verify_payment(request):
     payment: TaskBidder = get_object_or_404(TaskBidder, transaction_id=trxref)
     if payment.verify_transaction_completed():
         messages.success(
-            request, f"Payment Completed Successfully, ₦ {payment.offer}."
+            request, f"Payment Completed Successfully, ₦ {payment.total_charge}."
         )
         #call approve view here to send email to prof to start the task
         return Response({"message":"Payment was succesfull!"}, status=status.HTTP_200_OK)
 
-    else:
-        messages.warning(request, "Sorry, your payment could not be confirmed.")
-        return Response({"message":"Payment declined"}, status=status.HTTP_406_NOT_ACCEPTABLE)
-    
+    messages.warning(request, "Sorry, your payment could not be confirmed.")
+    return Response({"message":"Payment declined"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])

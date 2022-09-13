@@ -129,7 +129,10 @@ class TaskBidder(models.Model):
 
         if not self.transaction_id:
             ref = secrets.token_urlsafe(50)
+            VAT = 7.5
+            SERVICE_FEE = 1.5
             self.transaction_id = ref
+            self.total_charge = self.offer * (VAT + SERVICE_FEE)
         super().save(*args, **kwargs)
 
     def approve_bids(self):
@@ -151,7 +154,7 @@ class TaskBidder(models.Model):
 
     def verify_transaction_completed(self):
         paystack = PayStack()
-        status, result = paystack.verify_payment(self.transaction_id, self.offer)
+        status, result = paystack.verify_payment(self.transaction_id, self.total_charge)
         if status:
             self.payment_submitted = True
             if result["amount"] / 100 == self.total_charge:
