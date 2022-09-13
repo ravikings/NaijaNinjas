@@ -186,7 +186,9 @@ class TimelineSerializer(serializers.ModelSerializer):
 
     def get_timeline_comment(self, instance):
 
-        return Comment.objects.filter(task_timeline=instance.id)
+        query = Comment.objects.filter(task_timeline=instance.id)
+        serializer = TimelineCommentSerializer(query, many=True)
+        return serializer.data
 
 
 class TaskAssignedSerializer(serializers.ModelSerializer):
