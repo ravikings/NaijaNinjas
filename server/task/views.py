@@ -190,7 +190,7 @@ class TaskImageAPIView(viewsets.ModelViewSet):
 
 class TaskApproveView(viewsets.ModelViewSet):
 
-    permissions_classes = [AllowAny]
+    #permissions_classes = [AllowAny]
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
 
@@ -408,7 +408,7 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
                 id__in=[owner, bid.payment_author.id]
             )
             print("creating timeline")
-            query_set = Timeline.objects.create(
+            obj, _created = Timeline.objects.get_or_create(
                 author=bid.payment_author, task_owner=task_owner, task=bid.task
             )
             print("update task status")
@@ -416,7 +416,7 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
             bid.add_bidder_to_task(task_owner)
             response_data["payment_email"] = client_info.email
             print("timeline created")
-            serializer = TimelineStartSerializer(query_set)
+            serializer = TimelineStartSerializer(_created)
             response_data.update(serializer.data)
             return Response(response_data)
 
