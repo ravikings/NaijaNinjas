@@ -151,7 +151,7 @@ class BiddersProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RunnerProfile
-        fields = ("first_name", "last_name", "photo", "status")
+        fields = ("author", "first_name", "last_name", "photo", "status")
 
 
 class UserResumeSerializer(serializers.ModelSerializer):

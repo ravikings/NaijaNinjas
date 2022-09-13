@@ -95,9 +95,7 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     def get_bidder_info(self, instance):
 
         id = instance.bidder_profile
-        profile = RunnerProfile.objects.filter(id=id.id).values(
-            "first_name", "last_name", "photo", "status"
-        )
+        profile = RunnerProfile.objects.filter(id=id.id)
         serializer = BiddersProfileSerializer(profile, many=True)
         return serializer.data
 
