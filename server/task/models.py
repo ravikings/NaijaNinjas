@@ -132,15 +132,14 @@ class TaskBidder(models.Model):
             VAT = 7.5
             SERVICE_FEE = 1.5
             self.transaction_id = ref
-            self.total_charge = self.offer * (VAT + SERVICE_FEE)
+            self.total_charge = (self.offer * (VAT + SERVICE_FEE)) // 100
         super().save(*args, **kwargs)
 
     def approve_bids(self):
         self.bid_approve_status = True
-        self.save()
-
-    def set_total_offer(self, total_charge):
-        self.total_charge = total_charge
+        VAT = 7.5
+        SERVICE_FEE = 1.5
+        self.total_charge = (self.offer * (VAT + SERVICE_FEE)) // 100
         self.save()
 
     def add_bidder_to_task(self, query):
