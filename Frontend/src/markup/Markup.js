@@ -90,7 +90,7 @@ import TimeLine from "./Pages/Other/TimeLine"
 class Markup extends Component {
   render() {
     return (
-      <HashRouter basename="/react/demo">
+      <HashRouter basename="/">
         <div className="page-wraper">
           <Switch>
             <Route path="/" exact component={Homepage} />
@@ -301,7 +301,11 @@ class Markup extends Component {
               component={ContractProposal}
             />
             <Route path="/task-contract" exact component={TaskContract} />
-            <Route path="/timeline/:taskID/:taskOwner" exact component={TimeLine} />
+            <Route
+              path="/timeline/:taskID/:taskOwner"
+              exact
+              component={TimeLine}
+            />
 
             <PrivateRoute path="/add-services" exact component={AddServices} />
             <PrivateRoute
