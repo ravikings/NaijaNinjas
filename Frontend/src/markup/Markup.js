@@ -83,11 +83,14 @@ import Transactions from "./Pages/Other/Transactions"
 import ProjectsPage from "./Pages/Other/ProjectsPage"
 import UserProjects from "./Pages/Other/UserProjects"
 import UpdateProject from "./Pages/Other/UpdateProject"
+import ConfirmBid from "./Pages/Other/ConfirmBid"
+import TaskContract from "./Pages/Other/TaskContract"
+import TimeLine from "./Pages/Other/TimeLine"
 
 class Markup extends Component {
   render() {
     return (
-      <HashRouter basename="/react/demo">
+      <HashRouter basename="/">
         <div className="page-wraper">
           <Switch>
             <Route path="/" exact component={Homepage} />
@@ -201,6 +204,11 @@ class Markup extends Component {
               exact
               component={CompanyManageBids}
             />
+            <Route
+              path="/manage-bids/:id/:title/confirm/:bidId"
+              exact
+              component={ConfirmBid}
+            />
             <Route path="/make-offer/:id" exact component={MakeOfferPage} />
             <Route path="/companies" exact component={Companies} />
             <Route path="/free-job-alerts" exact component={Freejobalerts} />
@@ -291,6 +299,12 @@ class Markup extends Component {
               path="/contract-proposal"
               exact
               component={ContractProposal}
+            />
+            <Route path="/task-contract" exact component={TaskContract} />
+            <Route
+              path="/timeline/:taskID/:taskOwner"
+              exact
+              component={TimeLine}
             />
 
             <PrivateRoute path="/add-services" exact component={AddServices} />
