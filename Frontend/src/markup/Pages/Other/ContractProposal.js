@@ -1,52 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Header from "../../Layout/Header";
-import Footer from "../../Layout/Footer";
-import ClipLoader from "react-spinners/ClipLoader";
+import React, { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import Header from "../../Layout/Header"
+import Footer from "../../Layout/Footer"
+import ClipLoader from "react-spinners/ClipLoader"
 
-import createRequest from "../../../utils/axios";
-import axios from "axios";
-import "react-dropzone-uploader/dist/styles.css";
-import Dropzone from "react-dropzone-uploader";
+import createRequest from "../../../utils/axios"
+import axios from "axios"
+import "react-dropzone-uploader/dist/styles.css"
+import Dropzone from "react-dropzone-uploader"
 
 function ContractProposal() {
-  const [freelancerAmount, setFreelancerAmount] = useState(0);
-  const [gigxFee, setGigxFee] = useState(0);
-  const [clientAmount, setClientAmount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [attachFile, setAttachFile] = useState(null);
+  const [freelancerAmount, setFreelancerAmount] = useState(0)
+  const [gigxFee, setGigxFee] = useState(0)
+  const [clientAmount, setClientAmount] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [attachFile, setAttachFile] = useState(null)
 
   // upload image start
   const getUploadParams = ({ meta }) => {
-    return { url: "https://httpbin.org/post" };
-  };
+    return { url: "https://httpbin.org/post" }
+  }
 
   // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {
-    setAttachFile(file);
-  };
+    setAttachFile(file)
+  }
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [])
   const ClientTexCalculator = (e) => {
-    setClientAmount(e);
-    let fee = (e * 20) / 100;
-    setGigxFee(fee);
-    setFreelancerAmount(e - fee);
-  };
+    setClientAmount(e)
+    let fee = (e * 20) / 100
+    setGigxFee(fee)
+    setFreelancerAmount(e - fee)
+  }
 
   const FreelancerTexCalculator = (e) => {
-    let x = parseFloat(e);
+    let x = parseFloat(e)
 
-    setFreelancerAmount(x);
-    let fee = (20 / 100) * x;
+    setFreelancerAmount(x)
+    let fee = (20 / 100) * x
     if (fee >= 0) {
-      setGigxFee(fee.toFixed(1));
+      setGigxFee(fee.toFixed(1))
     } else {
-      setGigxFee(0);
+      setGigxFee(0)
     }
 
-    setClientAmount(parseFloat(x + fee));
-  };
+    setClientAmount(parseFloat(x + fee))
+  }
   // effect end
   // single data fatch end
   return (
@@ -258,6 +258,6 @@ function ContractProposal() {
 
       <Footer />
     </>
-  );
+  )
 }
-export default ContractProposal;
+export default ContractProposal

@@ -1,0 +1,65 @@
+.uk-timeline .uk-timeline-item .uk-card {
+  max-height: 300px !important;
+}
+
+.uk-timeline .uk-timeline-item {
+  display: flex !important;
+  position: relative !important;
+}
+
+.uk-timeline .uk-timeline-item::before {
+  background: #dadee4 !important;
+  content: "";
+  height: 100% !important;
+  left: 19px !important;
+  position: absolute !important;
+  top: 20px !important;
+  width: 2px !important;
+  z-index: 0 !important;
+}
+
+.uk-timeline .uk-timeline-item .uk-timeline-icon .uk-badge {
+  margin-top: 20px !important;
+  width: 40px !important;
+  height: 40px !important;
+  position: relative;
+}
+
+.uk-timeline .uk-timeline-item .uk-timeline-content {
+  -ms-flex: 1 1 auto !important;
+  flex: 1 1 auto !important;
+  padding: 0 0 0 1rem !important;
+}
+.form-area {
+  background-color: #fafafa !important;
+  padding: 10px 40px 60px !important;
+  margin: 10px 0px 60px !important;
+  border: 1px solid GREY !important;
+}
+.box-shadow-none {
+  box-shadow: none !important;
+}
+
+.tacbox {
+  display: block;
+  padding: 1em;
+  margin: 2em;
+  border: 3px solid #ddd;
+  background-color: #eee;
+  max-width: 800px;
+}
+
+input {
+  height: 2em;
+  width: 2em;
+  vertical-align: middle;
+}
+/*
+label {
+  outline: 2px dotted #f00;
+}
+
+/*
+label:after {
+  content: attr(for);
+}*/

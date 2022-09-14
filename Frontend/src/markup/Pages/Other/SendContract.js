@@ -1,143 +1,151 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams, useHistory, useLocation } from "react-router-dom";
-import Header from "../../Layout/Header";
-import Footer from "../../Layout/Footer";
-import ClipLoader from "react-spinners/ClipLoader";
-import { Badge } from "react-bootstrap";
-import { Divider } from "@material-ui/core";
-import createRequest from "../../../utils/axios";
-import axios from "axios";
-import "react-dropzone-uploader/dist/styles.css";
-import Dropzone from "react-dropzone-uploader";
-import url from "../../../utils/baseUrl";
-import swal from "sweetalert";
-import { useDispatch } from "react-redux";
-import { authActionTypes } from "../Auth/Redux/AuthActions";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import useAuth from "../../../hooks/useAuth";
-import "bootstrap-icons/font/bootstrap-icons.css";
+import React, { useState, useEffect } from "react"
+import { Link, useParams, useHistory, useLocation } from "react-router-dom"
+import Header from "../../Layout/Header"
+import Footer from "../../Layout/Footer"
+import ClipLoader from "react-spinners/ClipLoader"
+import { Badge } from "react-bootstrap"
+import { Divider } from "@material-ui/core"
+import createRequest from "../../../utils/axios"
+import axios from "axios"
+import "react-dropzone-uploader/dist/styles.css"
+import Dropzone from "react-dropzone-uploader"
+import url from "../../../utils/baseUrl"
+import swal from "sweetalert"
+import { useDispatch } from "react-redux"
+import { authActionTypes } from "../Auth/Redux/AuthActions"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import useAuth from "../../../hooks/useAuth"
+import "bootstrap-icons/font/bootstrap-icons.css"
 
 function SendContract() {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const auth = useAuth();
-  let token = `Bearer ` + localStorage.getItem("access_token");
-  var userId = parseInt(localStorage.getItem("userID"));
-  const [freelancerAmount, setFreelancerAmount] = useState(0);
-  const [gigxFee, setGigxFee] = useState(0);
-  const [clientAmount, setClientAmount] = useState(0);
-  const [cover, setCover] = useState("");
-  const [deliveryTime, setDeliveryTime] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [attachFile, setAttachFile] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
+  // const axiosPrivate = useAxiosPrivate()
 
-  let { id } = useParams();
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const auth = useAuth()
+  let token = `Bearer ` + localStorage.getItem("access_token")
+  var userId = parseInt(localStorage.getItem("userID"))
+  const [freelancerAmount, setFreelancerAmount] = useState(0)
+  const [gigxFee, setGigxFee] = useState(0)
+  const [clientAmount, setClientAmount] = useState(0)
+  const [cover, setCover] = useState("")
+  const [deliveryTime, setDeliveryTime] = useState("")
+  const [attachment, setAttachment] = useState(null)
+  const [attachmentVal, setAttachmentVal] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [attachFile, setAttachFile] = useState(null)
+  const axiosPrivate = useAxiosPrivate()
 
-  const [data, setData] = useState([]);
+  let { id } = useParams()
+
+  const [data, setData] = useState([])
 
   const allData = async () => {
-    setLoading(true);
+    setLoading(true)
     await createRequest()
       .get(`api/v1/task/task/${id}/`)
       .then((res) => {
-        console.log(res);
-        setData(res.data);
+        console.log(res)
+        setData(res.data)
 
-        setLoading(false);
+        setLoading(false)
       })
       .catch((e) => {
         if (e.response?.status === 400) {
-          console.log(e?.response?.data?.non_field_errors[0]);
+          console.log(e?.response?.data?.non_field_errors[0])
         } else {
-          console.log("Unknown Error");
+          console.log("Unknown Error")
         }
-      });
-  };
+      })
+  }
   useEffect(() => {
-    allData();
-  }, []);
+    allData()
+  }, [])
 
   // upload image start
   const getUploadParams = ({ meta }) => {
-    return { url: "https://httpbin.org/post" };
-  };
+    return { url: "https://httpbin.org/post" }
+  }
 
   // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {
-    setAttachFile(file);
-  };
+    setAttachFile(file)
+  }
 
   const ClientTexCalculator = (e) => {
-    setClientAmount(e);
-    let fee = (e * 20) / 100;
-    setGigxFee(fee);
-    setFreelancerAmount(e - fee);
-  };
+    setClientAmount(e)
+    let fee = (e * 20) / 100
+    setGigxFee(fee)
+    setFreelancerAmount(e - fee)
+  }
 
   const FreelancerTexCalculator = (e) => {
-    let x = parseFloat(e);
+    let x = parseFloat(e)
 
-    setFreelancerAmount(x);
-    let fee = (20 / 100) * x;
+    setFreelancerAmount(x)
+    let fee = (20 / 100) * x
     if (fee >= 0) {
-      setGigxFee(fee.toFixed(1));
+      setGigxFee(fee.toFixed(1))
     } else {
-      setGigxFee(0);
+      setGigxFee(0)
     }
 
-    setClientAmount(parseFloat(x + fee));
-  };
+    setClientAmount(parseFloat(x + fee))
+  }
   // effect end
   // single data fatch end
   // badding task start
-  console.log({ location });
+  // console.log({ location });
   const addBadding = (e) => {
-    console.log("userid", userId);
-    e.preventDefault();
+    // console.log("userid", userId);
+    e.preventDefault()
     if (!auth.isAuthenticated) {
-      swal("Aunauthorized", "Please login!", "warning", { buttons: false });
+      swal("Aunauthorized", "Please login!", "warning", { buttons: false })
       setTimeout(() => {
-        swal.close();
-        history.push(`/login?redirect=${location.pathname}`);
-      }, 3000);
-      return;
+        swal.close()
+        history.push(`/login?redirect=${location.pathname}`)
+      }, 3000)
+      return
     } else {
-      var formdata = new FormData();
-      formdata.append("description", cover);
-      formdata.append("offer", clientAmount);
-      formdata.append("task", id);
-      formdata.append("delivery_date", deliveryTime);
-      formdata.append("bidder", userId);
-
-      axiosPrivate({
-        method: "POST",
-        url: `${url.baseURL}api/v1/task/task-bidding/`,
-        data: formdata,
-        headers: {
-          Authorization: token,
-        },
-      }).then(
-        (response) => {
-          if (response) {
-            swal(
-              "Thank You",
-              "Thank you for filling out your information!",
-              "success"
-            );
-            setTimeout(() => {
-              swal.close();
-              history.push("/browse-job-filter-list");
-            }, 3000);
+      var formdata = new FormData()
+      formdata.append("description", cover)
+      formdata.append("offer", clientAmount)
+      formdata.append("task", id)
+      formdata.append("delivery_date", deliveryTime)
+      formdata.append("bidder", userId)
+      formdata.append("attachment", attachment)
+      // console.log("====attachment", attachment);
+      // axiosPrivate({
+      //   method: "POST",
+      //   url: `${url.baseURL}api/v1/task/task-bidding/`,
+      //   data: formdata,
+      //   headers: {
+      //     Authorization: token,
+      //   },
+      // })
+      axiosPrivate
+        .post(`${url.baseURL}api/v1/task/task-bidding/`, formdata)
+        .then(
+          (response) => {
+            if (response) {
+              swal(
+                "Thank You",
+                "Thank you for filling out your information!",
+                "success"
+              )
+              setTimeout(() => {
+                swal.close()
+                history.push("/browse-job-filter-list")
+              }, 3000)
+            }
+          },
+          (error) => {
+            dispatch({ type: authActionTypes.GET_ACCESS_TOKEN })
           }
-        },
-        (error) => {
-          dispatch({ type: authActionTypes.GET_ACCESS_TOKEN });
-        }
-      );
+        )
     }
-  };
+  }
   // badding task end
   return (
     <>
@@ -194,17 +202,11 @@ function SendContract() {
                         </div>
                         <div className="col-md-6">
                           <div className="input-group">
-                            <span className="input-group-prepend">
-                              <div className="input-group-text bg-transparent border-right-0">
-                                <i class="bi bi-stopwatch-fill" />
-                              </div>
-                            </span>
                             <input
-                              className="form-control py-2 border-left-0 border"
+                              type="date"
+                              className="form-control  border-left-0 border p-2 mt-2 fw9 "
                               value={deliveryTime}
                               onChange={(e) => setDeliveryTime(e.target.value)}
-                              type="number"
-                              min="0"
                             />
                           </div>
                         </div>
@@ -325,7 +327,37 @@ function SendContract() {
                   {/* contract section start */}
                 </div>
                 {/* contract price end */}
+                <div className="container-data m-b20">
+                  {/* contract Header start */}
+                  <div class="contract-header">
+                    <h2 class="mb-0">Attechment </h2>
+                  </div>
+                  {/* contract header end */}
 
+                  {/* contract section start */}
+                  <div className="form-group mb-10">
+                    <div className="custom-file">
+                      <p className="m-a0">
+                        <i className="fa fa-upload"></i>
+                        Upload File
+                      </p>
+                      <input
+                        type="file"
+                        name="attachment"
+                        onChange={(e) => {
+                          setAttachment(e.target.files[0])
+                          setAttachmentVal(e.target.value)
+                        }}
+                        className="site-button form-control"
+                        id="customFile"
+                        value={attachmentVal}
+                      />
+                    </div>
+                    <p class="ml-1">{attachmentVal}</p>
+                  </div>
+
+                  {/* contract section start */}
+                </div>
                 {/* contract send button Start */}
                 <div className="container-data m-b20">
                   {/* contract section start */}
@@ -392,6 +424,6 @@ function SendContract() {
 
       <Footer />
     </>
-  );
+  )
 }
-export default SendContract;
+export default SendContract
