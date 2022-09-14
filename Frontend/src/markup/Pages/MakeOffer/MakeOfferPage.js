@@ -16,23 +16,9 @@ import { useHistory, useLocation, useParams } from "react-router-dom"
 import createRequest from "../../../utils/axios"
 import ClipLoader from "react-spinners/ClipLoader"
 import { toast } from "react-toastify"
+import RelatedProfile from "./components/RelatedProfile"
 
 var bnr = require("../../../images/banner/bnr5.png")
-
-const blogGrid = [
-  {
-    image: require("../../../images/blog/grid/pic1.jpg"),
-  },
-  {
-    image: require("../../../images/blog/grid/pic2.jpg"),
-  },
-  {
-    image: require("../../../images/blog/grid/pic3.jpg"),
-  },
-  {
-    image: require("../../../images/blog/grid/pic4.jpg"),
-  },
-]
 
 function MakeOfferPage() {
   const classes = useStyles()
@@ -40,7 +26,7 @@ function MakeOfferPage() {
   const history = useHistory()
   const [user, setUser] = React.useState(null)
   const [resume, setResume] = React.useState(null)
-
+  const [relatedProfles, setRelatedProfles] = React.useState([])
   const getResume = async () => {
     try {
       const { data } = await createRequest().get(
@@ -52,10 +38,28 @@ function MakeOfferPage() {
     }
   }
 
+  const getRelatedProfile = async () => {
+    const { department, city, id, sector } = user
+    try {
+      const { data } = await createRequest().get(
+        `/api/v1/account/related-profiles/?department=${department}&city=${city}&id=${id}&sector=${sector}
+        `
+      )
+      console.log(data)
+      setRelatedProfles(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     handleRequest()
     getResume()
-  }, [id])
+  }, [])
+
+  useEffect(() => {
+    getRelatedProfile()
+  }, [user])
 
   const handleRequest = async () => {
     try {
@@ -127,13 +131,7 @@ function MakeOfferPage() {
               <Grid item xs={12} sm={12} md={7} lg={8}>
                 <TabsGroup data={user.description} resume={resume} id={id} />
                 <Feedback />
-                <Feedback />
-                <Feedback />
-                <Feedback />
-                <Feedback />
-                <Feedback />
-                <Feedback />
-                <Feedback />
+                <RelatedProfile data={relatedProfles} />
               </Grid>
               <Grid item xs={12} sm={12} md={5} lg={4}>
                 <div className="sticky-top browse-candidates">

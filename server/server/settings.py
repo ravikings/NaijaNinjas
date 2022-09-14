@@ -28,7 +28,11 @@ SECRET_KEY = "h@e3z6yev#04x)$kdhp5!+y=q0t2-&)q-#wvbt-h@%dwem=8s#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev", "https://fb54-98-44-232-67.ngrok.io"]
+ALLOWED_HOSTS = [
+    "*",
+    "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev",
+    "https://fb54-98-44-232-67.ngrok.io",
+]
 
 
 # Application definition
@@ -45,8 +49,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
-    'notifications',
-    'notifications_rest',
+    "notifications",
+    "notifications_rest",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -58,8 +62,8 @@ INSTALLED_APPS = [
     "channels",
     "ckeditor",
     "django_filters",
-    'rest_framework_simplejwt',
-    'django_s3_storage',
+    "rest_framework_simplejwt",
+    "django_s3_storage",
     "django_celery_results",
     "celery_progress",
     # "hitcount",
@@ -79,9 +83,9 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        #"rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",  # new
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 15,
@@ -107,7 +111,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "corsheaders.middleware.CorsPostCsrfMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -150,11 +154,12 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000",
-                         "http://127.0.0.1:3000",
-                         "http://localhost:8000",
-                         "http://127.0.0.1:8000",
-                         ]
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 
 
 CSRF_COOKIE_SECURE = True
@@ -172,7 +177,7 @@ ROOT_URLCONF = "server.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR,'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -199,13 +204,13 @@ WSGI_APPLICATION = "server.wsgi.application"
 # }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lastestgigxdb',
-        'USER': 'postgres',
-        'PASSWORD': '2{c%v~TtV?_SFCer',
-        'HOST': 'database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "lastestgigxdb",
+        "USER": "postgres",
+        "PASSWORD": "2{c%v~TtV?_SFCer",
+        "HOST": "database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com",
+        "PORT": "5432",
     }
 }
 
@@ -299,23 +304,19 @@ LOGGING = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 ASGI_APPLICATION = "server.asgi.application"
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
 
-AWS_ACCESS_KEY_ID = 'AKIA525LDBK2M3KUXK3R'
-AWS_SECRET_ACCESS_KEY = 'mzbEVDLdWPF/Ez4eumkkBh7STtrTdVx30D+arXhM'
-AWS_DEFAULT_REGION= 'us-east-1'
-AWS_LOCATION = 'static'
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+AWS_ACCESS_KEY_ID = "AKIA525LDBK2M3KUXK3R"
+AWS_SECRET_ACCESS_KEY = "mzbEVDLdWPF/Ez4eumkkBh7STtrTdVx30D+arXhM"
+AWS_DEFAULT_REGION = "us-east-1"
+AWS_LOCATION = "static"
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
 YOUR_S3_BUCKET = "zappa-wnf4dp8g2"
 
@@ -325,15 +326,15 @@ AWS_S3_BUCKET_NAME_STATIC = YOUR_S3_BUCKET
 AWS_S3_MAX_AGE_SECONDS_STATIC = "94608000"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles'),
+    os.path.join(BASE_DIR, "staticfiles"),
 ]
-# These next two lines will serve the static files directly 
+# These next two lines will serve the static files directly
 # from the s3 bucket
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % YOUR_S3_BUCKET
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % YOUR_S3_BUCKET
 STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # OR...if you create a fancy custom domain for your static files use:
-#AWS_S3_PUBLIC_URL_STATIC = "https://static.zappaguide.com/"
+# AWS_S3_PUBLIC_URL_STATIC = "https://static.zappaguide.com/"
 
 
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -346,17 +347,19 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 # EMAIL_HOST_PASSWORD = '123Amina4@'
 
 # Celery settings
-CELERY_BROKER_URL = "amqps://wmkxuxlw:reXDWVEj7Z0YK44d_dtEyfO_RjQX_xCe@toad.rmq.cloudamqp.com/wmkxuxlw"
-#CELERY_RESULT_BACKEND = "amqps://wmkxuxlw:reXDWVEj7Z0YK44d_dtEyfO_RjQX_xCe@toad.rmq.cloudamqp.com/wmkxuxlw"
+CELERY_BROKER_URL = (
+    "amqps://wmkxuxlw:reXDWVEj7Z0YK44d_dtEyfO_RjQX_xCe@toad.rmq.cloudamqp.com/wmkxuxlw"
+)
+# CELERY_RESULT_BACKEND = "amqps://wmkxuxlw:reXDWVEj7Z0YK44d_dtEyfO_RjQX_xCe@toad.rmq.cloudamqp.com/wmkxuxlw"
 CELERY_IMPORTS = [
-    'payment.tasks',
+    "payment.tasks",
 ]
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_JSON = "json"
 CELERY_TIMEZONE = "Africa/Lagos"
-CELERY_ACKS_LATE=True
+CELERY_ACKS_LATE = True
 
-#paystack info
-PAYSTACK_SECRET_KEY = "sk_test_200fcc984243e4e0d1ec71326d74e6a4e0750c29"
-PAYSTACK_PUBLIC_KEY  = "pk_test_b4198537c6f3c50f8fc0fccaebf4d0aae311d411"
+# paystack info
+PAYSTACK_SECRET_KEY = "sk_test_9576a7e41acdeb3ce9f62bdc86fc50dcdf901d9c"
+PAYSTACK_PUBLIC_KEY = "pk_test_b4198537c6f3c50f8fc0fccaebf4d0aae311d411"

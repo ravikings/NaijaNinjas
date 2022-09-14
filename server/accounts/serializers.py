@@ -116,10 +116,14 @@ class PrivateProfileSerializer(serializers.ModelSerializer):
     Profile serializers use profile for picture uploads and retrieve
     """
 
+    is_a_runner = serializers.SerializerMethodField()
+
     class Meta:
         model = RunnerProfile
         fields = "__all__"
 
+    def get_is_a_runner(self, instance):
+        return instance.author.is_a_runner
 
 class PublicProfileSerializer(serializers.ModelSerializer):
     """
@@ -147,7 +151,7 @@ class BiddersProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RunnerProfile
-        fields = ("first_name", "last_name", "photo", "status")
+        fields = ("author", "first_name", "last_name", "photo", "status")
 
 
 class UserResumeSerializer(serializers.ModelSerializer):
@@ -245,7 +249,7 @@ class ClientReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClientReview
-        fields = "__all__"
+        fields = ("id", "author", "task", "body", "created", "updated", "rating")
 
 
 class RunnerProfileSerializer(serializers.ModelSerializer):

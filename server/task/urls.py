@@ -16,6 +16,7 @@ from task.views import (
     accept_bid,
     ContractView,
     TaskRelatedView,
+    GetTimelineView,
 )
 
 router = DefaultRouter()
@@ -33,9 +34,13 @@ router.register(
     DashboardTaskFavorite,
     basename="dashboard-task-bookmarks",
 )
-router.register(r"dashboard-contracts", ContractView, basename="dashboard-contracts")
+router.register(r"dashboard-orders", ContractView, basename="dashboard-orders")
 router.register(r"related-tasks", TaskRelatedView, basename="related-tasks")
-
+router.register(
+    r"test-timeline",
+    GetTimelineView,
+    basename="test-timline",
+)
 
 
 urlpatterns = [
@@ -46,5 +51,10 @@ urlpatterns = [
         "get-timeline/<str:task_id>/<str:task_owner>",
         get_timeiline,
         name="timeline-tracker",
+    ),
+    path(
+        "test-timeline/<str:task_id>/<str:task_owner>",
+        GetTimelineView.as_view({"get": "list"}),
+        name="test-timline",
     ),
 ]
