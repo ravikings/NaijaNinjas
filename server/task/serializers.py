@@ -1,4 +1,8 @@
 from dataclasses import field
+from accounts.models import Review
+from accounts.serializers import ReviewSerializer
+from accounts.models import ClientReview
+from accounts.serializers import ClientReviewSerializer
 from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks
 from rest_framework import serializers
 from accounts.serializers import (
@@ -163,6 +167,8 @@ class TimelineSerializer(serializers.ModelSerializer):
 
     timeline_comment = serializers.SerializerMethodField()
     timestamps = serializers.SerializerMethodField()
+    client_reviews = serializers.SerializerMethodField()
+    pro_reviews = serializers.SerializerMethodField()
 
     class Meta:
         model = Timeline
@@ -189,6 +195,24 @@ class TimelineSerializer(serializers.ModelSerializer):
         query = Comment.objects.filter(task_timeline=instance.id)
         serializer = TimelineCommentSerializer(query, many=True)
         return serializer.data
+
+    def get_client_reviews(self, instance):
+        try:
+            query = Review.objects.get(task=instance.task.id)
+            serializer = ReviewSerializer(query)
+            return serializer.data
+
+        except:
+            return None
+
+    def get_pro_reviews(self, instance):
+        try:
+            query = ClientReview.objects.get(task=instance.task.id)
+            serializer = ClientReviewSerializer(query)
+            return serializer.data
+
+        except:
+            return None
 
 
 class TaskAssignedSerializer(serializers.ModelSerializer):

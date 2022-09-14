@@ -34,7 +34,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   const classes = useStyles()
   const auth = useAuth()
   const [socketUrl, setSocketUrl] = useState(
-    `ws://4.tcp.ngrok.io:16849/ws/chat/room/${userDetails && userDetails.initiator.id
+    `ws://4.tcp.ngrok.io:13948/ws/chat/room/${userDetails && userDetails.initiator.id
     }/${userDetails && userDetails.chat_room_id}/`
   )
   const [messageHistory, setMessageHistory] = useState([])
@@ -85,7 +85,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch }) {
   }, [data])
   useEffect(() => {
     setSocketUrl(
-      `ws://4.tcp.ngrok.io:16849/ws/chat/room/${userDetails && userDetails.initiator.id
+      `ws://4.tcp.ngrok.io:13948/ws/chat/room/${userDetails && userDetails.initiator.id
       }/${userDetails && userDetails.chat_room_id}/`
     )
   }, [userDetails])
