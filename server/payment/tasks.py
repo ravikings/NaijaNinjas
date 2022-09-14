@@ -59,8 +59,7 @@ def log_transaction_task(self, reference, transaction_data):
         if user: 
             
             account = user.payment_author.id
-            user.webhook_transaction_verified = True
-            user.save()
+            user.set_webhook_transaction_verified()
             print("found user, saved webhook info")
         else:
             print("user not found saving default user id")

@@ -14,22 +14,31 @@ import arrow
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 
+
 class AccountUser(AbstractUser):
     # We don't need to define the email attribute because is inherited from AbstractUser
     phone_number = models.CharField(max_length=12)
     is_a_runner = models.BooleanField(default=False, verbose_name="is_a_runner")
-    is_email_verified = models.BooleanField(default=False, verbose_name="email_verified")
-    is_phone_number_verified = models.BooleanField(default=False, verbose_name="phone_number_verified")
-    password_reset_required = models.BooleanField(default=False, verbose_name="reset_password") 
+    is_email_verified = models.BooleanField(
+        default=False, verbose_name="email_verified"
+    )
+    is_phone_number_verified = models.BooleanField(
+        default=False, verbose_name="phone_number_verified"
+    )
+    password_reset_required = models.BooleanField(
+        default=False, verbose_name="reset_password"
+    )
 
     class Meta:
         models.UniqueConstraint(fields=["phone_number"], name="unique_phonenumber")
+
 
 class IpModel(models.Model):
     ip = models.CharField(max_length=25)
 
     def __str__(self):
         return self.ip
+
 
 class RunnerProfile(models.Model):
     author = models.OneToOneField(
@@ -38,7 +47,9 @@ class RunnerProfile(models.Model):
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     title = models.CharField(max_length=55, blank=True, db_index=True)
-    photo = models.ImageField(upload_to="users/%Y/%m/%d/", blank=True, null=True, storage=storage)
+    photo = models.ImageField(
+        upload_to="users/%Y/%m/%d/", blank=True, null=True, storage=storage
+    )
     language = models.CharField(max_length=55, blank=True, null=True)
     location = models.CharField(max_length=55, blank=True, null=True, db_index=True)
     salary = models.CharField(max_length=55, blank=True, null=True, db_index=True)
@@ -58,16 +69,21 @@ class RunnerProfile(models.Model):
         max_length=55, blank=True, null=True, db_index=True
     )
     views = models.ManyToManyField(IpModel, related_name="user_views", blank=True)
-    status = models.BooleanField(default=False, verbose_name="online_status", blank=True)
-    login_tracker = models.BooleanField(default=False, verbose_name="login_tracker", blank=True)
-    user_set_status = models.BooleanField(default=False, verbose_name="is_online", blank=True)
+    status = models.BooleanField(
+        default=False, verbose_name="online_status", blank=True
+    )
+    login_tracker = models.BooleanField(
+        default=False, verbose_name="login_tracker", blank=True
+    )
+    user_set_status = models.BooleanField(
+        default=False, verbose_name="is_online", blank=True
+    )
     bookmarks = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="profile_bookmarks", blank=True
     )
 
-
     def private_mode(self, status):
-    
+
         if status == "True":
             print("setting status to private")
             self.user_set_status = status
@@ -81,16 +97,15 @@ class RunnerProfile(models.Model):
         self.save()
         print("profile is public")
         return False
-        
 
     def public_online_status(self):
 
         if not self.user_set_status:
             self.user_set_status = True
             self.save()
-    
+
     def set_online_status(self, type):
-        
+
         if not self.user_set_status:
 
             try:
@@ -115,9 +130,8 @@ class RunnerProfile(models.Model):
                     return "offline"
 
             except:
-                
+
                 pass
-                
 
 
 def upload_to_resume(instance, filename):
@@ -126,12 +140,17 @@ def upload_to_resume(instance, filename):
     milliseconds = now.microsecond // 1000
     return f"documents/user/resume/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
 
+
 class RunnerResume(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="resume_author"
     )
     profile = models.ForeignKey(
-        RunnerProfile,null=True, on_delete=models.CASCADE, related_name="user_profile", blank=True
+        RunnerProfile,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="user_profile",
+        blank=True,
     )
     headline = models.CharField(max_length=255, blank=True, db_index=True)
     skills = models.JSONField(null=True, blank=True)
@@ -143,11 +162,18 @@ class RunnerResume(models.Model):
     career_profile = models.JSONField(null=True, blank=True)
     postcode = models.CharField(max_length=55, blank=True, db_index=True)
     description = models.TextField(null=True, db_index=True, blank=True)
-    attachment = models.FileField(upload_to=upload_to_resume,null=True, blank=True, storage=storage)
+    attachment = models.FileField(
+        upload_to=upload_to_resume, null=True, blank=True, storage=storage
+    )
+
 
 class Review(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="authorreview"
+    )
+    task = models.IntegerField(
+        blank=True,
+        null=True,
     )
     body = RichTextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -158,18 +184,29 @@ class Review(models.Model):
     on_budget = models.BooleanField(default=False)
     on_time = models.BooleanField(default=False)
     profile = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_profile_review", null=True, blank=True
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="runner_profile_review",
+        null=True,
+        blank=True,
     )
+
     class Meta:
         ordering = ("created",)
 
 
 class ClientReview(models.Model):
     client_review = models.OneToOneField(
-        Review,
-        on_delete=models.CASCADE, related_name="client_review_model")
+        Review, on_delete=models.CASCADE, related_name="client_review_model"
+    )
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="runner_review_author"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="runner_review_author",
+    )
+    task = models.IntegerField(
+        blank=True,
+        null=True,
     )
     body = RichTextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -188,10 +225,16 @@ class ClientReview(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
     client_account = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="client_profile", null=True, blank=True
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="client_profile",
+        null=True,
+        blank=True,
     )
+
     class Meta:
         ordering = ("created",)
+
 
 class Photo(models.Model):
 
@@ -199,7 +242,9 @@ class Photo(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="photo_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    image = models.ImageField(upload_to="users/%Y/%m/%d/", null=True, blank=True, storage=storage)
+    image = models.ImageField(
+        upload_to="users/%Y/%m/%d/", null=True, blank=True, storage=storage
+    )
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
@@ -210,7 +255,9 @@ class Vidoe(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="video_author"
     )
     description = models.CharField(max_length=250, null=True, db_index=True)
-    video = models.FileField(upload_to="documents/video/%Y/%m/%d/", blank=True, null=True, storage=storage)
+    video = models.FileField(
+        upload_to="documents/video/%Y/%m/%d/", blank=True, null=True, storage=storage
+    )
 
     tags = models.CharField(max_length=250, null=True, db_index=True)
 
@@ -220,13 +267,19 @@ def upload_to(instance, filename):
     base, extension = os.path.splitext(filename.lower())
     milliseconds = now.microsecond // 1000
     return f"documents/user/service/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
+
+
 class Service(models.Model):
-    
+
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="service_author"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="service_author",
     )
     description = RichTextField(db_index=True, null=True)
-    image = models.ImageField(upload_to=upload_to,null=True, blank=True, storage=storage)
+    image = models.ImageField(
+        upload_to=upload_to, null=True, blank=True, storage=storage
+    )
     amount = models.CharField(max_length=250, null=True)
     location = models.CharField(max_length=250, null=True, db_index=True)
     title = models.CharField(max_length=250, null=True, db_index=True)
@@ -235,31 +288,43 @@ class Service(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True, null=True)
 
+
 class Projects(models.Model):
-    
+
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="project_author"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="project_author",
     )
     title = models.CharField(max_length=250, null=True, db_index=True)
     description = RichTextField(db_index=True)
 
 
 class ProjectPhoto(models.Model):
-    
+
     project = models.ForeignKey(
         Projects, on_delete=models.CASCADE, related_name="project_photos"
     )
 
-    image = models.ImageField(upload_to=upload_to,null=True,blank=True, storage=storage)
+    image = models.ImageField(
+        upload_to=upload_to, null=True, blank=True, storage=storage
+    )
+
 
 class PublicQuotes(models.Model):
-    
+
     description = models.TextField()
-    department  = models.CharField(max_length=250)
-    sector  = models.CharField(max_length=250)
+    department = models.CharField(max_length=250)
+    sector = models.CharField(max_length=250)
     location = models.CharField(max_length=250, null=True, db_index=True)
     first_name = models.CharField(max_length=250, null=True, db_index=True)
     last_name = models.CharField(max_length=250, null=True, db_index=True)
-    phone = models.CharField(max_length=15, null=True,)
-    email = models.CharField(max_length=25, null=True,)
+    phone = models.CharField(
+        max_length=15,
+        null=True,
+    )
+    email = models.CharField(
+        max_length=25,
+        null=True,
+    )
     created = models.DateTimeField(auto_now_add=True, null=True)

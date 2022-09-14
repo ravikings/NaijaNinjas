@@ -160,6 +160,11 @@ class TaskBidder(models.Model):
             return True
         return False
 
+    def set_webhook_transaction_verified(self):
+
+        self.webhook_transaction_verified = True
+        self.save()
+
 
 class Photo(models.Model):
 

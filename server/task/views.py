@@ -431,3 +431,18 @@ def get_timeiline(request, task_id, task_owner):
     data = Timeline.objects.get(task=task_id, task_owner=task_owner)
     serializer = TimelineSerializer(data)
     return Response(serializer.data)
+
+class GetTimelineView(viewsets.ModelViewSet):
+    
+    """
+    uses to add Timeline to view task activities
+    """
+    serializer_class = TimelineSerializer
+    # permissions_classes = [IsAuthenticated and IsOwner]
+
+    def get_queryset(self):
+        task_id = self.kwargs["task_id"]
+        task_owner = self.kwargs["task_owner"]
+        query =  Timeline.objects.filter(task=task_id, task_owner=task_owner)
+        return query
+        
