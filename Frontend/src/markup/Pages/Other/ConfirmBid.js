@@ -3,7 +3,7 @@ import { Link, useParams, useHistory, useLocation } from "react-router-dom"
 import Header from "../../Layout/Header"
 import Footer from "../../Layout/Footer"
 import ClipLoader from "react-spinners/ClipLoader"
-import { Badge } from "react-bootstrap"
+import { Badge, Modal } from "react-bootstrap"
 import { Divider } from "@material-ui/core"
 import createRequest from "../../../utils/axios"
 import axios from "axios"
@@ -16,73 +16,82 @@ import { authActionTypes } from "../Auth/Redux/AuthActions"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import useAuth from "../../../hooks/useAuth"
 import "bootstrap-icons/font/bootstrap-icons.css"
+import baseUrl from "../../../utils/baseUrl"
+import PaymentPage from "./PaymentPage"
+import { Payment } from "@mui/icons-material"
 
-function SendContract() {
+function ConfirmBid() {
   // const axiosPrivate = useAxiosPrivate()
-
   const history = useHistory()
   const dispatch = useDispatch()
   const location = useLocation()
+  const taskId = location?.pathname?.split("/")[2]
   const auth = useAuth()
-  let token = `Bearer ` + localStorage.getItem("access_token")
-  var userId = parseInt(localStorage.getItem("userID"))
   const [freelancerAmount, setFreelancerAmount] = useState(0)
-  const [gigxFee, setGigxFee] = useState(0)
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [gigxFee, setGigxFee] = useState(null)
+  const [salesTax, setSalesTax] = useState(0)
   const [clientAmount, setClientAmount] = useState(0)
   const [cover, setCover] = useState("")
   const [deliveryTime, setDeliveryTime] = useState("")
+  const [date, setDate] = useState("")
   const [attachment, setAttachment] = useState(null)
   const [attachmentVal, setAttachmentVal] = useState(null)
+  const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [attachFile, setAttachFile] = useState(null)
+  const [payment, setPayment] = useState(false)
+  const [email, setEmail] = useState("")
+  const [reference, setReference] = useState("")
+  const [timeline_id, setTimeline_id] = useState("")
+  const [taskID, setTaskID] = useState("")
+  const [taskOwner, setTaskOwner] = useState("")
   const axiosPrivate = useAxiosPrivate()
 
-  let { id } = useParams()
+  let { id, bidId } = useParams()
+  console.log("BID ID", bidId)
 
   const [data, setData] = useState([])
 
-  const allData = async () => {
-    setLoading(true)
-    await createRequest()
-      .get(`api/v1/task/task/${id}/`)
-      .then((res) => {
-        console.log(res)
-        setData(res.data)
-
-        setLoading(false)
-      })
-      .catch((e) => {
-        if (e.response?.status === 400) {
-          console.log(e?.response?.data?.non_field_errors[0])
-        } else {
-          console.log("Unknown Error")
-        }
-      })
-  }
   useEffect(() => {
-    allData()
-  }, [])
+    if (location.state.item) {
+      console.log(location.state.item, "location.state.item")
+      const date = location.state.item.delivery_date.split("T")[0]
+      setDate(date)
+      setCover(location.state.item.description)
+      setClientAmount(location.state.item.offer)
+      setReference(location.state.item.transaction_id)
+      ClientTexCalculator(location.state.item.offer)
+      setImage(location.state.item.attachment)
 
-  // upload image start
-  const getUploadParams = ({ meta }) => {
-    return { url: "https://httpbin.org/post" }
-  }
+      setTaskID(location.state.item.task)
+      setTaskOwner(location.state.item.bidder_info[0].author)
+      console.log(location.state.item.offer)
+    }
+  }, [location.state.item])
 
-  // called every time a file's `status` changes
-  const handleChangeStatus = ({ meta, file }, status) => {
-    setAttachFile(file)
-  }
+  // useEffect(() => {
+  //   if (clientAmount) {
+  //   }
+  // }, [clientAmount])
+
+  useEffect(() => {
+    if (freelancerAmount) {
+      FreelancerTexCalculator(freelancerAmount)
+    }
+  }, [freelancerAmount])
 
   const ClientTexCalculator = (e) => {
     setClientAmount(e)
-    let fee = (e * 20) / 100
+    let fee = (e * 1.5) / 100
+    let salesTax = (e * 7.5) / 100
+    setSalesTax(salesTax)
     setGigxFee(fee)
-    setFreelancerAmount(e - fee)
+    setTotalAmount(e + fee + salesTax)
   }
 
   const FreelancerTexCalculator = (e) => {
     let x = parseFloat(e)
-
     setFreelancerAmount(x)
     let fee = (20 / 100) * x
     if (fee >= 0) {
@@ -90,63 +99,35 @@ function SendContract() {
     } else {
       setGigxFee(0)
     }
+    // setClientAmount(parseFloat(x + fee))
+  }
 
-    setClientAmount(parseFloat(x + fee))
+  // Make payment
+  const makePayment = () => {
+    //​ /api​/v1​/task​/approve-bid​/?id=${fid}&&task_id=${taskId} Method=get/post
+    // setLoading(true)
+
+    axiosPrivate
+      .post(
+        `${baseUrl.baseURL}api/v1/task/approve-bid/?id=${bidId}&&task_id=${taskId}`
+      )
+      .then(
+        (response) => {
+          console.log("the response is ", response)
+          console.log(response.data.id)
+          setTimeline_id(response.data.id)
+          setPayment(true)
+          setEmail(response.data.payment_email)
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
   }
-  // effect end
-  // single data fatch end
-  // badding task start
-  // console.log({ location });
-  const addBadding = (e) => {
-    // console.log("userid", userId);
-    e.preventDefault()
-    if (!auth.isAuthenticated) {
-      swal("Aunauthorized", "Please login!", "warning", { buttons: false })
-      setTimeout(() => {
-        swal.close()
-        history.push(`/login?redirect=${location.pathname}`)
-      }, 3000)
-      return
-    } else {
-      var formdata = new FormData()
-      formdata.append("description", cover)
-      formdata.append("offer", clientAmount)
-      formdata.append("task", id)
-      formdata.append("delivery_date", deliveryTime)
-      formdata.append("bidder", userId)
-      formdata.append("attachment", attachment)
-      // console.log("====attachment", attachment);
-      // axiosPrivate({
-      //   method: "POST",
-      //   url: `${url.baseURL}api/v1/task/task-bidding/`,
-      //   data: formdata,
-      //   headers: {
-      //     Authorization: token,
-      //   },
-      // })
-      axiosPrivate
-        .post(`${url.baseURL}api/v1/task/task-bidding/`, formdata)
-        .then(
-          (response) => {
-            if (response) {
-              swal(
-                "Thank You",
-                "Thank you for filling out your information!",
-                "success"
-              )
-              setTimeout(() => {
-                swal.close()
-                history.push("/browse-job-filter-list")
-              }, 3000)
-            }
-          },
-          (error) => {
-            dispatch({ type: authActionTypes.GET_ACCESS_TOKEN })
-          }
-        )
-    }
-  }
-  // badding task end
+  useEffect(() => {
+    console.log("timeline_id", timeline_id)
+  }, [timeline_id])
+
   return (
     <>
       <Header />
@@ -154,8 +135,11 @@ function SendContract() {
         <div className="container">
           <div className="row">
             <div className="col-md-9  m-t40">
-              <h1 className="contract-title">Submit Parposal</h1>
-              <form className="contract-form" onSubmit={addBadding}>
+              <h1 className="contract-title">Approve Proposal</h1>
+              <form
+                className="contract-form"
+                onSubmit={() => console.log("Submit")}
+              >
                 {/* contract Client Requirements start */}
                 <div className="container-data m-b20">
                   {/* contract Header start */}
@@ -194,20 +178,18 @@ function SendContract() {
                     <div class="contract-client-name">
                       <div className="row contract-amount ">
                         <div className="col-md-6 ">
-                          <strong>Time Estimate</strong>
-                          <div className="p-0 contract-amount-caption">
+                          <p className="fw7 mt-3">
                             How much time it will take to you to complete this
                             task (in days)
-                          </div>
+                          </p>
                         </div>
                         <div className="col-md-6">
                           <div className="input-group">
-                            <input
-                              type="date"
-                              className="form-control  border-left-0 border p-2 mt-2 fw9 "
-                              value={deliveryTime}
-                              onChange={(e) => setDeliveryTime(e.target.value)}
-                            />
+                            {date && (
+                              <p className="border-left-0 border p-2 mt-2 fw8 ">
+                                {date}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -220,29 +202,33 @@ function SendContract() {
                 <div className="container-data m-b20">
                   {/* contract Header start */}
                   <div class="contract-header">
-                    <h2 class="mb-0">Cover Latter </h2>
+                    <h2 class="mb-0">Cover Letter </h2>
                   </div>
                   {/* contract header end */}
 
                   {/* contract section start */}
                   <div className="form-group mb-10">
-                    <label className="pl-4"> Cover Latter </label>
-                    <textarea
-                      rows="5"
-                      onChange={(e) => setCover(e.target.value)}
-                      className="form-control"
-                      required
-                    >
-                      {cover}
-                    </textarea>
-                    <span className="required-label">
-                      <i className="fa fa-exclamation-circle mr-1"></i> Cover
-                      Latter is required
-                    </span>
+                    <p className="p-4">{cover}</p>
                   </div>
                   {/* contract section start */}
                 </div>
                 {/* contract Details end */}
+
+                <div className="container-data m-b20">
+                  {/* contract Header start */}
+                  <div class="contract-header">
+                    <h2 class="mb-0">Attachment </h2>
+                  </div>
+                  {/* contract header end */}
+
+                  {/* contract section start */}
+                  <div className="form-group mb-10">
+                    <img src={image} alt="" width={"100%"} />
+                    <p class="ml-1">{attachmentVal}</p>
+                  </div>
+
+                  {/* contract section start */}
+                </div>
 
                 {/* contract Price Start */}
                 <div className="container-data m-b20">
@@ -263,101 +249,53 @@ function SendContract() {
                       </div>
                       <div className="col-md-6">
                         <div className="input-group">
-                          <span className="input-group-prepend">
-                            <div className="input-group-text bg-transparent border-right-0">
-                              <i className="fa fa-dollar" />
-                            </div>
-                          </span>
-                          <input
-                            className="form-control py-2 border-left-0 border"
-                            value={clientAmount}
-                            onChange={(e) =>
-                              ClientTexCalculator(e.target.value)
-                            }
-                            type="number"
-                            step="step=0.01"
-                            min="0"
-                            defaultValue="0.00"
-                          />
+                          <h6 className="mt-3">
+                            <strong> $ {clientAmount}</strong>
+                          </h6>
                         </div>
                       </div>
                     </div>
 
                     <div className="row contract-amount mb-4">
                       <div className="col-md-6 ">
-                        <strong>GigX Now Service Fee</strong>
+                        <strong>Service Fee</strong>
                       </div>
-                      <div className="col-md-6 pl-4">
-                        <span>
-                          <i className="fa fa-dollar mr-4"></i>
-                        </span>
-                        <span>{gigxFee}</span>
+                      <div className="col-md-6 ">
+                        <h6>
+                          <strong> $ {gigxFee}</strong>
+                        </h6>
+                      </div>
+                    </div>
+
+                    <div className="row contract-amount mb-4">
+                      <div className="col-md-6 ">
+                        <strong>Sales Tax</strong>
+                      </div>
+                      <div className="col-md-6 ">
+                        <h6>
+                          <strong> $ {salesTax}</strong>
+                        </h6>
                       </div>
                     </div>
 
                     <div className="row contract-amount m-t30">
                       <div className="col-md-6 ">
-                        <strong>You'll Receive</strong>
+                        <strong>Total Amount</strong>
                         <div className="p-0 contract-amount-caption">
                           The estimated amount you'll receive after service fees
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div className="input-group">
-                          <span className="input-group-prepend">
-                            <div className="input-group-text bg-transparent border-right-0">
-                              <i className="fa fa-dollar" />
-                            </div>
-                          </span>
-                          <input
-                            className="form-control py-2 border-left-0 border"
-                            value={freelancerAmount}
-                            onChange={(e) =>
-                              FreelancerTexCalculator(e.target.value)
-                            }
-                            type="number"
-                            step="step=0.01"
-                            min="0"
-                            defaultValue="0.00"
-                          />
-                        </div>
+                        <h6>
+                          <strong> $ {totalAmount.toFixed(2)}</strong>
+                        </h6>
                       </div>
                     </div>
                   </div>
                   {/* contract section start */}
                 </div>
                 {/* contract price end */}
-                <div className="container-data m-b20">
-                  {/* contract Header start */}
-                  <div class="contract-header">
-                    <h2 class="mb-0">Attechment </h2>
-                  </div>
-                  {/* contract header end */}
 
-                  {/* contract section start */}
-                  <div className="form-group mb-10">
-                    <div className="custom-file">
-                      <p className="m-a0">
-                        <i className="fa fa-upload"></i>
-                        Upload File
-                      </p>
-                      <input
-                        type="file"
-                        name="attachment"
-                        onChange={(e) => {
-                          setAttachment(e.target.files[0])
-                          setAttachmentVal(e.target.value)
-                        }}
-                        className="site-button form-control"
-                        id="customFile"
-                        value={attachmentVal}
-                      />
-                    </div>
-                    <p class="ml-1">{attachmentVal}</p>
-                  </div>
-
-                  {/* contract section start */}
-                </div>
                 {/* contract send button Start */}
                 <div className="container-data m-b20">
                   {/* contract section start */}
@@ -368,8 +306,12 @@ function SendContract() {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="site-button ml-4">
-                      Send to Client
+                    <button
+                      type="button"
+                      onClick={makePayment}
+                      className="site-button ml-4"
+                    >
+                      Make Payment
                     </button>
                   </div>
                   {/* contract section start */}
@@ -421,9 +363,26 @@ function SendContract() {
           </div>
         </div>
       </div>
+      <PaymentPage
+        start={payment}
+        reference={reference}
+        amount={totalAmount}
+        email={email}
+        timeline_id={timeline_id}
+        timeline_page={
+          [
+            taskID,
+            taskOwner
+          ]
+        }
+        stop={() => {
+          setPayment(false)
+        }}
+      />
+      {/* <Modal show={false}></Modal> */}
 
       <Footer />
     </>
   )
 }
-export default SendContract
+export default ConfirmBid
