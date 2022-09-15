@@ -121,6 +121,7 @@ class TaskBidder(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     delivery_date = models.DateTimeField(null=True, blank=True)
+    timeline = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ["-created", "-modified"]
@@ -131,6 +132,11 @@ class TaskBidder(models.Model):
             ref = secrets.token_urlsafe(50)
             self.transaction_id = ref
         super().save(*args, **kwargs)
+
+    def set_timeline(self, id):
+
+        self.timeline = id
+        self.save()
 
     def approve_bids(self):
         self.bid_approve_status = True
