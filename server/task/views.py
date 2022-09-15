@@ -374,9 +374,8 @@ def accept_bid(request):
             author=bid.payment_author, task_owner=task_owner, task=bid.task
         )
         print("update task status")
-        bid.approve_bids()
+        bid.approve_bids(query_set.id)
         bid.add_bidder_to_task(task_owner)
-        bid.set_timeline(query_set.id)
         response_data["payment_email"] = client_info.email
         print("timeline created")
         serializer = TimelineStartSerializer(query_set)

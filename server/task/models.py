@@ -133,17 +133,14 @@ class TaskBidder(models.Model):
             self.transaction_id = ref
         super().save(*args, **kwargs)
 
-    def set_timeline(self, id):
 
-        self.timeline = id
-        self.save()
-
-    def approve_bids(self):
+    def approve_bids(self, id):
         self.bid_approve_status = True
         VAT = 7.5
         SERVICE_FEE = 1.5
         charges = (self.offer * (VAT + SERVICE_FEE)) / 100
         self.total_charge = self.offer + charges
+        self.timeline = id
         self.save()
 
     def add_bidder_to_task(self, query):
