@@ -34,13 +34,21 @@ class CanApproveTask(permissions.BasePermission):
             return request.user == obj.payment_author
 
 
-class ProViewActiveTaskTimeline(permissions.BasePermission):
+class ViewActiveTaskTimeline(permissions.BasePermission):
     """
     Custom permission to only allow runner have access to view.
     """
 
-    def has_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj):
 
-        if request.user.is_a_runner:
+        if request.user:
 
-            return obj.bidder_profile.author == request.user
+            if obj.author == request.user:
+
+                return True
+
+            if obj.task_owner == request.user:
+
+                return True
+
+        return False
