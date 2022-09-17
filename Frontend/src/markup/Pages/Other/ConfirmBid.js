@@ -48,13 +48,16 @@ function ConfirmBid() {
   const [taskOwner, setTaskOwner] = useState("")
   const axiosPrivate = useAxiosPrivate()
 
-  let { id, bidId } = useParams()
-  console.log("BID ID", bidId)
+  let { id, title, bidId } = useParams()
 
   const [data, setData] = useState([])
 
   useEffect(() => {
-    if (location.state.item) {
+    if (!location.state) {
+      history.push(`/manage-bids/${id}/${title}`)
+    }
+
+    if (location.state && location.state.item) {
       console.log(location.state.item, "location.state.item")
       const date = location.state.item.delivery_date.split("T")[0]
       setDate(date)
@@ -68,7 +71,7 @@ function ConfirmBid() {
       setTaskOwner(location.state.item.bidder_info[0].author)
       console.log(location.state.item.offer)
     }
-  }, [location.state.item])
+  }, [location.state])
 
   // useEffect(() => {
   //   if (clientAmount) {
@@ -369,12 +372,7 @@ function ConfirmBid() {
         amount={totalAmount}
         email={email}
         timeline_id={timeline_id}
-        timeline_page={
-          [
-            taskID,
-            taskOwner
-          ]
-        }
+        timeline_page={[taskID, taskOwner]}
         stop={() => {
           setPayment(false)
         }}

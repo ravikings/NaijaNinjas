@@ -54,6 +54,7 @@ function TimeLine() {
   const { taskID, taskOwner } = useParams()
   const [loading, setLoading] = useState(false)
   const [timelineComment, setTimelineComment] = useState([])
+  const [error, setError] = useState("")
 
   useEffect(() => {
     getTimeLineData()
@@ -71,6 +72,7 @@ function TimeLine() {
       })
       .catch((e) => {
         setLoading(false)
+        setError(e.response?.data?.message || "Something went wrong")
         if (e.response?.status === 400) {
           console.log(e?.response?.data?.non_field_errors[0])
         } else {
@@ -205,6 +207,10 @@ function TimeLine() {
                     </div>
                     {loading ? (
                       <Loader />
+                    ) : error ? (
+                      <div className="text-center">
+                        <h3 className="text-danger">{error}</h3>
+                      </div>
                     ) : (
                       <form onSubmit={onClickCoseForm}>
                         <div className="container mt-5 mb-5">
