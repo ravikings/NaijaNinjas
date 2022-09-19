@@ -1,5 +1,9 @@
+from http.client import BAD_REQUEST
 from django.shortcuts import render
-from .models import Conversation
+from .models import Conversation, Message
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from accounts.permissions import CanDownloadMessageFile
+from django.http import FileResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -46,6 +50,49 @@ class get_conversation(viewsets.ModelViewSet):
     def get_queryset(self):
         convo_id = self.kwargs["convo_id"]
         return Conversation.objects.filter(id=convo_id)
+
+
+class MesageFileDownload(viewsets.ModelViewSet):
+
+    """
+    uses to download file for attachment
+    """
+
+    permissions_classes = [IsAuthenticated]  # and CanDownloadMessageFile]
+    queryset = Message.objects.all()
+    serializer_class = ConversationSerializer
+
+    def retrieve(self, request, pk=None):
+
+        instance = self.get_object()
+        # Security guard
+        self.allow_download(request, instance)
+        file_handle = instance.attachment.open()
+        if file_handle:
+
+            # send file
+            response = FileResponse(file_handle, content_type="file")
+            response["Content-Length"] = instance.attachment.size
+            response["Content-Disposition"] = (
+                'attachment; filename="%s"' % instance.attachment.name
+            )
+
+            return response
+
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    def allow_download(self, request, instance):
+
+        initiator = instance.conversation_id.initiator
+        receiver = instance.conversation_id.receiver
+        if initiator == request.user:
+            return True
+
+        elif receiver == request.user:
+            return True
+
+        else:
+            raise ValueError({"error": "user not allowed"})
 
 
 @api_view(["GET", "POST"])
