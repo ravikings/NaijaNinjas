@@ -455,8 +455,8 @@ class GetTimelineView(viewsets.ModelViewSet):
     uses to add Timeline to view task activities
     """
 
+    permissions_classes = [IsAuthenticated and IsOwner]
     serializer_class = TimelineSerializer
-    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
         task_id = self.kwargs["task_id"]
