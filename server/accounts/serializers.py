@@ -249,8 +249,7 @@ class ClientReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClientReview
-        fields = ("id", "author", "task", "body", "created", "updated", "rating")
-
+        fields = "__all__"
 
 class RunnerProfileSerializer(serializers.ModelSerializer):
     """
