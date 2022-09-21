@@ -6,11 +6,15 @@ from rest_framework import serializers
 
 class MessageSerializer(serializers.ModelSerializer):
 
+    file_name = serializers.SerializerMethodField()
     class Meta:
         model = Message
         exclude = ("conversation_id",)
 
 
+    def get_file_name(self, instance):
+
+        return instance.attachment.name if instance.attachment.name else None
 class FileMessageUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
