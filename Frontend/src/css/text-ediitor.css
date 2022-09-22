@@ -42,16 +42,22 @@ a {
 	height:19%;
 
 }
-.container {
+
+.text-ed-hed {
 	max-width: 991px;
 	width: 100%;
-	background: #fff;
+	/* background: #fff; */
 	border-radius: 8px;
 	overflow: hidden;
+	position: relative;
+	top: -10px;
+	/* height: 30px; */
 }
 .toolbar {
-	padding: 16px;
-	background: #eee;
+	padding-top: 16px;
+	padding-right: 16px;
+	padding-left: 16px;
+	/* background: #eee; */
 }
 .toolbar .head {
 	display: flex;

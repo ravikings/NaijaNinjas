@@ -12,20 +12,28 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import Search from "@material-ui/icons/Search";
 // import Link from "react-router-dom"
-
+import createRequest from "../../../utils/axios";
+import useAuth from "../../../hooks/useAuth";
 function SearchChat({ user }) {
-
+    const auth = useAuth()
     const classes = useStyles();
     const history = useHistory()
+    const [room , setRoom] = useState()
+    createRequest().get(`/ws/chat/start/${auth.currentUser.pk}/${user.author}/`).then((res) =>{
+        console.log(res.data,"starting chat")
+        setRoom(res.data.results[0].id)
+    })
+    // console.log("foooo")
+    // console.log(room)
     return (
-        <Link to={`/messages/new/chat/${user.author}`}>
+        <Link to={`/messages/${auth.currentUser.pk}/${room}`}>
         
             <Grid
                 container
                 spacing={1}
                 className={classes.oneItem}
                 style={{
-                borderLeft: true? "7px solid blue" : "",
+                // borderLeft: true? "7px solid blue" : "",
                 }}
                 alignItems={"center"}
                 // onClick={() => setUserDetails(user)}

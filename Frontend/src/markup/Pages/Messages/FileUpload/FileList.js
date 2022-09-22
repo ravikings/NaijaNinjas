@@ -1,70 +1,70 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import FileItem from './FileItem.js'
 import { Button, IconButton } from "@material-ui/core"
-import CssTextField from "../MessageWindow"
 import { useStyles } from ".././messagesStyles.js"
-import createRequest from '../../../../utils/axios.js'
+import { axiosPrivateFile } from '../../../../utils/axios';
 import "./upload.css"
-// const hitEnter = (e) => {
-//     if (textbox.trim() !== "") {
-//         if (e.keyCode === 13 && !e.shiftKey) {
-//             handleClickSendMessage()
-//             document.getElementById("messageBox").value = ""
-//             e.preventDefault()
-//         }
-//         } else {
-//             if (e.keyCode === 13) e.preventDefault()
-//         }
-// }
-const FileList = ({ files, removeFile ,SenderId,RoomId}) => {
+import LinearProgress from '@mui/material/LinearProgress';
+const FileList = ({ files, removeFile ,SenderId,RoomId,setFiles,refetch}) => {
     const classes = useStyles()
-    const [textbox, setTextbox] = useState("")
-    // const handleClickSendMessage = () => {
-    //     sendJsonMessage({ attachment: null, message: textbox, action: "message" })
-    // }
-    // const hitEnter = (e) => {
-    //     if (textbox.trim() !== "") {
-    //         if (e.keyCode === 13 && !e.shiftKey) {
-    //             handleClickSendMessage()
-    //             document.getElementById("messageBox").value = ""
-    //             e.preventDefault()
-    //         }
-    //     } else {
-    //         if (e.keyCode === 13) e.preventDefault()
-    //     }
-    // }
-    console.log(SenderId,RoomId)
+    const [error,setError] = useState()
+    const [progressPer,setProgressPer] = React.useState()
+    const sendFile = () => {
+        const form = new FormData();
+        form.append("sender",SenderId)
+        form.append("attachment",files.file)
+        form.append("attachment_type",files.type)
+        form.append("conversation_id",RoomId)
+        // console log for all entries of formdata 
+        // for (var key of form.entries()) {
+        //     console.log(key[0] + ', ' + key[1]);
+        // }
+        // console.log(files)
+
+        axiosPrivateFile.post("/ws/chat/chat_file_upload/",form,{onUploadProgress: (progressEvent) => {
+            setProgressPer(parseInt(Math.round(progressEvent.loaded * 100) / progressEvent.total))
+            console.log(progressEvent)
+        }}).then((res) => {
+            if(res.status === 201  || res.status === 200){
+                // alert("sent")
+                setTimeout(()=>{
+                    setFiles([])
+                    setProgressPer(undefined)
+                    refetch()
+                    
+                },5000)
+
+            }
+            console.log(res)}).catch((err) => {
+            //handle error
+            setError(err.response.data)
+            console.log(err.response.data);
+        });
+
+    }
     const deleteFileHandler = (_name) => {
         removeFile(_name)
     }
-    const handleClickSendMessage = async () =>{
-        await createRequest().post(`/ws/chat/chat_file_upload/${SenderId}/${files[0]}/${RoomId}`).then((res) =>{
-            console.log(res)
-        })
+    const [clicked , setClicked] = useState(false)
+    if(files?.file){
+        return (
+            <ul className={"file-list"}>
+                <FileItem key={files.file.name} file={files.file} deleteFile={deleteFileHandler} type={files.type} progressPer={progressPer} clicked={clicked} setClicked={setClicked} error={error}/>
+                <Button
+                        className={classes.sendButtonFile}
+                        sx={{position:"absolute !important ",height:"30px",left:"65%" }}
+                        onClick={() => {
+                            setClicked(true)
+                            sendFile()
+                        }}
+                        >
+                        Send
+                </Button>
+                
+            </ul>
+        )
     }
-    
-    return (
-        <ul className="file-list">
-            {
-                files &&
-                files.map(f => (<FileItem
-                    key={f.name}
-                    file={f}
-                    deleteFile={deleteFileHandler} />))
-            }
-            <Button
-                    className={classes.sendButtonFile}
-                    // sx={{position:"relative",height:"30px"}}
-                    onClick={() => {
-                        handleClickSendMessage()
-                    }}
-                    // disabled={readyState !== ReadyState.OPEN}
-                    >
-                    Send
-            </Button>
-        </ul>
-    )
+    return ""
 }
 
 export default FileList

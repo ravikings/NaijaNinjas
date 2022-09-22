@@ -80,3 +80,28 @@ export const axiosPrivate = axios.create({
   xsrfCookieName: "csrftoken",
   xsrfHeaderName: "X-CSRFToken",
 })
+// because of formdata contentType 
+export const axiosPrivateFile = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "multipart/form-data",
+    Accept: "*/*",
+    Authorization: `Bearer ${Cookies.get("access_token")}`,
+  },
+  withCredentials: true,
+  xsrfCookieName: "csrftoken",
+  xsrfHeaderName: "X-CSRFToken",
+})
+export const axiosPrivateFileDownload = axios.create({
+  baseURL: BASE_URL,
+  responseType:"blob",
+  headers: {
+    Accept: "*/*",
+    Authorization: `Bearer ${Cookies.get("access_token")}`,
+  },
+  withCredentials: true,
+  xsrfCookieName: "csrftoken",
+  xsrfHeaderName: "X-CSRFToken",
+})
+
+

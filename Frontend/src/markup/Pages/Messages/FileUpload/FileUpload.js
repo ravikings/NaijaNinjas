@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import "./upload.css"
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import createRequest from '../../../../utils/axios';
-const FileUpload = ({ files, setFiles, removeFile,RoomId,SenderId }) => {
+const FileUpload = ({ files, setFiles, removeFile,RoomId,SenderId ,setChecked,checked}) => {
 
     const uploadHandler = (event) => {
         const file = event.target.files[0];
@@ -17,18 +17,17 @@ const FileUpload = ({ files, setFiles, removeFile,RoomId,SenderId }) => {
         file.isUploading = true;
         setFiles([...files, file])
     }
-
     return (
         <>
             <div className="file-card">
 
                 <div className="file-inputs">
-                    <IconButton color="primary" aria-label="upload picture" component="label">
-                        <input hidden type="file" 
+                    <AttachFileIcon onClick={() => setChecked(!checked)} />
+                        {/* <input hidden type="file" 
                         onChange={uploadHandler}
-                        />
-                        <AttachFileIcon/>
+                        /> */}
                     
+                    <IconButton  aria-label="upload picture" component="label" onClick={() =>{ setChecked(!checked)}}> 
                     </IconButton>
                 </div>
 

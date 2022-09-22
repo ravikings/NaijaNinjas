@@ -60,7 +60,9 @@ function ChatListItem({ selected, user, setUserDetails, userRefetch }) {
                 textOverflow: "ellipsis",
               }}
             >
-              {user.receiver.username}
+              {/* displaying firstname and lastname if the user have not then display username  */}
+              {user.receiver_profile[0]?.first_name && user.receiver_profile[0]?.last_name ? 
+              `${user.receiver_profile[0]?.first_name}  ${user.receiver_profile[0]?.last_name}`:user.receiver.username}
             </div>
             <div
               style={{

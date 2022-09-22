@@ -23,7 +23,10 @@ function MakeOfferForm(props) {
       enabled: false, // turned off by default, manual refetch is needed
       onSuccess: (d) => {
         console.log(d);
-        history.push("/messages/")
+        // history.push("/messages/")
+        // i change this because of routers 
+        history.push(`/messages/${auth.currentUser.pk}/${d.results[0].id}`)
+
       }
     }
   );
@@ -99,7 +102,7 @@ function MakeOfferForm(props) {
             <ul className="list-inline mt-2 mb-2 badges">
               <li className="list-inline-item">
                 <button
-                  onClick={() => { history.push(`/messages/new/chat/${id}`) }}
+                  onClick={() => {  refetch(); }}
                   className="site-button"
                 >
                   Contact Me

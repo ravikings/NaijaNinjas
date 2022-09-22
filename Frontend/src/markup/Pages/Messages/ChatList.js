@@ -14,6 +14,7 @@ import { useQuery } from "react-query";
 import agent from "../../../api/agent";
 import createRequest from "../../../utils/axios";
 import SearchChat from "./SearchChat.js"
+import Search from "./search";
 const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -62,12 +63,55 @@ function ChatList({ props, setUserDetails, userDetails, rowData, userRefetch,use
   // )
   // // console.log(data,"data1")
   console.log(dat?.data,"dat")
+  // console.log(dat?.data?.count,"dat")
   // console.log(userData,"userData")
   //   // .data?.results[0].author)
   // console.log(rowData2,"rowData2")
 
   // console.log(userDetails,"userDetails")
   // const [searchText, setSearchText] = useState()
+  if(searchText && dat && dat?.data?.results){
+    return (
+      <div>
+        <div style={{ padding: "22px 30px", borderBottom: "1px solid #ccc" }}>
+          <CssTextField
+            size={"small"}
+            classes={{ root: classes.search }}
+            fullWidth
+            variant={"outlined"}
+            placeholder={"Search"}
+            onChange={SearchHandler}
+            value={searchText} 
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start" >
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+        <div
+          style={{
+            overflowY: "auto",
+            overflowX: "hidden",
+            height: "calc(100vh - 220px)",
+          }}
+        > 
+          {/* <Search dat={dat} /> */}
+          {searchText &&dat && dat?.data?.results && dat?.data?.count >0   ? dat.data.results.map((item,kx) => {
+            return (
+            <SearchChat user={item}/>
+            )
+          }):<div className="row">
+          <div className="col-12 mt-4">
+            <h6 className="text-muted text-center">No search Found</h6>
+          </div>
+        </div>}
+        </div>
+      </div>
+    )
+  }
   return (
     <div>
       <div style={{ padding: "22px 30px", borderBottom: "1px solid #ccc" }}>
@@ -98,22 +142,26 @@ function ChatList({ props, setUserDetails, userDetails, rowData, userRefetch,use
         {
           rowData && rowData.length > 0 && !searchText  ?
             rowData.map((user, key) => (
-              <ChatListItem key={key} user={user} setUserDetails={setUserDetails}  userRefetch={userRefetch} selected={userDetails && userDetails.chat_room_id === params.id} />
+              <ChatListItem key={key} user={user} setUserDetails={setUserDetails}  userRefetch={userRefetch} selected={userDetails && userDetails.chat_room_id === user.chat_room_id} />
                 // searchText && user.name.includes(searchText)?
             ))
             :
-            // <div className="row">
-            //   <div className="col-12 mt-4">
-            //     <h6 className="text-muted text-center">No Chat Found</h6>
-            //   </div>
-            // </div>
-            ""
+            <div className="row">
+              <div className="col-12 mt-4">
+                <h6 className="text-muted text-center">No Chat Found</h6>
+              </div>
+            </div>
+            
         }
-        {searchText &&dat && dat?.data?.results ? dat.data.results.map((item,kx) => {
+        {/* {searchText &&dat && dat?.data?.results ? dat.data.results.map((item,kx) => {
           return (
           <SearchChat user={item}/>
           )
-        }):""}
+        }):<div className="row">
+        <div className="col-12 mt-4">
+          <h6 className="text-muted text-center">No search Found</h6>
+        </div>
+      </div>} */}
       </div>
     </div>
   );

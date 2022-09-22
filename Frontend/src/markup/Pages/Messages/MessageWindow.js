@@ -9,7 +9,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket"
 import useAuth from "../../../hooks/useAuth"
 import { toast } from "react-toastify"
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import TextEditor from "./TextEditor"
+import TextEditor, { HeaderTextEditor } from "./TextEditor"
 import createRequest from "../../../utils/axios"
 import { useSelector } from "react-redux"
 import FileUpload from "./FileUpload/FileUpload.js"
@@ -19,6 +19,8 @@ import "./message.css"
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import {Emoji} from "./TextEditor.js"
 import { IconButton } from "@mui/material"
+import SelectTypeOfUpload from "./SelectTypeUpload"
+import PreviewFile from "./PreviewFile"
 export const CssTextField = withStyles({
   root: {
     "& label.Mui-focused": {
@@ -56,7 +58,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
     })
   }
   const [socketUrl, setSocketUrl] = useState(
-    `ws://8.tcp.ngrok.io:19259/ws/chat/room/${
+    `ws://4.tcp.ngrok.io:13948/ws/chat/room/${
       userDetails && userDetails.initiator.id
     }/${userDetails && userDetails.chat_room_id}/`
   )
@@ -67,7 +69,8 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
   const [files, setFiles] = useState([])
   // remove file function 
   const removeFile = (filename) => {
-    setFiles(files.filter(file => file.name !== filename))
+    setFiles([])
+    // setFiles(files.file.filter(file => file.name !== filename))
   }
   const { sendMessage, lastMessage, readyState, sendJsonMessage } =
     useWebSocket(socketUrl)
@@ -118,31 +121,44 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
   }, [data])
   useEffect(() => {
     setSocketUrl(
-      `ws://8.tcp.ngrok.io:19259/ws/chat/room/${
+      `ws://4.tcp.ngrok.io:13948/ws/chat/room/${
         userDetails && userDetails.initiator.id
       }/${userDetails && userDetails.chat_room_id}/`
     )
     
   }, [userDetails])
   const handleClickSendMessage = () => {
-    sendJsonMessage({ attachment: files[0], message: textbox, action: "message" })
+    sendJsonMessage({  attachment:null ,message: textbox, action: "message" })
   }
   const hitEnter = (e) => {
-    if (textbox.trim() !== "") {
-      if (e.keyCode === 13 && !e.shiftKey) {
-        handleClickSendMessage()
-        document.getElementById("messageBox").value = ""
-        e.preventDefault()
-      }
-    } else {
-      if (e.keyCode === 13) e.preventDefault()
+    var html = e.target.innerHTML; 
+    // const Text = JSON.stringify(html)
+    if (e.keyCode === 13 && !e.shiftKey) {
+          handleClickSendMessage()
+          // setting content empty when sends 
+          //previous one 
+          // document.getElementById("messageBox").contents = ""
+          // current one 
+          e.target.innerHTML = ""
+
+          // document.getElementById("messageBox").value = ""
+          e.preventDefault()
     }
+    if (e.keyCode === 13) e.preventDefault()
+    // if (textbox.trim() !== "") {
+    //   if (e.keyCode === 13 && !e.shiftKey) {
+    //     handleClickSendMessage()
+    //     document.getElementById("messageBox").value = ""
+    //     e.preventDefault()
+    //   }
+    // } else {
+    //   if (e.keyCode === 13) e.preventDefault()
+    // }
   }
   useEffect(() => {
     if (lastMessage !== null) {
       setMessageHistory((prev) => prev.concat(lastMessage))
     }
-    setTextbox("")
     refetch()
     if (userDetails) {
       document.querySelector("#messageBox").value = ""
@@ -161,6 +177,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
   const handleRemoveConversation = () => {
     removeRefetch()
   }
+  const [ checked,setChecked] = React.useState(false);
   const inputRef = useRef()
   const [cursorPosition,setCursorPosition] = useState()
   const [openEmoji, setOpenEmoji] = React.useState(false);
@@ -170,6 +187,7 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
       inputRef.current.selectionEnd = cursorPosition
     }
   }, [cursorPosition])
+  console.log(textbox)
   return (
     <>
   
@@ -249,7 +267,10 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
                 }
               </div>
             </div>
-            {files.length > 0? <FileList files={files} removeFile={removeFile}  SenderId={data?.results[0].initiator.id} RoomId={data?.results[0].id} />:""}
+            <PreviewFile senderid={auth?.currentUser?.pk}  roomid={params?.id} files={files} setFiles={setFiles}  refetch={refetch}/>
+            <HeaderTextEditor inputRef={inputRef}/>
+            <SelectTypeOfUpload checked={checked} setChecked={setChecked} files={files} setFiles={setFiles}/>
+            <FileList files={files} removeFile={removeFile}  SenderId={data?.results[0].initiator.id} RoomId={data?.results[0].id}  setFiles={setFiles}  refetch={refetch}/>
             {openEmoji?<Emoji textbox={textbox} setTextbox={setTextbox} cursorPosition={cursorPosition} setCursorPosition={setCursorPosition} inputRef={inputRef}/>:""}
             <div
               style={{
@@ -258,47 +279,64 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
                 justifyContent: "space-between",
                 padding: 30,
               }}
-            >
+              >
               {userDetails ? (
                 <> 
                   {/* <input type="file" onClick={}/> */}
                   <div className="sidebar-btn">
                     <EmojiEmotionsIcon onClick={() => setOpenEmoji(!openEmoji)} />
-                    <FileUpload files={files} setFiles={setFiles} removeFile={removeFile} />
+                    <FileUpload files={files} setFiles={setFiles} removeFile={removeFile} setChecked={setChecked} checked={checked} />
                   </div>
-                  {/* <CssTextField
+                  {/*
+                  <CssTextField
                     style={{ marginRight: 15 }}
                     id="messageBox"
                     ref={inputRef}
                     variant={"outlined"}
                     placeholder={"Your Message"}
                     // onKeyUp={(e) => {
-                    //   setTextbox(e.target.value)
-                    // }}
-                    onChange={(e) => setTextbox(e.target.value)}
-                    value={textbox}
-                    onKeyDown={(e) => hitEnter(e)}
-                    fullWidth
-                  /> */}
-                  <input 
-                    style={{ marginRight: 15 ,border:"none",outline:"none",position:"relative",width:"100%",padding:"15px",height:"100%"}}
+                      //   setTextbox(e.target.value)
+                      // }}
+                      onChange={(e) => setTextbox(e.target.value)}
+                      value={textbox}
+                      onKeyDown={(e) => hitEnter(e)}
+                      fullWidth
+                    /> */}
+                  {/* <TextEditor/> */}
+                  <div
+                    style={{ resize:"none","overflow":"auto","border":"0px",marginRight: 15 ,outline:"none",position:"relative",top:"10px",width:"100%",padding:"15px",paddingLeft:"3%",height:"100%"}}
                     id="messageBox"
                     ref={inputRef}
                     variant={"outlined"}
                     placeholder={"Your Message"}
-                    onKeyUp={(e) => {
-                      setTextbox(e.target.value)
+                    data-placeholder = {"Your Message"}
+                    // onKeyUp={(e) => {
+                    //   setTextbox(e.target.value)
+                    // }}
+                    onInput={(e) => {
+                      console.log(e.target,"value")
+                      var html = e.target.innerHTML; 
+                      // const Text = JSON.stringify(html)
+                      setTextbox(html)
                     }}
-                    onChange={(e) => setTextbox(e.target.value)}
-                    value={textbox}
-                    onKeyDown={(e) => hitEnter(e)}
-                    fullWidth
+                    // onChange={(e) => {
+                    //   console.log(e)
+                    //   setTextbox(e.target.value)}}
+                    // value={textbox}
+                    contentEditable
+                    onKeyDown={(e) => hitEnter(e.target)}
+                    // resize={"none"}
+                    // fullWidth
+                    // hidden
+                    
                     />
                   <Button
                     className={classes.sendButton}
                     onClick={() => {
                       handleClickSendMessage()
                     }}
+                    fontSize={12}
+                    sx={{position:"relative",height:"50px !important",top:"10px"}}
                     disabled={readyState !== ReadyState.OPEN}
                   >
                     
@@ -307,18 +345,33 @@ function MessageWindow({ props, setUserDetails, userDetails, userRefetch ,rowDat
                   
                 </> 
               ) : (
-                <CssTextField
-                  style={{ marginRight: 15 }}
-                  id="messageBox"
-                  variant={"outlined"}
-                  placeholder={"Your Message"}
-                  onKeyUp={(e) => {
-                    setTextbox(e.target.value)
-                  }}
-                  onKeyDown={(e) => hitEnter(e)}
-                  fullWidth
-                  hidden
-                />
+                <div
+                    style={{ resize:"none","overflow":"auto","border":"0px",marginRight: 15 ,outline:"none",position:"relative",top:"10px",width:"100%",padding:"15px",height:"100%"}}
+                    id="messageBox"
+                    ref={inputRef}
+                    variant={"outlined"}
+                    placeholder={"Your Message"}
+                    data-placeholder = {"Your Message"}
+                    // onKeyUp={(e) => {
+                    //   setTextbox(e.target.value)
+                    // }}
+                    onInput={(e) => {
+                      console.log(e.target,"value")
+                      var html = e.target.innerHTML; 
+                      const Text = JSON.stringify(html)
+                      setTextbox(Text)
+                    }}
+                    // onChange={(e) => {
+                    //   console.log(e)
+                    //   setTextbox(e.target.value)}}
+                    // value={textbox}
+                    contentEditable
+                    onKeyDown={(e) => hitEnter(e)}
+                    // resize={"none"}
+                    fullWidth
+                    hidden
+                    
+                    />
               )}
             </div>
           </div>

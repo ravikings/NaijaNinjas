@@ -1,6 +1,7 @@
 import React from 'react'
 import LeftMsg from './LeftMsg';
 import RightMsg from './RightMsg';
+import useDownloader from 'react-use-downloader';
 // message for all message 
 const MessageBox = (props) => {
     const { data, auth } = props;
@@ -14,7 +15,7 @@ const MessageBox = (props) => {
                 return (
                     <>
                         {
-                            auth.currentUser.pk === item.sender ? <RightMsg item={item} data={data} /> : <LeftMsg item={item} data={data} />
+                            auth.currentUser.pk === item.sender ? <RightMsg item={item} data={data}  /> : <LeftMsg item={item} data={data} />
                         }
                     </>
                 )

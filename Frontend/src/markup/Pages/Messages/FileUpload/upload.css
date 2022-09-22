@@ -17,18 +17,21 @@
     position: relative;
     top:15px;
 } */
-.file-list{
-    position: relative;
+.file-list,.file-list-uploading{
+    position: absolute;
     /* background-color:brown; */
-    /* top:20px; */
-    position: relative;
+    top:375px;
     width: 100%;
     height: 100px;
-    padding-left: 20px;
+    /* padding-left: 20px; */
     display: flex;
     border: 1px solid black;
     /* display:grid;
     grid-template-columns: 70% 30%; */
+}
+.file-list-uploading{
+    background:rgba(0,0,0,0.4);
+    opacity: 0.9;
 }
 
 .file-item{
@@ -37,6 +40,7 @@
     display: flex;
     gap: 13px;
     padding-top: 20px;
+    padding-left: 20px;
 
 }
 /* .file-list > button{

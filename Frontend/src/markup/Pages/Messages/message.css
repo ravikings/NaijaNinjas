@@ -15,6 +15,28 @@
     color: #666666;
     border-radius: 5px;
 }
+.text-editor-header{
+    position:relative;
+    display:flex;
+    gap: 15px;
+    padding-left: 20px;
+    top: 35px;
+    width: 75%;
+}
+[contenteditable="true"][placeholder]:empty:before {
+    content: attr(placeholder);
+    position: absolute;
+    /* margin-left: 15px; */
+    left:20px;
+    /* padding-left: 15px; */
+    font-size: 13px;
+    color: #aaa;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    direction: ltr;
+}
 
 
 /* Right triangle, left side slightly down */
@@ -37,3 +59,24 @@ border-color: #1d1c1c1f transparent transparent transparent;
     padding-top: 50px;
     /* top:20px; */
 }
+#messageBox{
+    position: relative;
+    overflow: auto;
+    overflow-wrap: anywhere;
+}
+.download-btn{
+    position:relative;
+    outline: none;
+    background-color:inherit;
+    border:none;
+}
+.left-msg {
+    margin: 0px 0px 0px 20px;
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    background-color: inherit;
+    color: white;
+    border-radius: 5px;
+  }

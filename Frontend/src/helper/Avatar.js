@@ -48,16 +48,16 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
     }));
 
 export default function BadgeAvatars(props) {
-    const { status,name,image,} = props
+    const { status,name,image,styles,stausAlign} = props
     return (
-        <Stack direction="row" spacing={2}>
+        <Stack  direction="row" spacing={2}>
         <StyledBadge
             overlap="circular"
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: stausAlign==="left"?"left": "right" }}
             // variant={reciever.status?"dot":""}
             variant={status?"dot":""}
         >
-            <Avatar alt={name} src="/static/images/avatar/1.jpg" ></Avatar>
+            <Avatar styles={styles} alt={name} src={image} ></Avatar>
         </StyledBadge>
         {/* <Badge
             overlap="circular"
