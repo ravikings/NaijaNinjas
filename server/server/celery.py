@@ -7,6 +7,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 app = Celery("django_celery")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+app.conf.worker_cancel_long_running_tasks_on_connection_loss = True
 
 
 @app.task(bind=True)
