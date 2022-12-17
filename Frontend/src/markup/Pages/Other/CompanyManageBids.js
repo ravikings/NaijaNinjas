@@ -162,7 +162,12 @@ function CompanyManageBids() {
                                   </div>
                                   <div className="job-post-info">
                                     <h4>
-                                      <Link to={"/make-offer"}>
+                                      <Link
+                                        to={"#"}
+                                        onClick={(e) => {
+                                          e.preventDefault()
+                                        }}
+                                      >
                                         {`${item.bidder_info[0].first_name} ${item.bidder_info[0].last_name}`}
                                       </Link>
                                     </h4>

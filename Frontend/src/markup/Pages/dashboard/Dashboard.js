@@ -1,50 +1,55 @@
-import React, { useState, useEffect } from "react";
-import Header2 from "../../Layout/Header2";
-import Footer from "../../Layout/Footer";
-import ProfileSidebar from "../../Element/Profilesidebar";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../Element/Loader";
-import { authActionTypes, setProfileData } from "../Auth/Redux/AuthActions";
-import createRequest from "../../../utils/axios";
-import Hero from "./Hero";
-import BarChart from "./BarChart";
-import styles from "./dashboard.module.css";
-import ScheduleIcon from "@mui/icons-material/Schedule";
-import LineChart from "./LineChart";
-import LineChart2 from "./LineChart2";
-import TableNOverview from "./TableNOverview";
+import React, { useState, useEffect } from "react"
+import Header2 from "../../Layout/Header2"
+import Footer from "../../Layout/Footer"
+import ProfileSidebar from "../../Element/Profilesidebar"
+import { useDispatch, useSelector } from "react-redux"
+import Loader from "../../Element/Loader"
+import { authActionTypes, setProfileData } from "../Auth/Redux/AuthActions"
+import createRequest from "../../../utils/axios"
+import Hero from "./Hero"
+import BarChart from "./BarChart"
+import styles from "./dashboard.module.css"
+import ScheduleIcon from "@mui/icons-material/Schedule"
+import LineChart from "./LineChart"
+import LineChart2 from "./LineChart2"
+import TableNOverview from "./TableNOverview"
+import { useHistory } from "react-router-dom"
 const Dashboard = () => {
   const { currentUser, userProfile, loading } = useSelector(
     (state) => state.authReducer
-  );
-  const dispatch = useDispatch();
-  const [userDetails, setUserDetails] = useState(null);
-
+  )
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const [userDetails, setUserDetails] = useState(null)
+  console.log(userProfile)
+  if (userProfile && !userProfile.is_a_runner) {
+    history.push("/jobs-profile")
+  }
   useEffect(() => {
     if (currentUser && !userProfile) {
-      getUserDetails();
+      getUserDetails()
     }
-  }, [currentUser]);
+  }, [currentUser])
 
   useEffect(() => {
     if (userDetails && !userProfile) {
       dispatch({
         type: authActionTypes.USER_PROFILE,
         payload: userDetails,
-      });
+      })
     }
-  }, [userDetails]);
+  }, [userDetails])
   const getUserDetails = () => {
     createRequest()
       .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
       .then(({ data }) => {
-        console.log("user data api", data);
-        setUserDetails(data);
+        console.log("user data api", data)
+        setUserDetails(data)
       })
       .catch((e) => {
         // toast.error(e.response?.data?.message || "Unknown Error");
-      });
-  };
+      })
+  }
   return (
     <>
       <Header2 />
@@ -152,7 +157,7 @@ const Dashboard = () => {
       )}
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

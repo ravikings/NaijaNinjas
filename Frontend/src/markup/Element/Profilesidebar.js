@@ -85,8 +85,6 @@ function ProfileSidebar({
     }
   }
 
-  console.log(currentUser)
-
   useEffect(() => {
     if (imageState) {
       sendImage()
@@ -100,7 +98,6 @@ function ProfileSidebar({
           <div className="candidate-detail text-center">
             <div className="canditate-des">
               <Link to={""}>
-                {console.log(userProfile)}
                 <img
                   alt={userProfile?.first_name}
                   src={
@@ -149,7 +146,7 @@ function ProfileSidebar({
             </div>
           </div>
           <ul>
-            {userProfile.is_a_runner && (
+            {userProfile && userProfile.is_a_runner && (
               <li>
                 <Link
                   to={"/dashboard"}
@@ -181,45 +178,48 @@ function ProfileSidebar({
                   <span>Bio</span>
                 </Link>
               </li>
-              {userProfile.is_a_runner && (
-                <>
-                  <li>
-                    <Link className="ml-4" to={"/jobs-my-resume"}>
-                      <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                      <span>Resume</span>
-                    </Link>
-                  </li>
+              {userProfile &&
+                userProfile &&
+                userProfile &&
+                userProfile.is_a_runner && (
+                  <>
+                    <li>
+                      <Link className="ml-4" to={"/jobs-my-resume"}>
+                        <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                        <span>Resume</span>
+                      </Link>
+                    </li>
 
-                  <li>
-                    <Link
-                      to={"/user-projects"}
-                      className={
-                        active === "My Projects ml-4" ? "active" : " ml-4"
-                      }
-                    >
-                      <i
-                        className="fa-solid fa-list-check"
-                        aria-hidden="true"
-                      ></i>
-                      <span>My Projects</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={"/user-services"}
-                      className={
-                        active === "My Services ml-4" ? "active" : " ml-4"
-                      }
-                    >
-                      <i
-                        className="fa-solid fa-ticket-simple"
-                        aria-hidden="true"
-                      ></i>
-                      <span>My Serivces</span>
-                    </Link>
-                  </li>
-                </>
-              )}
+                    <li>
+                      <Link
+                        to={"/user-projects"}
+                        className={
+                          active === "My Projects ml-4" ? "active" : " ml-4"
+                        }
+                      >
+                        <i
+                          className="fa-solid fa-list-check"
+                          aria-hidden="true"
+                        ></i>
+                        <span>My Projects</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={"/user-services"}
+                        className={
+                          active === "My Services ml-4" ? "active" : " ml-4"
+                        }
+                      >
+                        <i
+                          className="fa-solid fa-ticket-simple"
+                          aria-hidden="true"
+                        ></i>
+                        <span>My Serivces</span>
+                      </Link>
+                    </li>
+                  </>
+                )}
             </Collapse>
 
             {/* {userStatus?.is_a_runner && (
@@ -333,7 +333,7 @@ function ProfileSidebar({
                   <span>Orders</span>
                 </Link>
               </li>
-              {userProfile.is_a_runner && (
+              {userProfile && userProfile && userProfile.is_a_runner && (
                 <li>
                   <Link
                     className={
@@ -377,7 +377,7 @@ function ProfileSidebar({
                   <span>Alerts</span>
                 </Link>
               </li>
-              {userProfile.is_a_runner && (
+              {userProfile && userProfile.is_a_runner && (
                 <li>
                   <Link
                     className={active === "Security" ? "active ml-4" : "ml-4"}
