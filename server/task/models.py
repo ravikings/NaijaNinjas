@@ -121,6 +121,7 @@ class TaskBidder(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     delivery_date = models.DateTimeField(null=True, blank=True)
+    timeline = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ["-created", "-modified"]
@@ -132,12 +133,14 @@ class TaskBidder(models.Model):
             self.transaction_id = ref
         super().save(*args, **kwargs)
 
-    def approve_bids(self):
+
+    def approve_bids(self, id):
         self.bid_approve_status = True
         VAT = 7.5
         SERVICE_FEE = 1.5
         charges = (self.offer * (VAT + SERVICE_FEE)) / 100
         self.total_charge = self.offer + charges
+        self.timeline = id
         self.save()
 
     def add_bidder_to_task(self, query):

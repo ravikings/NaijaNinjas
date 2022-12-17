@@ -290,8 +290,8 @@ class ReviewView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    serializer_class = ReviewSerializer
     permissions_classes = [IsAuthenticated and IsOwner]
+    serializer_class = ReviewSerializer
 
     def get_queryset(self):
     

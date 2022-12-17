@@ -15,10 +15,10 @@ def debug_task(self):
 
 def start_celery_worker():
 
-    worker = app.Worker(app=app, pool="solo", concurrency=1, loglevel="INFO")
+    worker = app.Worker(app=app, pool="eventlet", concurrency=500, loglevel="INFO")
     thread = threading.Thread(target=worker.start)
     thread.daemon = True
     thread.start()
 
-#start_celery_worker()
+start_celery_worker()
 #celery -A server worker --without-heartbeat --without-gossip --without-mingle

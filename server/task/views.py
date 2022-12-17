@@ -32,6 +32,7 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import api_view, permission_classes
 from accounts.permissions import CanApproveTask
+
 # Create your views here.
 
 
@@ -141,7 +142,10 @@ class TaskBidderView(viewsets.ModelViewSet):
             raise ("please add offer")
         bid_queryset = Task.objects.get(id=task_id, post_status="OPEN")
         if request.user.id == bid_queryset.author.id:
-            return Response({"error":"Hey! you cannot bid on your own task"}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "Hey! you cannot bid on your own task"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         profile_odj = RunnerProfile.objects.get(author=bidder_id)
         if bid_queryset:
             obj, _created = TaskBidder.objects.get_or_create(
@@ -190,7 +194,7 @@ class TaskImageAPIView(viewsets.ModelViewSet):
 
 class TaskApproveView(viewsets.ModelViewSet):
 
-    #permissions_classes = [AllowAny]
+    # permissions_classes = [AllowAny]
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
 
@@ -343,7 +347,7 @@ class SearchTask(viewsets.ModelViewSet):
 
 
 @api_view(["GET", "POST"])
-#@permission_classes([CanApproveTask])
+# @permission_classes([CanApproveTask])
 def accept_bid(request):
 
     task_id = request.query_params.get("task_id")
@@ -354,7 +358,10 @@ def accept_bid(request):
         owner = bid.bidder_profile.author.id
         # TODO: Uncomment in the future
         if bid.payment_author.id == owner:
-           return Response({"error":"user not allowed perform action"}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "user not allowed perform action"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         response_data = {}
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
@@ -367,7 +374,7 @@ def accept_bid(request):
             author=bid.payment_author, task_owner=task_owner, task=bid.task
         )
         print("update task status")
-        bid.approve_bids()
+        bid.approve_bids(query_set.id)
         bid.add_bidder_to_task(task_owner)
         response_data["payment_email"] = client_info.email
         print("timeline created")
@@ -381,16 +388,21 @@ def accept_bid(request):
 
 
 class OwnerTaskApprove(viewsets.ModelViewSet):
-    
+
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
     permissions_classes = [IsAuthenticated and CanApproveTask]
 
-
-    @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated], url_path='owner-approve', url_name='owner-approve')
+    @action(
+        detail=False,
+        methods=["post"],
+        permission_classes=[IsAuthenticated],
+        url_path="owner-approve",
+        url_name="owner-approve",
+    )
     def approve(self, request, pk=None):
         task_id = request.query_params.get("task_id")
-        #pk = request.query_params.get("id")
+        # pk = request.query_params.get("id")
         print("hello world")
         print(task_id, id)
         bid_to_approve = TaskBidder.objects.filter(task_id=task_id, id=pk)
@@ -399,7 +411,10 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
             owner = bid.bidder_profile.author.id
             # TODO: Uncomment in the future
             if bid.payment_author.id == owner:
-                return Response({"error":"user not allowed perform action"}, status=status.HTTP_403_FORBIDDEN)
+                return Response(
+                    {"error": "user not allowed perform action"},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
             response_data = {}
             response_data["professional_first_name"] = bid.bidder_profile.first_name
             response_data["professional_last_name"] = bid.bidder_profile.last_name
@@ -421,7 +436,8 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
             return Response(response_data)
 
         return Response(
-        {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST)
+            {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["GET"])
@@ -432,17 +448,18 @@ def get_timeiline(request, task_id, task_owner):
     serializer = TimelineSerializer(data)
     return Response(serializer.data)
 
+
 class GetTimelineView(viewsets.ModelViewSet):
-    
+
     """
     uses to add Timeline to view task activities
     """
+
+    permissions_classes = [IsAuthenticated and IsOwner]
     serializer_class = TimelineSerializer
-    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
         task_id = self.kwargs["task_id"]
         task_owner = self.kwargs["task_owner"]
-        query =  Timeline.objects.filter(task=task_id, task_owner=task_owner)
+        query = Timeline.objects.filter(task=task_id, task_owner=task_owner)
         return query
-        
