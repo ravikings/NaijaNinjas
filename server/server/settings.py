@@ -203,6 +203,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 #     }
 # }
 
+#TODO: Use pg bounder in the future: pip install django-postgrespool2
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -211,6 +212,7 @@ DATABASES = {
         "PASSWORD": "2{c%v~TtV?_SFCer",
         "HOST": "database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com",
         "PORT": "5432",
+        "CONN_MAX_AGE": 60,
     }
 }
 

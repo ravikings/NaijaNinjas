@@ -4,13 +4,15 @@
         "project_name": "server",
         "runtime": "python3.9",
         "s3_bucket": "zappa-wnf4dp8g2",
-        "keep_warm": true,
+        "keep_warm": false,
         "memory_size": 2048
     },
     "prod": {
         "django_settings": "server.settings",
         "project_name": "server",
         "runtime": "python3.9",
-        "s3_bucket": "zappa-wnf4dp8g2"
+        "s3_bucket": "zappa-wnf4dp8g2",
+        "keep_warm": true,
+        "memory_size": 2048
     }
 }
