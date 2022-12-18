@@ -28,7 +28,7 @@ function LinkedAccount() {
   const allData = (page = 1) => {
     setLoading(true)
     createRequest()
-      .get(`api/v1/task/task-owner?user_id=30&page=${page}`)
+      .get(`api/v1/task/task-owner/?user_id=30&page=${page}`)
       .then((res) => {
         setTotalCount(res?.data?.count)
         setData(res.data.results)

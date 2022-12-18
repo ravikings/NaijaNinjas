@@ -50,9 +50,9 @@ def save_card_info(account, transaction_data):
 #         raise Exception()
 
 @transaction.atomic
-def update_current_balance(account_id, amount):
+def update_current_balance(author_id, amount):
 
-    update_account = CurrentBalance.objects.get_or_create(account_number=account_id)
+    update_account = CurrentBalance.objects.get_or_create(author=author_id)
     update_account.balance = update_account.balance + amount
     update_account.save()
 
@@ -73,9 +73,9 @@ def log_transaction_task(self, reference, transaction_data):
             print("user not found saving default user id")
             account = 1
         
-        amount = user.offer - 500
-        bidders_account = user.bidder_profile.author.account_number
-        update_current_balance(bidders_account, amount)
+        amount = user.offer - 500 # amount here is our service fee
+        bidder_id = user.bidder_profile.author
+        update_current_balance(bidder_id, amount)
         log_transaction(account, transaction_data)
         print("transaction log saved")
         print("saving payment info log")
