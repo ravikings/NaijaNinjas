@@ -64,6 +64,7 @@ urlpatterns = [
     path('notifications/', include('notifications_rest.urls')),
     path('celery-progress/', include('celery_progress.urls')),
     path('marketing/', include('Marketing.urls')),
+    path('money/', include('bank.urls')),
 
 ]
 

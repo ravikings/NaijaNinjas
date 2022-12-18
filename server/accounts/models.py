@@ -10,7 +10,7 @@ from django.db.models import Avg, F, Count
 from django.core.validators import MinValueValidator, MaxValueValidator
 from ckeditor.fields import RichTextField
 from django_s3_storage.storage import S3Storage
-import arrow
+import random
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 
