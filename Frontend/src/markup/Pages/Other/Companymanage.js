@@ -192,6 +192,9 @@ function Companymanage() {
                                     <i className="ti-trash"></i>
                                   </Link>
                                 </td>
+                                <td className="application text-primary">
+                                  {e?.total_bids}{" "}
+                                </td>
                               </tr>
                             ))}
                           </tbody>

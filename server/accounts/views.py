@@ -3,6 +3,7 @@ from rest_framework import viewsets, generics
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, get_object_or_404, reverse
+from django.test import Client
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -11,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -19,8 +20,15 @@ from history.signals import history_tracker
 from django.utils.encoding import force_bytes, force_str, smart_bytes
 from rest_framework.renderers import TemplateHTMLRenderer
 import jwt
+import re
+from django.db import transaction
 from accounts.permissions import IsOwner
-from .utilis import send_verify_email,send_reset_password_email, send_successfully_change_password_email, generate_token
+from .utilis import (
+    send_verify_email,
+    send_reset_password_email,
+    send_successfully_change_password_email,
+    generate_token,
+)
 from rest_framework import status
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -40,7 +48,7 @@ from .models import (
     Projects,
     ProjectPhoto,
     PublicQuotes,
-    ClientReview
+    ClientReview,
 )
 from .serializers import (
     PhotosSerializer,
@@ -66,8 +74,11 @@ from .serializers import (
     ChatSearchProfileSerializer,
 )
 from notifications.signals import notify
+from durin.auth import TokenAuthentication, CachedTokenAuthentication
+import requests
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class DashboardProfile(viewsets.ModelViewSet):
 
     """
@@ -78,14 +89,14 @@ class DashboardProfile(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
     def retrieve(self, request, pk=None):
-        
+
         data = RunnerProfile.objects.get_or_create(author_id=pk)
         serializer = ProfileSerializer(data[0])
         return Response(serializer.data)
 
 
 class RelatedProfile(viewsets.ModelViewSet):
-    
+
     """
     this is use for searching related profiles,
     query parameters to be passed will be from current page data,
@@ -96,36 +107,45 @@ class RelatedProfile(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
-        
-        sector = self.request.query_params.get('sector', None)
-        department = self.request.query_params.get('department', None)
-        city = self.request.query_params.get('city', None)
-        id = self.request.query_params.get('id', None)
-        queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True, sector=sector, department=department, city=city).exclude(id=id)
+
+        sector = self.request.query_params.get("sector", None)
+        department = self.request.query_params.get("department", None)
+        city = self.request.query_params.get("city", None)
+        id = self.request.query_params.get("id", None)
+        queryset = (
+            RunnerProfile.objects.select_related("author")
+            .filter(
+                author__is_a_runner=True,
+                sector=sector,
+                department=department,
+                city=city,
+            )
+            .exclude(id=id)
+        )
 
         return queryset
 
+
 class UserDashboardProfile(viewsets.ModelViewSet):
-    
+
     """
     dashboard serializers use for entry data for getting data to the ui
     """
 
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
-    #permissions_classes = IsAuthenticated
+    # permissions_classes = IsAuthenticated
 
     def retrieve(self, request, pk=None):
-        
+
         data = RunnerProfile.objects.get_or_create(author_id=pk)
-        #user = AccountUser.objects.get(id=pk)
-        #recipient = AccountUser.objects.get(id=41)
-        #print("im sending notification dashboard")
-        #notify.send(user,recipient=recipient, verb='hello come to dashboard')
+        # user = AccountUser.objects.get(id=pk)
+        # recipient = AccountUser.objects.get(id=41)
+        # print("im sending notification dashboard")
+        # notify.send(user,recipient=recipient, verb='hello come to dashboard')
 
         serializer = PrivateProfileSerializer(data[0])
         return Response(serializer.data)
-        
 
 
 def save_user_profile(profile, request):
@@ -138,7 +158,7 @@ def save_user_profile(profile, request):
 
 @api_view(["POST", "PATCH"])
 def taskUpdate(request, pk):
-    profile =  RunnerProfile.objects.filter(author_id=pk)
+    profile = RunnerProfile.objects.filter(author_id=pk)
     if profile.exists():
         print("found user, updating profile")
         save_user_profile(profile, request)
@@ -148,8 +168,10 @@ def taskUpdate(request, pk):
         profile = RunnerProfile.objects.create(author_id=pk)
         save_user_profile(profile, request)
 
-    return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
-@method_decorator(cache_page(60 * 15), name='dispatch')
+    return Response({"error": f"Operation failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class DashboardResume(viewsets.ModelViewSet):
 
     """
@@ -158,18 +180,18 @@ class DashboardResume(viewsets.ModelViewSet):
 
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
-    #TODO: uncomment below
-    #permissions_classes = [IsAuthenticated and IsRunner]
+    # TODO: uncomment below
+    # permissions_classes = [IsAuthenticated and IsRunner]
 
     def retrieve(self, request, pk=None):
-    
+
         data = RunnerResume.objects.get_or_create(author_id=pk)
         serializer = UserResumeSerializer(data[0])
         return Response(serializer.data)
 
 
 class UserDashboardResume(viewsets.ModelViewSet):
-    
+
     """
     uses to viewing resume for only runner dashboard
     """
@@ -178,7 +200,7 @@ class UserDashboardResume(viewsets.ModelViewSet):
     serializer_class = UserResumeSerializer
 
     def retrieve(self, request, pk=None):
-    
+
         data = RunnerResume.objects.get_or_create(author_id=pk)
         serializer = UserResumeSerializer(data[0])
         return Response(serializer.data)
@@ -199,9 +221,10 @@ def save_profile_resume(resume, request):
 
 #     return Response({"message": f"workder stared"})
 
+
 @api_view(["POST", "PATCH"])
 def resumeUpdate(request, pk):
-    resume =  RunnerResume.objects.filter(author_id=pk)
+    resume = RunnerResume.objects.filter(author_id=pk)
     if resume.exists():
         print("found user, updating resume")
         save_profile_resume(resume, request)
@@ -211,7 +234,7 @@ def resumeUpdate(request, pk):
         resume = RunnerResume.objects.create(author_id=pk)
         save_profile_resume(resume, request)
 
-    return Response({"error": f"Operation failed"},  status=status.HTTP_400_BAD_REQUEST)
+    return Response({"error": f"Operation failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST", "GET"])
@@ -220,23 +243,26 @@ def account_status(request, pk, type):
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.filter(author_id=pk)  #TODO: CHANGE TO REQUEST
-    queryset[0].set_online_status(str(type).upper()) # pass type, either login or logout
+    queryset = RunnerProfile.objects.filter(author_id=pk)  # TODO: CHANGE TO REQUEST
+    queryset[0].set_online_status(
+        str(type).upper()
+    )  # pass type, either login or logout
     return Response({"message": f"status updated to {type}"})
-    
 
-@api_view(["POST","GET"])
+
+@api_view(["POST", "GET"])
 def profile_mode_status(request, pk, type):
 
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.get(author=pk)  #TODO: CHANGE TO REQUEST
-    queryset.private_mode(type) 
+    queryset = RunnerProfile.objects.get(author=pk)  # TODO: CHANGE TO REQUEST
+    queryset.private_mode(type)
     serializer = ProfileSerializer(queryset)
     return Response(serializer.data)
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class PhotoUpload(viewsets.ModelViewSet):
 
     """
@@ -269,21 +295,22 @@ class VideoUpload(viewsets.ModelViewSet):
 
 
 class ProjectsViewSet(viewsets.ModelViewSet):
-    
+
     """
     uses to upload video to ui dashboard
     """
 
     serializer_class = ProjectsSerializer
-    #permissions_classes = [IsAuthenticated and IsRunner]
+    # permissions_classes = [IsAuthenticated and IsRunner]
 
     def get_queryset(self):
 
-        user_id = self.request.query_params.get('user_id')
+        user_id = self.request.query_params.get("user_id")
 
         return Projects.objects.filter(author=user_id)
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ReviewView(viewsets.ModelViewSet):
 
     """
@@ -294,20 +321,22 @@ class ReviewView(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
-    
+
         return Review.objects.filter(profile=self.request.user.id)
 
+
 class ClientReviewView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     queryset = ClientReview.objects.all()
     serializer_class = ClientReviewSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class SearchProfile(viewsets.ModelViewSet):
 
     """
@@ -330,7 +359,9 @@ class SearchProfile(viewsets.ModelViewSet):
         "postcode",
         "local_goverment_zone",
     ]
-    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    queryset = RunnerProfile.objects.select_related("author").filter(
+        author__is_a_runner=True
+    )
     serializer_class = ProfileSerializerWithResume
     filter_backends = [
         DjangoFilterBackend,
@@ -356,7 +387,7 @@ class SearchProfile(viewsets.ModelViewSet):
     ordering_fields = "__all__"
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ChatSearchProfile(viewsets.ModelViewSet):
 
     """
@@ -367,19 +398,16 @@ class ChatSearchProfile(viewsets.ModelViewSet):
         "first_name",
         "last_name",
     ]
-    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    queryset = RunnerProfile.objects.select_related("author").filter(
+        author__is_a_runner=True
+    )
     serializer_class = ChatSearchProfileSerializer
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    filterset_fields = [
-        "first_name",
-        "last_name",
-        "department",
-        "sector"
-    ]
+    filterset_fields = ["first_name", "last_name", "department", "sector"]
 
     ordering_fields = "__all__"
 
@@ -392,7 +420,8 @@ def get_client_ip(request):
         ip = request.META.get("REMOTE_ADDR")
     return ip
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class UserSearchDetails(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
@@ -412,9 +441,10 @@ class UserSearchDetails(viewsets.ModelViewSet):
         else:
             IpModel.objects.create(ip=ip)
             profile.views.add(IpModel.objects.get(ip=ip))
-        
+
         serializer = UserProfileSearchSerializer(profile)
         return Response(serializer.data)
+
 
 class DashboardServiceView(viewsets.ModelViewSet):
 
@@ -422,38 +452,37 @@ class DashboardServiceView(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ServiceView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     serializer_class = ServiceSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
-    
-        user_id = self.request.query_params.get('user_id')
-    
+
+        user_id = self.request.query_params.get("user_id")
+
         return Service.objects.filter(author=user_id)
 
 
 class PrivateServiceView(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     serializer_class = ServiceSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
-    
-        user_id = self.request.query_params.get('user_id')
-    
-        return Service.objects.filter(author=user_id)
 
+        user_id = self.request.query_params.get("user_id")
+
+        return Service.objects.filter(author=user_id)
 
 
 class TestView(viewsets.ModelViewSet):
@@ -462,9 +491,11 @@ class TestView(viewsets.ModelViewSet):
     uses to add review to profile
     """
 
-    queryset = RunnerProfile.objects.select_related("author").filter(author__is_a_runner=True)
+    queryset = RunnerProfile.objects.select_related("author").filter(
+        author__is_a_runner=True
+    )
     serializer_class = ProfileSerializerWithResume
-    
+
     def retrieve(self, request, pk=None):
 
         data = RunnerProfile.objects.get(author=pk)
@@ -476,15 +507,15 @@ class ActivateAccountView(APIView):
     def get(self, request, uid, token):
 
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
-            user = AccountUser.objects.get(id=payload['user_id'])
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user = AccountUser.objects.get(id=payload["user_id"])
             if not user.is_email_verified:
                 user.is_email_verified = True
                 user.save()
                 return redirect("http://127.0.0.1:3000/react/demo/")
             return redirect("http://127.0.0.1:3000/react/demo/")
         except jwt.ExpiredSignatureError as identifier:
-            id = (urlsafe_base64_decode(uid))
+            id = urlsafe_base64_decode(uid)
             user = AccountUser.objects.get(pk=id)
 
             if not user.is_email_verified:
@@ -496,13 +527,15 @@ class ActivateAccountView(APIView):
                 return redirect("http://127.0.0.1:3000/react/demo/")
 
         except jwt.exceptions.DecodeError as identifier:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class ChangePasswordAccountView(APIView):
 
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         """
         use to reset password, are passed as query parameters
@@ -513,22 +546,30 @@ class ChangePasswordAccountView(APIView):
         """
         try:
             email = request.user.email
-            user = authenticate(email=email, password=request.query_params.get('old_password'))
-            password1 = request.query_params.get('password1') 
-            password2 = request.query_params.get('password2') 
+            user = authenticate(
+                email=email, password=request.query_params.get("old_password")
+            )
+            password1 = request.query_params.get("password1")
+            password2 = request.query_params.get("password2")
             if user and password1 and password2:
 
                 if password1 == password2:
                     user = AccountUser.objects.get(email=email)
                     user.set_password(password1)
-                    user.save() 
-                    return Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
+                    user.save()
+                    return Response(
+                        {"message": "Password successfully changed!"},
+                        status=status.HTTP_200_OK,
+                    )
 
                 else:
-                    return Response({'error': 'password doesnt match!'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(
+                        {"error": "password doesnt match!"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
 
         except Exception as e:
-            return Response({'error': f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
@@ -537,7 +578,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
     def get(self, request):
         serializer = self.serializer_class(data=request.data)
 
-        email = request.query_params.get('email')
+        email = request.query_params.get("email")
 
         if AccountUser.objects.filter(email=email).exists() and email:
             user = AccountUser.objects.get(email=email)
@@ -546,10 +587,15 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             current_site = get_current_site(request)
             send_reset_password_email(user, current_site, user.email, uid)
 
-            return Response({'message': 'Reset link sent, kindly check your email!'}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "Reset link sent, kindly check your email!"},
+                status=status.HTTP_200_OK,
+            )
 
         else:
-            return Response({'message': 'User doesnot exist!'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "User doesnot exist!"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class SetProfilePassword(generics.GenericAPIView):
@@ -561,83 +607,98 @@ class SetProfilePassword(generics.GenericAPIView):
         """
         TODO: Use the new link from UI team to redirect to where user can change password
         """
-        token=request.query_params.get('token')
-        uid=request.query_params.get('uid')
+        token = request.query_params.get("token")
+        uid = request.query_params.get("uid")
         data = f"?token={token}&uid={uid}"
 
-        response = HttpResponseRedirect("http://127.0.0.1:3000/react/demo/reset-password" + data)
+        response = HttpResponseRedirect(
+            "http://127.0.0.1:3000/react/demo/reset-password" + data
+        )
         return response
-        #return Response({'message': 'Activation done'}, status=status.HTTP_200_OK)
+        # return Response({'message': 'Activation done'}, status=status.HTTP_200_OK)
+
+
 class ChangeProfilePassword(generics.GenericAPIView):
     """
     Use for changing password for request made via email,
     last stage for password chane for request made vie email.
     """
+
     serializer_class = SetNewPasswordSerializer
 
     def get(self, request):
 
-        password1 = request.GET.get('password1')
-        password2 = request.GET.get('password2')
-        token = request.GET.get('token')
-        uid = request.GET.get('uid')
+        password1 = request.GET.get("password1")
+        password2 = request.GET.get("password2")
+        token = request.GET.get("token")
+        uid = request.GET.get("uid")
 
         try:
-            
+
             serializer = self.serializer_class(data=request.data)
 
-            payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
-            user = AccountUser.objects.get(id=payload['user_id'])
-   
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user = AccountUser.objects.get(id=payload["user_id"])
+
         except jwt.ExpiredSignatureError as identifier:
 
-            id = (urlsafe_base64_decode(uid))
+            id = urlsafe_base64_decode(uid)
             user = AccountUser.objects.get(pk=id)
             if user.is_active:
                 current_site = get_current_site(request)
                 send_reset_password_email(user, current_site, user.email, uid)
-            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
-            return Response({'message': 'check email for new link!'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            # return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            return Response(
+                {"message": "check email for new link!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         except jwt.exceptions.DecodeError as identifier:
-            #return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
-            return Response({'message': 'token invalid!'}, status=status.HTTP_400_BAD_REQUEST)
+            # return HttpResponseRedirect("http://127.0.0.1:3000/react/demo/register")
+            return Response(
+                {"message": "token invalid!"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         except Exception as e:
-            #raise e({"error":"token expired"})
-            return Response({'message': 'token expired!'}, status=status.HTTP_400_BAD_REQUEST)
-         
+            # raise e({"error":"token expired"})
+            return Response(
+                {"message": "token expired!"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
         if user is not None and (password1 == password2):
 
             user.set_password(password1)
-            
+
             user.save()
 
             """
             use res style to send messages accros for notification
             """
-            res = Response({'message': 'Password successfully changed!'}, status=status.HTTP_200_OK)
+            res = Response(
+                {"message": "Password successfully changed!"}, status=status.HTTP_200_OK
+            )
 
             return res
-      
+
         else:
-            return Response({'message': 'password incorrect!'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "password incorrect!"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class SetNewPasswordAPIView(APIView):
-
     def get(self, request, uid, token):
 
         data = f"?token={token}&uid={uid}"
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY,  algorithms=['HS256'])
-            response = redirect(reverse('user-reset-password') + data)
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            response = redirect(reverse("user-reset-password") + data)
 
             return response
 
         except jwt.ExpiredSignatureError as identifier:
-            
-            id = (urlsafe_base64_decode(uid))
+
+            id = urlsafe_base64_decode(uid)
             user = AccountUser.objects.get(pk=id)
             if user.is_active:
                 current_site = get_current_site(request)
@@ -652,41 +713,42 @@ class SetNewPasswordAPIView(APIView):
 class ProjectImageAPIView(viewsets.ModelViewSet):
 
     """
-        this requires form data field
-        title, description, author    
-        image for image files to upload 
-    
+    this requires form data field
+    title, description, author
+    image for image files to upload
+
     """
 
     queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
     parser_classes = (MultiPartParser, FormParser)
 
-
     def create(self, request, pk=None):
-        
-        title = request.data['title']
-        description = request.data['description']
-        author_id = request.data['author']
+
+        title = request.data["title"]
+        description = request.data["description"]
+        author_id = request.data["author"]
         user_info = AccountUser.objects.get(id=author_id)
-        
+
         try:
-            id = request.data['id']
-            project= Projects.objects.get(id=id, author=user_info)
+            id = request.data["id"]
+            project = Projects.objects.get(id=id, author=user_info)
             project.title = title
             project.description = description
             project.save()
         except:
-            project = Projects.objects.create(author=user_info, title = title, description = description)
-        
+            project = Projects.objects.create(
+                author=user_info, title=title, description=description
+            )
+
         form_data = {}
-        form_data['project']= project.id
+        form_data["project"] = project.id
         success = True
         response = []
 
-        for images in request.FILES.getlist('image'):
-            form_data['image']=images  
-            print 
+        for images in request.FILES.getlist("image"):
+            form_data["image"] = images
+            print
             serializer = ProjectPhotoSerializer(data=form_data)
             if serializer.is_valid():
                 serializer.save()
@@ -694,20 +756,27 @@ class ProjectImageAPIView(viewsets.ModelViewSet):
             else:
                 success = False
         if success:
-            return Response({"message": f"action completed successfull! {response}"}, status=status.HTTP_201_CREATED)
-            
-        return Response(response,status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": f"action completed successfull! {response}"},
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteProjectReview(viewsets.ModelViewSet):
-    
+
     """
     uses to delete images attached to projects
     """
 
+    authentication_classes = [
+        TokenAuthentication,
+    ]
+    permissions_classes = IsAuthenticated  # [IsAuthenticated and IsOwner]
     queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+
 
 @api_view(["GET", "POST"])
 def delete_projects(request, pk):
@@ -719,28 +788,42 @@ def delete_projects(request, pk):
         return Response({"message": f"project deletion was successfull!"})
 
     except:
-        return Response({"error": f"Record doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": f"Record doesn't exists"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["GET"])
 def public_quotes(request):
 
-    description = request.query_params.get('description', None) 
-    department = request.query_params.get('department', None)
-    sector = request.query_params.get('sector', None)
-    location = request.query_params.get('location', None)
-    first_name = request.query_params.get('first_name', None)
-    last_name = request.query_params.get('last_name', None)
-    phone = request.query_params.get('phone', None)
-    email = request.query_params.get('email', None)
-    
+    description = request.query_params.get("description", None)
+    department = request.query_params.get("department", None)
+    sector = request.query_params.get("sector", None)
+    location = request.query_params.get("location", None)
+    first_name = request.query_params.get("first_name", None)
+    last_name = request.query_params.get("last_name", None)
+    phone = request.query_params.get("phone", None)
+    email = request.query_params.get("email", None)
+
     try:
-        PublicQuotes.objects.create(description=description, department=department,sector =sector,location=location,first_name=first_name,last_name=last_name, phone=phone, email=email)
+        PublicQuotes.objects.create(
+            description=description,
+            department=department,
+            sector=sector,
+            location=location,
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
+            email=email,
+        )
         return Response({"message": f"request submitted!"})
     except Exception as e:
         print(e)
         pass
-    return Response({"error": f"request not completed"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(
+        {"error": f"request not completed"}, status=status.HTTP_400_BAD_REQUEST
+    )
+
 
 @api_view(["POST", "GET"])
 def profile_favorite(request, pk):
@@ -753,15 +836,104 @@ def profile_favorite(request, pk):
         profile.bookmarks.add(pk)
         return Response({"message": f"profile {pk} added"})
 
+
 class DashboardProfileFavorite(viewsets.ModelViewSet):
-    
+
     """
     uses to add review to profile
     """
 
     serializer_class = BiddersProfileSerializer
-    #permissions_classes = [IsAuthenticated and IsOwner]
+    # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
 
-        return RunnerProfile.objects.filter(author__in=RunnerProfile.objects.filter(author_id=self.request.user.id).values_list("bookmarks"))
+        return RunnerProfile.objects.filter(
+            author__in=RunnerProfile.objects.filter(
+                author_id=self.request.user.id
+            ).values_list("bookmarks")
+        )
+
+
+class ExampleView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (CachedTokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        content = {"foo": "bar"}
+        return Response(content)
+
+
+
+ 
+
+ 
+# Define a function for
+# for validating an Email
+def check_email(email):
+    
+    # Make a regular expression
+    # for validating an Email
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    
+    # pass the regular expression
+    # and the string into the fullmatch() method
+    if(re.fullmatch(regex, email)):
+        return True
+    
+    return False
+
+def check_passowrd(password):
+    #passwd = 'Geek12@'
+    reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+      
+    # compiling regex
+    pat = re.compile(reg)
+      
+    # searching regex                 
+    mat = re.search(pat, password)
+      
+    # validating conditions
+    if mat:
+        return True
+    else:
+        return False
+    
+    
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@transaction.atomic
+def durinSingUp(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+    client = request.data.get("client")
+    data = {}
+    if not check_email(username):
+            return Response(
+            {"error": "invalid email address"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    if not check_passowrd(password):
+            return Response(
+            {"error": "invalid password"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    check_user = AccountUser.objects.filter(email=username)
+    if check_user.exists():
+        return Response(
+            {"error": "user already exist!"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    user = AccountUser.objects.create(username=username, email=username)
+    user.set_password(password)
+    user.save()
+
+    user_data = AccountUser.objects.filter(email=username).values("pk", "email", "username", "is_a_runner")
+    data["user"] = (user_data[0])
+
+    url = reverse("durin_login")
+    c = Client()
+    response = c.post(
+        url, {"username": username, "password": password, "client": client}
+    )
+    data.update(response.data)
+    return Response(data)

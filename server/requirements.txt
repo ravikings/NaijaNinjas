@@ -32,3 +32,5 @@ celery
 redis
 django-celery-results
 celery_progress
+django-rest-durin
+django-cache-memoize

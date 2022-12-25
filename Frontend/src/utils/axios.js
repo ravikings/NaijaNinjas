@@ -2,7 +2,8 @@ import axios from "axios"
 import Cookies from "js-cookie"
 
 export const BASE_URL =
-  "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"
+  //"https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"
+  "http://localhost:8000/"
 // export const BASE_URL = "/"
 
 export default function createRequest() {

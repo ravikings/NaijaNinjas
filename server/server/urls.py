@@ -49,6 +49,7 @@ urlpatterns = [
     path("api/v1/payment/", include("payment.urls")),
     path("ws/chat/", include("chatserver.urls")),
     path("forum/", include("forum.urls")),
+    path("api/auth/v1.0/", include('durin.urls')),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     path(

@@ -34,6 +34,7 @@ from accounts.views import (
     DeleteProjectReview,
     RelatedProfile,
     ChatSearchProfile,
+    durinSingUp,
     #start_celery_work,
 )
 
@@ -77,6 +78,8 @@ urlpatterns = [
         SetNewPasswordAPIView.as_view(), name='email-reset-password'),
     path('set-password/',
         ChangeProfilePassword.as_view(), name='set-password'),
+    path('durin-sign-up/',
+        durinSingUp, name='auth-singup'),
     path("account/reset_password/", ChangePasswordAccountView.as_view(), name="reset_password"),
     path('request-reset-email/', RequestPasswordResetEmail.as_view(), name="request-reset-email"),
     path('user-reset-password/', SetProfilePassword.as_view(), name="user-reset-password"),
