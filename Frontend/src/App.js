@@ -20,7 +20,8 @@ import useAxiosPrivate from "./hooks/useAxiosPrivate"
 import Loader from "./markup/Element/Loader"
 
 function App() {
-  const refreshToken = Cookies.get("refresh_token")
+  //const refreshToken = Cookies.get("refresh_token")
+  const refreshToken = localStorage.getItem("access_token")
   const axiosPrivate = useAxiosPrivate()
   const dispatch = useDispatch()
   const { loading, isVerified, currentUser } = useSelector(
@@ -29,22 +30,21 @@ function App() {
 
   useEffect(() => {
     if (refreshToken) {
-      console.log("First firsrt")
       dispatch(verifyToken(refreshToken))
     }
   }, [])
 
   useEffect(() => {
     let isMounted = true
-    const controller = new AbortController()
+    // const controller = new AbortController()
 
     const getUser = async () => {
       dispatch({ type: authActionTypes.GETTING_CURRENT_USER })
       try {
-        const { data } = await axiosPrivate.get("/dj-rest-auth/user/", {
-          signal: controller.signal,
-        })
-        console.log(data, "userData")
+        // const { data } = await axiosPrivate.get("/dj-rest-auth/user/", {
+        //   signal: controller.signal,
+        // })
+        const data = localStorage.getItem("userData");
         isMounted &&
           dispatch({ type: authActionTypes.GET_CURRENT_SUCCESS, user: data })
         dispatch(getUserStatus(data.pk))

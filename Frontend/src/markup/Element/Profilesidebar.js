@@ -40,16 +40,16 @@ function ProfileSidebar({
   const imageSendAPI = useAxiosPrivateImage()
 
   const getUserDetails = () => {
-    console.log("sended")
+    const pk = localStorage.getItem("userID");
     createRequest()
-      .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
+      .get(`/api/v1/account/user-profile/${pk}/`)
       .then(({ data }) => {
         setUserDetails(data)
         dispatch({
           type: authActionTypes.USER_PROFILE,
           payload: data,
         })
-        console.log("War gate")
+        
       })
       .catch((e) => {
         toast.error(e.response?.data?.message || "Unknown Error")
@@ -70,8 +70,9 @@ function ProfileSidebar({
         const formData = new FormData()
         formData.append("photo", imageState)
         //formData.append("author", userProfile?.author);
+        const pk = localStorage.getItem("userID");
         await imageSendAPI.patch(
-          `/api/v1/account/user-profile/${userProfile?.id}/`,
+          `/api/v1/account/user-profile/${pk}/`,
           formData
         )
         setImageState("")

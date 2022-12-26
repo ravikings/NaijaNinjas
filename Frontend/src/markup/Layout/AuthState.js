@@ -52,8 +52,9 @@ function AuthState({ userDetails }) {
 
   const getOnlineState = async () => {
     try {
+      const pk = localStorage.getItem("userID");
       const { data } = await createRequest().get(
-        `/api/v1/account/user-profile/${currentUser?.pk}/`
+        `/api/v1/account/user-profile/${pk}/`
       )
       const status = data.user_set_status === false ? true : false
       console.log("DATA FROM AUTH STATE", data)

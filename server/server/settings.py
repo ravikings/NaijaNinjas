@@ -208,7 +208,7 @@ DATABASES = {
     }
 }
 
-# TODO: Use pg bounder in the future: pip install django-postgrespool2
+#TODO: Use pg bounder in the future: pip install django-postgrespool2
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -374,13 +374,13 @@ PAYSTACK_PUBLIC_KEY = "pk_test_b4198537c6f3c50f8fc0fccaebf4d0aae311d411"
 REST_DURIN = {
     "DEFAULT_TOKEN_TTL": timedelta(days=30),
     "TOKEN_CHARACTER_LENGTH": 64,
-    "USER_SERIALIZER": None,
+    "USER_SERIALIZER": "accounts.serializers.UserSerializer",
     "AUTH_HEADER_PREFIX": "Token",
     "EXPIRY_DATETIME_FORMAT": api_settings.DATETIME_FORMAT,
     "TOKEN_CACHE_TIMEOUT": 60,
     "REFRESH_TOKEN_ON_LOGIN": True,
     "AUTHTOKEN_SELECT_RELATED_LIST": ["user"],
-    "API_ACCESS_CLIENT_NAME": True,
+    "API_ACCESS_CLIENT_NAME": "frontend",
     "API_ACCESS_EXCLUDE_FROM_SESSIONS": False,
     "API_ACCESS_RESPONSE_INCLUDE_TOKEN": True,
 }

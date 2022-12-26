@@ -14,6 +14,7 @@ import {
   validateCaptcha,
 } from "react-simple-captcha";
 import Cookies from "js-cookie";
+import axios from "axios"
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,6 +28,7 @@ const SignInSchema = Yup.object().shape({
 const initialValues = {
   email: "",
   password: "",
+  client: "frontend"
 };
 
 function LoginPage() {
@@ -47,21 +49,22 @@ function LoginPage() {
 
   const login = (loginDetails) => {
     createRequest()
-      .post("/dj-rest-auth/login/", loginDetails)
+      .post("/api/auth/v1.0/login/", loginDetails)
       .then((res) => {
         //    returnconsole.log("the res is "+res)
-        console.log(res.data);
         localStorage.setItem("userID", res?.data?.user?.pk);
-        localStorage.setItem("access_token", res?.data?.access_token);
-        Cookies.set("refresh_token", res?.data?.refresh_token, { expires: 1 });
-        const inFiveMinutes = new Date(new Date().getTime() + 60 * 60 * 1000);
-        Cookies.set("access_token", res?.data?.access_token, {
+        localStorage.setItem("access_token", res?.data?.token);
+        localStorage.setItem("userData", JSON.stringify(res?.data?.user));
+        localStorage.setItem("userData1", res?.data?.user)
+        //Cookies.set("refresh_token", res?.data?.refresh_token, { expires: 1 });
+        const inFiveMinutes = new Date(new Date().getTime() + 60 * 60 * 60 * 1000);
+        Cookies.set("access_token", res?.data?.token, {
           expires: inFiveMinutes,
         });
         dispatch({
           type: authActionTypes.LOGIN_SUCCESS,
           user: res?.data?.user,
-          accessToken: res?.data?.access_token,
+          accessToken: res?.data?.token,
         });
         const redirectURL = new URLSearchParams(location.search).get(
           "redirect"
@@ -90,7 +93,8 @@ function LoginPage() {
 
   const handleSubmit = (values) => {
     if (checkCaptcha()) {
-      values.username = "";
+      values.username = values.email;
+      delete values.email;
       login(values);
     } else if (!value) {
       toast.error("Please enter captcha to verify");
