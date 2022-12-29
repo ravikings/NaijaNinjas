@@ -8,13 +8,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { GoogleLoginButton, FacebookLoginButton } from "./components";
 import Button from "@material-ui/core/Button";
-import {
-  loadCaptchaEnginge,
-  LoadCanvasTemplateNoReload,
-  validateCaptcha,
-} from "react-simple-captcha";
+// import {
+//   loadCaptchaEnginge,
+//   LoadCanvasTemplateNoReload,
+//   validateCaptcha,
+// } from "react-simple-captcha";
 import Cookies from "js-cookie";
 import axios from "axios"
+
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -23,6 +24,12 @@ const SignInSchema = Yup.object().shape({
 
   password: Yup.string().required("Password is required"),
   // .min(4, "Password is too short - should be 4 chars minimum"),
+});
+
+const MfaSignInSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Please enter valid email.")
+    .required("Email is required"),
 });
 
 const initialValues = {
@@ -37,15 +44,19 @@ function LoginPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [value, setValue] = useState("");
+  const [mfaSchema, setmfaSchema] = useState(false);
+  const [mainLoginButton, setmainLoginButton] = useState(false);
+  const [mfaemail, setMfaemail] = useState("");
+  const [emailverify, setemailverify] = useState(false);
 
-  const checkCaptcha = () => {
-    const isValid = validateCaptcha(value);
-    return isValid;
-  };
+  // const checkCaptcha = () => {
+  //   const isValid = validateCaptcha(value);
+  //   return isValid;
+  // };
 
-  useEffect(() => {
-    loadCaptchaEnginge(6, "black", "white");
-  }, []);
+  // useEffect(() => {
+  //   loadCaptchaEnginge(6, "black", "white");
+  // }, []);
 
   const login = (loginDetails) => {
     createRequest()
@@ -54,8 +65,7 @@ function LoginPage() {
         //    returnconsole.log("the res is "+res)
         localStorage.setItem("userID", res?.data?.user?.pk);
         localStorage.setItem("access_token", res?.data?.token);
-        localStorage.setItem("userData", JSON.stringify(res?.data?.user));
-        localStorage.setItem("userData1", res?.data?.user)
+        localStorage.setItem("userData", res?.data?.user)
         //Cookies.set("refresh_token", res?.data?.refresh_token, { expires: 1 });
         const inFiveMinutes = new Date(new Date().getTime() + 60 * 60 * 60 * 1000);
         Cookies.set("access_token", res?.data?.token, {
@@ -83,7 +93,7 @@ function LoginPage() {
       .catch((e) => {
         if (e.response?.status === 400) {
           toast.error(e?.response?.data?.non_field_errors[0]);
-          loadCaptchaEnginge(6, "white", "#2e55fa");
+          //loadCaptchaEnginge(6, "white", "#2e55fa");
           setValue("");
         } else {
           toast.error("Unknown Error");
@@ -92,7 +102,8 @@ function LoginPage() {
   };
 
   const handleSubmit = (values) => {
-    if (checkCaptcha()) {
+    // if (checkCaptcha()) {
+    if (values) {
       values.username = values.email;
       delete values.email;
       login(values);
@@ -105,6 +116,47 @@ function LoginPage() {
       setValue("");
     }
   };
+
+  const handleMfa = (event) => {
+    console.log("here is mfa")
+    setmfaSchema(true);
+    setmainLoginButton(true);
+    setMfaemail(event.target.value)
+  }
+
+  const sendToken = () => {
+    createRequest().post("/auth/email/", { email: mfaemail })
+      .then((res) => {
+        history.push({
+          pathname: "/mfa-login",
+          state: { email: mfaemail }
+        });
+      })
+      .catch((e) => {
+        console(e);
+        toast.error("service not available.")
+      });
+  };
+
+
+  const handlemfaCreate = () => {
+    console.log("handle is request code is called");
+
+    const validate = () => MfaSignInSchema.validate(
+      { email: mfaemail },
+      { strict: true },
+    )
+    try {
+      validate();
+      //setemailverify(true);
+      sendToken();
+    } catch (error) {
+      toast.error("Please enter valid email.");
+      //setmainLoginButton(false);
+      //setemailverify(false);
+    };
+  };
+
 
   return (
     <div className="page-content bg-gray login-form-bx browse-job login-style2">
@@ -184,9 +236,9 @@ function LoginPage() {
                               />
                             </div>
                             <div className="form-group">
-                              <label>Verify *</label>
-                              <LoadCanvasTemplateNoReload />
-                              <div className="input-group mb-4">
+                              {/* <label>Verify *</label> */}
+                              {/* <LoadCanvasTemplateNoReload /> */}
+                              {/* <div className="input-group mb-4">
                                 <input
                                   name="text"
                                   onChange={(e) => setValue(e.target.value)}
@@ -196,7 +248,7 @@ function LoginPage() {
                                   placeholder="Enter above text"
                                   className="form-control"
                                 />
-                              </div>
+                              </div> */}
                             </div>
                             <div className="text-left">
                               <Button
@@ -210,12 +262,52 @@ function LoginPage() {
                                     : "site-button"
                                 }
                                 disabled={!(dirty && isValid)}
-                                // className='site-button'
+                              // className='site-button'
                               >
                                 login
                               </Button>
                             </div>
                           </Form>
+                          <div className={"separator"}>
+                            <span>Or, use your email</span>
+                          </div>
+                          <div className="form-group">
+                            <div className="input-group">
+                              <input
+                                type="email"
+                                name="mfaemail"
+                                id="mfaemail"
+                                value={mfaemail}
+                                className={
+                                  errors.email && touched.email
+                                    ? "input-error form-control border-danger "
+                                    : "form-control"
+                                }
+                                onChange={(event) => handleMfa(event)}
+                              />
+                            </div>
+                            <ErrorMessage
+                              name="email"
+                              component="div"
+                              className="error text-danger"
+                            />
+                          </div>
+                          <Button
+                            fullWidth
+                            variant={"contained"}
+                            color={"primary"}
+                            //type={"submit"}
+                            className={
+                              !mainLoginButton
+                                ? "disabled-btn"
+                                : "site-button"
+                            }
+                            disabled={!mainLoginButton}
+                            onClick={() => handlemfaCreate()}
+                          // className='site-button'
+                          >
+                            Send secure Code
+                          </Button>
                           <div className="text-center">
                             <Link
                               data-toggle="tab"
@@ -226,22 +318,21 @@ function LoginPage() {
                               Password
                             </Link>
                           </div>
-                          <div className={"separator"}>
-                            <span>or</span>
-                          </div>
-                          <FacebookLoginButton
-                            startIcon={<i className="fa fa-facebook"></i>}
+                          {/* <FacebookLoginButton
+                            startIcon={<i className="fa fa-envelope"></i>}
                             fullWidth
+                            onClick={console.log("i was clicked")}
                           >
-                            Login via Faceboook
-                          </FacebookLoginButton>
-                          <GoogleLoginButton
+                            Send secure Token
+                          </FacebookLoginButton> */}
+
+                          {/* <GoogleLoginButton
                             className={"mt-3"}
                             startIcon={<i className="fa fa-google-plus"></i>}
                             fullWidth
                           >
                             Login via Google+
-                          </GoogleLoginButton>
+                          </GoogleLoginButton> */}
                         </div>
                       );
                     }}
@@ -322,7 +413,7 @@ function LoginPage() {
         </div>
       </div>
       <footer className="login-footer">
-        <div className="container">
+        {/* <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center">
               <span className="float-left text-black-light">
@@ -336,7 +427,7 @@ function LoginPage() {
               <span className="float-right">All rights reserved.</span>
             </div>
           </div>
-        </div>
+        </div> */}
       </footer>
     </div>
   );

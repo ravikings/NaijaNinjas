@@ -1,3 +1,4 @@
+from parser import ParserError
 from signal import strsignal
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView
@@ -72,9 +73,11 @@ from .serializers import (
     ClientReviewSerializer,
     PrivateProfileSerializer,
     ChatSearchProfileSerializer,
+    UserSerializer,
 )
 from notifications.signals import notify
-from durin.auth import TokenAuthentication, CachedTokenAuthentication
+from rest_framework.authentication import TokenAuthentication
+from durin.auth import TokenAuthentication as DurinTokenAuthentication, CachedTokenAuthentication
 import requests
 
 
@@ -855,17 +858,15 @@ class DashboardProfileFavorite(viewsets.ModelViewSet):
         )
 
 
-class ExampleView(APIView):
+class MFATokenVerify(APIView):
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (CachedTokenAuthentication,)
-
-    def get(self, request, *args, **kwargs):
-        content = {"foo": "bar"}
-        return Response(content)
+    authentication_classes = (TokenAuthentication,)
 
 
+    def post(self, request, *args, **kwargs):
+        data = UserSerializer(request.user).data
+        return Response(data)
 
- 
 
  
 # Define a function for

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    "drfpasswordless",
     "channels",
     "ckeditor",
     "django_filters",
@@ -88,8 +89,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
         "durin.auth.CachedTokenAuthentication",  # new
-        # "rest_framework.authentication.TokenAuthentication",  #new
+        "durin.auth.TokenAuthentication",
         # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
@@ -102,6 +104,7 @@ JWT_AUTH_COOKIE = "my-app-auth"  # The cookie key name can be the one you want
 JWT_AUTH_REFRESH_COOKIE = "my-refresh-token"
 
 AUTHENTICATION_BACKENDS = (
+    # "axes.backends.AxesStandaloneBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
@@ -122,6 +125,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "axes.middleware.AxesMiddleware",
 ]
 
 
@@ -208,7 +212,7 @@ DATABASES = {
     }
 }
 
-#TODO: Use pg bounder in the future: pip install django-postgrespool2
+##TODO: Use pg bounder in the future: pip install django-postgrespool2
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -383,4 +387,16 @@ REST_DURIN = {
     "API_ACCESS_CLIENT_NAME": "frontend",
     "API_ACCESS_EXCLUDE_FROM_SESSIONS": False,
     "API_ACCESS_RESPONSE_INCLUDE_TOKEN": True,
+}
+
+# AXES_FAILURE_LIMIT = 5
+# AXES_COOLOFF_TIME = 6
+# AXES_RESET_ON_SUCCESS = True
+# AXES_USERNAME_FORM_FIELD = "login"
+
+PASSWORDLESS_AUTH = {
+    "PASSWORDLESS_AUTH_TYPES": [
+        "EMAIL",
+    ],
+    "PASSWORDLESS_EMAIL_NOREPLY_ADDRESS": "noreply@example.com",
 }

@@ -15,14 +15,34 @@ export function* verify(token) {
   yield put({ type: authActionTypes.VERIFYING_TOKEN });
   try {
     const tokens = localStorage.getItem("access_token");
-    yield createRequest().get("/api/auth/v1.0/apiaccess/", tokens);
-    console.log(token, "Done once");
-    yield put({
-      type: authActionTypes.VERIFY_TOKEN_SUCCESS,
-      accessToken: tokens,
-    });
+    const mfa = localStorage.getItem("mfa");
+    if (mfa) {
+      yield createRequest().post("/api/v1/mfa/auth/verify/", tokens)
+        .then((res) => {
+          localStorage.setItem("userID", res?.data?.pk);
+          localStorage.setItem("userData", res?.data);
+        });
+      yield put({
+        type: authActionTypes.LOGIN_SUCCESS,
+        accessToken: tokens,
+      });
+      yield put({
+        type: authActionTypes.VERIFY_TOKEN_SUCCESS,
+      });
+    } else {
+      yield createRequest().get("/api/auth/v1.0/apiaccess/", tokens);
+      yield put({
+        type: authActionTypes.VERIFY_TOKEN_SUCCESS,
+        accessToken: tokens,
+      });
+    };
+
   } catch (e) {
     yield put({ type: authActionTypes.VERIFY_TOKEN_FAILED });
+    localStorage.removeItem("userID");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("mfa");
   }
 }
 
@@ -66,8 +86,8 @@ export function* login({ history, loginDetails }) {
   } catch (e) {
     toast.error(
       e.response.data?.password?.join(",") ||
-        e.response.data?.non_field_errors?.join(",") ||
-        "Unknown Error"
+      e.response.data?.non_field_errors?.join(",") ||
+      "Unknown Error"
     );
     yield put({ type: authActionTypes.LOGIN_FAILED });
   }

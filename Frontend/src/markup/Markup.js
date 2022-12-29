@@ -58,6 +58,7 @@ import ScrollToTop from "./Element/ScrollToTop"
 import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage"
 import MessagesPage from "./Pages/Messages/MessagesPage"
 import ForgotPassword from "./Pages/Auth/Forgot-password"
+import MfaLogin from "./Pages/Auth/MFA-login"
 import ResetPassword from "./Pages/Auth/Reset-password"
 import CompanyManageBids from "./Pages/Other/CompanyManageBids"
 import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask"
@@ -247,7 +248,11 @@ class Markup extends Component {
               exact
               component={Categoryskilljobs}
             />
-
+            <Route
+              path="/mfa-login"
+              exact
+              component={MfaLogin}
+            />
             <Route path="/portfolio-grid-2" exact component={Portfoliogrid2} />
             <ProtectedRoute path="/login" component={LoginPage} />
 
