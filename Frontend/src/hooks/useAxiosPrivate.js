@@ -15,7 +15,7 @@ const useAxiosPrivate = () => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`
+          config.headers["Authorization"] = `Token ${accessToken}`
         }
         console.log(config.headers["Authorization"])
         return config
@@ -45,7 +45,7 @@ const useAxiosPrivate = () => {
     //         payload: newAccessToken,
     //       })
     //       console.log("NewAccessToken", newAccessToken)
-    //       prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`
+    //       prevRequest.headers["Authorization"] = `Token ${newAccessToken}`
     //       return axiosPrivate(prevRequest)
     //     }
     //     return Promise.reject(error)

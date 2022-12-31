@@ -174,7 +174,7 @@ function Browsejobfilterlist() {
                                   onClick={(e) => e.stopPropagation()}
                                   target="_blank"
                                 >
-                                  <button className="site-button btn-block ">
+                                  <button className="site-button btn-block" >
                                     Show Interest
                                   </button>
                                 </Link>

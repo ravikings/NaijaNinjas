@@ -39,7 +39,7 @@ function Componypostjobs() {
   const privateAxios = useAxiosPrivate();
   const classes = useStyles();
 
-  let token = `Bearer ` + localStorage.getItem("access_token");
+  let token = `Token ` + localStorage.getItem("access_token");
   const userId = localStorage.getItem("userID");
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -176,8 +176,8 @@ function Componypostjobs() {
                                 as="select"
                                 custom
                                 className="custom-select"
-                                // onChange={(e)=>setCategory(e.target.value)}
-                                // value={category}
+                              // onChange={(e)=>setCategory(e.target.value)}
+                              // value={category}
                               >
                                 <option>1 Years</option>
                                 <option>2 Years</option>

@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -78,7 +78,6 @@ from .serializers import (
 from notifications.signals import notify
 from rest_framework.authentication import TokenAuthentication
 from durin.auth import TokenAuthentication as DurinTokenAuthentication, CachedTokenAuthentication
-import requests
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -87,7 +86,8 @@ class DashboardProfile(viewsets.ModelViewSet):
     """
     dashboard serializers use for entry data for getting data to the ui
     """
-
+    # permission_classes  = [IsAuthenticated and IsOwner]
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerProfile.objects.all()
     serializer_class = ProfileSerializer
 
@@ -106,7 +106,7 @@ class RelatedProfile(viewsets.ModelViewSet):
     sector, department, city, id
 
     """
-
+    authentication_classes = (DurinTokenAuthentication,)
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
@@ -134,21 +134,24 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
     dashboard serializers use for entry data for getting data to the ui
     """
-
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
-    # permissions_classes = IsAuthenticated
+    permission_classes  = [IsAuthenticated]
 
     def retrieve(self, request, pk=None):
 
-        data = RunnerProfile.objects.get_or_create(author_id=pk)
+        obj, data = RunnerProfile.objects.get_or_create(author_id=pk)
         # user = AccountUser.objects.get(id=pk)
         # recipient = AccountUser.objects.get(id=41)
         # print("im sending notification dashboard")
         # notify.send(user,recipient=recipient, verb='hello come to dashboard')
+        if request.user.id == obj.author.id:
 
-        serializer = PrivateProfileSerializer(data[0])
-        return Response(serializer.data)
+            serializer = PrivateProfileSerializer(obj)
+            return Response(serializer.data)
+
+        return Response({"detail": "Permission deniied."},  status=status.HTTP_400_BAD_REQUEST)
 
 
 def save_user_profile(profile, request):
@@ -160,6 +163,7 @@ def save_user_profile(profile, request):
 
 
 @api_view(["POST", "PATCH"])
+@authentication_classes([DurinTokenAuthentication])
 def taskUpdate(request, pk):
     profile = RunnerProfile.objects.filter(author_id=pk)
     if profile.exists():
@@ -181,10 +185,12 @@ class DashboardResume(viewsets.ModelViewSet):
     uses to update resume for only runner dashboard
     """
 
+    permission_classes = [IsAuthenticated and IsRunner]
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
     # TODO: uncomment below
-    # permissions_classes = [IsAuthenticated and IsRunner]
+    
 
     def retrieve(self, request, pk=None):
 
@@ -199,6 +205,8 @@ class UserDashboardResume(viewsets.ModelViewSet):
     uses to viewing resume for only runner dashboard
     """
 
+    permission_classes = [IsAuthenticated and IsRunner]
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
 
@@ -226,6 +234,7 @@ def save_profile_resume(resume, request):
 
 
 @api_view(["POST", "PATCH"])
+@authentication_classes([DurinTokenAuthentication])
 def resumeUpdate(request, pk):
     resume = RunnerResume.objects.filter(author_id=pk)
     if resume.exists():
@@ -241,6 +250,7 @@ def resumeUpdate(request, pk):
 
 
 @api_view(["POST", "GET"])
+@authentication_classes([DurinTokenAuthentication])
 def account_status(request, pk, type):
 
     """
@@ -254,6 +264,7 @@ def account_status(request, pk, type):
 
 
 @api_view(["POST", "GET"])
+@authentication_classes([DurinTokenAuthentication])
 def profile_mode_status(request, pk, type):
 
     """
@@ -275,6 +286,7 @@ class PhotoUpload(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotosSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
+    authentication_classes = (DurinTokenAuthentication,)
 
     def get_queryset(self):
         if self.request.method == "GET":
@@ -295,6 +307,7 @@ class VideoUpload(viewsets.ModelViewSet):
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
+    authentication_classes = (DurinTokenAuthentication,)
 
 
 class ProjectsViewSet(viewsets.ModelViewSet):
@@ -304,7 +317,8 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = ProjectsSerializer
-    # permissions_classes = [IsAuthenticated and IsRunner]
+    permissions_classes = [IsAuthenticated and IsRunner]
+    authentication_classes = (DurinTokenAuthentication,)
 
     def get_queryset(self):
 
@@ -321,6 +335,7 @@ class ReviewView(viewsets.ModelViewSet):
     """
 
     permissions_classes = [IsAuthenticated and IsOwner]
+    authentication_classes = (DurinTokenAuthentication,)
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
@@ -336,6 +351,7 @@ class ClientReviewView(viewsets.ModelViewSet):
 
     queryset = ClientReview.objects.all()
     serializer_class = ClientReviewSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
 
@@ -453,6 +469,7 @@ class DashboardServiceView(viewsets.ModelViewSet):
 
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
+    authentication_classes = (DurinTokenAuthentication,)
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -463,6 +480,7 @@ class ServiceView(viewsets.ModelViewSet):
     """
 
     serializer_class = ServiceSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -479,6 +497,7 @@ class PrivateServiceView(viewsets.ModelViewSet):
     """
 
     serializer_class = ServiceSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -538,6 +557,7 @@ class ActivateAccountView(APIView):
 class ChangePasswordAccountView(APIView):
 
     permission_classes = [IsAuthenticated]
+    authentication_classes = (DurinTokenAuthentication,)
 
     def get(self, request):
         """
@@ -577,6 +597,7 @@ class ChangePasswordAccountView(APIView):
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordEmailRequestSerializer
+    
 
     def get(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -774,7 +795,7 @@ class DeleteProjectReview(viewsets.ModelViewSet):
     """
 
     authentication_classes = [
-        TokenAuthentication,
+        TokenAuthentication, DurinTokenAuthentication
     ]
     permissions_classes = IsAuthenticated  # [IsAuthenticated and IsOwner]
     queryset = ProjectPhoto.objects.all()

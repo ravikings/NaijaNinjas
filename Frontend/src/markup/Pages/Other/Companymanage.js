@@ -12,7 +12,7 @@ import url from "../../../utils/baseUrl";
 import swal from "sweetalert";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 function Companymanage() {
-  let token = `Bearer ` + localStorage.getItem("access_token");
+  let token = `Token ` + localStorage.getItem("access_token");
   const [company, setCompany] = useState(false);
   const [totalCount, setTotalCount] = useState(null);
   const [activePage, SetActivePage] = useState(1);

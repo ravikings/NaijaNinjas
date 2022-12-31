@@ -13,6 +13,7 @@ const initialState = {
   accessToken: null,
   isVerified: false,
   gettingToken: true,
+  checkRunner: false,
 }
 
 function reducer(state = initialState, action) {
@@ -121,6 +122,21 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         loading: true,
+      }
+    case authActionTypes.VERIFY_RUNNER:
+      console.log("redux auth is called");
+      const checkRunner = localStorage.getItem("checker");
+      console.log("redux auth is called 111", checkRunner);
+      if (checkRunner) {
+        return {
+          ...state,
+          checkRunner: true,
+        }
+      } else {
+        return {
+          ...state,
+          checkRunner: false,
+        }
       }
     case authActionTypes.GET_CURRENT_SUCCESS:
       return {

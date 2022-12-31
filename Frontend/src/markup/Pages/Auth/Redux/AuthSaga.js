@@ -10,8 +10,10 @@ import { authActionTypes } from "./AuthActions";
 import { toast } from "react-toastify";
 import createRequest from "../../../../utils/axios";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
 
 export function* verify(token) {
+
   yield put({ type: authActionTypes.VERIFYING_TOKEN });
   try {
     const tokens = localStorage.getItem("access_token");
@@ -19,8 +21,11 @@ export function* verify(token) {
     if (mfa) {
       yield createRequest().post("/api/v1/mfa/auth/verify/", tokens)
         .then((res) => {
+          console.log("checking data");
+          console.log(res.data)
           localStorage.setItem("userID", res?.data?.pk);
           localStorage.setItem("userData", res?.data);
+          localStorage.setItem("checker", res?.data?.is_a_runner)
         });
       yield put({
         type: authActionTypes.LOGIN_SUCCESS,
@@ -30,19 +35,22 @@ export function* verify(token) {
         type: authActionTypes.VERIFY_TOKEN_SUCCESS,
       });
     } else {
-      yield createRequest().get("/api/auth/v1.0/apiaccess/", tokens);
+      yield createRequest().get("/api/auth/v1.0/apiaccess/", tokens)
       yield put({
         type: authActionTypes.VERIFY_TOKEN_SUCCESS,
         accessToken: tokens,
       });
-    };
+      yield put({
+        type: authActionTypes.VERIFY_RUNNER,
+      });
+    }
 
   } catch (e) {
     yield put({ type: authActionTypes.VERIFY_TOKEN_FAILED });
-    localStorage.removeItem("userID");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("userData");
-    localStorage.removeItem("mfa");
+    // localStorage.removeItem("userID");
+    // localStorage.removeItem("access_token");
+    // localStorage.removeItem("userData");
+    // localStorage.removeItem("mfa");
   }
 }
 
@@ -144,11 +152,17 @@ export function* logout({ handleClose }) {
   try {
     console.log("logging out")
     const id = localStorage.getItem("userID");
+    const mfa = localStorage.getItem("mfa");
     // yield createRequest().post("/dj-rest-auth/logout/");
-    yield createRequest().post("/api/auth/v1.0/logout/");
+    if (!mfa) {
+      yield createRequest().post("/api/auth/v1.0/logout/");
+    }
     localStorage.removeItem('access_token');
-    //yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
+    yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
     localStorage.removeItem('userID');
+    localStorage.removeItem('mfa');
+    localStorage.removeItem('checker');
+    localStorage.removeItem('userData');
     yield call(handleClose);
     // yield call(getCurrentUser);
     Cookies.remove("access_token", { path: "/" });
@@ -156,10 +170,14 @@ export function* logout({ handleClose }) {
     yield put({ type: authActionTypes.LOGOUT_SUCCESS });
   } catch (e) {
     console.log(e.response.data);
+    const id = localStorage.getItem("userID");
+    yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
     //toast.error("Logout Failed");
     localStorage.removeItem('access_token');
     localStorage.removeItem('userID');
     localStorage.removeItem('userData');
+    localStorage.removeItem('mfa');
+    localStorage.removeItem('checker');
     yield call(handleClose);
     Cookies.remove("access_token", { path: "/" });
     //Cookies.remove("refresh_token", { path: "/" });

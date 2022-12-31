@@ -20,7 +20,7 @@ function UserServices() {
   const history = useHistory()
   const axiosPrivate = useAxiosPrivate()
   const { currentUser } = useSelector((state) => state.authReducer)
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
 
   const allData = () => {
