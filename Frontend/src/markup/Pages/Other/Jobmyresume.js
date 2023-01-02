@@ -76,8 +76,9 @@ function Jobmyresume() {
 
   const getUserDetails = () => {
     if (currentUser) {
+      const pk = localStorage.getItem("userID");
       createRequest()
-        .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
+        .get(`/api/v1/account/user-profile/${pk}/`)
         .then(({ data }) => {
           setUserDetails(data);
         })

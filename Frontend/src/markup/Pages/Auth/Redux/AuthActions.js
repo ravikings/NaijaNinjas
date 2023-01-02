@@ -34,6 +34,7 @@ export const authActionTypes = {
   GET_USER_STATUS_FAILED: "loan-agents/auth/get_user_status_failed",
 
   LOGOUT_SUCCESS: "loan-agents/auth/logout_success",
+  VERIFY_RUNNER: "loan-agents/user/isRunner/success",
 };
 
 export function loginAction(history, loginDetails) {

@@ -58,8 +58,10 @@ import ScrollToTop from "./Element/ScrollToTop"
 import MakeOfferPage from "./Pages/MakeOffer/MakeOfferPage"
 import MessagesPage from "./Pages/Messages/MessagesPage"
 import ForgotPassword from "./Pages/Auth/Forgot-password"
+import MfaLogin from "./Pages/Auth/MFA-login"
 import ResetPassword from "./Pages/Auth/Reset-password"
 import CompanyManageBids from "./Pages/Other/CompanyManageBids"
+import CompanyManageOrders from "./Pages/Other/CompanyManageOrders"
 import MakeOfferTaskPage from "./Pages/MakeOffer/MakeOfferTask"
 import Header from "./Layout/Header"
 import Search from "./Pages/Search"
@@ -125,11 +127,6 @@ class Markup extends Component {
               path="/jobs-my-resume"
               exact
               component={Jobmyresume}
-            />
-            <PrivateRoute
-              path="/jobs-applied-job"
-              exact
-              component={Jobsappliedjob}
             />
             <Route path="/jobs-alerts" exact component={Jobsalert} />
             <PrivateRoute
@@ -199,12 +196,17 @@ class Markup extends Component {
               exact
               component={MakeOfferTaskPage}
             />
-            <Route
+            <PrivateRoute
               path="/manage-bids/:id/:title"
               exact
               component={CompanyManageBids}
             />
-            <Route
+            <PrivateRoute
+              path="/order-page"
+              exact
+              component={CompanyManageOrders}
+            />
+            <PrivateRoute
               path="/manage-bids/:id/:title/confirm/:bidId"
               exact
               component={ConfirmBid}
@@ -247,7 +249,11 @@ class Markup extends Component {
               exact
               component={Categoryskilljobs}
             />
-
+            <Route
+              path="/mfa-login"
+              exact
+              component={MfaLogin}
+            />
             <Route path="/portfolio-grid-2" exact component={Portfoliogrid2} />
             <ProtectedRoute path="/login" component={LoginPage} />
 

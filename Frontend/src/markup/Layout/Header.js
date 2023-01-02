@@ -129,9 +129,9 @@ function Header() {
                   </Link>
                 </div>
                 <ul className="nav navbar-nav">
-                  <li className="">
+                  {/* <li className="">
                     <Link to={"/"}>Home</Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link to={"/browse-job-filter-list"}>tasks</Link>
                   </li>

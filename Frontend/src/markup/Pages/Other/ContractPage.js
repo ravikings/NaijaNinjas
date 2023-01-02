@@ -24,7 +24,7 @@ function ContractPage(props) {
   const [des, setDes] = useState("");
   const [title, setTitle] = useState("");
   const [payChecked, setPayChecked] = useState(true);
-  let token = `Bearer ` + localStorage.getItem("access_token");
+  let token = `Token ` + localStorage.getItem("access_token");
   let useId = localStorage.getItem("userID");
 
   const handleChange = (event) => {
@@ -295,8 +295,8 @@ function ContractPage(props) {
                       handleChange(e);
                     }}
                     inputProps={{ "aria-label": "controlled" }}
-                    // id="checkbox"
-                    // color="#2e55fa"
+                  // id="checkbox"
+                  // color="#2e55fa"
                   />
                 }
                 label={checkLab()}
@@ -306,7 +306,7 @@ function ContractPage(props) {
             <button
               type="submit"
               className="site-button m-b30"
-              // disabled={!payChecked}
+            // disabled={!payChecked}
             >
               Make Payment
             </button>

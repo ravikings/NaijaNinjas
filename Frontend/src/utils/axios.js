@@ -2,7 +2,8 @@ import axios from "axios"
 import Cookies from "js-cookie"
 
 export const BASE_URL =
-  "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"
+  //"https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"
+  "http://localhost:8000"
 // export const BASE_URL = "/"
 
 export default function createRequest() {
@@ -10,8 +11,9 @@ export default function createRequest() {
     "Content-Type": "application/json",
     Accept: "application/json",
   }
-  if (Cookies.get("access_token")) {
-    headers.Authorization = `Bearer ${Cookies.get("access_token")}`
+  const token = localStorage.getItem("access_token");
+  if (token) {
+    headers.Authorization = `Token ${token}`
   }
   return axios.create({
     baseURL: BASE_URL,
@@ -28,8 +30,9 @@ export const createRequestWithoutBase = (url) => {
     "Content-Type": "application/json",
     Accept: "application/json",
   }
-  if (Cookies.get("access_token")) {
-    headers.Authorization = `Bearer ${Cookies.get("access_token")}`
+  const token = localStorage.getItem("access_token");
+  if (token) {
+    headers.Authorization = `Token ${token}`
   }
   return axios.create({
     baseURL: url,
@@ -62,7 +65,7 @@ export const axiosPrivateImage = axios.create({
   headers: {
     "Content-Type":
       "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
-    Authorization: `Bearer ${Cookies.get("access_token")}`,
+    Authorization: `Token ${localStorage.getItem("access_token")}`,
   },
   withCredentials: true,
   xsrfCookieName: "csrftoken",
@@ -74,7 +77,7 @@ export const axiosPrivate = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${Cookies.get("access_token")}`,
+    Authorization: `Token ${localStorage.getItem("access_token")}`,
   },
   withCredentials: true,
   xsrfCookieName: "csrftoken",

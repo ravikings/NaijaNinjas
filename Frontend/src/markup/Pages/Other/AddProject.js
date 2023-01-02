@@ -20,7 +20,7 @@ const postBlog = [
 
 function AddProject() {
   const history = useHistory()
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [detailsValue, setDetailsValue] = useState()
   const [attachFile, setAttachFile] = useState([])

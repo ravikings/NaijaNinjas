@@ -5,7 +5,8 @@ import useAuth from "../hooks/useAuth";
 
 const PrivateRoute = ({ component: Component, path, checkRunner }) => {
   const auth = useAuth();
-  const refresh = Cookies.get("refresh_token");
+  //const refresh = Cookies.get("refresh_token");
+  const refresh = localStorage.getItem("access_token")
 
   if (!refresh) {
     return <Redirect to="/login" />;

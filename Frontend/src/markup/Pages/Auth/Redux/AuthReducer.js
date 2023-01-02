@@ -13,6 +13,7 @@ const initialState = {
   accessToken: null,
   isVerified: false,
   gettingToken: true,
+  checkRunner: false,
 }
 
 function reducer(state = initialState, action) {
@@ -122,6 +123,25 @@ function reducer(state = initialState, action) {
         ...state,
         loading: true,
       }
+    case authActionTypes.VERIFY_RUNNER:
+      console.log("redux auth is called 111");
+
+      // Retrieve the object from storage
+      const retrievedObject = localStorage.getItem('userData');
+
+      // console.log('retrievedObject: ', JSON.parse(retrievedObject));
+      // console.log("redux auth is called");
+      // // if (checkRunner) {
+      // //   return {
+      // //     ...state,
+      // //     checkRunner: true,
+      // //   }
+      // // } else {
+      return {
+        ...state,
+        userProfile: JSON.parse(retrievedObject),
+      }
+
     case authActionTypes.GET_CURRENT_SUCCESS:
       return {
         ...state,

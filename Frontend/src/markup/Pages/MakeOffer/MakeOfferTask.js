@@ -3,7 +3,7 @@ import Header from "../../Layout/Header"
 import Footer from "../../Layout/Footer"
 import Avatar from "@material-ui/core/Avatar"
 import { Box, Divider, Grid, Hidden, Modal } from "@material-ui/core"
-
+import { toast } from "react-toastify"
 import { useStyles } from "./MakeOfferStyles"
 import Ratings from "./components/Ratings"
 import HourlyRate from "./components/HourlyRate"
@@ -25,6 +25,7 @@ import ShortImages from "./components/ShortImageGallery"
 import RegisterPageModal from "../Auth/RegisterPageModal"
 import Proposals from "../components/Proposals"
 import Hired from "../components/Hired"
+import { useSelector } from "react-redux"
 
 var bnr = require("../../../images/banner/bnr5.png")
 
@@ -92,6 +93,28 @@ function MakeOfferPage() {
   useEffect(() => {
     getRelatedTasks()
   }, [data])
+
+  const { checkRunner, currentUser, userProfile } = useSelector((state) => state.authReducer)
+  const showbanner = () => {
+
+    toast.info('Only professional are allow to bid, singup to be a pro and have unlimited access to bid on millions of task available.')
+  };
+
+  const trackerLogin = () => {
+    if (currentUser == null) {
+
+      return (<Link
+        to={`/login`}
+        className="site-button"
+      >
+        Login to bid
+      </Link>)
+    }
+    return (
+      <button className="site-button btn-block" onClick={() => showbanner()}>
+        Show Interest
+      </button>)
+  }
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -349,12 +372,25 @@ function MakeOfferPage() {
                     </h3>
                     {/* <span>Project type: {data?.category}</span> */}
                     <div>
-                      <Link
-                        to={`/send-contract/${data?.id}`}
-                        className="site-button"
-                      >
-                        Submit a Proposal
-                      </Link>
+
+                      {/* {currentUser?.length ? "" :
+                        <Link
+                          to={`/login`}
+                          className="site-button"
+                        >
+                          Login to bid
+                        </Link>
+                      } */}
+
+                      {userProfile?.is_a_runner ? (
+                        <Link
+                          to={`/send-contract/${data?.id}`}
+                          className="site-button"
+                        >
+                          Submit a Proposal
+                        </Link>) : trackerLogin()}
+
+
                       {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
                     </div>
                   </div>

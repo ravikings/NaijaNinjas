@@ -72,8 +72,9 @@ function Jobprofile() {
 
   const getUserDetails = () => {
     setLoadingData(true)
+    const pk = localStorage.getItem("userID");
     createRequest()
-      .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
+      .get(`/api/v1/account/user-profile/${pk}/`)
       .then(({ data }) => {
         setUserDetails(data)
         setLoadingData(false)
@@ -85,8 +86,9 @@ function Jobprofile() {
   }
 
   const editUserDetails = (values) => {
+    const pk = localStorage.getItem("userID");
     axiosPrivate
-      .patch(`/api/v1/account/user-profile/${userDetails?.id}/`, values)
+      .patch(`/api/v1/account/user-profile/${pk}/`, values)
       .then(({ data }) => {
         toast.success("Profile updated successfully")
         getUserDetails()

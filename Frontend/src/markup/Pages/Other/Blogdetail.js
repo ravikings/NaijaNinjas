@@ -24,7 +24,7 @@ function Blogdetail() {
   const [loading, setLoading] = useState(false)
   let { id, title } = useParams()
 
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [showIcon, setShowIcon] = useState(true)
   const [key, setkey] = useState([1, 2])

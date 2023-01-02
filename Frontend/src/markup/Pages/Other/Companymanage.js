@@ -12,7 +12,7 @@ import url from "../../../utils/baseUrl";
 import swal from "sweetalert";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 function Companymanage() {
-  let token = `Bearer ` + localStorage.getItem("access_token");
+  let token = `Token ` + localStorage.getItem("access_token");
   const [company, setCompany] = useState(false);
   const [totalCount, setTotalCount] = useState(null);
   const [activePage, SetActivePage] = useState(1);
@@ -26,7 +26,7 @@ function Companymanage() {
   const allData = (page = 1) => {
     setLoading(true);
     createRequest()
-      .get(`api/v1/task/task-owner?user_id=${userId}&page=${page}`)
+      .get(`api/v1/task/task-owner/?user_id=${userId}&page=${page}`)
       .then((res) => {
         setTotalCount(res?.data?.count);
         setData(res.data.results);
@@ -191,6 +191,9 @@ function Companymanage() {
                                   >
                                     <i className="ti-trash"></i>
                                   </Link>
+                                </td>
+                                <td className="application text-primary">
+                                  {e?.total_bids}{" "}
                                 </td>
                               </tr>
                             ))}

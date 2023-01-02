@@ -15,7 +15,7 @@ const useAxiosPrivateImage = () => {
     const requestIntercept = axiosPrivateImage.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
+          config.headers["Authorization"] = `Token ${accessToken}`;
         }
         console.log(config.headers["Authorization"]);
         return config;
@@ -44,7 +44,7 @@ const useAxiosPrivateImage = () => {
             payload: newAccessToken,
           });
           console.log("NewAccessToken", newAccessToken);
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          prevRequest.headers["Authorization"] = `Token ${newAccessToken}`;
           return axiosPrivateImage(prevRequest);
         }
         return Promise.reject(error);

@@ -18,10 +18,15 @@ const Dashboard = () => {
   const { currentUser, userProfile, loading } = useSelector(
     (state) => state.authReducer
   )
+
+  console.log("getting user")
+  console.log(currentUser)
+  console.log("getting user")
   const history = useHistory()
   const dispatch = useDispatch()
   const [userDetails, setUserDetails] = useState(null)
   console.log(userProfile)
+  console.log("getting user userProfile")
   if (userProfile && !userProfile.is_a_runner) {
     history.push("/jobs-profile")
   }
@@ -40,8 +45,9 @@ const Dashboard = () => {
     }
   }, [userDetails])
   const getUserDetails = () => {
+    const pk = localStorage.getItem("userID");
     createRequest()
-      .get(`/api/v1/account/user-profile/${currentUser?.pk}/`)
+      .get(`/api/v1/account/user-profile/${pk}/`)
       .then(({ data }) => {
         console.log("user data api", data)
         setUserDetails(data)

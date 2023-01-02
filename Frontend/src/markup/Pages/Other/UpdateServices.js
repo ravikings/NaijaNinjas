@@ -16,7 +16,7 @@ function UpdateServices() {
   var { id } = useParams()
   const history = useHistory()
 
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [data, setData] = useState([])
   const [attachFile, setAttachFile] = useState(null)

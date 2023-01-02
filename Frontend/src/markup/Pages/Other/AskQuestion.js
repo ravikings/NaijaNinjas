@@ -1,9 +1,9 @@
-import React,{useState} from 'react';
-import {Link,useHistory} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
-import {Form}  from 'react-bootstrap';  
-import ReactQuill from 'react-quill'; 
+import { Form } from 'react-bootstrap';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import url from '../../../utils/baseUrl';
@@ -15,26 +15,26 @@ const postBlog = [
 	{ title: 'Branch Credit Manager', },
 ]
 
-function AskQuestion (){
+function AskQuestion() {
 	const history = useHistory();
 
-	let token = `Bearer ` + localStorage.getItem("access_token");
-	
-	let userId = parseInt(localStorage.getItem("userID"));
-	const [detailsValue,setDetailsValue]= useState();
-	const [attachFile,setAttachFile]= useState(null);
+	let token = `Token ` + localStorage.getItem("access_token");
 
-	
-		
-// upload image end	
-	const SubmitQuestion = (e)=>{
+	let userId = parseInt(localStorage.getItem("userID"));
+	const [detailsValue, setDetailsValue] = useState();
+	const [attachFile, setAttachFile] = useState(null);
+
+
+
+	// upload image end	
+	const SubmitQuestion = (e) => {
 		e.preventDefault();
 		console.log(token)
-		console.log("woow"+e.target[0].value);
-		console.log("woow"+e.target[1].value);
-		console.log("woow"+e.target[2].value);
-	
-		
+		console.log("woow" + e.target[0].value);
+		console.log("woow" + e.target[1].value);
+		console.log("woow" + e.target[2].value);
+
+
 		var formdata = new FormData();
 		formdata.append("title", e.target[0].value);
 		formdata.append("body", detailsValue);
@@ -47,27 +47,27 @@ function AskQuestion (){
 			url: `${url.baseURL}forum/list/`,
 			data: formdata,
 			headers: {
-	  
-			  Authorization: token,
-	  
+
+				Authorization: token,
+
 			},
-		  })
+		})
 			.then((response) => {
-			  console.log("the response is ", response)
-			  
-			  if(response.statusText =="Created"){
-				history.push(`/blog-details/${response.data.id}/${response.data.title}`) 
-				
-				
-			  }
-			  //console.log(response.data);
+				console.log("the response is ", response)
+
+				if (response.statusText == "Created") {
+					history.push(`/blog-details/${response.data.id}/${response.data.title}`)
+
+
+				}
+				//console.log(response.data);
 			}, (error) => {
-			  console.log(error);
-			
+				console.log(error);
+
 			});
 
 	}
-	return(
+	return (
 		<>
 			<Header2 />
 			<div className="page-content bg-white">
@@ -75,89 +75,89 @@ function AskQuestion (){
 					<div className="section-full bg-white p-t50 p-b20">
 						<div className="container">
 							<div className="row">
-							<ProfileSidebar active={"question"} />
+								<ProfileSidebar active={"question"} />
 								<div className="col-xl-9 col-lg-8 m-b30 browse-job">
-								<div className="job-bx-title  clearfix">
+									<div className="job-bx-title  clearfix">
 										<h5 className="font-weight-700 pull-left text-uppercase">Ask a Question</h5>
 										<div className="float-right">
-													<Link to="all-questions" className="btn btn-primary">Previous Question</Link>
-													</div>
+											<Link to="all-questions" className="btn btn-primary">Previous Question</Link>
+										</div>
 									</div>
-								<form onSubmit={SubmitQuestion} enctype="multipart/form-data">
-								
-											<div className="row">
-												<div className="col-lg-12 col-md-12">
-													<div className="form-group">
-														<label>Question Title</label>
-														<input type="text" 
+									<form onSubmit={SubmitQuestion} enctype="multipart/form-data">
+
+										<div className="row">
+											<div className="col-lg-12 col-md-12">
+												<div className="form-group">
+													<label>Question Title</label>
+													<input type="text"
 														name="QuestionTitle"
 														className="form-control" placeholder="Enter Job Title" />
-													</div>
-													
 												</div>
-												
-												<div className="col-lg-12 col-md-12">
-													<div className="form-group">
-														<label>Question Tags</label>
-														<input type="text" 
+
+											</div>
+
+											<div className="col-lg-12 col-md-12">
+												<div className="form-group">
+													<label>Question Tags</label>
+													<input type="text"
 														name="tag"
 														className="form-control tags_input" />
-														
-													</div>
+
 												</div>
-												<div className="col-lg-12 col-md-12">
-													<div className="form-group">
-														<label>Question Category</label>
-														<Form.Control as="select" custom 
+											</div>
+											<div className="col-lg-12 col-md-12">
+												<div className="form-group">
+													<label>Question Category</label>
+													<Form.Control as="select" custom
 														name="category"
 														className="custom-select">
-															<option>Communcation</option>
-															<option>Company</option>
-															<option>Language</option>
-															<option>Freelance</option>
-														</Form.Control>
-													</div>
+														<option>Communcation</option>
+														<option>Company</option>
+														<option>Language</option>
+														<option>Freelance</option>
+													</Form.Control>
 												</div>
-										
-												<div className="col-lg-12 col-md-12">
-													<div className="form-group">
-														<label>Details:</label>
-														<ReactQuill value={detailsValue || ''}
-                  onChange={(e)=>{setDetailsValue(e)}} style={{height:'200px', paddingBottom:'70px'}} />
-									
- 
-													</div>
-												</div>
-												
-											
-												
-												<div className="col-lg-12 col-md-12">
-                          <div className="form-group">
-                            <label>Upload File</label>
-                            <div className="custom-file  p-5">
-                              <p className="m-a0">
-                                <i className="fa fa-upload"></i>
-                                Upload File
-                              </p> 
-                              <input
-                                type="file"
-                                className="site-button form-control"
-                                id="customFile"
-                                onChange={(e)=>setAttachFile(e.target.files[0])}
-                              />
-                            </div>
-                          </div>
-                        </div>
 											</div>
-											<button type="submit" className="site-button m-b30">Publish</button>
-										</form>
+
+											<div className="col-lg-12 col-md-12">
+												<div className="form-group">
+													<label>Details:</label>
+													<ReactQuill value={detailsValue || ''}
+														onChange={(e) => { setDetailsValue(e) }} style={{ height: '200px', paddingBottom: '70px' }} />
+
+
+												</div>
+											</div>
+
+
+
+											<div className="col-lg-12 col-md-12">
+												<div className="form-group">
+													<label>Upload File</label>
+													<div className="custom-file  p-5">
+														<p className="m-a0">
+															<i className="fa fa-upload"></i>
+															Upload File
+														</p>
+														<input
+															type="file"
+															className="site-button form-control"
+															id="customFile"
+															onChange={(e) => setAttachFile(e.target.files[0])}
+														/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<button type="submit" className="site-button m-b30">Publish</button>
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<Footer />	
+			<Footer />
 		</>
 	)
 }

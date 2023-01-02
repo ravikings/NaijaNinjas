@@ -24,7 +24,7 @@ function SendContract() {
   const dispatch = useDispatch()
   const location = useLocation()
   const auth = useAuth()
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   var userId = parseInt(localStorage.getItem("userID"))
   const [freelancerAmount, setFreelancerAmount] = useState(0)
   const [gigxFee, setGigxFee] = useState(0)

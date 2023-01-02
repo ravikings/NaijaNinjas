@@ -62,7 +62,7 @@ function CompanyManageBids() {
   useEffect(() => {
     allData()
   }, [])
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   const displayPaymentPage = (item) => {
     //​ /api​/v1​/task​/approve-bid​/?id=${fid}&&task_id=${taskId} Method=get/post
     // setLoading(true)
@@ -147,115 +147,115 @@ function CompanyManageBids() {
                       {data.length === 0
                         ? "Your task have no bids at the moment, kindly check by soon, Thank you!"
                         : data.map((item, index) => (
-                            <li key={index}>
-                              <div className="post-bx">
-                                <div className="d-flex m-b30">
-                                  <div className="job-post-company">
-                                    <Link to={""}>
-                                      <span style={{ borderRadius: "50%" }}>
-                                        <img
-                                          alt=""
-                                          src={item.bidder_info.photo}
-                                        />
-                                      </span>
+                          <li key={index}>
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-company">
+                                  <Link to={""}>
+                                    <span style={{ borderRadius: "50%" }}>
+                                      <img
+                                        alt=""
+                                        src={item.bidder_info.photo}
+                                      />
+                                    </span>
+                                  </Link>
+                                </div>
+                                <div className="job-post-info">
+                                  <h4>
+                                    <Link
+                                      to={"#"}
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                      }}
+                                    >
+                                      {`${item.bidder_info[0].first_name} ${item.bidder_info[0].last_name}`}
                                     </Link>
-                                  </div>
-                                  <div className="job-post-info">
-                                    <h4>
-                                      <Link
-                                        to={"#"}
-                                        onClick={(e) => {
-                                          e.preventDefault()
-                                        }}
-                                      >
-                                        {`${item.bidder_info[0].first_name} ${item.bidder_info[0].last_name}`}
-                                      </Link>
-                                    </h4>
-                                    <Ratings />
-                                    <div className="mt-3">
-                                      {item.bid_approve_status ? (
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#2e55fa",
-                                            color: "white",
-                                          }}
-                                          onClick={() =>
-                                            history.push(
-                                              `/timeline/${item.task}/${item.bidder_info[0].author}`
-                                            )
-                                          }
-                                          variant="outlined"
-                                          startIcon={
-                                            <i className="fa fa-check"></i>
-                                          }
-                                        >
-                                          Show Timeline
-                                        </Button>
-                                      ) : (
-                                        <Button
-                                          style={{
-                                            backgroundColor: "#2e55fa",
-                                            color: "white",
-                                          }}
-                                          onClick={() =>
-                                            displayPaymentPage(item)
-                                          }
-                                          variant="outlined"
-                                          startIcon={
-                                            <i className="fa fa-check"></i>
-                                          }
-                                        >
-                                          Accept offer
-                                        </Button>
-                                      )}
+                                  </h4>
+                                  <Ratings />
+                                  <div className="mt-3">
+                                    {item.bid_approve_status ? (
                                       <Button
                                         style={{
-                                          backgroundColor: "#333333",
+                                          backgroundColor: "#2e55fa",
                                           color: "white",
                                         }}
-                                        className="ml-2"
+                                        onClick={() =>
+                                          history.push(
+                                            `/timeline/${item.task}/${item.bidder_info[0].author}`
+                                          )
+                                        }
                                         variant="outlined"
                                         startIcon={
-                                          <i className="fa fa-envelope"></i>
+                                          <i className="fa fa-check"></i>
                                         }
                                       >
-                                        Send message
+                                        Show Timeline
                                       </Button>
-                                      <IconButton
-                                        className="ml-2"
+                                    ) : (
+                                      <Button
                                         style={{
-                                          backgroundColor: "#eeeeee",
-                                          borderRadius: "10px",
-                                          height: "40px",
-                                          width: "40px",
+                                          backgroundColor: "#2e55fa",
+                                          color: "white",
                                         }}
-                                        aria-label="delete"
-                                        size="large"
+                                        onClick={() =>
+                                          displayPaymentPage(item)
+                                        }
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-check"></i>
+                                        }
                                       >
-                                        <i className="fa fa-trash"></i>
-                                      </IconButton>
-                                    </div>
-                                  </div>
-                                  <div className="rates">
-                                    <ul class="dashboard-task-info bid-info">
-                                      <li>
-                                        <strong>${item.offer}</strong>
-                                        <span>Fixed Price</span>
-                                      </li>
-                                      <li>
-                                        <strong>
-                                          {item.delivery_date
-                                            ? item.delivery_date
-                                            : "0"}
-                                        </strong>
-                                        <span>Delivery Time</span>
-                                      </li>
-                                    </ul>
+                                        Accept offer
+                                      </Button>
+                                    )}
+                                    <Button
+                                      style={{
+                                        backgroundColor: "#333333",
+                                        color: "white",
+                                      }}
+                                      className="ml-2"
+                                      variant="outlined"
+                                      startIcon={
+                                        <i className="fa fa-envelope"></i>
+                                      }
+                                    >
+                                      Send message
+                                    </Button>
+                                    <IconButton
+                                      className="ml-2"
+                                      style={{
+                                        backgroundColor: "#eeeeee",
+                                        borderRadius: "10px",
+                                        height: "40px",
+                                        width: "40px",
+                                      }}
+                                      aria-label="delete"
+                                      size="large"
+                                    >
+                                      <i className="fa fa-trash"></i>
+                                    </IconButton>
                                   </div>
                                 </div>
+                                <div className="rates">
+                                  <ul class="dashboard-task-info bid-info">
+                                    <li>
+                                      <strong>${item.offer}</strong>
+                                      <span>Fixed Price</span>
+                                    </li>
+                                    <li>
+                                      <strong>
+                                        {item.delivery_date
+                                          ? item.delivery_date
+                                          : "0"}
+                                      </strong>
+                                      <span>Delivery Time</span>
+                                    </li>
+                                  </ul>
+                                </div>
                               </div>
-                            </li>
-                          ))}
+                            </div>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </div>

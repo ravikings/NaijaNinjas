@@ -1,16 +1,40 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Header2 from "../../Layout/Header2";
 import Footer from "../../Layout/Footer";
 import ProfileSidebar from "../../Element/Profilesidebar";
+import createRequest from "../../../utils/axios";
+import React, { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import ClipLoader from "react-spinners/ClipLoader"
 
-const postBlog = [
-  { title: "PHP Web Developer" },
-  { title: "Software Developer" },
-  { title: "Branch Credit Manager" },
-];
 
 function Jobsappliedjob() {
+
+  const [taskAssigned, settaskAssigned] = useState([])
+  const [loading, setLoading] = React.useState(false)
+  const { userProfile, userStatus, currentUser } = useSelector(
+    (state) => state.authReducer
+  )
+
+  const getAssignTask = () => {
+
+    const id = localStorage.getItem("userID");
+    setLoading(true)
+    createRequest().get(
+      `/api/v1/task/get-assigned-task/${id}`
+    ).then((res) => {
+      settaskAssigned(res.data);
+      setLoading(false)
+    }).catch((e) => {
+      settaskAssigned("");
+      console.log(e)
+    })
+  }
+
+  useEffect(() => {
+    getAssignTask()
+  }, [])
+
   return (
     <>
       <Header2 />
@@ -23,7 +47,7 @@ function Jobsappliedjob() {
                 <div className="col-xl-9 col-lg-8 m-b30 browse-job">
                   <div className="job-bx-title  clearfix">
                     <h5 className="font-weight-700 pull-left text-uppercase">
-                      2269 Jobs Found
+                      {`${taskAssigned.length} Task Assinged`}
                     </h5>
                     <div className="float-right">
                       <span className="select-title">Sort by freshness</span>
@@ -36,25 +60,25 @@ function Jobsappliedjob() {
                     </div>
                   </div>
                   <ul className="post-job-bx browse-job">
-                    {postBlog.map((item, index) => (
+                    {loading ? (
+                      <div className="loader">
+                        <ClipLoader color={"#2e55fa"} loading={true} size={150} />
+                      </div>
+                    ) : taskAssigned.length > 0 ? taskAssigned.map((item, index) => (
                       <li key={index}>
                         <div className="post-bx">
                           <div className="job-post-info m-a0">
                             <h4>
-                              <Link to={"/job-detail"}>{item.title}</Link>
+                              <Link to={"/timeline/40/41"}>{item?.task?.title}</Link>
                             </h4>
                             <ul>
                               <li>
                                 <Link to={"/company-profile"}>
-                                  @company-name
+                                  {`${item?.payment_author?.first_name} ${item?.payment_author.username}`}
                                 </Link>
                               </li>
                               <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-money"></i> 25,000
+                                <i className="fa fa-money"></i> {item?.offer}
                               </li>
                             </ul>
                             <div className="job-time m-t15 m-b10">
@@ -74,21 +98,27 @@ function Jobsappliedjob() {
                             <div className="posted-info clearfix">
                               <p className="m-tb0 text-primary float-left">
                                 <span className="text-black m-r10">
-                                  Posted:
+                                  Delivery Date:
                                 </span>{" "}
-                                2 day ago
+                                {item?.delivery_date}
                               </p>
                               <Link
-                                to={"/jobs-my-resume"}
+                                to={"/timeline/40/41"}
                                 className="site-button button-sm float-right"
                               >
-                                Apply Job
+                                Update Progress
                               </Link>
                             </div>
                           </div>
                         </div>
                       </li>
-                    ))}
+                    )) : (
+                      <div className="col-lg-12 col-sm-12 col-12 m-b20">
+                        <div className="alert alert-secondary" role="alert">
+                          No Services Found
+                        </div>
+                      </div>
+                    )}
                   </ul>
                   <div className="pagination-bx m-t30">
                     <ul className="pagination">

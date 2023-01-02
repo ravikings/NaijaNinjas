@@ -24,7 +24,7 @@ function UpdateProject() {
   var { id } = useParams()
   const history = useHistory()
   const axiosPriv = useAxiosPrivate()
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [title, setTitle] = useState("")
   const [detailsValue, setDetailsValue] = useState("")

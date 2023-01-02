@@ -13,7 +13,7 @@ import swal from "sweetalert"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import { useSelector } from "react-redux"
 function LinkedAccount() {
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   const { currentUser } = useSelector((state) => state.authReducer)
   const [company, setCompany] = useState(false)
   const [totalCount, setTotalCount] = useState(null)
@@ -28,7 +28,7 @@ function LinkedAccount() {
   const allData = (page = 1) => {
     setLoading(true)
     createRequest()
-      .get(`api/v1/task/task-owner?user_id=30&page=${page}`)
+      .get(`api/v1/task/task-owner/?user_id=30&page=${page}`)
       .then((res) => {
         setTotalCount(res?.data?.count)
         setData(res.data.results)

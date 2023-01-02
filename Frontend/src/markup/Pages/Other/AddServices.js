@@ -11,11 +11,12 @@ import ClipLoader from "react-spinners/ClipLoader"
 import url from "../../../utils/baseUrl"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import { useSelector } from "react-redux"
+import { toast } from "react-toastify"
 
 function AddServices() {
   const history = useHistory()
 
-  let token = `Bearer ` + localStorage.getItem("access_token")
+  let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
   const [detailsValue, setDetailsValue] = useState()
   const [attachFile, setAttachFile] = useState(null)
@@ -25,8 +26,7 @@ function AddServices() {
   const [tag, setTag] = useState("")
   const [deliveryMethod, setDeliveryMethod] = useState("")
   const [loading, setLoading] = useState(false)
-  const { currentUser } = useSelector((state) => state.authReducer)
-  console.log(currentUser)
+  const { userProfile } = useSelector((state) => state.authReducer)
 
   const axiosPrivate = useAxiosPrivate()
 
@@ -43,7 +43,7 @@ function AddServices() {
     if (attachFile != null) {
       formdata.append("image", attachFile)
     }
-    formdata.append("author", currentUser?.pk)
+    formdata.append("author", userProfile?.author)
 
     //  axios({
     //    method: "POST",
@@ -63,6 +63,8 @@ function AddServices() {
           }
         },
         (error) => {
+          setLoading(false)
+          toast.error("An error occured" || error)
           console.log(error)
         }
       )

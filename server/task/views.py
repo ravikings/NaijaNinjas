@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.exceptions import PermissionDenied
+from django.http import FileResponse
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -26,17 +28,22 @@ from accounts.views import get_client_ip
 from accounts.models import IpModel
 from rest_framework import status
 from django.db import transaction
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.views import APIView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import api_view, permission_classes
 from accounts.permissions import CanApproveTask
+from rest_framework.authentication import TokenAuthentication
+from durin.auth import (
+    TokenAuthentication as DurinTokenAuthentication,
+    CachedTokenAuthentication,
+)
 
 # Create your views here.
 
 
-@method_decorator(cache_page(60 * 30), name="dispatch")
+#@method_decorator(cache_page(60 * 30), name="dispatch")
 class TaskView(viewsets.ModelViewSet):
 
     """
@@ -47,16 +54,19 @@ class TaskView(viewsets.ModelViewSet):
     # .annotate(num_views=Count('views')) \
     #             .order_by('-num_views', '-created',)
     serializer_class = TaskSerializer
+    authentication_classes = (DurinTokenAuthentication,)
 
     def retrieve(self, request, pk=None):
-        ip = get_client_ip(request)
+        
         task = Task.objects.get(id=pk)
-        history_tracker(request, task)
-        if IpModel.objects.filter(ip=ip).exists():
-            task.views.add(IpModel.objects.get(ip=ip))
-        else:
-            IpModel.objects.create(ip=ip)
-            task.views.add(IpModel.objects.get(ip=ip))
+        #TODO: Add celery to handle tracking
+        #ip = get_client_ip(request)
+        # history_tracker(request, task)
+        # if IpModel.objects.filter(ip=ip).exists():
+        #     task.views.add(IpModel.objects.get(ip=ip))
+        # else:
+        #     IpModel.objects.create(ip=ip)
+        #     task.views.add(IpModel.objects.get(ip=ip))
         serializer = TaskSerializer(task)
         return Response(serializer.data)
 
@@ -71,6 +81,7 @@ class TaskRelatedView(viewsets.ModelViewSet):
     """
 
     serializer_class = TaskSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -92,6 +103,7 @@ class TaskRelatedView(viewsets.ModelViewSet):
 class TaskOwnerView(viewsets.ModelViewSet):
 
     serializer_class = TaskWithTotalBidSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -103,6 +115,7 @@ class TaskOwnerView(viewsets.ModelViewSet):
 class ContractView(viewsets.ModelViewSet):
 
     serializer_class = ContractSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -120,6 +133,7 @@ class TaskBidderView(viewsets.ModelViewSet):
 
     # queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderprofileSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -170,6 +184,7 @@ class TaskImageAPIView(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = TaskImageSerializer
     parser_classes = (MultiPartParser, FormParser)
+    authentication_classes = (DurinTokenAuthentication,)
 
     def create(self, request, pk=None):
         property_id = request.data["task"]
@@ -197,6 +212,7 @@ class TaskApproveView(viewsets.ModelViewSet):
     # permissions_classes = [AllowAny]
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
+    authentication_classes = (DurinTokenAuthentication,)
 
     # permissions_classes = [IsAuthenticated and IsOwner]
 
@@ -231,6 +247,7 @@ class TimelineView(viewsets.ModelViewSet):
 
     queryset = Timeline.objects.all()
     serializer_class = TimelineSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def retrieve(self, request, pk=None):
@@ -246,9 +263,49 @@ class TimelineCommentView(viewsets.ModelViewSet):
     uses to add Timeline to view task activities
     """
 
-    queryset = Comment.objects.all()
+    permissions_classes = [IsOwner]  # IsAuthenticated and
+    authentication_classes = (DurinTokenAuthentication, TokenAuthentication)
+    # queryset = Comment.objects.all()
     serializer_class = TimelineCommentSerializer
-    # permissions_classes = [IsAuthenticated and IsOwner]
+
+    def retrieve(self, request, pk=None):
+
+        query = Comment.objects.get(id=pk)
+        if (
+            request.user in [query.task_timeline.author, query.task_timeline.task_owner]
+            or request.user.is_superuser
+        ):
+            serializer = TimelineSerializer(query)
+            return Response(serializer.data)
+
+        raise PermissionDenied
+
+    @action(detail=True, methods=["get", "post"])
+    def file_download(self, request, pk=None):
+        instance = Comment.objects.get(id=pk)
+        # if (
+        #     request.user
+        #     in [instance.task_timeline.author, instance.task_timeline.task_owner]
+        #     or request.user.is_superuser
+        # ):
+        file_handle = instance.attachment.open()
+        if file_handle:
+            # send file
+            response = FileResponse(file_handle, content_type="file")
+            response["Content-Length"] = instance.attachment.size
+            response["Content-Disposition"] = (
+                'attachment; filename="%s"' % instance.attachment.name
+            )
+            response['Access-Control-Expose-Headers'] = 'Content-Disposition'
+            
+
+            return response
+
+        raise PermissionDenied
+
+    def list(self, request):
+        pass
+        return Response({"Error": "Not allowed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TaskAssigned(viewsets.ModelViewSet):
@@ -257,19 +314,21 @@ class TaskAssigned(viewsets.ModelViewSet):
     uses to get assigned tasks to professionals
     """
 
-    # queryset = TaskBidder.objects.all()
+    queryset = TaskBidder.objects.all()
     serializer_class = TaskAssignedSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and Is_a_runner]
 
-    def get_queryset(self):
+    # def get_queryset(self):
 
-        return TaskBidder.objects.filter(
-            bidder_profile=self.request.user.id, bid_approve_status=True
-        ).order_by("modified")
-        # TODO Missing filter for task completed to be shown.
+    #     return TaskBidder.objects.filter(
+    #         bidder_profile=41, bid_approve_status=True
+    #     ).order_by("modified")
+        # TODO Missing filter for task completed to be shown. self.request.user.id
 
 
 @api_view(["POST"])
+@authentication_classes([DurinTokenAuthentication])
 def task_favorite(request, pk):
 
     task = TaskBookmarks.objects.filter(author=request.user.id, task=pk)
@@ -290,6 +349,7 @@ class DashboardTaskFavorite(viewsets.ModelViewSet):
     """
 
     serializer_class = TaskSerializer
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -347,6 +407,7 @@ class SearchTask(viewsets.ModelViewSet):
 
 
 @api_view(["GET", "POST"])
+@authentication_classes([DurinTokenAuthentication])
 # @permission_classes([CanApproveTask])
 def accept_bid(request):
 
@@ -392,6 +453,7 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
     queryset = TaskBidder.objects.all()
     serializer_class = TaskBidderSerializer
     permissions_classes = [IsAuthenticated and CanApproveTask]
+    authentication_classes = (DurinTokenAuthentication,)
 
     @action(
         detail=False,
@@ -441,6 +503,7 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
+@authentication_classes([DurinTokenAuthentication])
 # @permission_classes([AllowAny])
 def get_timeiline(request, task_id, task_owner):
 
@@ -457,9 +520,30 @@ class GetTimelineView(viewsets.ModelViewSet):
 
     permissions_classes = [IsAuthenticated and IsOwner]
     serializer_class = TimelineSerializer
+    authentication_classes = (DurinTokenAuthentication,)
 
     def get_queryset(self):
         task_id = self.kwargs["task_id"]
         task_owner = self.kwargs["task_owner"]
         query = Timeline.objects.filter(task=task_id, task_owner=task_owner)
         return query
+
+    
+@api_view(["GET"])
+#@permission_classes([IsAuthenticated])
+@authentication_classes([DurinTokenAuthentication])
+def pro_assigned_task(request, task_owner):
+
+    data = TaskBidder.objects.filter(bidder_profile__author=task_owner, transaction_verified=True)
+    serializer = TaskAssignedSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+#@permission_classes([IsAuthenticated])
+@authentication_classes([DurinTokenAuthentication])
+def task_ordered(request, task_owner):
+
+    data = TaskBidder.objects.filter(payment_author=task_owner, transaction_verified=True)
+    serializer = TaskAssignedSerializer(data, many=True)
+    return Response(serializer.data)
