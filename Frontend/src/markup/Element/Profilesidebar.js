@@ -49,12 +49,11 @@ function ProfileSidebar({
           type: authActionTypes.USER_PROFILE,
           payload: data,
         })
-        
+
       })
       .catch((e) => {
-        toast.error(e.response?.data?.message || "Unknown Error")
+        toast.error(e.response?.data?.message || "we are sorry,service not available.")
         console.log(e)
-        console.log("War gate")
       })
   }
 
@@ -195,7 +194,7 @@ function ProfileSidebar({
                       <Link
                         to={"/user-projects"}
                         className={
-                          active === "My Projects ml-4" ? "active" : " ml-4"
+                          active === "My Projects" ? "active ml-4" : "ml-4"
                         }
                       >
                         <i
@@ -209,7 +208,7 @@ function ProfileSidebar({
                       <Link
                         to={"/user-services"}
                         className={
-                          active === "My Services ml-4" ? "active" : " ml-4"
+                          active === "My Services" ? "active ml-4" : "ml-4"
                         }
                       >
                         <i
@@ -327,8 +326,8 @@ function ProfileSidebar({
               </li>
               <li>
                 <Link
-                  className={active === "Applied Jobs" ? "active ml-4" : "ml-4"}
-                  to={"/jobs-applied-job"}
+                  className={active === "Orders" ? "active ml-4" : "ml-4"}
+                  to={"/order-page"}
                 >
                   <i className="fa fa-briefcase" aria-hidden="true"></i>
                   <span>Orders</span>
@@ -338,7 +337,7 @@ function ProfileSidebar({
                 <li>
                   <Link
                     className={
-                      active === "Applied Jobs" ? "active ml-4" : "ml-4"
+                      active === "Upcoming tasks" ? "active ml-4" : "ml-4"
                     }
                     to={"/jobs-applied-job"}
                   >
@@ -391,7 +390,7 @@ function ProfileSidebar({
               )}
               <li>
                 <Link
-                  className={active === "Security" ? "active ml-4" : "ml-4"}
+                  className={active === "Transactions" ? "active ml-4" : "ml-4"}
                   to={"/transactions"}
                 >
                   <i className="bi bi-arrow-down-up" aria-hidden="true"></i>
@@ -412,7 +411,6 @@ function ProfileSidebar({
                   <span>Linked Accounts</span>
                 </Link>
               </li>
-
               <li>
                 <Link
                   className={

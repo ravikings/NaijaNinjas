@@ -12,6 +12,7 @@ import url from "../../../utils/baseUrl"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import { useSelector } from "react-redux"
 import { BASE_URL } from "../../../utils/axios"
+import { toast } from "react-toastify"
 function UserServices() {
   const [data, setData] = useState([])
   const [viewData, setViewData] = useState([])
@@ -19,7 +20,7 @@ function UserServices() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const axiosPrivate = useAxiosPrivate()
-  const { currentUser } = useSelector((state) => state.authReducer)
+  const { userProfile } = useSelector((state) => state.authReducer)
   let token = `Token ` + localStorage.getItem("access_token")
   let userId = parseInt(localStorage.getItem("userID"))
 
@@ -32,7 +33,7 @@ function UserServices() {
     // })
     axiosPrivate
       .get(
-        `${url.baseURL}api/v1/account/private-services/?user_id=${currentUser?.pk}`
+        `${url.baseURL}api/v1/account/private-services/?user_id=${userProfile?.author}`
       )
       .then((res) => {
         //   console.log(res)
@@ -41,8 +42,12 @@ function UserServices() {
       })
       .catch((e) => {
         if (e.response?.status === 400) {
+          setLoading(false)
+          toast.error("Service not available")
           console.log(e?.response?.data?.non_field_errors[0])
         } else {
+          setLoading(false)
+          toast.error("Service not available")
           console.log("Unknown Error")
         }
       })
@@ -69,10 +74,10 @@ function UserServices() {
   }
   // delete item end
   useEffect(() => {
-    if (currentUser?.pk) {
+    if (userProfile?.author) {
       allData()
     }
-  }, [currentUser])
+  }, [userProfile])
   return (
     <>
       <Header2 />

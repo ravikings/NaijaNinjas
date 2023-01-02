@@ -537,3 +537,13 @@ def pro_assigned_task(request, task_owner):
     data = TaskBidder.objects.filter(bidder_profile__author=task_owner, transaction_verified=True)
     serializer = TaskAssignedSerializer(data, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+#@permission_classes([IsAuthenticated])
+@authentication_classes([DurinTokenAuthentication])
+def task_ordered(request, task_owner):
+
+    data = TaskBidder.objects.filter(payment_author=task_owner, transaction_verified=True)
+    serializer = TaskAssignedSerializer(data, many=True)
+    return Response(serializer.data)
