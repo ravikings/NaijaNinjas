@@ -9,6 +9,7 @@ from accounts.serializers import (
     ContractUserSerializer,
     ProfileSerializer,
     BiddersProfileSerializer,
+    AssignTaskOwnerSerializer,
 )
 from accounts.models import RunnerProfile
 
@@ -215,13 +216,31 @@ class TimelineSerializer(serializers.ModelSerializer):
             return None
 
 
+class TaskAssignSerializer(serializers.ModelSerializer):
+    """
+    Task serializers use for creating task
+    """
+
+    class Meta:
+        model = Task
+        fields = ("title", "id", "description", "tags")
+
+
 class TaskAssignedSerializer(serializers.ModelSerializer):
     """
     Profile serializers use profile for picture uploads and retrieve
     """
 
-    task_assigned = TaskSerializer(read_only=True, many=True)
+    task = TaskAssignSerializer()
+    payment_author = AssignTaskOwnerSerializer()
 
     class Meta:
         model = TaskBidder
-        exclude = ("transaction_id",)
+        fields = (
+            "payment_author",
+            "offer",
+            "description",
+            "delivery_date",
+            "timeline",
+            "task",
+        )

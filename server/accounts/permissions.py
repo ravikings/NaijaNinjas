@@ -17,7 +17,13 @@ class IsOwner(permissions.BasePermission):
     """
     Custom permission to only allow runner have access to view.
     """
+    
+    def has_permission(self, request, view):
 
+        if request.user.is_authenticated:
+            return True
+        
+        return False
     def has_object_permission(self, request, view, obj):
 
         return obj.owner == request.user

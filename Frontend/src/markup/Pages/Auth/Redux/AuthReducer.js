@@ -124,20 +124,24 @@ function reducer(state = initialState, action) {
         loading: true,
       }
     case authActionTypes.VERIFY_RUNNER:
-      console.log("redux auth is called");
-      const checkRunner = localStorage.getItem("checker");
-      console.log("redux auth is called 111", checkRunner);
-      if (checkRunner) {
-        return {
-          ...state,
-          checkRunner: true,
-        }
-      } else {
-        return {
-          ...state,
-          checkRunner: false,
-        }
+      console.log("redux auth is called 111");
+
+      // Retrieve the object from storage
+      const retrievedObject = localStorage.getItem('userData');
+
+      // console.log('retrievedObject: ', JSON.parse(retrievedObject));
+      // console.log("redux auth is called");
+      // // if (checkRunner) {
+      // //   return {
+      // //     ...state,
+      // //     checkRunner: true,
+      // //   }
+      // // } else {
+      return {
+        ...state,
+        userProfile: JSON.parse(retrievedObject),
       }
+
     case authActionTypes.GET_CURRENT_SUCCESS:
       return {
         ...state,

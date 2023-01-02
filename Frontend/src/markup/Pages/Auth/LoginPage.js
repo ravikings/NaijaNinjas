@@ -65,7 +65,7 @@ function LoginPage() {
         //    returnconsole.log("the res is "+res)
         localStorage.setItem("userID", res?.data?.user?.pk);
         localStorage.setItem("access_token", res?.data?.token);
-        localStorage.setItem("userData", res?.data?.user)
+        localStorage.setItem("userData",  JSON.stringify(res?.data?.user))
         localStorage.setItem("checker", res?.data?.user?.is_a_runner)
         //Cookies.set("checker", res?.data?.user?.is_a_runner, {expires: 10});
         const inFiveMinutes = new Date(new Date().getTime() + 60 * 60 * 60 * 1000);

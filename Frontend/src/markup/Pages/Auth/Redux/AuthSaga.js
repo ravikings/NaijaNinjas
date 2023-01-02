@@ -21,10 +21,8 @@ export function* verify(token) {
     if (mfa) {
       yield createRequest().post("/api/v1/mfa/auth/verify/", tokens)
         .then((res) => {
-          console.log("checking data");
-          console.log(res.data)
           localStorage.setItem("userID", res?.data?.pk);
-          localStorage.setItem("userData", res?.data);
+          localStorage.setItem("userData", JSON.stringify(res?.data));
           localStorage.setItem("checker", res?.data?.is_a_runner)
         });
       yield put({
@@ -33,6 +31,9 @@ export function* verify(token) {
       });
       yield put({
         type: authActionTypes.VERIFY_TOKEN_SUCCESS,
+      });
+      yield put({
+        type: authActionTypes.VERIFY_RUNNER,
       });
     } else {
       yield createRequest().get("/api/auth/v1.0/apiaccess/", tokens)
@@ -192,7 +193,7 @@ function* watchHomePageActionSagas() {
   yield takeEvery(authActionTypes.VERIFY_TOKEN, verify);
   yield takeEvery(authActionTypes.GET_ACCESS_TOKEN, generateAccessToken);
   // yield takeEvery(authActionTypes.GET_USER_STATUS, getUserStatus);
-  // yield takeEvery(authActionTypes.USER_PROFILE, setProfileData);
+  //yield takeEvery(authActionTypes.USER_PROFILE, setProfileData);
 }
 
 export default [watchHomePageActionSagas];

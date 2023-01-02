@@ -86,18 +86,18 @@ function Header2() {
                 id="navbarNavDropdown"
               >
                 <ul className="nav navbar-nav">
-                  <li className="">
+                  {/* <li className="">
                     <Link to={"/"}>Home</Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link to={"/browse-job-filter-list"}>tasks</Link>
                   </li>
                   <li>
                     <Link to={"/browse-job-filter-list"}>marketplace</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link to={"/category-all-jobs"}>Explore</Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link to={"/blog-detailed-grid-sidebar"}>Forum</Link>
                   </li>

@@ -30,6 +30,9 @@ import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import Loader from "../../../markup/Element/Loader"
 import moment from "moment"
+import { Link } from "react-router-dom"
+import axios from "axios";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { toast } from "react-toastify"
 // 35 / 67
 
@@ -55,6 +58,9 @@ function TimeLine() {
   const [loading, setLoading] = useState(false)
   const [timelineComment, setTimelineComment] = useState([])
   const [error, setError] = useState("")
+  const [author, setAuthor] = useState("")
+  const [task_owner, setTask_owner] = useState("")
+  const [timelineStatus, settimelineStatus] = useState("")
 
   useEffect(() => {
     getTimeLineData()
@@ -64,9 +70,13 @@ function TimeLine() {
     axiosPrivate
       .get(`api/v1/task/get-timeline/${taskID}/${taskOwner}`)
       .then((res) => {
-        const { timeline_comment, id } = res.data
+        const { timeline_comment, id, author, task_owner,
+          status } = res.data
         setTimelineComment(timeline_comment)
         setTimeline_id(id)
+        settimelineStatus(status)
+        setAuthor(author)
+        setTask_owner(task_owner)
         console.log("res", res)
         setLoading(false)
       })
@@ -176,6 +186,38 @@ function TimeLine() {
       )
   }
 
+  const downloadFile = async (e, item) => {
+    e.preventDefault()
+    console.log(item.id)
+    console.log(item.id)
+    console.log("item.id")
+    // await axios({
+    //   url:
+    //     `${baseUrl.baseURL}api/v1/task/comment-timeline/${item.id}/file_download/`,
+    //   method: "GET",
+    //   responseType: "file"
+    // }).then(response => {
+    //   console.log(response);
+    //   const url = window.URL.createObjectURL(new Blob([response.data]));
+    //   const link = document.createElement("a");
+    //   link.href = url;
+    //   link.setAttribute("download", "file.png");
+    //   document.body.appendChild(link);
+    //   link.click();
+    // });
+  };
+  // createRequest
+  //   .get(`/api/v1/task/comment-timeline/${item.id}/file_download/`, responseType: "fil")
+  //   .then(
+  //     (response) => {
+  //       console.log("the response is ", response)
+  //     },
+  //     (error) => {
+  //       console.log({ error })
+  //     }
+  //   )
+  // }
+
   const getUploadParams = ({ meta }) => {
     return { url: "https://httpbin.org/post" }
   }
@@ -227,13 +269,12 @@ function TimeLine() {
                                 </div> */}
                                       <div className="uk-timeline-icon">
                                         <span
-                                          className={`uk-badge ${
-                                            item.status === "CONTRACT"
-                                              ? "btn-warning"
-                                              : item.status === "PROGRESS"
+                                          className={`uk-badge ${item.status === "CONTRACT"
+                                            ? "btn-warning"
+                                            : item.status === "PROGRESS"
                                               ? "btn-success"
                                               : "btn-danger"
-                                          } `}
+                                            } `}
                                         >
                                           <span
                                             uk-icon={
@@ -273,13 +314,12 @@ function TimeLine() {
                                               </h3>
                                               <span
                                                 className={`uk-label 
-                                            ${
-                                              item.status === "CONTRACT"
-                                                ? "uk-label-warning"
-                                                : item.status === "PROGRESS"
-                                                ? "uk-label-success"
-                                                : "uk-label-danger"
-                                            }
+                                            ${item.status === "CONTRACT"
+                                                    ? "uk-label-warning"
+                                                    : item.status === "PROGRESS"
+                                                      ? "uk-label-success"
+                                                      : "uk-label-danger"
+                                                  }
                                              uk-margin-auto-left`}
                                               >
                                                 {item.status}
@@ -292,6 +332,16 @@ function TimeLine() {
                                           <div className="uk-card-body">
                                             <h6>{item.title}</h6>
                                             <p>{item.body}</p>
+                                            {/* <Link to={`${item.attachment}`} target="_blank" download>
+                                              <span> Download </span>
+                                            </Link> */}
+                                            <p onClick={(event) => downloadFile(event, item)}>Attachment
+                                              <span>
+                                                {item?.attachment && (
+                                                  <FileDownloadIcon color="primary" sx={{ fontSize: 30 }} onClick={() => console.log("helllo file icon")} />
+                                                )}
+                                              </span>
+                                            </p>
                                           </div>
                                         </div>
                                       </div>
@@ -313,17 +363,24 @@ function TimeLine() {
                                             Load More
                                           </button>
                                         </div>
-                                        {/* {displayFormName === "" && ( */}
-                                        <div className="mr-2">
-                                          <button
-                                            className="btn btn-success"
-                                            onClick={(e) =>
-                                              onClickOpenForm(e, "milestone")
-                                            }
-                                          >
-                                            Add Milestone
-                                          </button>
-                                        </div>
+                                        {task_owner === userProfile?.author ? (
+                                          <><div className="mr-2">
+                                            <button
+                                              className="btn btn-success"
+                                              onClick={(e) => onClickOpenForm(e, "milestone")}
+                                            >
+                                              Add Milestone
+                                            </button>
+                                          </div>
+                                            <div className="mr-2">
+                                              <button
+                                                className="btn btn-danger"
+                                                onClick={(e) => onClickOpenForm(e, "deliver")}
+                                              >
+                                                Deliver Service
+                                              </button>
+                                            </div></>
+                                        ) : ""}
                                         {/* )} */}
                                         {/* {displayFormName === "" && (
                             <div className="mr-2">
@@ -335,17 +392,19 @@ function TimeLine() {
                               </button>
                             </div>
                           )} */}
-                                        <div className="mr-2">
-                                          <button
-                                            className="btn btn-info"
-                                            onClick={(e) =>
-                                              onClickOpenForm(e, "review")
-                                            }
-                                          >
-                                            Add Review
-                                          </button>
-                                        </div>
-                                        <div className="mr-2">
+                                        {timelineStatus == "DELIVERED" && (task_owner === userProfile?.author) ? (
+                                          <div className="mr-2">
+                                            <button
+                                              className="btn btn-info"
+                                              onClick={(e) =>
+                                                onClickOpenForm(e, "review")
+                                              }
+                                            >
+                                              Add Review
+                                            </button>
+                                          </div>
+                                        ) : ""}
+                                        {/* <div className="mr-2">
                                           <button
                                             className="btn btn-danger"
                                             onClick={(e) =>
@@ -354,7 +413,7 @@ function TimeLine() {
                                           >
                                             Deliver Service
                                           </button>
-                                        </div>
+                                        </div> */}
                                       </div>
                                     </div>
                                   </div>

@@ -270,6 +270,12 @@ class UserAccountSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "phone_number", "is_a_runner")
         read_only_fields = ("id", "email", "phone_number", "is_a_runner")
 
+class AssignTaskOwnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountUser
+        fields = ("id", "first_name", "last_name", "username")
+        read_only_fields = ("id", "first_name", "last_name")
+
 
 class UserProfileSearchSerializer(serializers.ModelSerializer):
     class Meta:

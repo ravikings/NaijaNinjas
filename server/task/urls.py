@@ -11,6 +11,7 @@ from task.views import (
     TaskAssigned,
     task_favorite,
     get_timeiline,
+    pro_assigned_task,
     DashboardTaskFavorite,
     SearchTask,
     accept_bid,
@@ -57,4 +58,5 @@ urlpatterns = [
         GetTimelineView.as_view({"get": "list"}),
         name="test-timline",
     ),
+    path("get-assigned-task/<str:task_owner>", pro_assigned_task, name="get-assigned-task")
 ]

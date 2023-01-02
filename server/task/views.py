@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.exceptions import PermissionDenied
+from django.http import FileResponse
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -32,12 +34,16 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from rest_framework.decorators import api_view, permission_classes
 from accounts.permissions import CanApproveTask
-from durin.auth import TokenAuthentication as DurinTokenAuthentication, CachedTokenAuthentication
+from rest_framework.authentication import TokenAuthentication
+from durin.auth import (
+    TokenAuthentication as DurinTokenAuthentication,
+    CachedTokenAuthentication,
+)
 
 # Create your views here.
 
 
-@method_decorator(cache_page(60 * 30), name="dispatch")
+#@method_decorator(cache_page(60 * 30), name="dispatch")
 class TaskView(viewsets.ModelViewSet):
 
     """
@@ -51,14 +57,16 @@ class TaskView(viewsets.ModelViewSet):
     authentication_classes = (DurinTokenAuthentication,)
 
     def retrieve(self, request, pk=None):
-        ip = get_client_ip(request)
+        
         task = Task.objects.get(id=pk)
-        history_tracker(request, task)
-        if IpModel.objects.filter(ip=ip).exists():
-            task.views.add(IpModel.objects.get(ip=ip))
-        else:
-            IpModel.objects.create(ip=ip)
-            task.views.add(IpModel.objects.get(ip=ip))
+        #TODO: Add celery to handle tracking
+        #ip = get_client_ip(request)
+        # history_tracker(request, task)
+        # if IpModel.objects.filter(ip=ip).exists():
+        #     task.views.add(IpModel.objects.get(ip=ip))
+        # else:
+        #     IpModel.objects.create(ip=ip)
+        #     task.views.add(IpModel.objects.get(ip=ip))
         serializer = TaskSerializer(task)
         return Response(serializer.data)
 
@@ -255,10 +263,49 @@ class TimelineCommentView(viewsets.ModelViewSet):
     uses to add Timeline to view task activities
     """
 
-    queryset = Comment.objects.all()
+    permissions_classes = [IsOwner]  # IsAuthenticated and
+    authentication_classes = (DurinTokenAuthentication, TokenAuthentication)
+    # queryset = Comment.objects.all()
     serializer_class = TimelineCommentSerializer
-    authentication_classes = (DurinTokenAuthentication,)
-    # permissions_classes = [IsAuthenticated and IsOwner]
+
+    def retrieve(self, request, pk=None):
+
+        query = Comment.objects.get(id=pk)
+        if (
+            request.user in [query.task_timeline.author, query.task_timeline.task_owner]
+            or request.user.is_superuser
+        ):
+            serializer = TimelineSerializer(query)
+            return Response(serializer.data)
+
+        raise PermissionDenied
+
+    @action(detail=True, methods=["get", "post"])
+    def file_download(self, request, pk=None):
+        instance = Comment.objects.get(id=pk)
+        # if (
+        #     request.user
+        #     in [instance.task_timeline.author, instance.task_timeline.task_owner]
+        #     or request.user.is_superuser
+        # ):
+        file_handle = instance.attachment.open()
+        if file_handle:
+            # send file
+            response = FileResponse(file_handle, content_type="file")
+            response["Content-Length"] = instance.attachment.size
+            response["Content-Disposition"] = (
+                'attachment; filename="%s"' % instance.attachment.name
+            )
+            response['Access-Control-Expose-Headers'] = 'Content-Disposition'
+            
+
+            return response
+
+        raise PermissionDenied
+
+    def list(self, request):
+        pass
+        return Response({"Error": "Not allowed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TaskAssigned(viewsets.ModelViewSet):
@@ -267,17 +314,17 @@ class TaskAssigned(viewsets.ModelViewSet):
     uses to get assigned tasks to professionals
     """
 
-    # queryset = TaskBidder.objects.all()
+    queryset = TaskBidder.objects.all()
     serializer_class = TaskAssignedSerializer
     authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and Is_a_runner]
 
-    def get_queryset(self):
+    # def get_queryset(self):
 
-        return TaskBidder.objects.filter(
-            bidder_profile=self.request.user.id, bid_approve_status=True
-        ).order_by("modified")
-        # TODO Missing filter for task completed to be shown.
+    #     return TaskBidder.objects.filter(
+    #         bidder_profile=41, bid_approve_status=True
+    #     ).order_by("modified")
+        # TODO Missing filter for task completed to be shown. self.request.user.id
 
 
 @api_view(["POST"])
@@ -480,3 +527,13 @@ class GetTimelineView(viewsets.ModelViewSet):
         task_owner = self.kwargs["task_owner"]
         query = Timeline.objects.filter(task=task_id, task_owner=task_owner)
         return query
+
+    
+@api_view(["GET"])
+#@permission_classes([IsAuthenticated])
+@authentication_classes([DurinTokenAuthentication])
+def pro_assigned_task(request, task_owner):
+
+    data = TaskBidder.objects.filter(bidder_profile__author=task_owner, transaction_verified=True)
+    serializer = TaskAssignedSerializer(data, many=True)
+    return Response(serializer.data)

@@ -94,13 +94,27 @@ function MakeOfferPage() {
     getRelatedTasks()
   }, [data])
 
-  const { checkRunner } = useSelector((state) => state.authReducer)
+  const { checkRunner, currentUser, userProfile } = useSelector((state) => state.authReducer)
   const showbanner = () => {
-    console.log(checkRunner);
-    console.log(checkRunner);
-    toast.warning('Only professional are allow to bid, singup to be a pro and have unlimited access to bid on millions of task available.')
 
+    toast.info('Only professional are allow to bid, singup to be a pro and have unlimited access to bid on millions of task available.')
   };
+
+  const trackerLogin = () => {
+    if (currentUser == null) {
+
+      return (<Link
+        to={`/login`}
+        className="site-button"
+      >
+        Login to bid
+      </Link>)
+    }
+    return (
+      <button className="site-button btn-block" onClick={() => showbanner()}>
+        Show Interest
+      </button>)
+  }
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -359,16 +373,24 @@ function MakeOfferPage() {
                     {/* <span>Project type: {data?.category}</span> */}
                     <div>
 
-                      {checkRunner ? (
+                      {/* {currentUser?.length ? "" :
+                        <Link
+                          to={`/login`}
+                          className="site-button"
+                        >
+                          Login to bid
+                        </Link>
+                      } */}
+
+                      {userProfile?.is_a_runner ? (
                         <Link
                           to={`/send-contract/${data?.id}`}
                           className="site-button"
                         >
                           Submit a Proposal
-                        </Link>) : (
-                        <button className="site-button btn-block" onClick={() => showbanner()}>
-                          Show Interest
-                        </button>)}
+                        </Link>) : trackerLogin()}
+
+
                       {/* <a href="#" className="site-button" >Submit a Proposal</a> */}
                     </div>
                   </div>
