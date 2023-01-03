@@ -12,11 +12,11 @@ import { useDispatch } from "react-redux";
 import { authActionTypes, getCurrentUser } from "./Redux/AuthActions";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
-import {
-  loadCaptchaEnginge,
-  LoadCanvasTemplateNoReload,
-  validateCaptcha,
-} from "react-simple-captcha";
+// import {
+//   loadCaptchaEnginge,
+//   LoadCanvasTemplateNoReload,
+//   validateCaptcha,
+// } from "react-simple-captcha";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -54,14 +54,14 @@ function RegisterPage() {
 
   const [value, setValue] = useState("");
 
-  const checkCaptcha = () => {
-    const isValid = validateCaptcha(value);
-    return isValid;
-  };
+  // const checkCaptcha = () => {
+  //   const isValid = validateCaptcha(value);
+  //   return isValid;
+  // };
 
-  useEffect(() => {
-    loadCaptchaEnginge(6, "black", "white");
-  }, []);
+  // useEffect(() => {
+  //   loadCaptchaEnginge(6, "black", "white");
+  // }, []);
 
   const register = (loginDetails) => {
     setLoading(true);
@@ -94,9 +94,9 @@ function RegisterPage() {
         } else if (e.response.data.password1) {
           let message =
             e.response.data.password1[0] +
-              " " +
-              e.response.data.password1.length >
-              1 && e.response.data.password1[1];
+            " " +
+            e.response.data.password1.length >
+            1 && e.response.data.password1[1];
           if (e.response.data.password1.length > 1) {
             message =
               e.response.data.password1[0] +
@@ -120,7 +120,8 @@ function RegisterPage() {
   };
 
   const handleSumbit = (values) => {
-    if (checkCaptcha()) {
+    // if (checkCaptcha()) {
+    if (values) {
       register(values);
     } else if (!value) {
       toast.error("Please enter captcha to verify");
@@ -316,7 +317,7 @@ function RegisterPage() {
                                     className='error text-danger'
                                   />
                                 </div>
-                                <div className='form-group'>
+                                {/* <div className='form-group'>
                                   <label>Verify *</label>
                                   <LoadCanvasTemplateNoReload />
                                   <div className='input-group mb-4'>
@@ -330,7 +331,7 @@ function RegisterPage() {
                                       className='form-control'
                                     />
                                   </div>
-                                </div>
+                                </div> */}
 
                                 <div className='text-left'>
                                   <Button
@@ -349,7 +350,30 @@ function RegisterPage() {
                                   </Button>
                                 </div>
                               </Form>
-                              <div className={"separator"}>
+                              {/* <div className={"separator"}>
+                                <span>or</span>
+                              </div>
+                              <div className='text-left'>
+                                <Link to='login' className='text-primary'>
+
+
+                                  <Button
+                                    fullWidth
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    type={"submit"}
+                                    className={
+                                      !(dirty && isValid)
+                                        ? "disabled-btn"
+                                        : "site-button"
+                                    }
+                                    disabled={!(dirty && isValid)}
+                                  >
+                                    Use secure code
+                                  </Button>
+                                </Link>
+                              </div> */}
+                              {/* <div className={"separator"}>
                                 <span>or</span>
                               </div>
                               <FacebookLoginButton
@@ -366,7 +390,7 @@ function RegisterPage() {
                                 fullWidth
                               >
                                 Login via Google+
-                              </GoogleLoginButton>
+                              </GoogleLoginButton> */}
                             </div>
                           );
                         }}
@@ -454,14 +478,14 @@ function RegisterPage() {
             <div className='container'>
               <div className='row'>
                 <div className='col-lg-12 text-center'>
-                  <span className='float-left text-black-light'>
+                  {/* <span className='float-left text-black-light'>
                     {" "}
                     © Copyright by{" "}
                     <i className='fa fa-heart m-lr5 text-red heart'></i>
                     <Link to={"#"} className='text-primary'>
                       DexignZone{" "}
                     </Link>
-                  </span>
+                  </span> */}
                   <span className='float-right'>All rights reserved.</span>
                 </div>
               </div>

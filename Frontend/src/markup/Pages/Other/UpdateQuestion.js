@@ -2,32 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
-import { Form } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
-import axios from 'axios';
+import axios from 'axios'; 
+import BASE_URL from "../../../utils/baseUrl"
 
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'
 
-const postBlog = [
-	{ title: 'PHP Web Developer', },
-	{ title: 'Software Developer', },
-	{ title: 'Branch Credit Manager', },
-]
 
 function UpdateQuestion() {
 	const stateData = useLocation();
 	const data = stateData.state;
 	const [title, setTitle] = useState(data.title);
-	const [id, setId] = useState(data.id);
+	const id = data.id;
 	const [tags, setTags] = useState(data.tags);
 	const [category, setCategory] = useState(data.category);
 	const [detailsValue, setDetailsValue] = useState(data.body);
-	const [attachment, setAttachment] = useState(data.attachment);
+	//const [attachment, setAttachment] = useState(data.attachment);
 	const history = useHistory();
-	const baseURL = `https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev/`;
 	let token = `Token ` + localStorage.getItem("access_token");
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [attachFile, setAttachFile] = useState(null);
@@ -55,7 +49,7 @@ function UpdateQuestion() {
 		formdata.append("author", userId);
 		axios({
 			method: 'PUT',
-			url: `${baseURL}forum/list/${id}/`,
+			url: `${BASE_URL}forum/list/${id}/`,
 			data: formdata,
 			headers: {
 
@@ -66,7 +60,7 @@ function UpdateQuestion() {
 			.then((response) => {
 				console.log("the response is ", response)
 
-				if (response.statusText == "Created" || response.statusText == "OK") {
+				if (response.statusText === "Created" || response.statusText === "OK") {
 					history.push(`/blog-details/${response.data.id}/${response.data.title}`)
 
 
@@ -78,9 +72,9 @@ function UpdateQuestion() {
 			});
 
 	}
-	useEffect(() => {
-		console.log(data);
-	}, [])
+	// useEffect(() => {
+	// 	console.log(data);
+	// }, [])
 	return (
 		<>
 			<Header2 />

@@ -5,7 +5,6 @@ import Footer from "../../Layout/Footer";
 import { Form } from "react-bootstrap";
 import ProfileSidebar from "../../Element/Profilesidebar";
 import ClipLoader from "react-spinners/ClipLoader";
-import axios from "axios";
 import url from "../../../utils/baseUrl";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { Autocomplete } from "@material-ui/lab";

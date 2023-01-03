@@ -65,8 +65,9 @@ function LoginPage() {
         //    returnconsole.log("the res is "+res)
         localStorage.setItem("userID", res?.data?.user?.pk);
         localStorage.setItem("access_token", res?.data?.token);
-        localStorage.setItem("userData",  JSON.stringify(res?.data?.user))
+        localStorage.setItem("userData", JSON.stringify(res?.data?.user))
         localStorage.setItem("checker", res?.data?.user?.is_a_runner)
+        toast.success("You're login successfully!")
         //Cookies.set("checker", res?.data?.user?.is_a_runner, {expires: 10});
         const inFiveMinutes = new Date(new Date().getTime() + 60 * 60 * 60 * 1000);
         Cookies.set("access_token", res?.data?.token, {
@@ -97,7 +98,8 @@ function LoginPage() {
           //loadCaptchaEnginge(6, "white", "#2e55fa");
           setValue("");
         } else {
-          toast.error("Unknown Error");
+          toast.error("Login failed!")
+          toast.error(e?.response?.data);
         }
       });
   };
@@ -128,14 +130,19 @@ function LoginPage() {
   const sendToken = () => {
     createRequest().post("/auth/email/", { email: mfaemail })
       .then((res) => {
+        toast.success("Secure token sent!");
         history.push({
           pathname: "/mfa-login",
           state: { email: mfaemail }
         });
       })
       .catch((e) => {
-        console(e);
-        toast.error("service not available.")
+        if (e.response?.status === 400) {
+          toast.info("Please singup to continue.");
+          setValue("");
+        } else {
+          toast.error("service not available.")
+        }
       });
   };
 
