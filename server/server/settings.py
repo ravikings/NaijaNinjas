@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
     "*",
     "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev",
     "https://fb54-98-44-232-67.ngrok.io",
+    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/"
 ]
 
 
@@ -133,6 +134,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/",
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -155,6 +157,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -167,6 +170,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/",
 ]
 
 
