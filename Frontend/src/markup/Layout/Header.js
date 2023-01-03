@@ -71,7 +71,7 @@ function Header() {
           <div className="main-bar clearfix">
             <div className="px-3 clearfix">
               <div className="logo-header mostion">
-                <Link to={"./"}>
+                <Link to={"/home"}>
                   <img src={logo2} className="logo" alt="img" />
                 </Link>
               </div>

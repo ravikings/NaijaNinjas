@@ -96,6 +96,7 @@ class Markup extends Component {
         <div className="page-wraper">
           <Switch>
             <Route path="/" exact component={Homepage} />
+            <Route path="/home" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
             <Route path="/messages" exact component={MessagesPage} />
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />

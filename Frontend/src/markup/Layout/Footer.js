@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import logo2 from "./../../images/logoNew.png"
 
 function Footer(){
 	return(
@@ -9,7 +10,7 @@ function Footer(){
 					<div className="row">
 						<div className="col-xl-5 col-lg-4 col-md-12 col-sm-12">
 							<div className="widget">
-								<img src={require("./../../images/logo-white.png")} width="180" className="m-b15" alt=""/>
+								<img src={logo2} width="180" className="m-b15" alt=""/>
 								<p className="text-capitalize m-b20">Lorem Ipsum is simply dummy text of the printing and typesetting industry has been the industry's standard dummy text ever since the.</p>
 								<div className="subscribe-form m-b20">
 									<form className="dzSubscribe" action="script/mailchamp.php" method="post">
