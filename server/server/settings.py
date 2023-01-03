@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     "*",
     "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev",
     "https://fb54-98-44-232-67.ngrok.io",
-    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/"
+    "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
 
@@ -134,7 +134,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/",
+    "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -157,7 +157,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/",
+    "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -170,7 +170,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://gigxnow-frontend-api.s3.amazonaws.com/build/index.html#/",
+    "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
 
@@ -402,4 +402,13 @@ PASSWORDLESS_AUTH = {
         "EMAIL",
     ],
     "PASSWORDLESS_EMAIL_NOREPLY_ADDRESS": "noreply@example.com",
+    "PASSWORDLESS_REGISTER_NEW_USERS": False,
+    # Token Generation Retry Count
+    "PASSWORDLESS_TOKEN_GENERATION_ATTEMPTS": 3,
+    # Marks itself as verified the first time a user completes auth via token.
+    # Automatically unmarks itself if email is changed.
+    "PASSWORDLESS_USER_MARK_EMAIL_VERIFIED": True,
+    "PASSWORDLESS_USER_EMAIL_VERIFIED_FIELD_NAME": "email_verified",
+    # The user's email field name
+    "PASSWORDLESS_USER_EMAIL_FIELD_NAME": "email",
 }

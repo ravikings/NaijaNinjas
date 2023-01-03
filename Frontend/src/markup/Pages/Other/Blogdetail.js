@@ -39,7 +39,7 @@ function Blogdetail() {
   // vote function start here
   const voteAnswer = (id) => {
     createRequest()
-      .get(`forum/vote/${parseInt(id)}/`)
+      .get(`/forum/vote/${parseInt(id)}/`)
       .then((res) => {
         console.log("my vot is ", res)
 
