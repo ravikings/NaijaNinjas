@@ -545,5 +545,5 @@ def pro_assigned_task(request, task_owner):
 def task_ordered(request, task_owner):
 
     data = TaskBidder.objects.filter(payment_author=task_owner, transaction_verified=True)
-    serializer = TaskAssignedSerializer(data, many=True)
+    serializer = TaskBidderprofileSerializer(data, many=True)
     return Response(serializer.data)
