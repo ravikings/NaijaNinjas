@@ -547,3 +547,22 @@ def task_ordered(request, task_owner):
     data = TaskBidder.objects.filter(payment_author=task_owner, transaction_verified=True)
     serializer = TaskBidderprofileSerializer(data, many=True)
     return Response(serializer.data)
+
+@api_view(["GET", "POST"])
+#@permission_classes([IsAuthenticated])
+@authentication_classes([DurinTokenAuthentication])
+def approve_delivery(request, pk):
+
+    query = get_object_or_404(Comment, id=pk)
+    # if (
+    #     request.user in [query.task_timeline.author, query.task_timeline.task_owner]
+    #     or request.user.is_superuser
+    # ):
+    print(request.data.get("status"))
+    query.status = request.data.get("status")
+    query.update_timeline_status()
+    query.save()
+    serializer = TimelineSerializer(query)
+    return Response(serializer.data)
+
+    #raise PermissionDenied
