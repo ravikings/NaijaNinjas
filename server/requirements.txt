@@ -14,7 +14,7 @@ channels==3.0.4
 django-filter==21.1
 django-redis
 PyJWT==2.3.0
-six==1.16.0
+# six==1.16.0
 pytz
 black
 PyJWT==2.3.0
@@ -35,3 +35,4 @@ celery_progress
 django-rest-durin
 django-cache-memoize
 drfpasswordless
+#pycurl

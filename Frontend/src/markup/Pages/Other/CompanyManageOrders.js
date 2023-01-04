@@ -1,146 +1,255 @@
-import { Link } from "react-router-dom";
-import Header2 from "../../Layout/Header2";
-import Footer from "../../Layout/Footer";
-import ProfileSidebar from "../../Element/Profilesidebar";
-import createRequest from "../../../utils/axios";
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import ClipLoader from "react-spinners/ClipLoader"
+import React, { useState, useEffect } from "react"
+import { Link, useHistory, useLocation, useParams } from "react-router-dom"
+import Header2 from "../../Layout/Header2"
+import Footer from "../../Layout/Footer"
+import ContactPage from "./ContractPage"
+import { Alert, Modal } from "react-bootstrap"
+import ProfileSidebar from "../../Element/Profilesidebar"
+import DeleteIcon from "@material-ui/icons/Delete"
+import createRequest, { axiosPrivate } from "../../../utils/axios"
+import axios from "axios"
+import moment from "moment"
+import logo from "../../../images/logo/icon1.png"
+import Ratings from "../MakeOffer/components/Ratings"
+import { Button, IconButton } from "@material-ui/core"
+import TimeLine from "./TimeLine"
+import PaymentPage from "./PaymentPageOld"
+import baseUrl from "../../../utils/baseUrl"
+import TestPayment from "./TestPayment"
+
 
 
 function CompanyManageOrders() {
+  const location = useLocation()
+  const [company, setCompany] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [totalCount, setTotalCount] = useState(null)
+  const { id, title } = useParams()
+  const [owner, setOwner] = useState("")
+  const [data, setData] = useState([])
+  const taskId = location?.pathname?.split("/")[2]
+  const [displayPage, setDisplayPage] = useState("")
+  const [errorMes, setErrorMes] = useState("")
+  const params = useParams()
+  const history = useHistory()
+  const userID = localStorage.userID
 
-  const [taskAssigned, settaskAssigned] = useState([])
-  const [loading, setLoading] = React.useState(false)
-  const { userProfile, userStatus, currentUser } = useSelector(
-    (state) => state.authReducer
-  )
-
-  const getAssignTask = () => {
-
-    const id = localStorage.getItem("userID");
+  const allData = () => {
     setLoading(true)
-    createRequest().get(
-      `/api/v1/task/get-ordered-task/${id}`
-    ).then((res) => {
-      settaskAssigned(res.data);
-      setLoading(false)
-    }).catch((e) => {
-      settaskAssigned("");
-      console.log(e)
-    })
-  }
+    createRequest()
+      .get(`/api/v1/task/get-ordered-task/${userID}`)
+      .then((res) => {
+        setTotalCount(res?.data?.count)
+        setData(res.data)
 
+        setLoading(false)
+      })
+      .catch((e) => {
+        if (e.response?.status === 400) {
+          console.log(e?.response?.data?.non_field_errors[0])
+        } else {
+          console.log("Unknown Error")
+        }
+        setLoading(false)
+      })
+  }
   useEffect(() => {
-    getAssignTask()
+    allData()
   }, [])
+  let token = `Token ` + localStorage.getItem("access_token")
+  const displayPaymentPage = (item) => {
+    //​ /api​/v1​/task​/approve-bid​/?id=${fid}&&task_id=${taskId} Method=get/post
+    // setLoading(true)
+    // return console.log(item, "item")
+    history.push({
+      pathname: `/manage-bids/${id}/${title}/confirm/${item?.id}`,
+      state: { item },
+    })
+    // axiosPrivate({
+    //   method: "POST",
+    //   url: `${baseUrl.baseURL}api/v1/task/approve-bid/?id=${item.id}&&task_id=${taskId}`,
+    //   headers: {
+    //     Authorization: token,
+    //   },
+    // })
+    // axiosPrivate
+    //   .post(
+    //     `${baseUrl.baseURL}api/v1/task/approve-bid/?id=${item.id}&&task_id=${taskId}`
+    //   )
+    //   .then(
+    //     (response) => {
+    //       console.log("the response is ", response)
+    //       if (response.status === 201) {
+    //         setLoading(false)
+    //         setDisplayPage("contact")
+    //       }
+    //     },
+    //     (error) => {
+    //       console.log(error)
+    //       setErrorMes("Something went wrong")
+    //       setTimeout(() => {
+    //         setErrorMes("")
+    //       }, 2000)
+    //     }
+    //   )
+  }
+  const timeLinePage = (item) => {
+    if (item) {
+      setOwner(item.bidder_profile)
+    }
+    setDisplayPage("timeLine")
+  }
+  // const paymentPage = () => {
+  //   setDisplayPage("payment");
+  // };
+  // const bidsPage = () => {
+  //   setDisplayPage("");
+  // };
 
   return (
     <>
       <Header2 />
+
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
             <div className="container">
               <div className="row">
-                <ProfileSidebar active={"Applied Jobs"} />
-                <div className="col-xl-9 col-lg-8 m-b30 browse-job">
-                  <div className="job-bx-title  clearfix">
-                    <h5 className="font-weight-700 pull-left text-uppercase">
-                      {`${taskAssigned.length} Task Ordered`}
-                    </h5>
-                    <div className="float-right">
-                      <span className="select-title">Sort by freshness</span>
-                      <select className="custom-btn">
-                        <option>Last 2 Months</option>
-                        <option>Last Months</option>
-                        <option>Last Weeks</option>
-                        <option>Last 3 Days</option>
-                      </select>
+                <ProfileSidebar showManageProp={true} active={"Manage jobs"} />
+                {displayPage === "contact" && (
+                  <ContactPage nextPage={timeLinePage} />
+                )}
+                <div className="col-xl-9 col-lg-8 m-b30">
+                  <div className="job-bx browse-job clearfix">
+                    <div className="job-bx-title  clearfix">
+                      <h5 className="font-weight-700 pull-left text-uppercase">
+                        Task Orders
+                      </h5>
+                      <div className="float-right">
+                        <span className="select-title">Sort by freshness</span>
+                        <select className="custom-btn">
+                          <option>All</option>
+                          <option>None</option>
+                          <option>Read</option>
+                          <option>Unread</option>
+                          <option>Starred</option>
+                          <option>Unstarred</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                  <ul className="post-job-bx browse-job">
-                    {loading ? (
-                      <div className="loader">
-                        <ClipLoader color={"#2e55fa"} loading={true} size={150} />
-                      </div>
-                    ) : taskAssigned.length > 0 ? taskAssigned.map((item, index) => (
-                      <li key={index}>
-                        <div className="post-bx">
-                          <div className="job-post-info m-a0">
-                            <h4>
-                              <Link to={"/timeline/40/41"}>{item?.task?.title}</Link>
-                            </h4>
-                            <ul>
-                              <li>
-                                <Link to={"/company-profile"}>
-                                  {`${item?.payment_author?.first_name} ${item?.payment_author.username}`}
-                                </Link>
-                              </li>
-                              <li>
-                                <i className="fa fa-money"></i> {item?.offer}
-                              </li>
-                            </ul>
-                            <div className="job-time m-t15 m-b10">
-                              <Link to={""} className="mr-1">
-                                <span>PHP</span>
-                              </Link>
-                              <Link to={""} className="mr-1">
-                                <span>Angular</span>
-                              </Link>
-                              <Link to={""} className="mr-1">
-                                <span>Bootstrap</span>
-                              </Link>
-                              <Link to={""} className="mr-1">
-                                <span>Wordpress</span>
-                              </Link>
+                    <ul className="post-job-bx">
+                      {data?.length === 0
+                        ? "Your task have no bids at the moment, kindly check by soon, Thank you!"
+                        : data.map((item, index) => (
+                          <li key={index}>
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-company">
+                                  <Link to={""}>
+                                    <span style={{ borderRadius: "50%" }}>
+                                      <img
+                                        alt=""
+                                        src={item.bidder_info.photo}
+                                      />
+                                    </span>
+                                  </Link>
+                                </div>
+                                <div className="job-post-info">
+                                  <h4>
+                                    <Link
+                                      to={"#"}
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                      }}
+                                    >
+                                      {`${item.bidder_info[0].first_name} ${item.bidder_info[0].last_name}`}
+                                    </Link>
+                                  </h4>
+                                  <Ratings />
+                                  <div className="mt-3">
+                                    {item.bid_approve_status ? (
+                                      <Button
+                                        style={{
+                                          backgroundColor: "#2e55fa",
+                                          color: "white",
+                                        }}
+                                        onClick={() =>
+                                          history.push(
+                                            `/timeline/${item.task}/${item.bidder_info[0].author}`
+                                          )
+                                        }
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-check"></i>
+                                        }
+                                      >
+                                        Show Timeline
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        style={{
+                                          backgroundColor: "#2e55fa",
+                                          color: "white",
+                                        }}
+                                        onClick={() =>
+                                          displayPaymentPage(item)
+                                        }
+                                        variant="outlined"
+                                        startIcon={
+                                          <i className="fa fa-check"></i>
+                                        }
+                                      >
+                                        Accept offer
+                                      </Button>
+                                    )}
+                                    <Button
+                                      style={{
+                                        backgroundColor: "#333333",
+                                        color: "white",
+                                      }}
+                                      className="ml-2"
+                                      variant="outlined"
+                                      startIcon={
+                                        <i className="fa fa-envelope"></i>
+                                      }
+                                    >
+                                      Send message
+                                    </Button>
+                                    <IconButton
+                                      className="ml-2"
+                                      style={{
+                                        backgroundColor: "#eeeeee",
+                                        borderRadius: "10px",
+                                        height: "40px",
+                                        width: "40px",
+                                      }}
+                                      aria-label="delete"
+                                      size="large"
+                                    >
+                                      <i className="fa fa-trash"></i>
+                                    </IconButton>
+                                  </div>
+                                </div>
+                                <div className="rates">
+                                  <ul class="dashboard-task-info bid-info">
+                                    <li>
+                                      <strong>${item.offer}</strong>
+                                      <span>Fixed Price</span>
+                                    </li>
+                                    <li>
+                                      <strong>
+                                        {item.delivery_date
+                                          ? item.delivery_date
+                                          : "0"}
+                                      </strong>
+                                      <span>Delivery Time</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
                             </div>
-                            <div className="posted-info clearfix">
-                              <p className="m-tb0 text-primary float-left">
-                                <span className="text-black m-r10">
-                                  Delivery Date:
-                                </span>{" "}
-                                {item?.delivery_date}
-                              </p>
-                              <Link
-                                to={"/timeline/40/41"}
-                                className="site-button button-sm float-right"
-                              >
-                                Update Progress
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    )) : (
-                      <div className="col-lg-12 col-sm-12 col-12 m-b20">
-                        <div className="alert alert-secondary" role="alert">
-                          No Services Found
-                        </div>
-                      </div>
-                    )}
-                  </ul>
-                  <div className="pagination-bx m-t30">
-                    <ul className="pagination">
-                      <li className="previous">
-                        <Link to={" "}>
-                          <i className="ti-arrow-left"></i> Prev
-                        </Link>
-                      </li>
-                      <li className="active">
-                        <Link to={" "}>1</Link>
-                      </li>
-                      <li>
-                        <Link to={" "}>2</Link>
-                      </li>
-                      <li>
-                        <Link to={" "}>3</Link>
-                      </li>
-                      <li className="next">
-                        <Link to={" "}>
-                          Next <i className="ti-arrow-right"></i>
-                        </Link>
-                      </li>
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </div>
@@ -149,8 +258,9 @@ function CompanyManageOrders() {
           </div>
         </div>
       </div>
+
       <Footer />
     </>
-  );
+  )
 }
-export default CompanyManageOrders;
+export default CompanyManageOrders

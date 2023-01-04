@@ -4,31 +4,38 @@ import WeekendIcon from "@mui/icons-material/Weekend";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import StoreIcon from "@mui/icons-material/Store";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { Link } from "react-router-dom"
 
 const Hero = () => {
   return (
     <div className={styles.hero}>
       <div className="row">
         <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-lg-5 mb-md-5 mb-sm-5 ">
-          <div className={styles.heroBox}>
-            <div className={styles.upper}>
-              <div className={styles.upperWrapper}>
-                <div className={styles.upperLeft}>
-                  <WeekendIcon />
-                </div>
-                <div className={styles.upperRight}>
-                  <span>Booking</span>
-                  <h5>281</h5>
+          <Link to={"./"}>
+            <div className={styles.heroBox}>
+              <div className={styles.upper}>
+                <div className={styles.upperWrapper}>
+                  <div className={styles.upperLeft}>
+                    <WeekendIcon />
+                  </div>
+                  <div className={styles.upperRight}>
+                    <Link to={"./"}>
+                      <span>Main Balance</span>
+                      <h5>281</h5>
+                    </Link>
+                  </div>
                 </div>
               </div>
+              <hr />
+              <div className={styles.bottom}>
+                <Link to={"./"}>
+                  <p>
+                    <span>Click to Withdraw</span>
+                  </p>
+                </Link>
+              </div>
             </div>
-            <hr />
-            <div className={styles.bottom}>
-              <p>
-                <span>+55%</span> than last week
-              </p>
-            </div>
-          </div>
+          </Link>
         </div>
         <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-lg-5 mb-md-5 mb-sm-5">
           <div className={styles.heroBox}>
@@ -38,7 +45,7 @@ const Hero = () => {
                   <LeaderboardIcon />
                 </div>
                 <div className={styles.upperRight}>
-                  <span>Today's User</span>
+                  <span>Invoice Amount</span>
                   <h5>2,300</h5>
                 </div>
               </div>
@@ -59,7 +66,7 @@ const Hero = () => {
                   <StoreIcon />
                 </div>
                 <div className={styles.upperRight}>
-                  <span>Revenue</span>
+                  <span>Total Revenue</span>
                   <h5>34k</h5>
                 </div>
               </div>
@@ -80,7 +87,7 @@ const Hero = () => {
                   <PersonAddIcon />
                 </div>
                 <div className={styles.upperRight}>
-                  <span>Total Followers</span>
+                  <span>Task completed</span>
                   <h5>+91</h5>
                 </div>
               </div>

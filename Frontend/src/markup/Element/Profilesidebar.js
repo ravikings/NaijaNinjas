@@ -408,6 +408,20 @@ function ProfileSidebar({
                     className="fa-solid fa-building-columns"
                     aria-hidden="true"
                   ></i>
+                  <span>Manage debits cards</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={
+                    active === "Linked Accounts" ? "active ml-4" : "ml-4"
+                  }
+                  to={"/linked-accounts"}
+                >
+                  <i
+                    className="fa-solid fa-building-columns"
+                    aria-hidden="true"
+                  ></i>
                   <span>Linked Accounts</span>
                 </Link>
               </li>
