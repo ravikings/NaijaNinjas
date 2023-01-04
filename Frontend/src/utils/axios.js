@@ -2,7 +2,7 @@ import axios from "axios"
 import baseURL from "./baseUrl"
 
 
-export const BASE_URL = baseURL.BASE_URL
+export const BASE_URL = baseURL.baseURL
 
 
 export default function createRequest() {

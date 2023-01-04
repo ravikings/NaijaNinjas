@@ -13,6 +13,7 @@ from task.views import (
     get_timeiline,
     pro_assigned_task,
     task_ordered,
+    approve_delivery,
     DashboardTaskFavorite,
     SearchTask,
     accept_bid,
@@ -61,5 +62,7 @@ urlpatterns = [
     ),
     path("get-assigned-task/<str:task_owner>", pro_assigned_task, name="get-assigned-task"),
     path("get-ordered-task/<str:task_owner>", task_ordered, name="get-ordered-task"),
+    path("approve-delivery/<str:pk>", approve_delivery, name="approve-delivery"),
+    
     
 ]

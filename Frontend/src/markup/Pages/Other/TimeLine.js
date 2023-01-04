@@ -19,6 +19,10 @@ import {
   Form,
   // FormGroup, InputGroup
 } from "react-bootstrap"
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import "react-dropzone-uploader/dist/styles.css"
 import Dropzone from "react-dropzone-uploader"
 import createRequest, { axiosPrivate } from "../../../utils/axios"
@@ -77,8 +81,8 @@ function TimeLine() {
         settimelineStatus(status)
         setAuthor(author)
         setTask_owner(task_owner)
-        console.log("res", res)
         setLoading(false)
+        toast.success("Good to see you, welcome back!")
       })
       .catch((e) => {
         setLoading(false)
@@ -150,6 +154,30 @@ function TimeLine() {
           console.log({ error })
         }
       )
+  }
+
+  const approveOrder = (e) => {
+    e.preventDefault()
+    const formdata = new FormData()
+    formdata.append("status", "APPROVED")
+    axiosPrivate
+      .post(`${baseUrl.baseURL}api/v1/task/approve-delivery/${e.target.id}`, formdata)
+      .then(
+        (response) => {
+          setDeliveryAttach(null)
+          toast.success("Thank you! order completed")
+          // } else {
+          //   toast.success("we are sorry for the inconvenience, Pro will get back ASAP!")
+          // }
+          getTimeLineData()
+          console.log("the response is ", response)
+        },
+        (error) => {
+          toast.error("sorry! service not available")
+          console.log({ error })
+        }
+      )
+
   }
 
   const addReview = (e) => {
@@ -262,11 +290,6 @@ function TimeLine() {
                                 {timelineComment.length > 0 &&
                                   timelineComment?.map((item, index) => (
                                     <div className="uk-timeline-item">
-                                      {/* <div className="uk-timeline-icon">
-                                  <div className="uk-badge">
-                                    <span uk-icon="check"></span>
-                                  </div>
-                                </div> */}
                                       <div className="uk-timeline-icon">
                                         <span
                                           className={`uk-badge ${item.status === "CONTRACT"
@@ -343,6 +366,24 @@ function TimeLine() {
                                               </span>
                                             </p>
                                           </div>
+                                          {item.status === "DELIVERED" && (author === userProfile?.author)? (
+                                          <div className="container my-3 bg-light">
+                                            <div className="col-md-12 text-center">
+                                              <button type="button" className="btn btn-primary" id={item.id} onClick={approveOrder} >Approve </button>
+                                              <span>{"  "}</span>
+                                              <button type="button" className="btn btn-warning" onClick={(e) => onClickOpenForm(e, "revision")}> Reject </button>
+                                            </div>
+                                          </div>
+                                          ) : ""}
+                                          {/* {item.status === "APPROVED" ? "" : (
+                                          <div className="container my-3 bg-light">
+                                            <div className="col-md-12 text-center">
+                                              <button type="button" className="btn btn-primary" id={item.id} onClick={approveOrder} >Approve {item.id} </button>
+                                              <span>{"  "}</span>
+                                              <button type="button" className="btn btn-warning"> Reject </button>
+                                            </div>
+                                          </div>
+                                          )} */}
                                         </div>
                                       </div>
                                     </div>
@@ -363,7 +404,7 @@ function TimeLine() {
                                             Load More
                                           </button>
                                         </div>
-                                        {task_owner === userProfile?.author ? (
+                                        {timelineStatus !== "DELIVERED" && (task_owner === userProfile?.author) ?  (
                                           <><div className="mr-2">
                                             <button
                                               className="btn btn-success"
@@ -381,18 +422,7 @@ function TimeLine() {
                                               </button>
                                             </div></>
                                         ) : ""}
-                                        {/* )} */}
-                                        {/* {displayFormName === "" && (
-                            <div className="mr-2">
-                              <button
-                                className="btn btn-warning"
-                                onClick={(e) => onClickOpenForm(e, "comment")}
-                              >
-                                Add Comment
-                              </button>
-                            </div>
-                          )} */}
-                                        {timelineStatus == "DELIVERED" && (task_owner === userProfile?.author) ? (
+                                        {timelineStatus === "APPROVED" && (author === userProfile?.author) ? (
                                           <div className="mr-2">
                                             <button
                                               className="btn btn-info"
@@ -422,21 +452,42 @@ function TimeLine() {
                             </div>
                           </div>
                         </div>
-                        {displayFormName === "deliver" && (
+                        {displayFormName === "revision" && (
                           <div className="container mt-5 mb-5 ml-20">
-                            <h3>Deliver Service</h3>
+                            <h3>Request Order revison</h3>
                             <Form onSubmit={addDelivery}>
                               <div>
-                                {/* <FormControl
-                      style={{ marginBottom: "2rem", marginTop: "1rem" }}
-                    >
-                      <FormLabel id="commentDescription">Comment</FormLabel>
-                      <TextareaAutosize
-                        aria-labelledby="commentDescription"
-                        minRows={3}
-                        style={{ width: 250 }}
-                      />
-                    </FormControl> */}
+                                <div className="form-group">
+                                  <label>Description:</label>
+                                  <textarea
+                                    id="description"
+                                    required
+                                    value={deliveryDes}
+                                    onChange={(e) =>
+                                      setDeliveryDes(e.target.value)
+                                    }
+                                    placeholder="Enter description"
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
+                              <div className="m-b20">
+                                <label>Deliverables:</label>
+                                <Dropzone
+                                  getUploadParams={getUploadParams}
+                                  onChangeStatus={handleChangeStatus}
+                                  accept="image/*"
+                                />
+                              </div>
+                              <Button type="submit">Deliver Service</Button>
+                            </Form>
+                          </div>
+                        )}
+                        {displayFormName === "deliver" && (
+                          <div className="container mt-5 mb-5 ml-20">
+                            <h3>Send</h3>
+                            <Form onSubmit={addDelivery}>
+                              <div>
                                 <div className="form-group">
                                   <label>Description:</label>
                                   <textarea

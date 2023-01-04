@@ -188,6 +188,8 @@ class Timeline(models.Model):
         ("CLIENT_REVIEW", "CLIENT_REVIEW"),
         ("PRO_REVIEW", "PRO_REVIEW"),
         ("APPROVED", "APPROVED"),
+        ("DECLINED", "DECLINED"),
+        ("REVISION", "REVISION"),
     ]
 
     author = models.ForeignKey(
@@ -226,6 +228,8 @@ class Comment(models.Model):
         ("CLIENT_REVIEW", "CLIENT_REVIEW"),
         ("PRO_REVIEW", "PRO_REVIEW"),
         ("APPROVED", "APPROVED"),
+        ("DECLINED", "DECLINED"),
+        ("REVISION", "REVISION"),
     ]
 
     author = models.ForeignKey(
