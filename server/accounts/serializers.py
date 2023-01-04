@@ -1,22 +1,16 @@
-from asyncore import read
 from django.db import transaction
 from django.conf import settings
 from rest_framework import serializers
 from django.db.models import Avg, F
+from rest_framework.fields import CurrentUserDefault
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes
 from django.db import IntegrityError
-from django.utils.safestring import mark_safe
-from django.db.models import Avg, F, Count
-from rest_framework import status
-import datetime
+from django.db.models import Avg
 from django.utils import timezone
-from rest_framework.response import Response
 from accounts.models import (
     AccountUser,
     RunnerProfile,
@@ -31,6 +25,8 @@ from accounts.models import (
     PublicQuotes,
     IpModel,
 )
+from bank.models import CurrentBalance
+from bank.serializers import CurrentBalanceSerializer
 
 # from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
@@ -94,6 +90,7 @@ class UserSerializer(serializers.ModelSerializer):
             return {"days": day, "hour": hour, "minutes": minutes, "seconds": seconds}
 
         return None
+
 
 class ContractUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -165,7 +162,6 @@ class UserResumeSerializer(serializers.ModelSerializer):
 
 
 class ChatSearchProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = RunnerProfile
         fields = ("author", "first_name", "last_name", "title", "photo", "status")
@@ -269,6 +265,7 @@ class UserAccountSerializer(serializers.ModelSerializer):
         model = AccountUser
         fields = ("id", "email", "phone_number", "is_a_runner")
         read_only_fields = ("id", "email", "phone_number", "is_a_runner")
+
 
 class AssignTaskOwnerSerializer(serializers.ModelSerializer):
     class Meta:

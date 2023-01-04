@@ -1,4 +1,3 @@
-from parser import ParserError
 from signal import strsignal
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView

@@ -52,9 +52,10 @@ def save_card_info(account, transaction_data):
 @transaction.atomic
 def update_current_balance(author_id, amount):
 
-    update_account = CurrentBalance.objects.get_or_create(author=author_id)
-    update_account.balance = update_account.balance + amount
+    update_account = CurrentBalance.objects.get(author=author_id)
+    update_account.invoice_amount = update_account.invoice_amount + amount
     update_account.save()
+    print("account balance update")
 
 @shared_task(name="log-transaction-task", bind=True, autoretry_for=(Exception,), retry_backoff=15, retry_jitter=True, retry_kwargs={'max_retries': 0})
 def log_transaction_task(self, reference, transaction_data):

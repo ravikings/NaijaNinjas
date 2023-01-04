@@ -4,6 +4,7 @@ import Footer from "../../Layout/Footer"
 import ProfileSidebar from "../../Element/Profilesidebar"
 import { useDispatch, useSelector } from "react-redux"
 import Loader from "../../Element/Loader"
+import { BsFillArrowDownSquareFill } from "react-icons/bs";
 import { authActionTypes, setProfileData } from "../Auth/Redux/AuthActions"
 import createRequest from "../../../utils/axios"
 import Hero from "./Hero"

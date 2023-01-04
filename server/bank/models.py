@@ -13,11 +13,11 @@ def account_no_generator():
 
 class CurrentBalance(models.Model):
     account_number = models.IntegerField(unique=True, default=account_no_generator, editable=False)
-    balance = models.IntegerField()
+    invoice_amount = models.IntegerField(default=0, blank=True, null=True)
+    balance = models.IntegerField(default=0, blank=True, null=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="bank_owner"
     )
-
 
 class AvailableBalance(models.Model):
     balance = models.IntegerField()

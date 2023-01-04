@@ -17,14 +17,7 @@ import PaymentPage from "./PaymentPageOld"
 import baseUrl from "../../../utils/baseUrl"
 import TestPayment from "./TestPayment"
 
-const postBox = [
-  { image: logo },
-  { image: logo },
-  { image: logo },
-  { image: logo },
-  { image: logo },
-  { image: logo },
-]
+
 
 function CompanyManageBids() {
   const location = useLocation()
@@ -39,7 +32,6 @@ function CompanyManageBids() {
   const [errorMes, setErrorMes] = useState("")
   const params = useParams()
   const history = useHistory()
-  console.log("params", params)
 
   const allData = () => {
     setLoading(true)
