@@ -438,7 +438,7 @@ function ProfileSidebar({
               </li>
             </Collapse>
             <li>
-              <Link to={"./"}>
+              <Link to={"/"}>
                 <i className="fa fa-sign-out" aria-hidden="true"></i>
                 <span>Log Out</span>
               </Link>

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Tab, Tabs } from "@material-ui/core"
 import { useStyles } from "../MakeOfferStyles"
-import { AboutMe, Gallery, Resume, Services } from "./"
+import { AboutMe, Gallery, Resume, Services } from "/"
 
 function TabsGroup({ data, resume, id }) {
   const classes = useStyles()

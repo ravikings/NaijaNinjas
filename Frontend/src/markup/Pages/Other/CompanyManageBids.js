@@ -36,7 +36,7 @@ function CompanyManageBids() {
   const allData = () => {
     setLoading(true)
     createRequest()
-      .get(`api/v1/task/task-bidding/?task=${id}`)
+    .get(`api/v1/task/task-bidding/?task=${id}`)
       .then((res) => {
         setTotalCount(res?.data?.count)
         setData(res.data.results)
@@ -49,6 +49,7 @@ function CompanyManageBids() {
         } else {
           console.log("Unknown Error")
         }
+        setLoading(false)
       })
   }
   useEffect(() => {
@@ -121,9 +122,9 @@ function CompanyManageBids() {
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title  clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        Manage Bids
+                      Manage Bids
                       </h5>
-                      <div className="float-right">
+                      {/* <div className="float-right">
                         <span className="select-title">Sort by freshness</span>
                         <select className="custom-btn">
                           <option>All</option>
@@ -133,10 +134,10 @@ function CompanyManageBids() {
                           <option>Starred</option>
                           <option>Unstarred</option>
                         </select>
-                      </div>
+                      </div> */}
                     </div>
                     <ul className="post-job-bx">
-                      {data.length === 0
+                      {data?.length === 0
                         ? "Your task have no bids at the moment, kindly check by soon, Thank you!"
                         : data.map((item, index) => (
                           <li key={index}>
@@ -147,7 +148,7 @@ function CompanyManageBids() {
                                     <span style={{ borderRadius: "50%" }}>
                                       <img
                                         alt=""
-                                        src={item.bidder_info.photo}
+                                        src={item.bidder_info[0].photo}
                                       />
                                     </span>
                                   </Link>
@@ -164,6 +165,7 @@ function CompanyManageBids() {
                                     </Link>
                                   </h4>
                                   <Ratings />
+                                  <h6>{item.description}</h6>
                                   <div className="mt-3">
                                     {item.bid_approve_status ? (
                                       <Button
@@ -208,12 +210,12 @@ function CompanyManageBids() {
                                       className="ml-2"
                                       variant="outlined"
                                       startIcon={
-                                        <i className="fa fa-envelope"></i>
+                                        <i className="fas fa-info-circle"></i>
                                       }
                                     >
-                                      Send message
+                                      {item.task_status[0].status}
                                     </Button>
-                                    <IconButton
+                                    {/* <IconButton
                                       className="ml-2"
                                       style={{
                                         backgroundColor: "#eeeeee",
@@ -225,7 +227,7 @@ function CompanyManageBids() {
                                       size="large"
                                     >
                                       <i className="fa fa-trash"></i>
-                                    </IconButton>
+                                    </IconButton> */}
                                   </div>
                                 </div>
                                 <div className="rates">
@@ -236,9 +238,9 @@ function CompanyManageBids() {
                                     </li>
                                     <li>
                                       <strong>
-                                        {item.delivery_date
-                                          ? item.delivery_date
-                                          : "0"}
+                                        {item.task_delivery_date
+                                          ? item.task_delivery_date
+                                          : " "}
                                       </strong>
                                       <span>Delivery Time</span>
                                     </li>

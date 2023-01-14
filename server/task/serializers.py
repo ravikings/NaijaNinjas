@@ -81,6 +81,8 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
     """
 
     bidder_info = serializers.SerializerMethodField()
+    task_delivery_date = serializers.SerializerMethodField()
+    task_status = serializers.SerializerMethodField()
 
     class Meta:
         model = TaskBidder
@@ -89,6 +91,7 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
             "runner_confirmed",
             "webhook_transaction_verified",
             "transaction_verified",
+            "delivery_date"
         ]
         read_only_fields = (
             "bid_approve_status",
@@ -103,6 +106,16 @@ class TaskBidderprofileSerializer(serializers.ModelSerializer):
         profile = RunnerProfile.objects.filter(id=id.id)
         serializer = BiddersProfileSerializer(profile, many=True)
         return serializer.data
+    
+    def get_task_delivery_date(self, instance):
+        dateTimeObj = instance.delivery_date
+        timestampStr = dateTimeObj.strftime("%b-%d-%Y")
+
+        return timestampStr
+    
+    def get_task_status(self, instance):
+        
+        return Timeline.objects.filter(id=instance.timeline).values("status")
 
 
 class TaskImageSerializer(serializers.ModelSerializer):

@@ -56,7 +56,7 @@ function Header2() {
           <div className="main-bar clearfix">
             <div className="container clearfix">
               <div className="logo-header mostion">
-                <Link to={"./"}>
+                <Link to={"/"}>
                   <img
                     src={require("./../../images/logoNew.png")}
                     className="logo"

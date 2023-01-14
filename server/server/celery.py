@@ -16,10 +16,20 @@ def debug_task(self):
 
 def start_celery_worker():
 
-    worker = app.Worker(app=app, pool="eventlet", concurrency=500, loglevel="INFO")
-    thread = threading.Thread(target=worker.start)
+    #worker = app.Worker(app=app, pool="eventlet", concurrency=500, loglevel="INFO")
+    thread = threading.Thread(target=run_woker)
     thread.daemon = True
     thread.start()
+
+def run_woker():
+    
+    worker = app.Worker(app=app, pool="solo",concurrency=1, task_events=True, loglevel="INFO")
+    worker.start()
+    output = app.control.inspect().ping()
+    if not output:
+        raise AssertionError("No worker pinged")
+    workers = list(output.keys())
+    print("here is worker list", workers)
 
 #start_celery_worker()
 #celery -A server worker --without-heartbeat --without-gossip --without-mingle

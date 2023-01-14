@@ -1,12 +1,12 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
-import {Form} from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import GoogleMaps from "simple-react-google-maps";
 
-function Companyprofile(){
-	return(
+function Companyprofile() {
+	return (
 		<>
 			<Header2 />
 			<div className="page-content bg-white">
@@ -33,25 +33,25 @@ function Companyprofile(){
 											</div>
 											<ul>
 												<li><Link to={"/company-profile"} className="active">
-													<i className="fa fa-user-o" aria-hidden="true"></i> 
+													<i className="fa fa-user-o" aria-hidden="true"></i>
 													<span>Company Profile</span></Link></li>
 												<li><Link to={"/company-post-jobs"}>
-													<i className="fa fa-file-text-o" aria-hidden="true"></i> 
+													<i className="fa fa-file-text-o" aria-hidden="true"></i>
 													<span>Post A Job</span></Link></li>
 												<li><Link to={"/company-transactions"}>
 													<i className="fa fa-random" aria-hidden="true"></i>
 													<span>Transactions</span></Link></li>
 												<li><Link to={"/company-manage-job"}>
-													<i className="fa fa-briefcase" aria-hidden="true"></i> 
+													<i className="fa fa-briefcase" aria-hidden="true"></i>
 													<span>Manage tasks</span></Link></li>
 												<li><Link to={"/company-resume"}>
 													<i className="fa fa-id-card-o" aria-hidden="true"></i>
 													<span>Resume</span></Link></li>
 												<li><Link to={"/jobs-change-password"}>
-													<i className="fa fa-key" aria-hidden="true"></i> 
+													<i className="fa fa-key" aria-hidden="true"></i>
 													<span>Change Password</span></Link></li>
-												<li><Link to={"./"}>
-													<i className="fa fa-sign-out" aria-hidden="true"></i> 
+												<li><Link to={"/"}>
+													<i className="fa fa-sign-out" aria-hidden="true"></i>
 													<span>Log Out</span></Link></li>
 											</ul>
 										</div>
@@ -92,7 +92,7 @@ function Companyprofile(){
 												<div className="col-lg-6 col-md-6">
 													<div className="form-group">
 														<label>Category</label>
-														 <Form.Control as="select" custom className="custom-select">
+														<Form.Control as="select" custom className="custom-select">
 															<option>Web Designer</option>
 															<option>Web Developer1</option>
 														</Form.Control>
@@ -112,7 +112,7 @@ function Companyprofile(){
 													</div>
 												</div>
 											</div>
-											
+
 											<div className="job-bx-title clearfix">
 												<h5 className="font-weight-700 pull-left text-uppercase">Contact Information</h5>
 											</div>
@@ -156,14 +156,14 @@ function Companyprofile(){
 												<div className="col-lg-12">
 													<GoogleMaps
 														apiKey={"AIzaSyBPDjB2qkV4Yxn9h0tGSk2X5uH6NKmssXw"}
-														style={{ height: "300px", width: "100%" , border:"0"}}
+														style={{ height: "300px", width: "100%", border: "0" }}
 														zoom={6}
 														center={{ lat: 37.4224764, lng: -122.0842499 }}
 														markers={{ lat: 37.4224764, lng: -122.0842499 }} //optional
 													/>
 												</div>
 											</div>
-											
+
 											<div className="job-bx-title clearfix">
 												<h5 className="font-weight-700 pull-left text-uppercase">Social link</h5>
 											</div>
@@ -200,7 +200,7 @@ function Companyprofile(){
 							</div>
 						</div>
 					</div>
-					
+
 				</div>
 			</div>
 			<Footer />
