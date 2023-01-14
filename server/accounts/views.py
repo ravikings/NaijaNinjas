@@ -12,7 +12,11 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from accounts.permissions import IsRunner
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -76,7 +80,10 @@ from .serializers import (
 )
 from notifications.signals import notify
 from rest_framework.authentication import TokenAuthentication
-from durin.auth import TokenAuthentication as DurinTokenAuthentication, CachedTokenAuthentication
+from durin.auth import (
+    TokenAuthentication as DurinTokenAuthentication,
+    CachedTokenAuthentication,
+)
 
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -85,6 +92,7 @@ class DashboardProfile(viewsets.ModelViewSet):
     """
     dashboard serializers use for entry data for getting data to the ui
     """
+
     # permission_classes  = [IsAuthenticated and IsOwner]
     authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerProfile.objects.all()
@@ -105,6 +113,7 @@ class RelatedProfile(viewsets.ModelViewSet):
     sector, department, city, id
 
     """
+
     authentication_classes = (DurinTokenAuthentication,)
     serializer_class = ProfileSerializer
 
@@ -133,10 +142,11 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
     dashboard serializers use for entry data for getting data to the ui
     """
+
     authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
-    permission_classes  = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def retrieve(self, request, pk=None):
 
@@ -150,7 +160,9 @@ class UserDashboardProfile(viewsets.ModelViewSet):
             serializer = PrivateProfileSerializer(obj)
             return Response(serializer.data)
 
-        return Response({"detail": "Permission deniied."},  status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Permission deniied."}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 def save_user_profile(profile, request):
@@ -189,7 +201,6 @@ class DashboardResume(viewsets.ModelViewSet):
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
     # TODO: uncomment below
-    
 
     def retrieve(self, request, pk=None):
 
@@ -596,7 +607,6 @@ class ChangePasswordAccountView(APIView):
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordEmailRequestSerializer
-    
 
     def get(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -793,9 +803,7 @@ class DeleteProjectReview(viewsets.ModelViewSet):
     uses to delete images attached to projects
     """
 
-    authentication_classes = [
-        TokenAuthentication, DurinTokenAuthentication
-    ]
+    authentication_classes = [TokenAuthentication, DurinTokenAuthentication]
     permissions_classes = IsAuthenticated  # [IsAuthenticated and IsOwner]
     queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
@@ -849,15 +857,17 @@ def public_quotes(request):
 
 
 @api_view(["POST", "GET"])
+@authentication_classes([DurinTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def profile_favorite(request, pk):
 
-    profile = get_object_or_404(RunnerProfile, author_id=request.user.id)
-    if profile.bookmarks.filter(id=pk).exists():
-        profile.bookmarks.remove(pk)
-        return Response({"message": f"profile {pk} removed"})
-    else:
-        profile.bookmarks.add(pk)
-        return Response({"message": f"profile {pk} added"})
+    profile = get_object_or_404(RunnerProfile, author=pk)
+    user = request.user.id
+    if profile.bookmarks.filter(id=user).exists():
+        profile.bookmarks.remove(user)
+        return Response({"message": f"profile {user} removed"})
+    profile.bookmarks.add(user)
+    return Response({"message": f"profile {user} added"})
 
 
 class DashboardProfileFavorite(viewsets.ModelViewSet):
@@ -882,45 +892,43 @@ class MFATokenVerify(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
-
     def post(self, request, *args, **kwargs):
         data = UserSerializer(request.user).data
         return Response(data)
 
 
- 
 # Define a function for
 # for validating an Email
 def check_email(email):
-    
+
     # Make a regular expression
     # for validating an Email
-    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    
+    regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
+
     # pass the regular expression
     # and the string into the fullmatch() method
-    if(re.fullmatch(regex, email)):
+    if re.fullmatch(regex, email):
         return True
-    
+
     return False
 
+
 def check_passowrd(password):
-    #passwd = 'Geek12@'
+    # passwd = 'Geek12@'
     reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
-      
+
     # compiling regex
     pat = re.compile(reg)
-      
-    # searching regex                 
+
+    # searching regex
     mat = re.search(pat, password)
-      
+
     # validating conditions
     if mat:
         return True
     else:
         return False
-    
-    
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -931,11 +939,11 @@ def durinSingUp(request):
     client = request.data.get("client")
     data = {}
     if not check_email(username):
-            return Response(
+        return Response(
             {"error": "invalid email address"}, status=status.HTTP_400_BAD_REQUEST
         )
     if not check_passowrd(password):
-            return Response(
+        return Response(
             {"error": "invalid password"}, status=status.HTTP_400_BAD_REQUEST
         )
     check_user = AccountUser.objects.filter(email=username)
@@ -948,8 +956,10 @@ def durinSingUp(request):
     user.set_password(password)
     user.save()
 
-    user_data = AccountUser.objects.filter(email=username).values("pk", "email", "username", "is_a_runner")
-    data["user"] = (user_data[0])
+    user_data = AccountUser.objects.filter(email=username).values(
+        "pk", "email", "username", "is_a_runner"
+    )
+    data["user"] = user_data[0]
 
     url = reverse("durin_login")
     c = Client()

@@ -8,6 +8,7 @@ import Pagination from "react-js-pagination"
 import Accordsidebar from "../../Element/Accordsidebar"
 import createRequest from "../../../utils/axios"
 import ClipLoader from "react-spinners/ClipLoader"
+import { useDispatch, useSelector } from "react-redux"
 //Images
 import logo from "../../../images/logo/icon1.png"
 import { Badge } from "react-bootstrap"
@@ -22,6 +23,10 @@ function BrowseCandidates() {
   const [data, setData] = useState([])
   const [totalCount, setTotalCount] = useState(null)
   const [activePage, SetActivePage] = useState(1)
+  const { currentUser, userProfile } = useSelector(
+    (state) => state.authReducer
+  )
+  const userID = localStorage.getItem("userID");
 
   const { title, sector } = queryString.parse(window.location.search)
   const allData = async () => {
@@ -101,10 +106,11 @@ function BrowseCandidates() {
       const { data } = await createRequest().post(
         `/api/v1/profile-bookmark/${id}/`
       )
-      toast.success(data.message)
+      toast.success(data.message) 
     } catch (error) {
-      toast.error(error.response.data.message || "Something went wrong")
+      toast.error(error.response.data.message || "Service not available")
     }
+    allData()
   }
 
   // paginate function start
@@ -129,7 +135,7 @@ function BrowseCandidates() {
                   <div className="col-xl-9 col-lg-8 col-md-7">
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        {data?.length} Professionals Found
+                        {totalCount} Professionals Found
                       </h5>
                     </div>
                     <ul className="post-job-bx">
@@ -200,10 +206,6 @@ function BrowseCandidates() {
                                     <li>
                                       <i className="fa fa-usd"></i> Full Time
                                     </li>
-                                    <li>
-                                      <i className="fa fa-clock-o"></i>{" "}
-                                      Published 11 months ago
-                                    </li>
                                   </ul>
                                 </div>
                               </div>
@@ -239,9 +241,11 @@ function BrowseCandidates() {
                                   </Link>
                                 </div>
                               </div>
+                              {currentUser ? (
                               <label className="like-btn">
                                 <input
                                   type="checkbox"
+                                  //checked={item.bookmarks.includes(parseInt(userID)) ? true : false}
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     handleBookmark(item.author)
@@ -249,6 +253,7 @@ function BrowseCandidates() {
                                 />
                                 <span className="checkmark"></span>
                               </label>
+                              ): ""}
                             </div>
                           </Link>
                         </li>

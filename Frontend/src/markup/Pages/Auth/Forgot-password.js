@@ -189,7 +189,7 @@ function ForgotPassword(props) {
             <div className='col-lg-6 col-md-5 d-flex box-skew1'>
               <div className='text-white max-w400 align-self-center'>
                 <div className='logo'>
-                  <Link to={"./"}>
+                  <Link to={"/"}>
                     <img src='assets/logo.png' alt='' />
                   </Link>
                 </div>

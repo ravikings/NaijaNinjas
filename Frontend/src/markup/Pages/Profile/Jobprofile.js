@@ -132,7 +132,7 @@ function Jobprofile() {
       ) {
         formik.values.postcode =
           states[formik.values.state].postalCodes[
-            states[formik.values.state].cities.indexOf(formik.values.city)
+          states[formik.values.state].cities.indexOf(formik.values.city)
           ]
       }
     }
@@ -168,7 +168,7 @@ function Jobprofile() {
                             Basic Information
                           </h5>
                           <Link
-                            to={"./"}
+                            to={"/"}
                             className="site-button right-arrow button-sm float-right"
                           >
                             Back

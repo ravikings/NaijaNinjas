@@ -1,13 +1,13 @@
 import React from 'react';
-import {useFormik} from "formik";
-import {Link, useHistory} from "react-router-dom";
+import { useFormik } from "formik";
+import { Link, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import createRequest from "../../../utils/axios";
-import {useLocation} from "react-router-dom";
-import {toast} from "react-toastify";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function useQuery() {
-    const {search} = useLocation();
+    const { search } = useLocation();
 
     return React.useMemo(() => new URLSearchParams(search), [search]);
 }
@@ -18,7 +18,7 @@ function ResetPassword(props) {
 
     const resetPassword = async (values) => {
         try {
-            const {data} = await createRequest().get("/api/v1/set-password/", {
+            const { data } = await createRequest().get("/api/v1/set-password/", {
                 params: {
                     password1: values.password1,
                     password2: values.password2,
@@ -34,9 +34,9 @@ function ResetPassword(props) {
     }
 
     const formik = useFormik({
-        initialValues: {password1: "", password2: ""},
+        initialValues: { password1: "", password2: "" },
         enableReinitialize: true,
-        onSubmit: async (values, {resetForm}) => {
+        onSubmit: async (values, { resetForm }) => {
             await resetPassword(values);
         },
     });
@@ -56,7 +56,7 @@ function ResetPassword(props) {
                                         onSubmit={formik.handleSubmit}
                                         id="login"
                                         className="tab-pane active col-12 p-a0 "
-                                        style={{width: "310px"}}
+                                        style={{ width: "310px" }}
                                     >
                                         <p className="font-weight-bold text-center text-dark h4">
                                             Reset password
@@ -140,7 +140,7 @@ function ResetPassword(props) {
                         <div className="col-lg-6 col-md-5 d-flex box-skew1">
                             <div className="text-white max-w400 align-self-center">
                                 <div className="logo">
-                                    <Link to={"./"}>
+                                    <Link to={"/"}>
                                         <img
                                             src='assets/logo.png'
                                             alt=""
@@ -188,14 +188,14 @@ function ResetPassword(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12 text-center">
-              <span className="float-left text-black-light">
-                {" "}
-                  © Copyright by{" "}
-                  <i className="fa fa-heart m-lr5 text-red heart"></i>
-                <Link to={"#"} className="text-primary">
-                  NaijaNinjas
-                </Link>
-              </span>
+                            <span className="float-left text-black-light">
+                                {" "}
+                                © Copyright by{" "}
+                                <i className="fa fa-heart m-lr5 text-red heart"></i>
+                                <Link to={"#"} className="text-primary">
+                                    NaijaNinjas
+                                </Link>
+                            </span>
                             <span className="float-right">All rights reserved.</span>
                         </div>
                     </div>

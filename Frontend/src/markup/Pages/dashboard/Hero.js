@@ -11,7 +11,7 @@ const Hero = () => {
     <div className={styles.hero}>
       <div className="row">
         <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-lg-5 mb-md-5 mb-sm-5 ">
-          <Link to={"./"}>
+          <Link to={"/"}>
             <div className={styles.heroBox}>
               <div className={styles.upper}>
                 <div className={styles.upperWrapper}>
@@ -19,7 +19,7 @@ const Hero = () => {
                     <WeekendIcon />
                   </div>
                   <div className={styles.upperRight}>
-                    <Link to={"./"}>
+                    <Link to={"/"}>
                       <span>Main Balance</span>
                       <h5>281</h5>
                     </Link>
@@ -28,9 +28,9 @@ const Hero = () => {
               </div>
               <hr />
               <div className={styles.bottom}>
-                <Link to={"./"}>
+                <Link to={"/"}>
                   <p>
-                    <span>Click to Withdraw</span>
+                    <span>Withdraw</span>
                   </p>
                 </Link>
               </div>
