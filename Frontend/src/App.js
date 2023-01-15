@@ -61,16 +61,16 @@ function App() {
 
   return (
     <div className="App">
-      {loading ? (
+      {/* {loading ? (
         <Loader />
       ) : (
         <>
           <Markup />
           <ToastContainer />
         </>
-      )}
-      {/* <Markup />
-      <ToastContainer /> */}
+      )} */}
+      <Markup />
+      <ToastContainer />
     </div>
   )
 }
