@@ -23,6 +23,7 @@ function BrowseCandidates() {
   const [data, setData] = useState([])
   const [totalCount, setTotalCount] = useState(null)
   const [activePage, SetActivePage] = useState(1)
+  const [checkBookmark, setCheckBookmark] = useState({})
   const { currentUser, userProfile } = useSelector(
     (state) => state.authReducer
   )
@@ -77,6 +78,11 @@ function BrowseCandidates() {
     allData()
   }, [])
 
+  // useEffect(() => {
+  //   console.log("use effect");
+  //   console.log(data);
+  // }, [data])
+
   const handleFilter = async (params) => {
     window.scrollTo(0, 0)
     setLoading(true)
@@ -101,16 +107,29 @@ function BrowseCandidates() {
     }
   }
 
-  const handleBookmark = async (id) => {
+  const handleBookmark = async (id, index) => {
+    const record = data[index].bookmarks
+    if (record.includes(id)) {
+      let index = record.indexOf(id);
+      record.splice(index, 1)
+      checkBookmark[index]=false;
+    } else {
+      record.push(id);
+      checkBookmark[index]=true;
+    }
+    data[index].bookmarks = record
+    console.log("heeeeh")
+    console.log(data[index].bookmarks)
+    console.log(index, data)
     try {
       const { data } = await createRequest().post(
         `/api/v1/profile-bookmark/${id}/`
       )
-      toast.success(data.message) 
+      //toast.success(data.message)
     } catch (error) {
-      toast.error(error.response.data.message || "Service not available")
+      //toast.error(error.response.data.message || "Service not available")
     }
-    allData()
+    //allData()
   }
 
   // paginate function start
@@ -221,7 +240,6 @@ function BrowseCandidates() {
                                 )}
 
                                 <div className="salary-bx">
-                                  {console.log(item, "item")}
                                   <Link
                                     to={{
                                       pathname: `/make-offer/${item.author}`,
@@ -242,18 +260,19 @@ function BrowseCandidates() {
                                 </div>
                               </div>
                               {currentUser ? (
-                              <label className="like-btn">
-                                <input
-                                  type="checkbox"
-                                  //checked={item.bookmarks.includes(parseInt(userID)) ? true : false}
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleBookmark(item.author)
-                                  }}
-                                />
-                                <span className="checkmark"></span>
-                              </label>
-                              ): ""}
+                                <label className="like-btn">
+                                  {item.bookmarks.includes(parseInt(userID)) ? setCheckBookmark[index] = true  : setCheckBookmark[index] = false}
+                                  <input
+                                    type="checkbox"
+                                    checked={checkBookmark[index]}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleBookmark(item.author, index)
+                                    }}
+                                  />
+                                  <span className="checkmark"></span>
+                                </label>
+                              ) : ""}
                             </div>
                           </Link>
                         </li>

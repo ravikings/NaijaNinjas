@@ -64,5 +64,4 @@ urlpatterns = [
     path("get-ordered-task/<str:task_owner>", task_ordered, name="get-ordered-task"),
     path("approve-delivery/<str:pk>", approve_delivery, name="approve-delivery"),
     
-    
 ]

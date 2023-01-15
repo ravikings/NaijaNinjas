@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header2 from "../../Layout/Header2";
 import Footer from "../../Layout/Footer";
@@ -21,6 +21,7 @@ function Companymanage() {
   const [viewData, setViewData] = useState([]);
   const axiosPrivate = useAxiosPrivate();
   const { id, title } = useParams();
+  const refTime = useRef(null);
   var userId = parseInt(localStorage.getItem("userID"));
   // geting data from api for fourm start
   const allData = (page = 1) => {
@@ -44,14 +45,8 @@ function Companymanage() {
 
   // geting data from api for fourm end
   const deleteItem = (e) => {
-    axiosPrivate({
-      method: "DELETE",
-      url: `${url.baseURL}api/v1/task/task-assigned/${e}`,
-
-      headers: {
-        Authorization: token,
-      },
-    }).then(
+    createRequest()
+    .delete(`${url.baseURL}api/v1/task/task/${e}/`).then(
       (response) => {
         if (response) {
           swal("Success", "Task deleted successfully", "success");
@@ -66,6 +61,21 @@ function Companymanage() {
   useEffect(() => {
     allData();
   }, []);
+
+  //TODO: Use this method to reload componet accros
+  // useEffect(() => {
+
+  //   refTime.current = setInterval(() => allData(), 60 * 15 * 1000);
+  //   console.log("callng api");
+  //   console.log("callng api");
+    
+  //   return () => {
+  //     if(refTime.current){
+  //       clearInterval(refTime.current)
+  //     }
+  //   };
+  // }, []);
+
   const Paginate = (page) => {
     SetActivePage(page);
     allData(page);
@@ -166,7 +176,7 @@ function Companymanage() {
                                 <td className="application text-primary">
                                   {e?.department}
                                 </td>
-                                <td>{e?.updated || e?.created} </td>
+                                <td>{e?.updated.split("T")[0] || e?.created.split("T")[0]} </td>
                                 <td className="expired success">
                                   {e?.post_status}{" "}
                                 </td>
