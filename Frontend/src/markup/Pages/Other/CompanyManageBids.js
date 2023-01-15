@@ -213,7 +213,7 @@ function CompanyManageBids() {
                                         <i className="fas fa-info-circle"></i>
                                       }
                                     >
-                                      {item.task_status[0].status}
+                                      {item.task_status[0]?.status}
                                     </Button>
                                     {/* <IconButton
                                       className="ml-2"
@@ -231,7 +231,7 @@ function CompanyManageBids() {
                                   </div>
                                 </div>
                                 <div className="rates">
-                                  <ul class="dashboard-task-info bid-info">
+                                  <ul className="dashboard-task-info bid-info">
                                     <li>
                                       <strong>${item.offer}</strong>
                                       <span>Fixed Price</span>

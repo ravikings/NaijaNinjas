@@ -407,7 +407,7 @@ class SearchTask(viewsets.ModelViewSet):
 
 
 @api_view(["GET", "POST"])
-@authentication_classes([DurinTokenAuthentication])
+#@authentication_classes([DurinTokenAuthentication])
 # @permission_classes([CanApproveTask])
 def accept_bid(request):
 
@@ -427,17 +427,13 @@ def accept_bid(request):
         response_data["professional_first_name"] = bid.bidder_profile.first_name
         response_data["professional_last_name"] = bid.bidder_profile.last_name
         response_data["total_charge"] = bid.total_charge
-        task_owner, client_info = AccountUser.objects.filter(
-            id__in=[owner, bid.payment_author.id]
-        )
         print("creating timeline")
         query_set = Timeline.objects.create(
-            author=bid.payment_author, task_owner=task_owner, task=bid.task
+            author=bid.payment_author, task_owner=bid.bidder_profile.author, task=bid.task
         )
         print("update task status")
         bid.approve_bids(query_set.id)
-        bid.add_bidder_to_task(task_owner)
-        response_data["payment_email"] = client_info.email
+        bid.add_bidder_to_task(bid.bidder_profile.author)
         print("timeline created")
         serializer = TimelineStartSerializer(query_set)
         response_data.update(serializer.data)
@@ -446,7 +442,6 @@ def accept_bid(request):
     return Response(
         {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST
     )
-
 
 class OwnerTaskApprove(viewsets.ModelViewSet):
 
@@ -510,7 +505,6 @@ def get_timeiline(request, task_id, task_owner):
     data = Timeline.objects.get(task=task_id, task_owner=task_owner)
     serializer = TimelineSerializer(data)
     return Response(serializer.data)
-
 
 class GetTimelineView(viewsets.ModelViewSet):
 
