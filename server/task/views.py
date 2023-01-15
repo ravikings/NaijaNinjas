@@ -360,8 +360,7 @@ class DashboardTaskFavorite(viewsets.ModelViewSet):
             ).values_list("task")
         )
 
-
-@method_decorator(cache_page(60 * 15), name="dispatch")
+#@method_decorator(cache_page(60 * 15), name="dispatch")
 class SearchTask(viewsets.ModelViewSet):
 
     search_fields = [
@@ -407,7 +406,7 @@ class SearchTask(viewsets.ModelViewSet):
 
 
 @api_view(["GET", "POST"])
-#@authentication_classes([DurinTokenAuthentication])
+@authentication_classes([DurinTokenAuthentication])
 # @permission_classes([CanApproveTask])
 def accept_bid(request):
 
