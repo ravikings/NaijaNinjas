@@ -154,7 +154,7 @@ function SendContract() {
         <div className="container">
           <div className="row">
             <div className="col-md-9  m-t40">
-              <h1 className="contract-title">Submit Parposal</h1>
+              <h1 className="contract-title">Submit Proposal</h1>
               <form className="contract-form" onSubmit={addBadding}>
                 {/* contract Client Requirements start */}
                 <div className="container-data m-b20">
@@ -207,6 +207,7 @@ function SendContract() {
                               className="form-control  border-left-0 border p-2 mt-2 fw9 "
                               value={deliveryTime}
                               onChange={(e) => setDeliveryTime(e.target.value)}
+                              required
                             />
                           </div>
                         </div>
@@ -237,7 +238,7 @@ function SendContract() {
                     </textarea>
                     <span className="required-label">
                       <i className="fa fa-exclamation-circle mr-1"></i> Cover
-                      Latter is required
+                      Letter is required
                     </span>
                   </div>
                   {/* contract section start */}

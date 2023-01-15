@@ -59,7 +59,7 @@ function ConfirmBid() {
 
     if (location.state && location.state.item) {
       console.log(location.state.item, "location.state.item")
-      const date = location.state.item.delivery_date.split("T")[0]
+      const date = location.state.item.task_delivery_date
       setDate(date)
       setCover(location.state.item.description)
       setClientAmount(location.state.item.offer)
@@ -120,7 +120,7 @@ function ConfirmBid() {
           console.log(response.data.id)
           setTimeline_id(response.data.id)
           setPayment(true)
-          setEmail(response.data.payment_email)
+          setEmail(response.data.author.email)
         },
         (error) => {
           console.log(error)
