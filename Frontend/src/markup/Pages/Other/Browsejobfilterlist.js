@@ -180,7 +180,7 @@ function Browsejobfilterlist() {
                                 </Link>
                               </div>
                             </div>
-                            <label className="like-btn">
+                            {/* <label className="like-btn">
                               <input
                                 type="checkbox"
                                 onClick={(e) => {
@@ -189,7 +189,7 @@ function Browsejobfilterlist() {
                                 }}
                               />
                               <span className="checkmark"></span>
-                            </label>
+                            </label> */}
                           </div>
                         </li>
                       ))}

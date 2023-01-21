@@ -12,13 +12,14 @@ function Jobsappliedjob() {
 
   const [taskAssigned, settaskAssigned] = useState([])
   const [loading, setLoading] = React.useState(false)
+  const id = localStorage.getItem("userID");
+
   const { userProfile, userStatus, currentUser } = useSelector(
     (state) => state.authReducer
   )
 
   const getAssignTask = () => {
 
-    const id = localStorage.getItem("userID");
     setLoading(true)
     createRequest().get(
       `/api/v1/task/get-assigned-task/${id}`
@@ -69,7 +70,7 @@ function Jobsappliedjob() {
                         <div className="post-bx">
                           <div className="job-post-info m-a0">
                             <h4>
-                              <Link to={"/timeline/40/41"}>{item?.task?.title}</Link>
+                              <Link to={"/timeline/" + `${item?.task.id}` + "/" + `${id}`} target="_blank">{item?.task?.title}</Link>
                             </h4>
                             <ul>
                               <li>
@@ -103,7 +104,8 @@ function Jobsappliedjob() {
                                 {item?.delivery_date}
                               </p>
                               <Link
-                                to={"/timeline/40/41"}
+                                to={"/timeline/" + `${item?.task.id}` + "/" + `${id}`}
+                                target="_blank"
                                 className="site-button button-sm float-right"
                               >
                                 Update Progress

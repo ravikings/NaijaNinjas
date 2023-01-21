@@ -27,7 +27,8 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_bookmarks(self, instance):
-        return TaskBookmarks.objects.filter(task=instance.id).values_list("author")
+        my_list = TaskBookmarks.objects.filter(task=instance.id).values_list("author")
+        return [num for sublist in my_list for num in sublist]
 
 
 class TaskWithTotalBidSerializer(serializers.ModelSerializer):

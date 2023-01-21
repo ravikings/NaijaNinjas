@@ -78,6 +78,9 @@ function BrowseCandidates() {
     allData()
   }, [])
 
+  useEffect(() => {
+    console.log("this changed!!!!!")
+  }, [checkBookmark])
   // useEffect(() => {
   //   console.log("use effect");
   //   console.log(data);
@@ -107,20 +110,39 @@ function BrowseCandidates() {
     }
   }
 
-  const handleBookmark = async (id, index) => {
-    const record = data[index].bookmarks
+  const buildBookmark = (item, index) => {
+
+    if (loading === 0) {
+      item.bookmarks.includes(parseInt(userID)) ? checkBookmark[index] = true : checkBookmark[index] = false
+    }
+    return 
+  }
+
+  const testMe = (index) => {
+    return checkBookmark[index]
+  }
+
+  const handleBookmark = async (id, index, e) => {
+    const tt = e.target.checked
+    e.target.checked = !tt
+    console.log(e.target.checked)
+    let copyBk = { ...checkBookmark }
+    let copyData = [ ...data ]
+    const record = copyData[index].bookmarks
     if (record.includes(id)) {
       let index = record.indexOf(id);
       record.splice(index, 1)
-      checkBookmark[index]=false;
+      copyBk[index] = false;
+      setCheckBookmark(copyBk);
     } else {
       record.push(id);
-      checkBookmark[index]=true;
+      copyBk[index] = true;
+      setCheckBookmark(copyBk);
     }
-    data[index].bookmarks = record
-    console.log("heeeeh")
-    console.log(data[index].bookmarks)
-    console.log(index, data)
+    copyData[index].bookmarks = record
+    console.log(copyData)
+    setData(copyData);
+
     try {
       const { data } = await createRequest().post(
         `/api/v1/profile-bookmark/${id}/`
@@ -259,20 +281,21 @@ function BrowseCandidates() {
                                   </Link>
                                 </div>
                               </div>
-                              {currentUser ? (
+                              {/* {currentUser ? (
                                 <label className="like-btn">
-                                  {item.bookmarks.includes(parseInt(userID)) ? setCheckBookmark[index] = true  : setCheckBookmark[index] = false}
                                   <input
                                     type="checkbox"
-                                    checked={checkBookmark[index]}
+                                    checked={testMe(index)}
                                     onClick={(e) => {
-                                      e.stopPropagation()
-                                      handleBookmark(item.author, index)
+                                      //e.stopPropagation()
+                                      handleBookmark(item.author, index, e)
                                     }}
                                   />
                                   <span className="checkmark"></span>
+                                  {buildBookmark(item, index)}
+                                  {console.log(checkBookmark)}
                                 </label>
-                              ) : ""}
+                              ) : ""} */}
                             </div>
                           </Link>
                         </li>

@@ -4,190 +4,231 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-} from "@material-ui/core"
-import React, { useEffect, useState } from "react"
-import "../../../css/TimeLine.css"
-import Rating from "@mui/material/Rating"
+  Divider
+} from "@material-ui/core";
+import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import React, { useEffect, useState } from "react";
+import TimelineFeedback from "../MakeOffer/components/TimelineFeedback";
+import "../../../css/TimeLine.css";
+import Rating from "@mui/material/Rating";
 import {
   InputLabel,
   // TextareaAutosize,
   //   TextField,
   Typography,
-} from "@mui/material"
+} from "@mui/material";
 import {
   Button,
   Form,
   // FormGroup, InputGroup
-} from "react-bootstrap"
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import "react-dropzone-uploader/dist/styles.css"
-import Dropzone from "react-dropzone-uploader"
-import createRequest, { axiosPrivate } from "../../../utils/axios"
-import baseUrl from "../../../utils/baseUrl"
-import Header2 from "../../Layout/Header2"
-import Footer from "../../Layout/Footer"
-import ProfileSidebar from "../../Element/Profilesidebar"
-import { useParams } from "react-router-dom"
-import { useSelector } from "react-redux"
-import Loader from "../../../markup/Element/Loader"
-import moment from "moment"
-import { Link } from "react-router-dom"
+} from "react-bootstrap";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import "react-dropzone-uploader/dist/styles.css";
+import Dropzone from "react-dropzone-uploader";
+import createRequest, { axiosPrivate } from "../../../utils/axios";
+import baseUrl from "../../../utils/baseUrl";
+import Header2 from "../../Layout/Header2";
+import Footer from "../../Layout/Footer";
+import ProfileSidebar from "../../Element/Profilesidebar";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Loader from "../../../markup/Element/Loader";
+import moment from "moment";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { toast } from "react-toastify"
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { toast } from "react-toastify";
 // 35 / 67
 
 function TimeLine() {
-  const [displayFormName, IsDisplayFormName] = useState("")
-  const { userProfile } = useSelector((state) => state.authReducer)
-  const [timeline_id, setTimeline_id] = useState("")
+  const userID = localStorage.getItem("userID");
+  const [displayFormName, IsDisplayFormName] = useState("");
+  const { userProfile } = useSelector((state) => state.authReducer);
+  const [timeline_id, setTimeline_id] = useState("");
   // Milestone
-  const [title, setTitle] = useState("")
-  const [des, setDes] = useState("")
-  const [milestoneAttach, setMilestoneAttach] = useState(null)
+  const [title, setTitle] = useState("");
+  const [des, setDes] = useState("");
+  const [milestoneAttach, setMilestoneAttach] = useState(null);
 
   // Delivery
-  const [deliveryTitle, setDeliveryTitle] = useState("Service Delivered!")
-  const [deliveryDes, setDeliveryDes] = useState("")
-  const [deliveryAttach, setDeliveryAttach] = useState(null)
+  const [deliveryTitle, setDeliveryTitle] = useState("Service Delivered!");
+  const [deliveryDes, setDeliveryDes] = useState("");
+  const [deliveryAttach, setDeliveryAttach] = useState(null);
 
-  const [reviewDes, setReviewDes] = useState("")
-  const [budget, setBudget] = useState(false)
-  const [time, setTime] = useState(false)
-  const [rateValue, setRateValue] = useState(0)
-  const { taskID, taskOwner } = useParams()
-  const [loading, setLoading] = useState(false)
-  const [timelineComment, setTimelineComment] = useState([])
-  const [error, setError] = useState("")
-  const [author, setAuthor] = useState("")
-  const [task_owner, setTask_owner] = useState("")
-  const [timelineStatus, settimelineStatus] = useState("")
+  const [reviewDes, setReviewDes] = useState("");
+  const [budget, setBudget] = useState(false);
+  const [time, setTime] = useState(false);
+  const [rateValue, setRateValue] = useState(0);
+  const { taskID, taskOwner } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [timelineComment, setTimelineComment] = useState([]);
+  const [error, setError] = useState("");
+  const [author, setAuthor] = useState("");
+  const [task_owner, setTask_owner] = useState("");
+  const [task, setTask] = useState("");
+  const [timelineStatus, settimelineStatus] = useState("");
+  const [clientReview, setclientReview] = useState({});
+  const [proReview, setproReview] = useState({});
 
   useEffect(() => {
-    getTimeLineData()
-  }, [])
+    getTimeLineData();
+  }, []);
+
   const getTimeLineData = () => {
-    setLoading(true)
+    setLoading(true);
     axiosPrivate
       .get(`api/v1/task/get-timeline/${taskID}/${taskOwner}`)
       .then((res) => {
-        const { timeline_comment, id, author, task_owner,
-          status } = res.data
-        setTimelineComment(timeline_comment)
-        setTimeline_id(id)
-        settimelineStatus(status)
-        setAuthor(author)
-        setTask_owner(task_owner)
-        setLoading(false)
-        toast.success("Good to see you, welcome back!")
+        const { timeline_comment, id, author, task_owner, status, task, client_reviews, pro_reviews
+        } =
+          res.data;
+        setTimelineComment(timeline_comment);
+        setTimeline_id(id);
+        settimelineStatus(status);
+        setLoading(false);
+        setAuthor(author);
+        setTask(task);
+        setTask_owner(task_owner);
+        setclientReview(client_reviews);
+        setproReview(pro_reviews);
+        //toast.success("Good to see you, welcome back!");
       })
       .catch((e) => {
-        setLoading(false)
-        setError(e.response?.data?.message || "Something went wrong")
+        setLoading(false);
+        setError(e.response?.data?.message || "Something went wrong");
         if (e.response?.status === 400) {
-          console.log(e?.response?.data?.non_field_errors[0])
+          console.log(e?.response?.data?.non_field_errors[0]);
         } else {
-          console.log("Unknown Error")
+          console.log("Unknown Error");
         }
-      })
-  }
+      });
+  };
   const onClickOpenForm = (e, formName) => {
-    e.preventDefault()
-    IsDisplayFormName(formName)
-  }
+    e.preventDefault();
+    IsDisplayFormName(formName);
+  };
   const onClickCoseForm = (e) => {
-    e.preventDefault()
-    addDelivery()
-  }
+    e.preventDefault();
+    addDelivery();
+  };
   const addMileStone = (e) => {
-    e.preventDefault()
-    const formdata = new FormData()
-    formdata.append("status", "PROGRESS")
-    formdata.append("author", userProfile?.author)
-    formdata.append("title", title)
-    formdata.append("body", des)
-    formdata.append("task_timeline", timeline_id)
-    formdata.append("attachement", milestoneAttach)
+    e.preventDefault();
+    const formdata = new FormData();
+    formdata.append("status", "PROGRESS");
+    formdata.append("author", userProfile?.author);
+    formdata.append("title", title);
+    formdata.append("body", des);
+    formdata.append("task_timeline", timeline_id);
+    formdata.append("attachement", milestoneAttach);
     axiosPrivate
       .post(`${baseUrl.baseURL}api/v1/task/comment-timeline/`, formdata)
       .then(
         (response) => {
-          console.log("the response is ", response)
-          IsDisplayFormName("")
-          setTitle("")
-          setDes("")
-          setMilestoneAttach(null)
-          toast.success("Milestone Added Successfully")
-          getTimeLineData()
+          console.log("the response is ", response);
+          IsDisplayFormName("");
+          setTitle("");
+          setDes("");
+          setMilestoneAttach(null);
+          toast.success("Milestone Added Successfully");
+          getTimeLineData();
         },
         (error) => {
-          console.log({ error })
+          console.log({ error });
         }
-      )
-  }
+      );
+  };
 
   const addDelivery = (e) => {
-    e.preventDefault()
-    const formdata = new FormData()
-    formdata.append("status", "DELIVERED")
-    formdata.append("author", userProfile?.author)
-    formdata.append("title", deliveryTitle)
-    formdata.append("body", deliveryDes)
-    formdata.append("task_timeline", timeline_id)
-    formdata.append("attachement", deliveryAttach)
+    e.preventDefault();
+    const formdata = new FormData();
+    formdata.append("status", "DELIVERED");
+    formdata.append("author", userProfile?.author);
+    formdata.append("title", deliveryTitle);
+    formdata.append("body", deliveryDes);
+    formdata.append("task_timeline", timeline_id);
+    formdata.append("attachement", deliveryAttach);
     axiosPrivate
       .post(`${baseUrl.baseURL}api/v1/task/comment-timeline/`, formdata)
       .then(
         (response) => {
-          console.log("the response is ", response)
-          IsDisplayFormName("")
-          setDeliveryTitle("")
-          setDeliveryDes("")
-          setDeliveryAttach(null)
-          toast.success("Service Delivered Successfully")
-          getTimeLineData()
+          console.log("the response is ", response);
+          IsDisplayFormName("");
+          setDeliveryTitle("");
+          setDeliveryDes("");
+          setDeliveryAttach(null);
+          toast.success("Service Delivered Successfully");
+          getTimeLineData();
         },
         (error) => {
-          console.log({ error })
+          console.log({ error });
         }
-      )
-  }
+      );
+  };
 
-  const approveOrder = (e) => {
-    e.preventDefault()
-    const formdata = new FormData()
-    formdata.append("status", "APPROVED")
+  const addRequestRevision = (e) => {
+    e.preventDefault();
+    const formdata = new FormData();
+    formdata.append("status", "REVISION");
+    formdata.append("author", userProfile?.author);
+    formdata.append("body", deliveryDes);
+    formdata.append("task_timeline", timeline_id);
+    formdata.append("attachement", deliveryAttach);
     axiosPrivate
-      .post(`${baseUrl.baseURL}api/v1/task/approve-delivery/${e.target.id}`, formdata)
+      .post(`${baseUrl.baseURL}api/v1/task/comment-timeline/`, formdata)
       .then(
         (response) => {
-          setDeliveryAttach(null)
-          toast.success("Thank you! order completed")
+          IsDisplayFormName("");
+          setDeliveryTitle("");
+          setDeliveryDes("");
+          setDeliveryAttach(null);
+          toast.success("We apologize for any inconvenience, revison request inprogress.");
+          getTimeLineData();
+        },
+        (error) => {
+          console.log({ error });
+        }
+      );
+  };
+
+  const approveOrder = (e) => {
+    e.preventDefault();
+    const formdata = new FormData();
+    formdata.append("status", "APPROVED");
+    axiosPrivate
+      .post(
+        `${baseUrl.baseURL}api/v1/task/approve-delivery/${e.target.id}`,
+        formdata
+      )
+      .then(
+        (response) => {
+          setDeliveryAttach(null);
+          toast.success("Thank you! order completed");
           // } else {
           //   toast.success("we are sorry for the inconvenience, Pro will get back ASAP!")
           // }
-          getTimeLineData()
-          console.log("the response is ", response)
+          getTimeLineData();
+          console.log("the response is ", response);
         },
         (error) => {
-          toast.error("sorry! service not available")
-          console.log({ error })
+          toast.error("sorry! service not available");
+          console.log({ error });
         }
-      )
-
-  }
+      );
+  };
 
   const addReview = (e) => {
-    e.preventDefault()
-    const formdata = new FormData()
-    formdata.append("body", reviewDes)
-    formdata.append("rating", rateValue)
-    formdata.append("on_budget", budget === "Yes" ? true : false)
-    formdata.append("on_time", time === "Yes" ? true : false)
-    formdata.append("author", userProfile?.author)
+    e.preventDefault();
+    const formdata = new FormData();
+    formdata.append("body", reviewDes);
+    formdata.append("rating", rateValue);
+    formdata.append("on_budget", budget === "Yes" ? true : false);
+    formdata.append("on_time", time === "Yes" ? true : false);
+    formdata.append("author", userProfile?.author);
+    formdata.append("task", task);
+    formdata.append("profile", task_owner);
     // formdata.append("profile", "");
     // axiosPrivate({
     //   method: "POST",
@@ -201,24 +242,25 @@ function TimeLine() {
       .post(`${baseUrl.baseURL}api/v1/account/client-review/`, formdata)
       .then(
         (response) => {
-          console.log("the response is ", response)
-          IsDisplayFormName("")
-          setReviewDes("")
-          setBudget(false)
-          setTime(false)
-          setRateValue(0)
+          IsDisplayFormName("");
+          setReviewDes("");
+          setBudget(false);
+          setTime(false);
+          setRateValue(0);
+          toast.success("Thank you for your review, and making us better!");
+          getTimeLineData();
         },
         (error) => {
-          console.log({ error })
+          console.log({ error });
         }
-      )
-  }
+      );
+  };
 
   const downloadFile = async (e, item) => {
-    e.preventDefault()
-    console.log(item.id)
-    console.log(item.id)
-    console.log("item.id")
+    e.preventDefault();
+    console.log(item.id);
+    console.log(item.id);
+    console.log("item.id");
     // await axios({
     //   url:
     //     `${baseUrl.baseURL}api/v1/task/comment-timeline/${item.id}/file_download/`,
@@ -247,18 +289,20 @@ function TimeLine() {
   // }
 
   const getUploadParams = ({ meta }) => {
-    return { url: "https://httpbin.org/post" }
-  }
+    return { url: "https://httpbin.org/post" };
+  };
   const handleChangeStatus = ({ meta, file }, status) => {
     if (status === "done") {
-      setDeliveryAttach(file)
+      setDeliveryAttach(file);
     }
-  }
+  };
   const handleMilestoneAttach = ({ meta, file }, status) => {
     if (status === "done") {
-      setMilestoneAttach(file)
+      setMilestoneAttach(file);
     }
-  }
+  };
+
+
   return (
     <>
       <Header2 />
@@ -283,7 +327,8 @@ function TimeLine() {
                       </div>
                     ) : (
                       <form onSubmit={onClickCoseForm}>
-                        <div className="container mt-5 mb-5">
+                        {/* <div className="container mt-5 mb-5"> */}
+                        <div className="container-fluid">
                           <div className="row">
                             <div className="uk-container uk-padding w-100">
                               <div className="uk-timeline">
@@ -296,14 +341,18 @@ function TimeLine() {
                                             ? "btn-warning"
                                             : item.status === "PROGRESS"
                                               ? "btn-success"
-                                              : "btn-danger"
+                                              : item.status === "REVISION"
+                                                ? "btn-primary"
+                                                : "btn-danger"
                                             } `}
                                         >
                                           <span
                                             uk-icon={
                                               item.status === "CONTRACT"
                                                 ? "clock"
-                                                : "check"
+                                                : item.status === "REVISION"
+                                                  ? "clock"
+                                                  : "check"
                                             }
                                           ></span>
                                         </span>
@@ -315,75 +364,85 @@ function TimeLine() {
                                               className="uk-grid-small uk-flex-middle d-flex flex-row"
                                               uk-grid
                                             >
-                                              <h3 className="uk-card-title">
+                                              <h6 className="uk-card-title">
                                                 <time datetime="2020-07-08">
                                                   {item.time_created.Updated
                                                     ? item.time_created.Updated
                                                     : item.time_created.Created}
-                                                  {/* {
-                                                timeCreated && timeCreated
-                                                // .split(" ")[0]
-                                                // .split("-")[2] +
-                                                // "/" +
-                                                // timeCreated
-                                                //   .split(" ")[0]
-                                                //   .split("-")[1] +
-                                                // "/" +
-                                                // timeCreated
-                                                //   .split(" ")[0]
-                                                //   .split("-")[0]
-                                              } */}
                                                 </time>
-                                              </h3>
+                                              </h6>
                                               <span
                                                 className={`uk-label 
                                             ${item.status === "CONTRACT"
                                                     ? "uk-label-warning"
                                                     : item.status === "PROGRESS"
                                                       ? "uk-label-success"
-                                                      : "uk-label-danger"
+                                                      : item.status === "REVISION"
+                                                        ? "uk-label"
+                                                        : "uk-label-danger"
                                                   }
                                              uk-margin-auto-left`}
                                               >
                                                 {item.status}
                                               </span>
-                                              {/* <span className="uk-label uk-label-success uk-margin-auto-left">
-                                          Feature
-                                        </span> */}
                                             </div>
                                           </div>
                                           <div className="uk-card-body">
                                             <h6>{item.title}</h6>
                                             <p>{item.body}</p>
-                                            {/* <Link to={`${item.attachment}`} target="_blank" download>
-                                              <span> Download </span>
-                                            </Link> */}
-                                            <p onClick={(event) => downloadFile(event, item)}>Attachment
+                                            <p
+                                              onClick={(event) =>
+                                                downloadFile(event, item)
+                                              }
+                                            >
+                                              Attachment
                                               <span>
                                                 {item?.attachment && (
-                                                  <FileDownloadIcon color="primary" sx={{ fontSize: 30 }} onClick={() => console.log("helllo file icon")} />
+                                                  <FileDownloadIcon
+                                                    color="primary"
+                                                    sx={{ fontSize: 30 }}
+                                                    onClick={() =>
+                                                      console.log(
+                                                        "helllo file icon"
+                                                      )
+                                                    }
+                                                  />
                                                 )}
                                               </span>
                                             </p>
                                           </div>
-                                          {item.status === "DELIVERED" && (author === userProfile?.author)? (
-                                          <div className="container my-3 bg-light">
-                                            <div className="col-md-12 text-center">
-                                              <button type="button" className="btn btn-primary" id={item.id} onClick={approveOrder} >Approve </button>
-                                              <span>{"  "}</span>
-                                              <button type="button" className="btn btn-warning" onClick={(e) => onClickOpenForm(e, "revision")}> Reject </button>
-                                            </div>
-                                          </div>
-                                          ) : ""}
-                                          {/* {item.status === "APPROVED" ? "" : (
-                                          <div className="container my-3 bg-light">
-                                            <div className="col-md-12 text-center">
-                                              <button type="button" className="btn btn-primary" id={item.id} onClick={approveOrder} >Approve {item.id} </button>
-                                              <span>{"  "}</span>
-                                              <button type="button" className="btn btn-warning"> Reject </button>
-                                            </div>
-                                          </div>
-                                          )} */}
+                                          {item.status === "APPROVED" ? "" :
+                                            item.status === "DELIVERED" &&
+                                              author === userProfile?.author ? (
+                                              <div className="container my-3 bg-light">
+                                                <div className="col-md-12 text-center">
+                                                  <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    id={item.id}
+                                                    onClick={approveOrder}
+                                                  >
+                                                    Approve{" "}
+                                                  </button>
+                                                  <span>{"  "}</span>
+                                                  <button
+                                                    type="button"
+                                                    className="btn btn-warning"
+                                                    onClick={(e) =>
+                                                      onClickOpenForm(
+                                                        e,
+                                                        "revision"
+                                                      )
+                                                    }
+                                                  >
+                                                    {" "}
+                                                    Request revision{" "}
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            ) : (
+                                              ""
+                                            )}
                                         </div>
                                       </div>
                                     </div>
@@ -392,7 +451,8 @@ function TimeLine() {
                                   <div className="uk-timeline-item">
                                     <div className="uk-timeline-content">
                                       <div className="d-flex flex-row align-items-baseline">
-                                        <div className="mr-2">
+                                        {/* <div className="mr-2"> */}
+                                        <div className="container-fluid">
                                           <button
                                             type="button"
                                             class="btn btn-link"
@@ -404,25 +464,38 @@ function TimeLine() {
                                             Load More
                                           </button>
                                         </div>
-                                        {timelineStatus !== "DELIVERED" && (task_owner === userProfile?.author) ?  (
-                                          <><div className="mr-2">
-                                            <button
-                                              className="btn btn-success"
-                                              onClick={(e) => onClickOpenForm(e, "milestone")}
-                                            >
-                                              Add Milestone
-                                            </button>
-                                          </div>
+                                        {timelineStatus === "APPROVED" ? "" : timelineStatus !== "DELIVERED" &&
+                                          task_owner === userProfile?.author ? (
+                                          <>
+                                            <div className="mr-2">
+                                              <button
+                                                className="btn btn-success"
+                                                onClick={(e) =>
+                                                  onClickOpenForm(
+                                                    e,
+                                                    "milestone"
+                                                  )
+                                                }
+                                              >
+                                                Add Milestone
+                                              </button>
+                                            </div>
                                             <div className="mr-2">
                                               <button
                                                 className="btn btn-danger"
-                                                onClick={(e) => onClickOpenForm(e, "deliver")}
+                                                onClick={(e) =>
+                                                  onClickOpenForm(e, "deliver")
+                                                }
                                               >
                                                 Deliver Service
                                               </button>
-                                            </div></>
-                                        ) : ""}
-                                        {timelineStatus === "APPROVED" && (author === userProfile?.author) ? (
+                                            </div>
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                        {clientReview ? "" : timelineStatus === "APPROVED" &&
+                                          author === userProfile?.author ? (
                                           <div className="mr-2">
                                             <button
                                               className="btn btn-info"
@@ -433,17 +506,9 @@ function TimeLine() {
                                               Add Review
                                             </button>
                                           </div>
-                                        ) : ""}
-                                        {/* <div className="mr-2">
-                                          <button
-                                            className="btn btn-danger"
-                                            onClick={(e) =>
-                                              onClickOpenForm(e, "deliver")
-                                            }
-                                          >
-                                            Deliver Service
-                                          </button>
-                                        </div> */}
+                                        ) : (
+                                          ""
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -452,10 +517,79 @@ function TimeLine() {
                             </div>
                           </div>
                         </div>
+                        <Divider style={{ margin: "30px 0px" }} />
+                        {console.log("im getting clientReview", clientReview)}
+                        {clientReview ? <div className="card">
+                          <div style={{ marginTop: 5 }}>
+                            <div
+                              style={{
+                                background: "#F2F2F2",
+                                height: 60,
+                                paddingLeft: 30,
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <ThumbUpAltOutlinedIcon style={{ color: "#3f51b5" }} />
+                              <h5 style={{ fontWeight: 400, margin: "0px 10px" }}>
+                                Work Feedback
+                              </h5>
+                            </div>
+                            <div className="container-fluid">
+                              <TimelineFeedback data={clientReview} review={"client"} />
+                            </div>
+                            <div className="card-body">
+                              <div className="col-md-12 text-center container-fluid">
+                                {author === userProfile?.author ?
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    id={"1"}
+                                    onClick={(e) =>
+                                      onClickOpenForm(e, "review")
+                                    }
+                                  >
+                                    Update review{" "}
+                                  </button>
+                                  : ""}
+                                <span>{"  "}</span>
+                                {clientReview && task_owner === parseInt(userID) ?
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                  // onClick={(e) =>
+                                  //   onClickOpenForm(
+                                  //     e,
+                                  //     "revision"
+                                  //   )
+                                  // }
+                                  >
+                                    {" "}
+                                    Add review{" "}
+                                  </button>
+                                  : ""}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                          : ""}
+                        {proReview ?
+                          <div className="card">
+                            <div style={{ marginTop: 5 }}>
+                              <div className="container-fluid">
+                                <TimelineFeedback data={proReview} review={"professional"} />
+                              </div>
+                              <div className="card-body">
+                                <a href="#" class="btn btn-primary">Update review</a>
+                              </div>
+                            </div>
+                          </div>
+                          : ""}
                         {displayFormName === "revision" && (
-                          <div className="container mt-5 mb-5 ml-20">
+                          //<div className="container mt-5 mb-5 ml-20">
+                          <div className="container-fluid">
                             <h3>Request Order revison</h3>
-                            <Form onSubmit={addDelivery}>
+                            <Form onSubmit={addRequestRevision}>
                               <div>
                                 <div className="form-group">
                                   <label>Description:</label>
@@ -484,8 +618,8 @@ function TimeLine() {
                           </div>
                         )}
                         {displayFormName === "deliver" && (
-                          <div className="container mt-5 mb-5 ml-20">
-                            <h3>Send</h3>
+                          <div className="container-fluid">
+                            <h4>Add delivery information</h4>
                             <Form onSubmit={addDelivery}>
                               <div>
                                 <div className="form-group">
@@ -515,121 +649,113 @@ function TimeLine() {
                           </div>
                         )}
                         {displayFormName === "review" && (
-                          <div className="container mt-5 mb-5 ml-20">
-                            <h3>Leave a Review</h3>
-                            <p>
-                              Rate Peter Valentín for the project Simple Chrome
-                              Extension
-                            </p>
-                            <Form onSubmit={addReview}>
-                              <div>
-                                <FormControl>
-                                  <FormLabel id="demo-row-radio-buttons-group-label">
-                                    Was this delivered on budget?
-                                  </FormLabel>
-                                  <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
-                                  >
-                                    <FormControlLabel
-                                      value="Yes"
-                                      control={
-                                        <Radio
-                                          onChange={(e) =>
-                                            setBudget(e.target.value)
-                                          }
-                                        />
-                                      }
-                                      label="Yes"
-                                    />
-                                    <FormControlLabel
-                                      value="No"
-                                      control={
-                                        <Radio
-                                          onChange={(e) =>
-                                            setBudget(e.target.value)
-                                          }
-                                        />
-                                      }
-                                      label="No"
-                                    />
-                                  </RadioGroup>
-                                </FormControl>
+                          <div>
+                            <div className="card">
+                              <div class="card-header">
+                                Leave a Review for this project
                               </div>
-                              <div>
-                                <FormControl>
-                                  <FormLabel id="demo-row-radio-buttons-group-label">
-                                    Was this delivered on time?
-                                  </FormLabel>
-                                  <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
-                                  >
-                                    <FormControlLabel
-                                      value="Yes"
-                                      control={
-                                        <Radio
-                                          onChange={(e) =>
-                                            setTime(e.target.value)
-                                          }
-                                        />
-                                      }
-                                      label="Yes"
-                                    />
-                                    <FormControlLabel
-                                      value="No"
-                                      control={
-                                        <Radio
-                                          onChange={(e) =>
-                                            setTime(e.target.value)
-                                          }
-                                        />
-                                      }
-                                      label="No"
-                                    />
-                                  </RadioGroup>
-                                </FormControl>
-                              </div>
-                              <div>
-                                <Typography component={InputLabel}>
-                                  Your Rating
-                                </Typography>
-                                <Rating
-                                  name="simple-controlled"
-                                  // value={rateValue}
-                                  onChange={(event, newValue) => {
-                                    setRateValue(newValue)
-                                  }}
-                                />
-                              </div>
-                              <div>
-                                <div className="form-group">
-                                  <label>Description:</label>
-                                  <textarea
-                                    id="description"
-                                    // value={reviewDes}
-                                    onChange={(e) =>
-                                      setReviewDes(e.target.value)
-                                    }
-                                    placeholder="Enter description"
-                                    className="form-control"
+                              <div className="card-body">
+                                <Form onSubmit={addReview}>
+                                <div>
+                                  <FormControl>
+                                    <FormLabel id="demo-row-radio-buttons-group-label">
+                                      Was this delivered on budget?
+                                    </FormLabel>
+                                    <RadioGroup
+                                      row
+                                      aria-labelledby="demo-row-radio-buttons-group-label"
+                                      name="row-radio-buttons-group"
+                                    >
+                                      <FormControlLabel
+                                        value="Yes"
+                                        control={
+                                          <Radio
+                                            onChange={(e) =>
+                                              setBudget(e.target.value)
+                                            }
+                                          />
+                                        }
+                                        label="Yes"
+                                      />
+                                      <FormControlLabel
+                                        value="No"
+                                        control={
+                                          <Radio
+                                            onChange={(e) =>
+                                              setBudget(e.target.value)
+                                            }
+                                          />
+                                        }
+                                        label="No"
+                                      />
+                                    </RadioGroup>
+                                  </FormControl>
+                                </div>
+                                <div>
+                                  <FormControl>
+                                    <FormLabel id="demo-row-radio-buttons-group-label">
+                                      Was this delivered on time?
+                                    </FormLabel>
+                                    <RadioGroup
+                                      row
+                                      aria-labelledby="demo-row-radio-buttons-group-label"
+                                      name="row-radio-buttons-group"
+                                    >
+                                      <FormControlLabel
+                                        value="Yes"
+                                        control={
+                                          <Radio
+                                            onChange={(e) =>
+                                              setTime(e.target.value)
+                                            }
+                                          />
+                                        }
+                                        label="Yes"
+                                      />
+                                      <FormControlLabel
+                                        value="No"
+                                        control={
+                                          <Radio
+                                            onChange={(e) =>
+                                              setTime(e.target.value)
+                                            }
+                                          />
+                                        }
+                                        label="No"
+                                      />
+                                    </RadioGroup>
+                                  </FormControl>
+                                </div>
+                                <div>
+                                  <Typography component={InputLabel}>
+                                    Your Rating
+                                  </Typography>
+                                  <Rating
+                                    name="simple-controlled"
+                                    value={rateValue}
+                                    onChange={(event, newValue) => {
+                                      setRateValue(newValue);
+                                    }}
                                   />
                                 </div>
-                                {/* <FormControl
-                      style={{ marginBottom: "2rem", marginTop: "1rem" }}
-                    >
-                      <FormLabel id="description">Description</FormLabel>
-                      <TextareaAutosize
-                        aria-labelledby="description"
-                        minRows={3}
-                        style={{ width: 250 }}
-                      />
-                    </FormControl> */}
+                                <div>
+                                  <div className="form-group">
+                                    <label>Description:</label>
+                                    <textarea
+                                      id="description"
+                                      value={reviewDes}
+                                      onChange={(e) =>
+                                        setReviewDes(e.target.value)
+                                      }
+                                      placeholder="Enter description"
+                                      className="form-control"
+                                    />
+                                  </div>
+                                </div>
+                                <Button type="submit">Leave a review</Button>
+                              </Form>
                               </div>
-                              <Button type="submit">Leave a review</Button>
-                            </Form>
+                            </div>
                           </div>
                         )}
                         {displayFormName === "milestone" && (
@@ -697,7 +823,7 @@ function TimeLine() {
       </div>
       <Footer />
     </>
-  )
+  );
 }
 
-export default TimeLine
+export default TimeLine;
