@@ -59,20 +59,20 @@ function Jobmyresume() {
 
   const [userDetails, setUserDetails] = useState(null);
 
-  useEffect(() => {
-    if (!userProfile) {
-      getUserDetails();
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (!userProfile) {
+  //     getUserDetails();
+  //   }
+  // }, [currentUser]);
 
-  useEffect(() => {
-    if (userDetails) {
-      dispatch({
-        type: authActionTypes.USER_PROFILE,
-        payload: userDetails,
-      });
-    }
-  }, [userDetails]);
+  // useEffect(() => {
+  //   if (userDetails) {
+  //     dispatch({
+  //       type: authActionTypes.USER_PROFILE,
+  //       payload: userDetails,
+  //     });
+  //   }
+  // }, [userDetails]);
 
   const getUserDetails = () => {
     if (currentUser) {
@@ -91,9 +91,10 @@ function Jobmyresume() {
 
   const getResume = async () => {
     setLoading(true);
+    const pk = localStorage.getItem("userID");
     try {
       const { data } = await createRequest().get(
-        `/api/v1/account/user-resume/${currentUser?.pk}/`
+        `/api/v1/account/user-resume/${pk}/`
       );
       console.log(data, "RESUME DATA");
       setResumeDetails(data);
