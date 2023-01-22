@@ -45,7 +45,6 @@ router.register(
     basename="test-timline",
 )
 
-
 urlpatterns = [
     path("", include(router.urls)),
     path("task-bookmark/<str:pk>/", task_favorite, name="task-bookmark"),

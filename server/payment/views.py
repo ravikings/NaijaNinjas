@@ -8,11 +8,18 @@ from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 from .tasks import log_transaction_task
 from .models import TransactionLog, ClientPaymentInfo
+from bank.models import CurrentBalance
 from django.db import transaction
 from rest_framework import viewsets
 from .serializers import CardSerializer
 # Create your views here.
 
+@transaction.atomic
+def update_current_balance(offer, task):
+    print("writing to account balance")
+    amount = offer - 500  # amount here is our service fee
+    CurrentBalance.objects.create(author=task.bidder_profile.author, task=task, invoice_amount=amount)
+    print("account balance update")
 
 #TODO: Add celery task here for backgroud task, to support retry
 #ADD: send Email to user, also notifcation for pro to start work
@@ -33,11 +40,13 @@ def verify_payment(request):
         messages.success(
             request, f"Payment Completed Successfully, ₦ {payment.total_charge}."
         )
-        #call approve view here to send email to prof to start the task
+        update_current_balance(payment.offer, payment)
+        #TODO: call approve view here to send email to prof to start the task
         return Response({"message":"Payment was succesfull!"}, status=status.HTTP_200_OK)
 
     messages.warning(request, "Sorry, your payment could not be confirmed.")
     return Response({"message":"Payment declined"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
 
 
 @api_view(["POST"])

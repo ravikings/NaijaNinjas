@@ -15,13 +15,14 @@ def account_no_generator():
 
 
 class CurrentBalance(models.Model):
-    account_number = models.IntegerField(
-        unique=True, default=account_no_generator, editable=False
-    )
     invoice_amount = models.IntegerField(default=0, blank=True, null=True)
-    balance = models.IntegerField(default=0, blank=True, null=True)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="bank_owner"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="bank_owner_invoice",
+        default="",
     )
     task = models.ForeignKey(
         TaskBidder,
@@ -34,12 +35,20 @@ class CurrentBalance(models.Model):
     transfer_to_available = models.BooleanField(
         default=False, verbose_name="transfer_to_available"
     )
+    created = models.DateTimeField(auto_now=True)
 
 
 class AvailableBalance(models.Model):
     balance = models.IntegerField()
-    account_number = models.ForeignKey(
-        CurrentBalance,
-        on_delete=models.CASCADE,
-        related_name="available_balance",
+    account_number = models.IntegerField(
+        unique=True, default=account_no_generator, editable=False
     )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="bank_owner",
+        default="",
+        blank=True,
+        null=True,
+    )
+    updated = models.DateTimeField(auto_now=True)

@@ -197,6 +197,8 @@ function TimeLine() {
     e.preventDefault();
     const formdata = new FormData();
     formdata.append("status", "APPROVED");
+    formdata.append("task", timelineComment.id)
+    formdata.append("task_owner", task_owner);
     axiosPrivate
       .post(
         `${baseUrl.baseURL}api/v1/task/approve-delivery/${e.target.id}`,

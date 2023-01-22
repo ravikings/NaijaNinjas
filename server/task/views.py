@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
+from bank.models import CurrentBalance
 from task.serializers import (
     TaskSerializer,
     TimelineStartSerializer,
@@ -39,6 +40,8 @@ from durin.auth import (
     TokenAuthentication as DurinTokenAuthentication,
     CachedTokenAuthentication,
 )
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 # Create your views here.
 
@@ -543,6 +546,7 @@ def task_ordered(request, task_owner):
 
 @api_view(["GET", "POST"])
 #@permission_classes([IsAuthenticated])
+@transaction.atomic
 @authentication_classes([DurinTokenAuthentication])
 def approve_delivery(request, pk):
 
@@ -551,10 +555,17 @@ def approve_delivery(request, pk):
     #     request.user in [query.task_timeline.author, query.task_timeline.task_owner]
     #     or request.user.is_superuser
     # ):
-    print(request.data.get("status"))
-    query.status = request.data.get("status")
-    query.update_timeline_status()
-    query.save()
+    task_owner = request.data.get("task_owner")
+    task = request.data.get("task")
+    # logic below are use to credit pro, set pay out to 7days.
+    now = timezone.now()
+    next_seven_days = now + timedelta(days=7)
+    balance = get_object_or_404(CurrentBalance, author=task_owner, task=task)
+    balance.payout_date = next_seven_days
+    balance.save()
+    # query.status = request.data.get("status")
+    # query.update_timeline_status()
+    # query.save()
     serializer = TimelineSerializer(query)
     return Response(serializer.data)
 

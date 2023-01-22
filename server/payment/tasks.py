@@ -1,5 +1,4 @@
 from celery import shared_task
-from bank.models import CurrentBalance
 from .models import TransactionLog, ClientPaymentInfo
 from django.db import transaction
 from task.models import TaskBidder
@@ -49,15 +48,6 @@ def save_card_info(account, transaction_data):
 #         raise Exception()
 
 
-@transaction.atomic
-def update_current_balance(author_id, amount, user):
-    update_account = CurrentBalance.objects.get(author=author_id)
-    update_account.invoice_amount = update_account.invoice_amount + amount
-    update_account.task = user
-    update_account.save()
-    print("account balance update")
-
-
 @shared_task(
     name="log-transaction-task",
     bind=True,
@@ -81,9 +71,6 @@ def log_transaction_task(self, reference, transaction_data):
             print("user not found saving default user id")
             account = 1
 
-        amount = user.offer - 500  # amount here is our service fee
-        bidder_id = user.bidder_profile.author
-        update_current_balance(bidder_id, amount, user)
         log_transaction(account, transaction_data)
         print("transaction log saved")
         print("saving payment info log")
