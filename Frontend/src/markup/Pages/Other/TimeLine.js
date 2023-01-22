@@ -86,9 +86,9 @@ function TimeLine() {
         } =
           res.data;
         setTimelineComment(timeline_comment);
+        setLoading(false);
         setTimeline_id(id);
         settimelineStatus(status);
-        setLoading(false);
         setAuthor(author);
         setTask(task);
         setTask_owner(task_owner);
@@ -302,6 +302,9 @@ function TimeLine() {
     }
   };
 
+  const formCloseButton = () => {
+
+  }
 
   return (
     <>
@@ -338,11 +341,11 @@ function TimeLine() {
                                       <div className="uk-timeline-icon">
                                         <span
                                           className={`uk-badge ${item.status === "CONTRACT"
-                                            ? "btn-warning"
+                                            ?  "btn-primary"
                                             : item.status === "PROGRESS"
                                               ? "btn-success"
                                               : item.status === "REVISION"
-                                                ? "btn-primary"
+                                                ? "btn-warning"
                                                 : "btn-danger"
                                             } `}
                                         >
@@ -374,11 +377,11 @@ function TimeLine() {
                                               <span
                                                 className={`uk-label 
                                             ${item.status === "CONTRACT"
-                                                    ? "uk-label-warning"
+                                                    ? "uk-label"
                                                     : item.status === "PROGRESS"
                                                       ? "uk-label-success"
                                                       : item.status === "REVISION"
-                                                        ? "uk-label"
+                                                        ? "uk-label-warning"
                                                         : "uk-label-danger"
                                                   }
                                              uk-margin-auto-left`}
@@ -557,12 +560,12 @@ function TimeLine() {
                                   <button
                                     type="button"
                                     className="btn btn-primary"
-                                  // onClick={(e) =>
-                                  //   onClickOpenForm(
-                                  //     e,
-                                  //     "revision"
-                                  //   )
-                                  // }
+                                    onClick={(e) =>
+                                      onClickOpenForm(
+                                        e,
+                                        "pro-review"
+                                      )
+                                    }
                                   >
                                     {" "}
                                     Add review{" "}
@@ -656,104 +659,226 @@ function TimeLine() {
                               </div>
                               <div className="card-body">
                                 <Form onSubmit={addReview}>
-                                <div>
-                                  <FormControl>
-                                    <FormLabel id="demo-row-radio-buttons-group-label">
-                                      Was this delivered on budget?
-                                    </FormLabel>
-                                    <RadioGroup
-                                      row
-                                      aria-labelledby="demo-row-radio-buttons-group-label"
-                                      name="row-radio-buttons-group"
-                                    >
-                                      <FormControlLabel
-                                        value="Yes"
-                                        control={
-                                          <Radio
-                                            onChange={(e) =>
-                                              setBudget(e.target.value)
-                                            }
-                                          />
-                                        }
-                                        label="Yes"
-                                      />
-                                      <FormControlLabel
-                                        value="No"
-                                        control={
-                                          <Radio
-                                            onChange={(e) =>
-                                              setBudget(e.target.value)
-                                            }
-                                          />
-                                        }
-                                        label="No"
-                                      />
-                                    </RadioGroup>
-                                  </FormControl>
-                                </div>
-                                <div>
-                                  <FormControl>
-                                    <FormLabel id="demo-row-radio-buttons-group-label">
-                                      Was this delivered on time?
-                                    </FormLabel>
-                                    <RadioGroup
-                                      row
-                                      aria-labelledby="demo-row-radio-buttons-group-label"
-                                      name="row-radio-buttons-group"
-                                    >
-                                      <FormControlLabel
-                                        value="Yes"
-                                        control={
-                                          <Radio
-                                            onChange={(e) =>
-                                              setTime(e.target.value)
-                                            }
-                                          />
-                                        }
-                                        label="Yes"
-                                      />
-                                      <FormControlLabel
-                                        value="No"
-                                        control={
-                                          <Radio
-                                            onChange={(e) =>
-                                              setTime(e.target.value)
-                                            }
-                                          />
-                                        }
-                                        label="No"
-                                      />
-                                    </RadioGroup>
-                                  </FormControl>
-                                </div>
-                                <div>
-                                  <Typography component={InputLabel}>
-                                    Your Rating
-                                  </Typography>
-                                  <Rating
-                                    name="simple-controlled"
-                                    value={rateValue}
-                                    onChange={(event, newValue) => {
-                                      setRateValue(newValue);
-                                    }}
-                                  />
-                                </div>
-                                <div>
-                                  <div className="form-group">
-                                    <label>Description:</label>
-                                    <textarea
-                                      id="description"
-                                      value={reviewDes}
-                                      onChange={(e) =>
-                                        setReviewDes(e.target.value)
-                                      }
-                                      placeholder="Enter description"
-                                      className="form-control"
+                                  <div>
+                                    <FormControl>
+                                      <FormLabel id="demo-row-radio-buttons-group-label">
+                                        Was this delivered on budget?
+                                      </FormLabel>
+                                      <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                      >
+                                        <FormControlLabel
+                                          value="Yes"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setBudget(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="Yes"
+                                        />
+                                        <FormControlLabel
+                                          value="No"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setBudget(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="No"
+                                        />
+                                      </RadioGroup>
+                                    </FormControl>
+                                  </div>
+                                  <div>
+                                    <FormControl>
+                                      <FormLabel id="demo-row-radio-buttons-group-label">
+                                        Was this delivered on time?
+                                      </FormLabel>
+                                      <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                      >
+                                        <FormControlLabel
+                                          value="Yes"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setTime(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="Yes"
+                                        />
+                                        <FormControlLabel
+                                          value="No"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setTime(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="No"
+                                        />
+                                      </RadioGroup>
+                                    </FormControl>
+                                  </div>
+                                  <div>
+                                    <Typography component={InputLabel}>
+                                      Your Rating
+                                    </Typography>
+                                    <Rating
+                                      name="simple-controlled"
+                                      value={rateValue}
+                                      onChange={(event, newValue) => {
+                                        setRateValue(newValue);
+                                      }}
                                     />
                                   </div>
-                                </div>
-                                <Button type="submit">Leave a review</Button>
-                              </Form>
+                                  <div>
+                                    <div className="form-group">
+                                      <label>Description:</label>
+                                      <textarea
+                                        id="description"
+                                        value={reviewDes}
+                                        onChange={(e) =>
+                                          setReviewDes(e.target.value)
+                                        }
+                                        placeholder="Enter description"
+                                        className="form-control"
+                                      />
+                                    </div>
+                                  </div>
+                                  <Button type="submit">Leave a review</Button>
+                                  <button
+                                    className="btn btn-danger ml-2"
+                                    onClick={() => onClickCoseForm()}
+                                  >
+                                    Cancel
+                                  </button>
+                                </Form>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {displayFormName === "pro-review" && (
+                          <div>
+                            <div className="card">
+                              <div class="card-header">
+                                Leave a Review for client
+                              </div>
+                              <div className="card-body">
+                                <Form onSubmit={addReview}>
+                                  <div>
+                                    <FormControl>
+                                      <FormLabel id="demo-row-radio-buttons-group-label">
+                                        Was this delivered on budget?
+                                      </FormLabel>
+                                      <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                      >
+                                        <FormControlLabel
+                                          value="Yes"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setBudget(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="Yes"
+                                        />
+                                        <FormControlLabel
+                                          value="No"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setBudget(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="No"
+                                        />
+                                      </RadioGroup>
+                                    </FormControl>
+                                  </div>
+                                  <div>
+                                    <FormControl>
+                                      <FormLabel id="demo-row-radio-buttons-group-label">
+                                        Was this delivered on time?
+                                      </FormLabel>
+                                      <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                      >
+                                        <FormControlLabel
+                                          value="Yes"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setTime(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="Yes"
+                                        />
+                                        <FormControlLabel
+                                          value="No"
+                                          control={
+                                            <Radio
+                                              onChange={(e) =>
+                                                setTime(e.target.value)
+                                              }
+                                            />
+                                          }
+                                          label="No"
+                                        />
+                                      </RadioGroup>
+                                    </FormControl>
+                                  </div>
+                                  <div>
+                                    <Typography component={InputLabel}>
+                                      Your Rating
+                                    </Typography>
+                                    <Rating
+                                      name="simple-controlled"
+                                      value={rateValue}
+                                      onChange={(event, newValue) => {
+                                        setRateValue(newValue);
+                                      }}
+                                    />
+                                  </div>
+                                  <div>
+                                    <div className="form-group">
+                                      <label>Description:</label>
+                                      <textarea
+                                        id="description"
+                                        value={reviewDes}
+                                        onChange={(e) =>
+                                          setReviewDes(e.target.value)
+                                        }
+                                        placeholder="Enter description"
+                                        className="form-control"
+                                      />
+                                    </div>
+                                  </div>
+                                  <Button type="submit">Leave a review</Button>
+                                  <button
+                                    className="btn btn-danger ml-2"
+                                    onClick={() => formCloseButton()}
+                                  >
+                                    Cancel
+                                  </button>
+                                </Form>
                               </div>
                             </div>
                           </div>
