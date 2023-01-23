@@ -4,7 +4,7 @@ import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
 import { Form } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+//import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import url from '../../../utils/baseUrl';
 import axios from 'axios';

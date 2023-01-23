@@ -89,6 +89,8 @@ import UpdateProject from "./Pages/Other/UpdateProject"
 import ConfirmBid from "./Pages/Other/ConfirmBid"
 import TaskContract from "./Pages/Other/TaskContract"
 import TimeLine from "./Pages/Other/TimeLine"
+import { CometChatUI } from "../cometchat-pro-react-ui-kit/CometChatWorkspace/src";
+import Conversationlist from "../chat-app/Conversationlist"
 
 class Markup extends Component {
   render() {
@@ -103,6 +105,7 @@ class Markup extends Component {
             <Route path="/messages" exact component={MessagesPage} />
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
+            <Route path="/comet-chat" exact component={Conversationlist} />
             <PrivateRoute
               path="/jobs-my-resume"
               exact
