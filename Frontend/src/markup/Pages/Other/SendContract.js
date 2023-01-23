@@ -221,13 +221,12 @@ function SendContract() {
                 <div className="container-data m-b20">
                   {/* contract Header start */}
                   <div class="contract-header">
-                    <h2 class="mb-0">Cover Latter </h2>
+                    <h2 class="mb-0">Cover Letter </h2>
                   </div>
                   {/* contract header end */}
 
                   {/* contract section start */}
                   <div className="form-group mb-10">
-                    <label className="pl-4"> Cover Latter </label>
                     <textarea
                       rows="5"
                       onChange={(e) => setCover(e.target.value)}

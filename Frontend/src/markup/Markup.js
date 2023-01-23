@@ -3,6 +3,7 @@ import { BrowserRouter, HashRouter, Route, Switch } from "react-router-dom"
 
 import Homepage from "./Pages/Other/Homepage1"
 import Homepage2 from "./Pages/Other/Homepage2"
+import Landingpage from "./Pages/Other/landingpage"
 
 import AskQuestion from "./Pages/Other/AskQuestion"
 import UpdateQuestion from "./Pages/Other/UpdateQuestion"
@@ -96,6 +97,7 @@ class Markup extends Component {
         <div className="page-wraper">
           <Switch>
             <Route path="/" exact component={Homepage} />
+            <Route path="/landingpage" exact component={Landingpage} />
             <Route path="/home" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
             <Route path="/messages" exact component={MessagesPage} />

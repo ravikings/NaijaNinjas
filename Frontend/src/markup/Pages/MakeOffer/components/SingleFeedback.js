@@ -8,7 +8,7 @@ function SingleFeedback(props) {
     <>
       <div style={{ margin: "20px 0px" }}>
         <div style={{ fontSize: 18, color: "#333333", fontWeight: 600 }}>
-          Web, Database and API Developer
+          Web, Database and API Developer {props.text}
         </div>
         <div style={{ fontSize: 16, color: "#808080", marginBottom: 7 }}>
           Rated as Freelancer

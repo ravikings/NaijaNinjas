@@ -45,7 +45,6 @@ router.register(
     basename="test-timline",
 )
 
-
 urlpatterns = [
     path("", include(router.urls)),
     path("task-bookmark/<str:pk>/", task_favorite, name="task-bookmark"),
@@ -63,6 +62,5 @@ urlpatterns = [
     path("get-assigned-task/<str:task_owner>", pro_assigned_task, name="get-assigned-task"),
     path("get-ordered-task/<str:task_owner>", task_ordered, name="get-ordered-task"),
     path("approve-delivery/<str:pk>", approve_delivery, name="approve-delivery"),
-    
     
 ]

@@ -1,8 +1,8 @@
 import React from "react";
 import Rating from "@material-ui/lab/Rating";
 
-function Ratings({rating=5}) {
-  
+function Ratings({ rating = 5 }) {
+
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <div

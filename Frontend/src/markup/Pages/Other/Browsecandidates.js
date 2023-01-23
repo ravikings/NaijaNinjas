@@ -23,6 +23,7 @@ function BrowseCandidates() {
   const [data, setData] = useState([])
   const [totalCount, setTotalCount] = useState(null)
   const [activePage, SetActivePage] = useState(1)
+  const [checkBookmark, setCheckBookmark] = useState({})
   const { currentUser, userProfile } = useSelector(
     (state) => state.authReducer
   )
@@ -77,6 +78,14 @@ function BrowseCandidates() {
     allData()
   }, [])
 
+  useEffect(() => {
+    console.log("this changed!!!!!")
+  }, [checkBookmark])
+  // useEffect(() => {
+  //   console.log("use effect");
+  //   console.log(data);
+  // }, [data])
+
   const handleFilter = async (params) => {
     window.scrollTo(0, 0)
     setLoading(true)
@@ -101,16 +110,48 @@ function BrowseCandidates() {
     }
   }
 
-  const handleBookmark = async (id) => {
+  const buildBookmark = (item, index) => {
+
+    if (loading === 0) {
+      item.bookmarks.includes(parseInt(userID)) ? checkBookmark[index] = true : checkBookmark[index] = false
+    }
+    return 
+  }
+
+  const testMe = (index) => {
+    return checkBookmark[index]
+  }
+
+  const handleBookmark = async (id, index, e) => {
+    const tt = e.target.checked
+    e.target.checked = !tt
+    console.log(e.target.checked)
+    let copyBk = { ...checkBookmark }
+    let copyData = [ ...data ]
+    const record = copyData[index].bookmarks
+    if (record.includes(id)) {
+      let index = record.indexOf(id);
+      record.splice(index, 1)
+      copyBk[index] = false;
+      setCheckBookmark(copyBk);
+    } else {
+      record.push(id);
+      copyBk[index] = true;
+      setCheckBookmark(copyBk);
+    }
+    copyData[index].bookmarks = record
+    console.log(copyData)
+    setData(copyData);
+
     try {
       const { data } = await createRequest().post(
         `/api/v1/profile-bookmark/${id}/`
       )
-      toast.success(data.message) 
+      //toast.success(data.message)
     } catch (error) {
-      toast.error(error.response.data.message || "Service not available")
+      //toast.error(error.response.data.message || "Service not available")
     }
-    allData()
+    //allData()
   }
 
   // paginate function start
@@ -221,7 +262,6 @@ function BrowseCandidates() {
                                 )}
 
                                 <div className="salary-bx">
-                                  {console.log(item, "item")}
                                   <Link
                                     to={{
                                       pathname: `/make-offer/${item.author}`,
@@ -241,19 +281,21 @@ function BrowseCandidates() {
                                   </Link>
                                 </div>
                               </div>
-                              {currentUser ? (
-                              <label className="like-btn">
-                                <input
-                                  type="checkbox"
-                                  //checked={item.bookmarks.includes(parseInt(userID)) ? true : false}
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleBookmark(item.author)
-                                  }}
-                                />
-                                <span className="checkmark"></span>
-                              </label>
-                              ): ""}
+                              {/* {currentUser ? (
+                                <label className="like-btn">
+                                  <input
+                                    type="checkbox"
+                                    checked={testMe(index)}
+                                    onClick={(e) => {
+                                      //e.stopPropagation()
+                                      handleBookmark(item.author, index, e)
+                                    }}
+                                  />
+                                  <span className="checkmark"></span>
+                                  {buildBookmark(item, index)}
+                                  {console.log(checkBookmark)}
+                                </label>
+                              ) : ""} */}
                             </div>
                           </Link>
                         </li>

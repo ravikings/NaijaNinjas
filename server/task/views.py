@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
+from bank.models import CurrentBalance
 from task.serializers import (
     TaskSerializer,
     TimelineStartSerializer,
@@ -39,11 +40,13 @@ from durin.auth import (
     TokenAuthentication as DurinTokenAuthentication,
     CachedTokenAuthentication,
 )
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 # Create your views here.
 
 
-#@method_decorator(cache_page(60 * 30), name="dispatch")
+# @method_decorator(cache_page(60 * 30), name="dispatch")
 class TaskView(viewsets.ModelViewSet):
 
     """
@@ -57,10 +60,10 @@ class TaskView(viewsets.ModelViewSet):
     authentication_classes = (DurinTokenAuthentication,)
 
     def retrieve(self, request, pk=None):
-        
+
         task = Task.objects.get(id=pk)
-        #TODO: Add celery to handle tracking
-        #ip = get_client_ip(request)
+        # TODO: Add celery to handle tracking
+        # ip = get_client_ip(request)
         # history_tracker(request, task)
         # if IpModel.objects.filter(ip=ip).exists():
         #     task.views.add(IpModel.objects.get(ip=ip))
@@ -296,8 +299,7 @@ class TimelineCommentView(viewsets.ModelViewSet):
             response["Content-Disposition"] = (
                 'attachment; filename="%s"' % instance.attachment.name
             )
-            response['Access-Control-Expose-Headers'] = 'Content-Disposition'
-            
+            response["Access-Control-Expose-Headers"] = "Content-Disposition"
 
             return response
 
@@ -324,7 +326,7 @@ class TaskAssigned(viewsets.ModelViewSet):
     #     return TaskBidder.objects.filter(
     #         bidder_profile=41, bid_approve_status=True
     #     ).order_by("modified")
-        # TODO Missing filter for task completed to be shown. self.request.user.id
+    # TODO Missing filter for task completed to be shown. self.request.user.id
 
 
 @api_view(["POST"])
@@ -360,7 +362,8 @@ class DashboardTaskFavorite(viewsets.ModelViewSet):
             ).values_list("task")
         )
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class SearchTask(viewsets.ModelViewSet):
 
     search_fields = [
@@ -428,7 +431,9 @@ def accept_bid(request):
         response_data["total_charge"] = bid.total_charge
         print("creating timeline")
         query_set = Timeline.objects.create(
-            author=bid.payment_author, task_owner=bid.bidder_profile.author, task=bid.task
+            author=bid.payment_author,
+            task_owner=bid.bidder_profile.author,
+            task=bid.task,
         )
         print("update task status")
         bid.approve_bids(query_set.id)
@@ -441,6 +446,7 @@ def accept_bid(request):
     return Response(
         {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST
     )
+
 
 class OwnerTaskApprove(viewsets.ModelViewSet):
 
@@ -505,6 +511,7 @@ def get_timeiline(request, task_id, task_owner):
     serializer = TimelineSerializer(data)
     return Response(serializer.data)
 
+
 class GetTimelineView(viewsets.ModelViewSet):
 
     """
@@ -521,41 +528,53 @@ class GetTimelineView(viewsets.ModelViewSet):
         query = Timeline.objects.filter(task=task_id, task_owner=task_owner)
         return query
 
-    
+
 @api_view(["GET"])
-#@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @authentication_classes([DurinTokenAuthentication])
 def pro_assigned_task(request, task_owner):
 
-    data = TaskBidder.objects.filter(bidder_profile__author=task_owner, transaction_verified=True)
+    data = TaskBidder.objects.filter(
+        bidder_profile__author=task_owner, transaction_verified=True
+    )
     serializer = TaskAssignedSerializer(data, many=True)
     return Response(serializer.data)
 
 
 @api_view(["GET"])
-#@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @authentication_classes([DurinTokenAuthentication])
 def task_ordered(request, task_owner):
 
-    data = TaskBidder.objects.filter(payment_author=task_owner, transaction_verified=True)
+    data = TaskBidder.objects.filter(
+        payment_author=task_owner, transaction_verified=True
+    )
     serializer = TaskBidderprofileSerializer(data, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET", "POST"])
-#@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
+@transaction.atomic
 @authentication_classes([DurinTokenAuthentication])
 def approve_delivery(request, pk):
+    task_owner = request.data.get("task_owner")
+    task_id = request.data.get("task")
+    query_task = get_object_or_404(TaskBidder, id=task_id)
 
-    query = get_object_or_404(Comment, id=pk)
-    # if (
-    #     request.user in [query.task_timeline.author, query.task_timeline.task_owner]
-    #     or request.user.is_superuser
-    # ):
-    print(request.data.get("status"))
-    query.status = request.data.get("status")
-    query.update_timeline_status()
-    query.save()
-    serializer = TimelineSerializer(query)
-    return Response(serializer.data)
+    if request.user in [query_task.payment_author, request.user.is_superuser]:
+        query = get_object_or_404(Comment, id=pk)
 
-    #raise PermissionDenied
+        # logic below are use to credit pro, set pay out to 7days.
+        now = timezone.now()
+        next_seven_days = now + timedelta(days=7)
+        balance = get_object_or_404(CurrentBalance, author=task_owner, task=task_id)
+        balance.payout_date = next_seven_days
+        balance.save()
+        query.status = request.data.get("status")
+        query.update_timeline_status()
+        query.save()
+        serializer = TimelineSerializer(query)
+        return Response(serializer.data)
+
+    raise PermissionDenied

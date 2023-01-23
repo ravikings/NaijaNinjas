@@ -9,6 +9,7 @@ import url from "../../../utils/baseUrl";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { Autocomplete } from "@material-ui/lab";
 import { sectors } from "../../../helper/sectors";
+import { states } from "../../../helper/states"
 import { useStyles } from "../../Layout/LayoutStyles";
 import { styled, TextField } from "@material-ui/core";
 
@@ -33,6 +34,7 @@ const CssTextField = styled(TextField)({
   },
 });
 
+
 function Componypostjobs() {
   const history = useHistory();
   const privateAxios = useAxiosPrivate();
@@ -53,6 +55,18 @@ function Componypostjobs() {
   const [category, setCategory] = useState("");
   const [attachFile, setAttachFile] = useState("");
   // const [postStatus,setPostStatus]=useState('');
+  const cityOptions = () => region ? states[region].cities : []
+
+  useEffect(() => {
+    // action on update of movies
+    console.log(states)
+  }, [region]);
+
+  useEffect(() => {
+    // action on update of movies
+    console.log(location)
+  }, [location]);
+
   const addData = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -136,6 +150,7 @@ function Componypostjobs() {
                                 placeholder="Enter Job Title"
                                 onChange={(e) => setTitle(e.target.value)}
                                 value={title}
+                                required
                               />
                             </div>
                           </div>
@@ -160,6 +175,7 @@ function Componypostjobs() {
                                 className="custom-select"
                                 onChange={(e) => setCategory(e.target.value)}
                                 value={category}
+                                required
                               >
                                 <option value="FUll Time">Full Time</option>
                                 <option value="Part Time">Part Time</option>
@@ -175,8 +191,8 @@ function Componypostjobs() {
                                 as="select"
                                 custom
                                 className="custom-select"
-                              // onChange={(e)=>setCategory(e.target.value)}
-                              // value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                value={category}
                               >
                                 <option>1 Years</option>
                                 <option>2 Years</option>
@@ -200,6 +216,7 @@ function Componypostjobs() {
                                   setMinimumSalary(e.target.value)
                                 }
                                 value={minimumSalary}
+                                required
                               />
                             </div>
                           </div>
@@ -215,13 +232,14 @@ function Componypostjobs() {
                                   setMaximumSalary(e.target.value)
                                 }
                                 value={maximumSalary}
+                                required
                               />
                             </div>
                           </div>
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Region</label>
-                              <Form.Control
+                              <label>State:</label>
+                              {/* <Form.Control
                                 as="select"
                                 custom
                                 className="custom-select"
@@ -231,18 +249,53 @@ function Componypostjobs() {
                                 <option>New York</option>
                                 <option>London</option>
                                 <option>Los Angeles</option>
-                              </Form.Control>
+                              </Form.Control> */}
+                              <Autocomplete
+                                fullWidth
+                                freeSolo
+                                autoSelect
+                                classes={{ input: classes.root }}
+                                value={region}
+                                onChange={(e) => setRegion(e.target.value)}
+                                options={Object.keys(states)}
+                                renderInput={(params) => (
+                                  <CssTextField
+                                    {...params}
+                                    variant="outlined"
+                                  />
+                                )}
+                                required
+                              />
                             </div>
                           </div>
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Location</label>
-                              <input
+                              <label>City</label>
+                              {/* <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Enter Location"
                                 onChange={(e) => setLocation(e.target.value)}
                                 value={location}
+                              /> */}
+                              <Autocomplete
+                                fullWidth
+                                freeSolo
+                                autoSelect
+                                classes={{ input: classes.root }}
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                                options={states[region]
+                                  ? states[region].cities
+                                  : []
+                                }
+                                renderInput={(params) => (
+                                  <CssTextField
+                                    {...params}
+                                    variant="outlined"
+                                  />
+                                )}
+                                required
                               />
                             </div>
                           </div>
@@ -263,6 +316,7 @@ function Componypostjobs() {
                                     variant="outlined"
                                   />
                                 )}
+                                required
                               />
                             </div>
                           </div>
@@ -278,13 +332,17 @@ function Componypostjobs() {
                                 onChange={(e, value) => {
                                   setSector(value);
                                 }}
-                                options={Object.keys(sectors)}
+                                options={sectors[department]
+                                  ? sectors[department]
+                                  : []
+                                }
                                 renderInput={(params) => (
                                   <CssTextField
                                     {...params}
                                     variant="outlined"
                                   />
                                 )}
+                                required
                               />
                             </div>
                           </div>
@@ -318,6 +376,7 @@ function Componypostjobs() {
                                   onChange={(e) =>
                                     setAttachFile(e.target.files[0])
                                   }
+                                  required
                                 />
                               </div>
                             </div>

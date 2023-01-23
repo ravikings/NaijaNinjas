@@ -136,7 +136,7 @@ class RelatedProfile(viewsets.ModelViewSet):
 
         return queryset
 
-
+@method_decorator(cache_page(60 * 60), name="dispatch")
 class UserDashboardProfile(viewsets.ModelViewSet):
 
     """
