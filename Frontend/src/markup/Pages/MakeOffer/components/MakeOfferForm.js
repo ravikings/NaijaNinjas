@@ -99,7 +99,9 @@ function MakeOfferForm(props) {
             <ul className="list-inline mt-2 mb-2 badges">
               <li className="list-inline-item">
                 <button
-                  onClick={() => { refetch(); }}
+                  onClick={() =>
+                    history.push(`/messages/${id}`)
+                  }
                   className="site-button"
                 >
                   Contact Me
@@ -108,7 +110,7 @@ function MakeOfferForm(props) {
               <li className="list-inline-item">
                 <button
                   onClick={() =>
-                    history.push(`/send-contract/${auth.currentUser.pk}`)
+                    history.push(`/message/${auth.currentUser.pk}`)
                   }
                   className="site-button"
                   id="gray-button"
