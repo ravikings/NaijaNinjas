@@ -89,6 +89,9 @@ import UpdateProject from "./Pages/Other/UpdateProject"
 import ConfirmBid from "./Pages/Other/ConfirmBid"
 import TaskContract from "./Pages/Other/TaskContract"
 import TimeLine from "./Pages/Other/TimeLine"
+import { CometChatUI } from "../cometchat-pro-react-ui-kit/CometChatWorkspace/src";
+import Conversationlist from "../chat-app/Conversationlist"
+import Conversationchatroom from "../chat-app/Conversationchatroom"
 
 class Markup extends Component {
   render() {
@@ -100,7 +103,6 @@ class Markup extends Component {
             <Route path="/landingpage" exact component={Landingpage} />
             <Route path="/home" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
-            <Route path="/messages" exact component={MessagesPage} />
             <PrivateRoute path="/jobs-profile" component={Jobprofile} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute
@@ -121,8 +123,9 @@ class Markup extends Component {
             <Route path="/jobs-cv-manager" exact component={Jobcvmanager} />
             <Route path="/" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
-            <PrivateRoute path="/messages" exact component={MessagesPage} />
-
+            {/* <PrivateRoute path="/messages" exact component={MessagesPage} /> */}
+            <PrivateRoute path="/messages" exact component={Conversationlist} />
+            <PrivateRoute path="/messages/:id" exact component={Conversationchatroom} />
             <Route path="/ask-questions" exact component={AskQuestion} />
             <Route path="/update-questions" exact component={UpdateQuestion} />
 

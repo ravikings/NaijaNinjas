@@ -3,7 +3,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import Header2 from '../../Layout/Header2';
 import Footer from '../../Layout/Footer';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+//import 'react-quill/dist/quill.snow.css';
 import ProfileSidebar from "../../Element/Profilesidebar";
 import axios from 'axios'; 
 import BASE_URL from "../../../utils/baseUrl"

@@ -9,7 +9,7 @@ import Select from 'react-select'
 import createRequest from "../../../utils/axios";
 import axios from 'axios'
 import ReactQuill from 'react-quill'; 
-import 'react-quill/dist/quill.snow.css';
+//import 'react-quill/dist/quill.snow.css';
 import TagsInput from '../components/TagsInput';
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader'

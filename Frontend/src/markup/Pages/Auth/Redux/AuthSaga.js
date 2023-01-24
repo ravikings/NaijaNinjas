@@ -138,9 +138,7 @@ export function* setProfileData({ data }) {
 
 export function* gettingAccessToken() {
   try {
-    //yield createRequest().post("/dj-rest-auth/token/verify/");
     const { data } = localStorage.getItem("userData");
-    // const { data } = yield createRequest().get("/api/auth/v1.0/apiaccess/", token);
     console.log(data, "userData");
     yield put({ type: authActionTypes.GET_CURRENT_SUCCESS, user: data });
   } catch (e) {

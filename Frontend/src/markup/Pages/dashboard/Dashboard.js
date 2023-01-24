@@ -20,14 +20,10 @@ const Dashboard = () => {
     (state) => state.authReducer
   )
 
-  console.log("getting user")
-  console.log(currentUser)
-  console.log("getting user")
   const history = useHistory()
   const dispatch = useDispatch()
   const [userDetails, setUserDetails] = useState(null)
-  console.log(userProfile)
-  console.log("getting user userProfile")
+
   if (userProfile && !userProfile.is_a_runner) {
     history.push("/jobs-profile")
   }

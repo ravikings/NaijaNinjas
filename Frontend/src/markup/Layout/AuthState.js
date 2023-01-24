@@ -18,6 +18,9 @@ import ReactButton from "react-bootstrap/Button"
 import { Dropdown } from "react-bootstrap"
 import createRequest from "../../utils/axios"
 import { toast } from "react-toastify"
+import { CometChat } from "@cometchat-pro/chat"
+import { COMETCHAT_CONSTANTS } from "./../../consts"
+
 
 function AuthState({ userDetails }) {
   const classes = useStyles()
@@ -44,23 +47,55 @@ function AuthState({ userDetails }) {
 
   const open = Boolean(anchorEl)
   const id = open ? "simple-popover" : undefined
+  let authKey = COMETCHAT_CONSTANTS.AUTH_KEY;
 
   const signOut = () => {
     dispatch(logout(handleClose))
     history.push("/")
   }
 
+  const cometCreate = (uid) => {
+    const name = "Abdul";
+    const user = new CometChat.User(uid);
+    user.setName(name);
+    CometChat.createUser(user, authKey).then(
+        user => {
+            console.log("user created", user);
+        },error => {
+            console.log("error", error);
+        }
+    )
+  }
+
+  const cometLogin = (uid) => {
+    CometChat.login(uid, authKey).then(
+      user => {
+        console.log("chat Login Successful:", { user });    
+      },
+      error => {
+        console.log("Login failed with exception:", { error });  
+        const { code } = error
+        if (code === "ERR_UID_NOT_FOUND") {
+          cometCreate(uid)
+        }
+      }
+    );
+  }
+
   const getOnlineState = async () => {
     try {
       const pk = localStorage.getItem("userID");
-      const { data } = await createRequest().get(
-        `/api/v1/account/user-profile/${pk}/`
-      )
-      const status = data.user_set_status === false ? true : false
-      console.log("DATA FROM AUTH STATE", data)
-      setServerState(data.status)
-      setOnlineState(status)
-      setUserProfile(data)
+      if (pk) {
+        const { data } = await createRequest().get(
+          `/api/v1/account/user-profile/${pk}/`
+        )
+        const status = data.user_set_status === false ? true : false
+        console.log("DATA FROM AUTH STATE", data)
+        cometLogin(pk)
+        setServerState(data.status)
+        setOnlineState(status)
+        setUserProfile(data)
+      }
     } catch (error) {
       console.log(error)
     }
