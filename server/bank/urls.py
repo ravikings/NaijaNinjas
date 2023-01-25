@@ -8,5 +8,5 @@ router = DefaultRouter()
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("balance/", users_account, name="")
+    path("balance/", users_account, name=""),
 ]

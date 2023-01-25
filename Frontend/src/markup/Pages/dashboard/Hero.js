@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import WeekendIcon from "@mui/icons-material/Weekend";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import StoreIcon from "@mui/icons-material/Store";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import createRequest from "../../../utils/axios";
+
 
 const Hero = () => {
+
+  const [accountBalance, setaccountBalance] = useState(null);
+
+  const getBalance = () => {
+    createRequest()
+      .post(`/money/balance/`)
+      .then((res) => {
+        setaccountBalance(res.data)
+      })
+      .catch((e) => {
+        console.log("Unknown Error", e);
+      });
+  };
+
+  useEffect(() => {
+    getBalance();
+  }, [accountBalance])
+
+
   return (
     <div className={styles.hero}>
       <div className="row">
@@ -21,7 +42,7 @@ const Hero = () => {
                   <div className={styles.upperRight}>
                     <Link to={"/"}>
                       <span>Main Balance</span>
-                      <h5>281</h5>
+                      <h5>₦{accountBalance?.available_balance}</h5>
                     </Link>
                   </div>
                 </div>
@@ -46,7 +67,7 @@ const Hero = () => {
                 </div>
                 <div className={styles.upperRight}>
                   <span>Invoice Amount</span>
-                  <h5>2,300</h5>
+                  <h5>₦{accountBalance?.invoice_amount__sum}</h5>
                 </div>
               </div>
             </div>
