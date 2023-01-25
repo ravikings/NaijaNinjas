@@ -9,7 +9,7 @@ import random
 def account_no_generator():
     # return a 6 digit random number
     key = int(random.uniform(100000, 999999))
-    if CurrentBalance.objects.filter(account_number=key).exists():
+    if AvailableBalance.objects.filter(account_number=key).exists():
         key = account_no_generator()
     return key
 
@@ -23,6 +23,9 @@ class CurrentBalance(models.Model):
         null=True,
         related_name="bank_owner_invoice",
         default="",
+    )
+    approved = models.BooleanField(
+        default=False, verbose_name="invoice_approved"
     )
     task = models.ForeignKey(
         TaskBidder,
@@ -39,7 +42,7 @@ class CurrentBalance(models.Model):
 
 
 class AvailableBalance(models.Model):
-    balance = models.IntegerField()
+    balance = models.IntegerField(default=0)
     account_number = models.IntegerField(
         unique=True, default=account_no_generator, editable=False
     )
@@ -52,3 +55,9 @@ class AvailableBalance(models.Model):
         null=True,
     )
     updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+    
+        if not self.account_number:
+            self.account_number = account_no_generator()
+        super().save(*args, **kwargs)
