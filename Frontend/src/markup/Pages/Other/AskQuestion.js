@@ -22,17 +22,16 @@ function AskQuestion() {
 
 	let userId = parseInt(localStorage.getItem("userID"));
 	const [detailsValue, setDetailsValue] = useState();
-	const [attachFile, setAttachFile] = useState(null);
-
+	const [attachFile, setAttachFile] = useState("");
 
 
 	// upload image end	
 	const SubmitQuestion = (e) => {
 		e.preventDefault();
-		console.log(token)
-		console.log("woow" + e.target[0].value);
-		console.log("woow" + e.target[1].value);
-		console.log("woow" + e.target[2].value);
+		// console.log(token)
+		// console.log("woow" + e.target[0].value);
+		// console.log("woow" + e.target[1].value);
+		// console.log("woow" + e.target[2].value);
 
 
 		var formdata = new FormData();
@@ -118,7 +117,6 @@ function AskQuestion() {
 													</Form.Control>
 												</div>
 											</div>
-
 											<div className="col-lg-12 col-md-12">
 												<div className="form-group">
 													<label>Details:</label>
@@ -128,9 +126,6 @@ function AskQuestion() {
 
 												</div>
 											</div>
-
-
-
 											<div className="col-lg-12 col-md-12">
 												<div className="form-group">
 													<label>Upload File</label>

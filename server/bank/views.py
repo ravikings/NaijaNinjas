@@ -17,8 +17,27 @@ from rest_framework.response import Response
 
 # Create your views here.
 
-@cache_memoize(60 * 60)
-def get_account(request):
+# @cache_memoize(60 * 60)
+# def get_account(request):
+#     acount, balance_created = AvailableBalance.objects.get_or_create(
+#         author=request.user
+#     )
+#     available_invoice = CurrentBalance.objects.filter(
+#         author=request.user, transfer_to_available=False
+#     ).aggregate(Sum("invoice_amount"))
+#     response = {}
+#     response.update(available_invoice)
+#     response["account_no"] = acount.account_number
+#     response["available_balance"] = acount.balance
+#     response["author"] = acount.author.id
+#     return response
+    
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([DurinTokenAuthentication])
+def users_account(request):
+
     acount, balance_created = AvailableBalance.objects.get_or_create(
         author=request.user
     )
@@ -30,25 +49,5 @@ def get_account(request):
     response["account_no"] = acount.account_number
     response["available_balance"] = acount.balance
     response["author"] = acount.author.id
-    return response
-    
-#TODO: add cache invalidation get_account.invalidate(post.id)
-
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([DurinTokenAuthentication])
-def users_account(request):
-
-    # acount, balance_created = AvailableBalance.objects.get_or_create(
-    #     author=request.user
-    # )
-    # available_invoice = CurrentBalance.objects.filter(
-    #     author=request.user, transfer_to_available=False
-    # ).aggregate(Sum("invoice_amount"))
-    # response = {}
-    # response.update(available_invoice)
-    # response["account_no"] = acount.account_number
-    # response["available_balance"] = acount.balance
-    # response["author"] = acount.author.id
-    return Response(get_account(request))
+    return Response(response)
 

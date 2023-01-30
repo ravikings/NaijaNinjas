@@ -10,7 +10,7 @@ import createRequest from "../../../utils/axios";
 
 const Hero = () => {
 
-  const [accountBalance, setaccountBalance] = useState(null);
+  const [accountBalance, setaccountBalance] = useState([]);
 
   const getBalance = () => {
     createRequest()
@@ -24,8 +24,10 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    getBalance();
-  }, [accountBalance])
+    if ( accountBalance.length === 0 ) {
+      getBalance();
+    }
+  }, [])
 
 
   return (
@@ -42,7 +44,7 @@ const Hero = () => {
                   <div className={styles.upperRight}>
                     <Link to={"/"}>
                       <span>Main Balance</span>
-                      <h5>₦{accountBalance?.available_balance}</h5>
+                      <h5>₦{parseFloat(accountBalance?.available_balance).toFixed(2)}</h5>
                     </Link>
                   </div>
                 </div>
@@ -67,7 +69,7 @@ const Hero = () => {
                 </div>
                 <div className={styles.upperRight}>
                   <span>Invoice Amount</span>
-                  <h5>₦{accountBalance?.invoice_amount__sum}</h5>
+                  <h5>₦{parseFloat(accountBalance?.invoice_amount__sum).toFixed(2)}</h5>
                 </div>
               </div>
             </div>
