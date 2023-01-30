@@ -29,6 +29,7 @@ from accounts.views import (
     profile_mode_status,
     profile_favorite,
     delete_projects,
+    public_project_viewset,
     DashboardServiceView,
     PrivateServiceView,
     DeleteProjectReview,
@@ -111,5 +112,6 @@ urlpatterns = [
     path("public-quotes/", public_quotes, name="public-quotes"),
     path("delete-project/<str:pk>/", delete_projects, name="delete-project"),
     path("profile-bookmark/<str:pk>/", profile_favorite, name="profile-bookmark"),
+    path("public-projects-view/<str:pk>/", public_project_viewset, name="public-projects-view")
     # path("public-celery/", start_celery_work, name="start-celery"),
 ]

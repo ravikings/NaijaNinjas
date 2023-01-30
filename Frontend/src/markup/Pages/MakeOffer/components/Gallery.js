@@ -23,10 +23,11 @@ function Gallery({ id }) {
   const allData = () => {
     setLoading(true)
     axiosPrivate
-      .get(`${url.baseURL}api/v1/account/projects/?user_id=${id}`)
+      //.get(`${url.baseURL}api/v1/account/projects/?user_id=${id}`)
+      .get(`/api/v1/public-projects-view/${id}/`)
       .then((res) => {
-        console.log(res.data.results)
-        setProjects(res.data.results)
+        console.log(res.data)
+        setProjects(res.data)
         setLoading(false)
       })
       .catch((e) => {
@@ -36,6 +37,7 @@ function Gallery({ id }) {
         } else {
           console.log("Unknown Error")
         }
+        setLoading(false)
       })
   }
 

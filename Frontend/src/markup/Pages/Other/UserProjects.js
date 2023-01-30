@@ -22,6 +22,8 @@ function UserProjects() {
   const { currentUser } = useSelector((state) => state.authReducer)
   const [index, setIndex] = useState(0)
 
+  let userId = parseInt(localStorage.getItem("userID"))
+
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex)
   }
@@ -29,9 +31,10 @@ function UserProjects() {
   const allData = () => {
     setLoading(true)
     axiosPrivate
-      .get(`${url.baseURL}api/v1/account/projects/?user_id=${currentUser?.pk}`)
+      //.get(`${url.baseURL}api/v1/account/projects/?user_id=${userId}`)
+      .get(`/api/v1/public-projects-view/${userId}/`)
       .then((res) => {
-        setData(res.data.results)
+        setData(res.data)
         setLoading(false)
       })
       .catch((e) => {
@@ -81,7 +84,7 @@ function UserProjects() {
   }
   // delete item end
   useEffect(() => {
-    if (currentUser?.pk) {
+    if (userId) {
       allData()
     }
   }, [currentUser])
