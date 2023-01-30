@@ -86,7 +86,7 @@ from durin.auth import (
 )
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class DashboardProfile(viewsets.ModelViewSet):
 
     """
@@ -135,6 +135,7 @@ class RelatedProfile(viewsets.ModelViewSet):
         )
 
         return queryset
+
 
 @method_decorator(cache_page(60 * 60), name="dispatch")
 class UserDashboardProfile(viewsets.ModelViewSet):
@@ -189,7 +190,7 @@ def taskUpdate(request, pk):
     return Response({"error": f"Operation failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class DashboardResume(viewsets.ModelViewSet):
 
     """
@@ -286,7 +287,7 @@ def profile_mode_status(request, pk, type):
     return Response(serializer.data)
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class PhotoUpload(viewsets.ModelViewSet):
 
     """
@@ -337,20 +338,21 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         return Projects.objects.filter(author=user_id)
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class ReviewView(viewsets.ModelViewSet):
 
     """
     uses to add review to profile
     """
 
-    permissions_classes = [IsAuthenticated and IsOwner]
-    authentication_classes = (DurinTokenAuthentication,)
+    queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permissions_classes = [IsAuthenticated, IsOwner]
+    authentication_classes = (DurinTokenAuthentication,)
 
-    def get_queryset(self):
+    # def get_queryset(self):
 
-        return Review.objects.filter(profile=self.request.user.id)
+    #     return Review.objects.filter(profile=self.request.user.id)
 
 
 class ClientReviewView(viewsets.ModelViewSet):
@@ -365,7 +367,7 @@ class ClientReviewView(viewsets.ModelViewSet):
     # permissions_classes = [IsAuthenticated and IsOwner]
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class SearchProfile(viewsets.ModelViewSet):
 
     """
@@ -416,7 +418,7 @@ class SearchProfile(viewsets.ModelViewSet):
     ordering_fields = "__all__"
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class ChatSearchProfile(viewsets.ModelViewSet):
 
     """
@@ -450,7 +452,7 @@ def get_client_ip(request):
     return ip
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class UserSearchDetails(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving users.
@@ -482,7 +484,7 @@ class DashboardServiceView(viewsets.ModelViewSet):
     authentication_classes = (DurinTokenAuthentication,)
 
 
-#@method_decorator(cache_page(60 * 15), name="dispatch")
+# @method_decorator(cache_page(60 * 15), name="dispatch")
 class ServiceView(viewsets.ModelViewSet):
 
     """

@@ -559,17 +559,18 @@ def task_ordered(request, task_owner):
 @authentication_classes([DurinTokenAuthentication])
 def approve_delivery(request, pk):
     task_owner = request.data.get("task_owner")
-    task_id = request.data.get("task")
-    query_task = get_object_or_404(TaskBidder, id=task_id)
+    bid_id = request.data.get("task")
+    query_task = get_object_or_404(TaskBidder, id=bid_id)
 
     if request.user in [query_task.payment_author, request.user.is_superuser]:
         query = get_object_or_404(Comment, id=pk)
 
         # logic below are use to credit pro, set pay out to 7days.
         now = timezone.now()
-        next_seven_days = now + timedelta(days=7)
-        balance = get_object_or_404(CurrentBalance, author=task_owner, task=task_id)
-        balance.payout_date = next_seven_days
+        next_five_days = now + timedelta(days=5)
+        balance = get_object_or_404(CurrentBalance, author=task_owner, task=query_task)
+        balance.payout_date = next_five_days
+        balance.approved = True
         balance.save()
         query.status = request.data.get("status")
         query.update_timeline_status()

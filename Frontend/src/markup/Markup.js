@@ -103,8 +103,8 @@ class Markup extends Component {
             <Route path="/landingpage" exact component={Landingpage} />
             <Route path="/home" exact component={Homepage} />
             <Route path="/index-2" exact component={Homepage2} />
-            <PrivateRoute path="/jobs-profile" component={Jobprofile} />
-            <PrivateRoute path="/dashboard" component={Dashboard} />
+            <PrivateRoute path="/jobs-profile" exact component={Jobprofile} />
+            <PrivateRoute path="/dashboard" exact component={Dashboard} />
             <PrivateRoute
               path="/jobs-my-resume"
               exact
@@ -275,7 +275,8 @@ class Markup extends Component {
               component={ResetPassword}
             />
 
-            <Route path="/error-404" exact component={Error404} />
+            {/* <Route path="/error-404" exact component={Error404} /> */}
+            {/* <Route component={Error404} /> */}
 
             <Route path="/contact" exact component={Contact} />
 

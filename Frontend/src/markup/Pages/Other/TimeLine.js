@@ -41,6 +41,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { toast } from "react-toastify";
+import swal from "sweetalert";
 // 35 / 67
 
 function TimeLine() {
@@ -69,9 +70,45 @@ function TimeLine() {
   const [author, setAuthor] = useState("");
   const [task_owner, setTask_owner] = useState("");
   const [task, setTask] = useState("");
+
   const [timelineStatus, settimelineStatus] = useState("");
   const [clientReview, setclientReview] = useState({});
   const [proReview, setproReview] = useState({});
+  const [clientrateValue, setclientrateValue] = useState("");
+  const [platformrateValue, setplatformrateValue] = useState("");
+  const [platformDes, setplatformDes] = useState("");
+  const [budgetValue, setbudgetValue] = useState("");
+  const [communicationValue, setcommunicationValue] = useState("");
+  const [clientReviewUpdate, setclientReviewUpdate] = useState(false);
+  const [proReviewUpdate, setproReviewUpdate] = useState(false);
+
+  const updateProReview = (event, data) => {
+    onClickOpenForm(
+      event,
+      "pro-review"
+    )
+    setproReviewUpdate(true);
+    setReviewDes(data?.body);
+    setRateValue(data?.rating);
+    setclientrateValue(data?.client_review);
+    setplatformrateValue(data?.Platform_rating);
+    setplatformDes(data?.Platform_suggestion);
+    setbudgetValue(data?.budget);
+    setcommunicationValue(data?.communcation_rating);
+
+  }
+
+  const updateClientReview = (event, data) => {
+    onClickOpenForm(
+      event,
+      "review"
+    )
+    setclientReviewUpdate(true);
+    setReviewDes(data?.body);
+    setRateValue(data?.rating);
+    setbudgetValue(data?.budget);
+    setTime(data?.communcation_rating);
+  }
 
   useEffect(() => {
     getTimeLineData();
@@ -110,9 +147,10 @@ function TimeLine() {
     e.preventDefault();
     IsDisplayFormName(formName);
   };
-  const onClickCoseForm = (e) => {
-    e.preventDefault();
-    addDelivery();
+  const onClickCoseForm = () => {
+    //e.preventDefault();
+    IsDisplayFormName("")
+    //addDelivery();
   };
   const addMileStone = (e) => {
     e.preventDefault();
@@ -194,10 +232,10 @@ function TimeLine() {
   };
 
   const approveOrder = (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     const formdata = new FormData();
     formdata.append("status", "APPROVED");
-    formdata.append("task", timelineComment.id)
+    formdata.append("task", timeline_id)
     formdata.append("task_owner", task_owner);
     axiosPrivate
       .post(
@@ -231,15 +269,24 @@ function TimeLine() {
     formdata.append("author", userProfile?.author);
     formdata.append("task", task);
     formdata.append("profile", task_owner);
-    // formdata.append("profile", "");
-    // axiosPrivate({
-    //   method: "POST",
-    //   url: `${baseUrl.baseURL}api/v1/account/client-review/`,
-    //   data: formdata,
-    //   headers: {
-    //     Authorization: token,
-    //   },
-    // })
+    if (clientReviewUpdate) {
+      axiosPrivate
+      .put(`${baseUrl.baseURL}api/v1/account/client-review/${clientReview.id}/`, formdata)
+      .then(
+        (response) => {
+          IsDisplayFormName("");
+          setReviewDes("");
+          setBudget(false);
+          setTime(false);
+          setRateValue(0);
+          toast.success("Thank you for your review, and making us better!");
+          getTimeLineData();
+        },
+        (error) => {
+          console.log({ error });
+        }
+      );
+    } else {
     axiosPrivate
       .post(`${baseUrl.baseURL}api/v1/account/client-review/`, formdata)
       .then(
@@ -256,7 +303,59 @@ function TimeLine() {
           console.log({ error });
         }
       );
+    }
   };
+
+  const addforClient = (e) => {
+    e.preventDefault();
+    const formdata = new FormData();
+    formdata.append("body", reviewDes);
+    formdata.append("task", task);
+    formdata.append("rating", clientrateValue);
+    formdata.append("client_review", clientrateValue);
+    formdata.append("Platform_rating", platformrateValue);
+    formdata.append("Platform_suggestion", platformDes);
+    formdata.append("budget", budgetValue);
+    formdata.append("communcation_rating", communicationValue);
+    formdata.append("author", userProfile?.author);
+    formdata.append("client_account", author);
+    if (proReviewUpdate) {
+      axiosPrivate
+        .put(`${baseUrl.baseURL}api/v1/account/freelancer-review/${proReview.id}/`, formdata)
+        .then(
+          (response) => {
+            IsDisplayFormName("");
+            setReviewDes("");
+            setBudget(false);
+            setTime(false);
+            setRateValue(0);
+            toast.success("Thank you for your review, and making us better!");
+            getTimeLineData();
+          },
+          (error) => {
+            console.log({ error });
+          }
+        );
+    } else {
+      axiosPrivate
+        .post(`${baseUrl.baseURL}api/v1/account/freelancer-review/`, formdata)
+        .then(
+          (response) => {
+            IsDisplayFormName("");
+            setReviewDes("");
+            setBudget(false);
+            setTime(false);
+            setRateValue(0);
+            toast.success("Thank you for your review, and making us better!");
+            getTimeLineData();
+          },
+          (error) => {
+            console.log({ error });
+          }
+        );
+    }
+  };
+
 
   const downloadFile = async (e, item) => {
     e.preventDefault();
@@ -304,9 +403,7 @@ function TimeLine() {
     }
   };
 
-  const formCloseButton = () => {
 
-  }
 
   return (
     <>
@@ -343,7 +440,7 @@ function TimeLine() {
                                       <div className="uk-timeline-icon">
                                         <span
                                           className={`uk-badge ${item.status === "CONTRACT"
-                                            ?  "btn-primary"
+                                            ? "btn-primary"
                                             : item.status === "PROGRESS"
                                               ? "btn-success"
                                               : item.status === "REVISION"
@@ -523,7 +620,6 @@ function TimeLine() {
                           </div>
                         </div>
                         <Divider style={{ margin: "30px 0px" }} />
-                        {console.log("im getting clientReview", clientReview)}
                         {clientReview ? <div className="card">
                           <div style={{ marginTop: 5 }}>
                             <div
@@ -551,14 +647,14 @@ function TimeLine() {
                                     className="btn btn-primary"
                                     id={"1"}
                                     onClick={(e) =>
-                                      onClickOpenForm(e, "review")
+                                      updateClientReview(e, clientReview)
                                     }
                                   >
                                     Update review{" "}
                                   </button>
                                   : ""}
                                 <span>{"  "}</span>
-                                {clientReview && task_owner === parseInt(userID) ?
+                                {proReview ? "" : clientReview && task_owner === parseInt(userID) ?
                                   <button
                                     type="button"
                                     className="btn btn-primary"
@@ -585,7 +681,21 @@ function TimeLine() {
                                 <TimelineFeedback data={proReview} review={"professional"} />
                               </div>
                               <div className="card-body">
-                                <a href="#" class="btn btn-primary">Update review</a>
+                                {clientReview && task_owner === parseInt(userID) ?
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={(e) =>
+                                      updateProReview(
+                                        e,
+                                        proReview
+                                      )
+                                    }
+                                  >
+                                    {" "}
+                                    Update review {" "}
+                                  </button>
+                                  : ""}
                               </div>
                             </div>
                           </div>
@@ -618,7 +728,7 @@ function TimeLine() {
                                   accept="image/*"
                                 />
                               </div>
-                              <Button type="submit">Deliver Service</Button>
+                              <Button onClick={addRequestRevision} type="submit">Submit request</Button>
                             </Form>
                           </div>
                         )}
@@ -649,7 +759,7 @@ function TimeLine() {
                                   accept="image/*"
                                 />
                               </div>
-                              <Button type="submit">Deliver Service</Button>
+                              <Button onClick={addDelivery} type="submit">Deliver Service 01</Button>
                             </Form>
                           </div>
                         )}
@@ -757,7 +867,7 @@ function TimeLine() {
                                       />
                                     </div>
                                   </div>
-                                  <Button type="submit">Leave a review</Button>
+                                  <Button onClick={addReview} type="submit">Leave a review</Button>
                                   <button
                                     className="btn btn-danger ml-2"
                                     onClick={() => onClickCoseForm()}
@@ -776,86 +886,52 @@ function TimeLine() {
                                 Leave a Review for client
                               </div>
                               <div className="card-body">
-                                <Form onSubmit={addReview}>
-                                  <div>
-                                    <FormControl>
-                                      <FormLabel id="demo-row-radio-buttons-group-label">
-                                        Was this delivered on budget?
-                                      </FormLabel>
-                                      <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"
-                                      >
-                                        <FormControlLabel
-                                          value="Yes"
-                                          control={
-                                            <Radio
-                                              onChange={(e) =>
-                                                setBudget(e.target.value)
-                                              }
-                                            />
-                                          }
-                                          label="Yes"
-                                        />
-                                        <FormControlLabel
-                                          value="No"
-                                          control={
-                                            <Radio
-                                              onChange={(e) =>
-                                                setBudget(e.target.value)
-                                              }
-                                            />
-                                          }
-                                          label="No"
-                                        />
-                                      </RadioGroup>
-                                    </FormControl>
-                                  </div>
-                                  <div>
-                                    <FormControl>
-                                      <FormLabel id="demo-row-radio-buttons-group-label">
-                                        Was this delivered on time?
-                                      </FormLabel>
-                                      <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"
-                                      >
-                                        <FormControlLabel
-                                          value="Yes"
-                                          control={
-                                            <Radio
-                                              onChange={(e) =>
-                                                setTime(e.target.value)
-                                              }
-                                            />
-                                          }
-                                          label="Yes"
-                                        />
-                                        <FormControlLabel
-                                          value="No"
-                                          control={
-                                            <Radio
-                                              onChange={(e) =>
-                                                setTime(e.target.value)
-                                              }
-                                            />
-                                          }
-                                          label="No"
-                                        />
-                                      </RadioGroup>
-                                    </FormControl>
-                                  </div>
+                                <Form onSubmit={addforClient}>
                                   <div>
                                     <Typography component={InputLabel}>
-                                      Your Rating
+                                      Rate client
                                     </Typography>
                                     <Rating
                                       name="simple-controlled"
-                                      value={rateValue}
+                                      value={clientrateValue}
                                       onChange={(event, newValue) => {
-                                        setRateValue(newValue);
+                                        setclientrateValue(newValue);
+                                      }}
+                                    />
+                                  </div>
+                                  <div>
+                                    <Typography component={InputLabel}>
+                                      Platform rating
+                                    </Typography>
+                                    <Rating
+                                      name="simple-controlled"
+                                      value={platformrateValue}
+                                      onChange={(event, newValue) => {
+                                        setplatformrateValue(newValue);
+                                      }}
+                                    />
+                                  </div>
+                                  <div>
+                                    <Typography component={InputLabel}>
+                                      Pay Rating
+                                    </Typography>
+                                    <Rating
+                                      name="simple-controlled"
+                                      value={budgetValue}
+                                      onChange={(event, newValue) => {
+                                        setbudgetValue(newValue);
+                                      }}
+                                    />
+                                  </div>
+                                  <div>
+                                    <Typography component={InputLabel}>
+                                      Communication Rating
+                                    </Typography>
+                                    <Rating
+                                      name="simple-controlled"
+                                      value={communicationValue}
+                                      onChange={(event, newValue) => {
+                                        setcommunicationValue(newValue);
                                       }}
                                     />
                                   </div>
@@ -873,10 +949,24 @@ function TimeLine() {
                                       />
                                     </div>
                                   </div>
-                                  <Button type="submit">Leave a review</Button>
+                                  <div>
+                                    <div className="form-group">
+                                      <label>Platform Feedback:</label>
+                                      <textarea
+                                        id="description"
+                                        value={platformDes}
+                                        onChange={(e) =>
+                                          setplatformDes(e.target.value)
+                                        }
+                                        placeholder="Enter description"
+                                        className="form-control"
+                                      />
+                                    </div>
+                                  </div>
+                                  <Button onClick={addforClient} type="submit">Leave a review</Button>
                                   <button
                                     className="btn btn-danger ml-2"
-                                    onClick={() => formCloseButton()}
+                                    onClick={() => onClickCoseForm()}
                                   >
                                     Cancel
                                   </button>

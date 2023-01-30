@@ -29,7 +29,7 @@ class ForumList(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         ip = get_client_ip(request)
         forum = Forum.objects.get(id=pk)
-        history_tracker(request, forum)
+        #history_tracker(request, forum)
         if IpModel.objects.filter(ip=ip).exists():
                 forum.views.add(IpModel.objects.get(ip=ip))
         else:

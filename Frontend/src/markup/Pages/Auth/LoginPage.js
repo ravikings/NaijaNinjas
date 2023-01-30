@@ -8,6 +8,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { GoogleLoginButton, FacebookLoginButton } from "./components";
 import Button from "@material-ui/core/Button";
+import Loader from "../../Element/Loader";
+
 // import {
 //   loadCaptchaEnginge,
 //   LoadCanvasTemplateNoReload,
@@ -48,6 +50,7 @@ function LoginPage() {
   const [mainLoginButton, setmainLoginButton] = useState(false);
   const [mfaemail, setMfaemail] = useState("");
   const [emailverify, setemailverify] = useState(false);
+  const [loading, setloading] = useState(false);
 
   // const checkCaptcha = () => {
   //   const isValid = validateCaptcha(value);
@@ -73,6 +76,7 @@ function LoginPage() {
         Cookies.set("access_token", res?.data?.token, {
           expires: inFiveMinutes,
         });
+        setloading(true);
         dispatch({
           type: authActionTypes.LOGIN_SUCCESS,
           user: res?.data?.user,
@@ -101,6 +105,7 @@ function LoginPage() {
           toast.error("Login failed!")
           toast.error(e?.response?.data);
         }
+        setloading(false);
       });
   };
 
@@ -117,6 +122,7 @@ function LoginPage() {
     } else {
       toast.error("Please enter correct captcha");
       setValue("");
+      setloading(false);
     }
   };
 
@@ -170,6 +176,7 @@ function LoginPage() {
     <div className="page-content bg-gray login-form-bx browse-job login-style2">
       <div className="section-full">
         <div className="container-fluid">
+        {loading ? <Loader /> : (
           <div className="row">
             <div className="col-lg-6 col-md-7 box-skew d-flex">
               <div
@@ -185,7 +192,7 @@ function LoginPage() {
                     }}
                   >
                     {(formik) => {
-                      const { errors, touched, isValid, dirty } = formik;
+                      const {values, errors, touched, isValid, dirty } = formik;
                       return (
                         <div
                           className="tab-pane active col-12 p-a0 "
@@ -210,6 +217,7 @@ function LoginPage() {
                                   type="email"
                                   name="email"
                                   id="email"
+                                  value={values.email}
                                   className={
                                     errors.email && touched.email
                                       ? "input-error form-control border-danger "
@@ -418,6 +426,7 @@ function LoginPage() {
               </div>
             </div>
           </div>
+        )}
         </div>
       </div>
       <footer className="login-footer">
