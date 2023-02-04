@@ -79,7 +79,6 @@ function BrowseCandidates() {
   }, [])
 
   useEffect(() => {
-    console.log("this changed!!!!!")
   }, [checkBookmark])
   // useEffect(() => {
   //   console.log("use effect");
@@ -112,10 +111,12 @@ function BrowseCandidates() {
 
   const buildBookmark = (item, index) => {
 
-    if (loading === 0) {
-      item.bookmarks.includes(parseInt(userID)) ? checkBookmark[index] = true : checkBookmark[index] = false
-    }
-    return 
+    // if (loading === 0) {
+    //   item.bookmarks.includes(parseInt(userID)) ? checkBookmark[index] = true : checkBookmark[index] = false
+    // }
+    item.bookmarks.includes(parseInt(userID)) ? checkBookmark[index] = true : checkBookmark[index] = false
+    
+    //return checkBookmark
   }
 
   const testMe = (index) => {
@@ -281,21 +282,22 @@ function BrowseCandidates() {
                                   </Link>
                                 </div>
                               </div>
-                              {/* {currentUser ? (
+                              {currentUser ? (
                                 <label className="like-btn">
+                                  {buildBookmark(item, index)}
                                   <input
                                     type="checkbox"
-                                    checked={testMe(index)}
+                                    checked={checkBookmark[index]}
                                     onClick={(e) => {
                                       //e.stopPropagation()
                                       handleBookmark(item.author, index, e)
                                     }}
                                   />
                                   <span className="checkmark"></span>
-                                  {buildBookmark(item, index)}
+                                  {/* {buildBookmark(item, index)} */}
                                   {console.log(checkBookmark)}
                                 </label>
-                              ) : ""} */}
+                              ) : ""}
                             </div>
                           </Link>
                         </li>

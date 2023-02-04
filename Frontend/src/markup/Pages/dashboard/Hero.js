@@ -23,6 +23,12 @@ const Hero = () => {
       });
   };
 
+  const separateNumber = (givenNumber) => {
+        
+    const nfObject = new Intl.NumberFormat('en-US');
+    return nfObject.format(givenNumber);
+  }
+
   useEffect(() => {
     if ( accountBalance.length === 0 ) {
       getBalance();
@@ -44,7 +50,7 @@ const Hero = () => {
                   <div className={styles.upperRight}>
                     <Link to={"/"}>
                       <span>Main Balance</span>
-                      <h5>₦{parseFloat(accountBalance?.available_balance).toFixed(2)}</h5>
+                      <h5>₦{separateNumber(parseFloat(accountBalance?.available_balance).toFixed(2))}</h5>
                     </Link>
                   </div>
                 </div>
@@ -69,7 +75,7 @@ const Hero = () => {
                 </div>
                 <div className={styles.upperRight}>
                   <span>Invoice Amount</span>
-                  <h5>₦{parseFloat(accountBalance?.invoice_amount__sum).toFixed(2)}</h5>
+                  <h5>₦{separateNumber(parseFloat(accountBalance?.invoice_amount__sum).toFixed(2))}</h5>
                 </div>
               </div>
             </div>
