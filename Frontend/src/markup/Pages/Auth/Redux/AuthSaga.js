@@ -152,7 +152,7 @@ export function* logout({ handleClose }) {
     console.log("logging out")
     const id = localStorage.getItem("userID");
     const mfa = localStorage.getItem("mfa");
-    // yield createRequest().post("/dj-rest-auth/logout/");
+    yield createRequest().post("/dj-rest-auth/logout/");
     if (!mfa) {
       yield createRequest().post("/api/auth/v1.0/logout/");
     }
@@ -167,6 +167,7 @@ export function* logout({ handleClose }) {
     Cookies.remove("access_token", { path: "/" });
     //Cookies.remove("refresh_token", { path: "/" });
     yield put({ type: authActionTypes.LOGOUT_SUCCESS });
+    localStorage.clear();
   } catch (e) {
     console.log(e.response.data);
     const id = localStorage.getItem("userID");
@@ -181,6 +182,7 @@ export function* logout({ handleClose }) {
     Cookies.remove("access_token", { path: "/" });
     //Cookies.remove("refresh_token", { path: "/" });
     yield put({ type: authActionTypes.LOGOUT_SUCCESS });
+    localStorage.clear();
   }
 }
 
