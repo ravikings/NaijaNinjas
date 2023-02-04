@@ -13,6 +13,9 @@ from durin.auth import (
 )
 from .models import AvailableBalance, CurrentBalance
 from rest_framework.response import Response
+from django.utils import timezone
+from .serializers import CurrentBalanceSerializer
+from django.db import transaction
 
 
 # Create your views here.
@@ -51,3 +54,22 @@ def users_account(request):
     response["author"] = acount.author.id
     return Response(response)
 
+@api_view(["GET"])
+#@authentication_classes([DurinTokenAuthentication])
+def transfer_users_payment(request):
+    credit_users_account()
+    return Response({"Message": "account credit completed"})
+    
+
+@transaction.atomic
+def credit_users_account():
+    two_days_ago = timezone.now() + timezone.timedelta(days=2)
+    available_invoice = CurrentBalance.objects.filter(transfer_to_available=False, approved=True, payout_date__lte=two_days_ago)
+    for invoice in available_invoice:
+        print("Account to credit is for {fname}, amount: {amount}".format(fname = invoice.author, amount = invoice.invoice_amount))
+        account_to_update = AvailableBalance.objects.get(author=invoice.author)
+        account_to_update.balance += invoice.invoice_amount
+        account_to_update.save()
+        invoice.transfer_to_available = True
+        invoice.save()
+        print("Credit usern{fname}, amount: {amount} completed".format(fname = invoice.author, amount = invoice.invoice_amount))
