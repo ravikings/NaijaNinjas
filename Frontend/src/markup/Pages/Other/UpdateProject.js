@@ -38,17 +38,19 @@ function UpdateProject() {
 
   const allData = () => {
     axiosPrivate
-      .get(`${url.baseURL}api/v1/account/projects/?user_id=${currentUser?.pk}`)
+      .get(`/api/v1/account/projects/${id}/`)
       .then((res) => {
-        const data = res.data.results
-        data.filter((item) => {
-          console.log(item)
-          if (item.id === parseInt(id)) {
-            setTitle(item.title)
-            setDetailsValue(item.description)
-            console.log("UpdateProject", item)
-          }
-        })
+        const item = res.data
+        setTitle(item?.title)
+        setDetailsValue(item?.description)
+        // data.filter((item) => {
+        //   console.log(item)
+        //   if (item.id === parseInt(id)) {
+        //     setTitle(item.title)
+        //     setDetailsValue(item.description)
+        //     console.log("UpdateProject", item)
+        //   }
+        // })
       })
       .catch((e) => {
         if (e.response?.status === 400) {
@@ -60,7 +62,7 @@ function UpdateProject() {
   }
 
   useEffect(() => {
-    if (currentUser?.pk && id) {
+    if (userId && id) {
       allData()
     }
   }, [id, currentUser])
@@ -96,7 +98,7 @@ function UpdateProject() {
     //   .post(`${url.baseURL}api/v1/account/project-create/`, formdata)
 
     axiosPriv
-      .post(`/api/v1/account/project-create/`, formdata, {
+      .put(`/api/v1/account/project-create/${id}/`, formdata, {
         signal: controller.signal,
       })
       .then(

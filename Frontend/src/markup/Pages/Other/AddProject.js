@@ -76,7 +76,7 @@ function AddProject() {
     // 	},
     // })
     axiosPrivate
-      .post(`${url.baseURL}/api/v1/account/project-create/`, formdata)
+      .post(`/api/v1/account/project-create/`, formdata)
       .then(
         (response) => {
           console.log("the response is ", response)

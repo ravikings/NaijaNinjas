@@ -116,3 +116,6 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 docker build -t gigxnow .
 docker tag gigxnow:latest 951157197492.dkr.ecr.us-east-1.amazonaws.com/gigxnow:latest
 docker push 951157197492.dkr.ecr.us-east-1.amazonaws.com/gigxnow:latest
+
+for ui
+"proxy": "https://zjoxobi1x6.execute-api.us-east-1.amazonaws.com/dev"

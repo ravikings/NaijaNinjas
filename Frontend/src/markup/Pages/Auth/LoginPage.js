@@ -76,7 +76,8 @@ function LoginPage() {
         Cookies.set("access_token", res?.data?.token, {
           expires: inFiveMinutes,
         });
-        setloading(true);
+        //setloading(true);
+        setloading(false);
         dispatch({
           type: authActionTypes.LOGIN_SUCCESS,
           user: res?.data?.user,
@@ -114,6 +115,7 @@ function LoginPage() {
     if (values) {
       values.username = values.email;
       delete values.email;
+      setloading(true);
       login(values);
     } else if (!value) {
       toast.error("Please enter captcha to verify");
@@ -127,7 +129,6 @@ function LoginPage() {
   };
 
   const handleMfa = (event) => {
-    console.log("here is mfa")
     setmfaSchema(true);
     setmainLoginButton(true);
     setMfaemail(event.target.value)

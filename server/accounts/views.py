@@ -326,17 +326,24 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     """
     uses to upload video to ui dashboard
     """
-
+    queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
     authentication_classes = (DurinTokenAuthentication,)
 
-    def get_queryset(self):
+    # def get_queryset(self):
 
-        user_id = self.request.query_params.get("user_id")
+    #     user_id = self.request.query_params.get("user_id")
 
-        return Projects.objects.filter(author=user_id)
+    #     return Projects.objects.filter(author=user_id)
 
+    
+@api_view(["GET"])
+def public_project_viewset(request, pk):
+    
+    query = Projects.objects.filter(author=pk)
+    data = ProjectsSerializer(query, many=True).data
+    return Response(data, status=status.HTTP_200_OK)
 
 # @method_decorator(cache_page(60 * 15), name="dispatch")
 class ReviewView(viewsets.ModelViewSet):
