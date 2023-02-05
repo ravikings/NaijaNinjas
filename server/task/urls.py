@@ -17,6 +17,7 @@ from task.views import (
     DashboardTaskFavorite,
     SearchTask,
     accept_bid,
+    reject_bid,
     ContractView,
     TaskRelatedView,
     GetTimelineView,
@@ -48,6 +49,7 @@ router.register(
 urlpatterns = [
     path("", include(router.urls)),
     path("task-bookmark/<str:pk>/", task_favorite, name="task-bookmark"),
+    path("reject-bid/<str:pk>/", reject_bid, name="reject-bid"),
     path("approve-bid/", accept_bid, name="approve-bid"),
     path(
         "get-timeline/<str:task_id>/<str:task_owner>",

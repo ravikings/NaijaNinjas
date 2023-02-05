@@ -140,9 +140,19 @@ function SendContract() {
               }, 3000)
             }
           },
-          (error) => {
-            dispatch({ type: authActionTypes.GET_ACCESS_TOKEN })
-          }
+          // (error) => {
+          //   dispatch({ type: authActionTypes.GET_ACCESS_TOKEN })
+          // }
+        )
+        .catch((e) => {
+          console.log("hi jpw are u")
+          console.log(e.response.data.error)
+          swal(
+            "Sorry",
+            e.response.data.error,
+            "warning"
+          )
+        }
         )
     }
   }

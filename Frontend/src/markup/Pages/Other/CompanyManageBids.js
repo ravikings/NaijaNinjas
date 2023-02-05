@@ -16,6 +16,7 @@ import TimeLine from "./TimeLine"
 import PaymentPage from "./PaymentPageOld"
 import baseUrl from "../../../utils/baseUrl"
 import TestPayment from "./TestPayment"
+import { toast } from "react-toastify"
 
 
 
@@ -36,7 +37,7 @@ function CompanyManageBids() {
   const allData = () => {
     setLoading(true)
     createRequest()
-    .get(`api/v1/task/task-bidding/?task=${id}`)
+      .get(`api/v1/task/task-bidding/?task=${id}`)
       .then((res) => {
         setTotalCount(res?.data?.count)
         setData(res.data.results)
@@ -105,6 +106,22 @@ function CompanyManageBids() {
   //   setDisplayPage("");
   // };
 
+  const rejectBid = (id) => {
+    if (id) {
+      setLoading(true)
+      createRequest()
+        .get(`/api/v1/task/reject-bid/${id}/`)
+        .then((res) => {
+          setLoading(false)
+          toast.info(res.data.message)
+        })
+        .catch((e) => {
+          console.log(e)
+          setLoading(false)
+        })
+    }
+  }
+
   return (
     <>
       <Header2 />
@@ -122,7 +139,7 @@ function CompanyManageBids() {
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title  clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                      Manage Bids
+                        Manage Bids
                       </h5>
                       {/* <div className="float-right">
                         <span className="select-title">Sort by freshness</span>
@@ -167,42 +184,57 @@ function CompanyManageBids() {
                                   <Ratings />
                                   <h6>{item.description}</h6>
                                   <div className="mt-3">
-                                    {item.bid_approve_status ? (
-                                      <Button
+                                    {item.bid_approve_status === 'True' ? (
+                                      <><Button
                                         style={{
                                           backgroundColor: "#2e55fa",
                                           color: "white",
                                         }}
-                                        onClick={() =>
-                                          history.push(
-                                            `/timeline/${item.task}/${item.bidder_info[0].author}`
-                                          )
-                                        }
+                                        onClick={() => history.push(
+                                          `/timeline/${item.task}/${item.bidder_info[0].author}`
+                                        )}
                                         variant="outlined"
-                                        startIcon={
-                                          <i className="fa fa-check"></i>
-                                        }
+                                        startIcon={<i className="fa fa-check"></i>}
                                       >
                                         Show Timeline
-                                      </Button>
-                                    ) : (
-                                      <Button
+                                      </Button><Button
                                         style={{
-                                          backgroundColor: "#2e55fa",
+                                          backgroundColor: "#333333",
                                           color: "white",
                                         }}
-                                        onClick={() =>
-                                          displayPaymentPage(item)
-                                        }
+                                        className="ml-2"
                                         variant="outlined"
-                                        startIcon={
-                                          <i className="fa fa-check"></i>
-                                        }
+                                        startIcon={<i className="fas fa-info-circle"></i>}
                                       >
-                                        Accept offer
-                                      </Button>
+                                          {item.task_status[0]?.status}
+                                        </Button></>
+                                    ) : (
+                                      <>
+                                        {item.bid_approve_status !== "Reject" ? (<Button disabled style={{
+                                          backgroundColor: "#E4A11B",
+                                          color: "black",
+                                        }}> Rejected</Button>) : (
+                                          <><Button
+                                            style={{
+                                              backgroundColor: "#2e55fa",
+                                              color: "white",
+                                            }}
+                                            onClick={() => displayPaymentPage(item)}
+                                            variant="outlined"
+                                            startIcon={<i className="fa fa-check"></i>}
+                                          >
+                                            Accept offer
+                                          </Button><Button
+                                            className="ml-2"
+                                            style={{
+                                              backgroundColor: "#E4A11B",
+                                              color: "black",
+                                            }}
+                                            onClick={() => rejectBid(item.id)}
+                                          >Reject offer</Button></>
+                                        )}</>
                                     )}
-                                    <Button
+                                    {/* <Button
                                       style={{
                                         backgroundColor: "#333333",
                                         color: "white",
@@ -213,8 +245,8 @@ function CompanyManageBids() {
                                         <i className="fas fa-info-circle"></i>
                                       }
                                     >
-                                      {item.task_status[0]?.status}
-                                    </Button>
+                                      {item.task_status[0]?.status} 
+                                    </Button> */}
                                     {/* <IconButton
                                       className="ml-2"
                                       style={{
