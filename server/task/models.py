@@ -82,6 +82,11 @@ class TaskBidder(models.Model):
     """
     The junction table for task and bid models/tables. Contains every instance of a task for a placement
     """
+    STATUS = [
+        ("False", "False"),
+        ("True", "True"),
+        ("Reject", "Reject"),
+    ]
 
     task = models.ForeignKey(
         Task,
@@ -111,7 +116,7 @@ class TaskBidder(models.Model):
     attachment = models.FileField(
         upload_to=upload_to, null=True, blank=True, storage=storage
     )
-    bid_approve_status = models.BooleanField(default=False)
+    bid_approve_status = models.CharField(max_length=255, choices=STATUS, default="False")
     transaction_id = models.CharField(
         max_length=255, blank=True, null=True, db_index=True, unique=True
     )
@@ -146,11 +151,12 @@ class TaskBidder(models.Model):
     def add_bidder_to_task(self, query):
 
         task = Task.objects.get(id=self.task.id)
-        if BiddersOnTask.objects.filter(bidder=query).exists():
-            task.bidders.add(BiddersOnTask.objects.get(bidder=query))
+        bidder_list = BiddersOnTask.objects.filter(bidder=query)
+        if bidder_list.exists():
+            task.bidders.add(bidder_list.first())
         else:
-            BiddersOnTask.objects.create(bidder=query)
-            task.bidders.add(BiddersOnTask.objects.get(bidder=query))
+            bidder_list = BiddersOnTask.objects.create(bidder=query)
+            task.bidders.add(bidder_list)
 
     def verify_transaction_completed(self):
         paystack = PayStack()

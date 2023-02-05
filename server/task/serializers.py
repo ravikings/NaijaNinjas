@@ -3,7 +3,7 @@ from accounts.models import Review
 from accounts.serializers import ReviewSerializer
 from accounts.models import ClientReview
 from accounts.serializers import ClientReviewSerializer
-from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks
+from task.models import Task, TaskBidder, Photo, Comment, Timeline, TaskBookmarks, BiddersOnTask
 from rest_framework import serializers
 from accounts.serializers import (
     ContractUserSerializer,
@@ -13,6 +13,12 @@ from accounts.serializers import (
 )
 from accounts.models import RunnerProfile
 
+class BiddersOnTaskSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = BiddersOnTask
+        fields = ["bidder_id"]
+
 
 class TaskSerializer(serializers.ModelSerializer):
     """
@@ -21,14 +27,16 @@ class TaskSerializer(serializers.ModelSerializer):
 
     # task_author = CustomRegisterSerializer(read_only=True, many=True)
     bookmarks = serializers.SerializerMethodField()
+    bidders = BiddersOnTaskSerializer(many=True)
 
     class Meta:
         model = Task
         fields = "__all__"
+        
 
     def get_bookmarks(self, instance):
-        my_list = TaskBookmarks.objects.filter(task=instance.id).values_list("author")
-        return [num for sublist in my_list for num in sublist]
+        my_list = TaskBookmarks.objects.filter(task=instance.id).values_list("author", flat=True)
+        return my_list
 
 
 class TaskWithTotalBidSerializer(serializers.ModelSerializer):

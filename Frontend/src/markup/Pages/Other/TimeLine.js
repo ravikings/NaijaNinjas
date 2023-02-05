@@ -312,7 +312,7 @@ function TimeLine() {
     formdata.append("body", reviewDes);
     formdata.append("task", task);
     formdata.append("rating", clientrateValue);
-    formdata.append("client_review", clientrateValue);
+    formdata.append("client_review", clientReview.id);
     formdata.append("Platform_rating", platformrateValue);
     formdata.append("Platform_suggestion", platformDes);
     formdata.append("budget", budgetValue);

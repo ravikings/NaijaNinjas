@@ -22,7 +22,7 @@ from task.serializers import (
     ContractSerializer,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
-from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks
+from task.models import Task, TaskBidder, Photo, Timeline, Comment, TaskBookmarks, BiddersOnTask
 from django.db.models import Count
 from history.signals import history_tracker
 from accounts.views import get_client_ip
@@ -175,6 +175,7 @@ class TaskBidderView(viewsets.ModelViewSet):
             obj.description = description
             obj.attachment = attachment
             obj.delivery_date = delivery_date
+            obj.add_bidder_to_task(profile_odj.author)
             obj.save()
             return Response({"message": "Your bid was successfully processed"})
 
@@ -369,17 +370,17 @@ class SearchTask(viewsets.ModelViewSet):
     search_fields = [
         "title",
         "sector",
-        "fixed_salary",
-        "minimum_salary",
-        "maximum_salary",
+        # "fixed_salary",
+        # "minimum_salary",
+        # "maximum_salary",
         "region",
         "location",
         "department",
-        "experience",
+        # "experience",
         "description",
-        "tags",
-        "created",
-        "updated",
+        # "tags",
+        # "created",
+        # "updated",
     ]
 
     queryset = Task.objects.filter(post_status="OPEN")
@@ -392,17 +393,17 @@ class SearchTask(viewsets.ModelViewSet):
     filterset_fields = [
         "title",
         "sector",
-        "fixed_salary",
-        "minimum_salary",
-        "maximum_salary",
+        # "fixed_salary",
+        # "minimum_salary",
+        # "maximum_salary",
         "region",
         "location",
         "department",
-        "experience",
+        # "experience",
         "description",
-        "tags",
-        "created",
-        "updated",
+        # "tags",
+        # "created",
+        # "updated",
     ]
 
     ordering_fields = "__all__"
@@ -437,7 +438,7 @@ def accept_bid(request):
         )
         print("update task status")
         bid.approve_bids(query_set.id)
-        bid.add_bidder_to_task(bid.bidder_profile.author)
+        #bid.add_bidder_to_task(bid.bidder_profile.author)
         print("timeline created")
         serializer = TimelineStartSerializer(query_set)
         response_data.update(serializer.data)
@@ -447,7 +448,20 @@ def accept_bid(request):
         {"error": "Request was not completed"}, status=status.HTTP_400_BAD_REQUEST
     )
 
-
+@api_view(["GET", "POST"])
+@authentication_classes([DurinTokenAuthentication])
+# @permission_classes([CanApproveTask])
+def reject_bid(request, pk):
+    
+    bid_to_reject = TaskBidder.objects.get(id=pk)
+    if bid_to_reject.bid_approve_status == "False":
+        bid_to_reject.bid_approve_status = "Rejected"
+        bid_to_reject.save()
+    
+        return Response({"message": "bid status updated"})
+    return Response(
+        {"message": "You can't update this bid"}, status=status.HTTP_400_BAD_REQUEST
+    )
 class OwnerTaskApprove(viewsets.ModelViewSet):
 
     queryset = TaskBidder.objects.all()
