@@ -159,7 +159,7 @@ function Landingpage() {
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                 <div className="title">About Us</div>
-                <div className="heading">Welcome To <span> Currect</span> Hustle</div>
+                <div className="heading">Welcome To <span> Correct</span> Hustle</div>
                 <div className="text">Lorem ipsum dolor sit amet. Qui dolorem eius et cumque qui voluptas sint quo recusandae ratione! Qui quibusdam odio est reprehenderit laborum qui corporis ipsa aut libero corrupti? <br /> Sit modi unde eum dolor fuga a magnam facilis nam odio enim qui maiores quaerat sed consequatur voluptatem rem enim alias. Ad voluptas excepturi et autem adipisci sit voluptatem quas non cupiditate deserunt. </div>
                 <div className="row m-auto w-100 my-4">
                   <div className="col-lg-6 col-md-6 col-sm-6 col-6 pl-0 mt-3">
