@@ -326,6 +326,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     """
     uses to upload video to ui dashboard
     """
+
     queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
@@ -337,13 +338,14 @@ class ProjectsViewSet(viewsets.ModelViewSet):
 
     #     return Projects.objects.filter(author=user_id)
 
-    
+
 @api_view(["GET"])
 def public_project_viewset(request, pk):
-    
+
     query = Projects.objects.filter(author=pk)
     data = ProjectsSerializer(query, many=True).data
     return Response(data, status=status.HTTP_200_OK)
+
 
 # @method_decorator(cache_page(60 * 15), name="dispatch")
 class ReviewView(viewsets.ModelViewSet):
@@ -943,11 +945,17 @@ def check_passowrd(password):
 @permission_classes([AllowAny])
 @transaction.atomic
 def durinSingUp(request):
-    username = request.data.get("username")
+    
+    """
+    uses to update user pro status
+    query params: username, password, client
+    """
+    
+    email = request.data.get("username")
     password = request.data.get("password")
     client = request.data.get("client")
     data = {}
-    if not check_email(username):
+    if not check_email(email):
         return Response(
             {"error": "invalid email address"}, status=status.HTTP_400_BAD_REQUEST
         )
@@ -955,17 +963,17 @@ def durinSingUp(request):
         return Response(
             {"error": "invalid password"}, status=status.HTTP_400_BAD_REQUEST
         )
-    check_user = AccountUser.objects.filter(email=username)
+    check_user = AccountUser.objects.filter(email=email)
     if check_user.exists():
         return Response(
             {"error": "user already exist!"}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    user = AccountUser.objects.create(username=username, email=username)
+    user = AccountUser.objects.create(username=email, email=email)
     user.set_password(password)
     user.save()
 
-    user_data = AccountUser.objects.filter(email=username).values(
+    user_data = AccountUser.objects.filter(email=email).values(
         "pk", "email", "username", "is_a_runner"
     )
     data["user"] = user_data[0]
@@ -973,7 +981,27 @@ def durinSingUp(request):
     url = reverse("durin_login")
     c = Client()
     response = c.post(
-        url, {"username": username, "password": password, "client": client}
+        url, {"username": email, "password": password, "client": client}
     )
     data.update(response.data)
     return Response(data)
+
+
+@authentication_classes([DurinTokenAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(["POST"])
+@transaction.atomic
+def switch_to_pro(request):
+    """
+    uses to update user pro status
+    query params: is_pro
+    input value: ["true" or "false"]
+    """
+    is_pro = request.query_params.get("is_pro", False)
+    str_to_bool = {"true": True}
+    account_info = get_object_or_404(AccountUser, id=request.user.id)
+    status = str_to_bool.get(is_pro, False)
+    account_info.is_a_runner = status
+    account_info.save()
+    data = UserSerializer(account_info).data
+    return Response({"message": f"user's pro status was updated to {status}", "user_data": data})

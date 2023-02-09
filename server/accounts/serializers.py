@@ -39,9 +39,9 @@ class CustomRegisterSerializer(RegisterSerializer):
     Custom serializers use profile for singup and login
     """
 
-    phone_number = serializers.CharField(
-        max_length=30, validators=[UniqueValidator(queryset=AccountUser.objects.all())]
-    )
+    # phone_number = serializers.CharField(
+    #     max_length=30, validators=[UniqueValidator(queryset=AccountUser.objects.all())]
+    # )
     is_a_runner = serializers.BooleanField(default=False)
 
     # Define transaction.atomic to rollback the save operation in case of error
@@ -49,7 +49,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     def save(self, request):
         user = super().save(request)
         try:
-            user.phone_number = self.data.get("phone_number")
+            #user.phone_number = self.data.get("phone_number")
             user.is_a_runner = self.data.get("is_a_runner")
             email = self.data.get("email")
             user.save()

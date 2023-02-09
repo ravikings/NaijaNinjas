@@ -46,6 +46,8 @@ class RunnerProfile(models.Model):
     )
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
+    phone_number = models.CharField(max_length=12, blank=True, null=True)
+    interest = models.JSONField(null=True, blank=True)
     title = models.CharField(max_length=55, blank=True, db_index=True)
     photo = models.ImageField(
         upload_to="users/%Y/%m/%d/", blank=True, null=True, storage=storage
