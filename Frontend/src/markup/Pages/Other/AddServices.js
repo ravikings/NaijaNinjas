@@ -110,7 +110,7 @@ function AddServices() {
                           </div>
                         </div>
 
-                        <div className="col-lg-12 col-md-12">
+                        {/* <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Services Tags</label>
                             <input
@@ -122,7 +122,7 @@ function AddServices() {
                               required
                             />
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Service Price</label>
@@ -151,7 +151,7 @@ function AddServices() {
                         </div>
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
-                            <label>Delivery Method</label>
+                            <label>Service Type</label>
                             <Form.Control
                               as="select"
                               custom
@@ -163,8 +163,8 @@ function AddServices() {
                               }
                               required
                             >
-                              <option value="method 1">Method 1</option>
-                              <option value="method 2">Method 2</option>
+                              <option value="Payment">Payment</option>
+                              <option value="Service">Service</option>
                             </Form.Control>
                           </div>
                         </div>

@@ -7,6 +7,7 @@ from ckeditor.fields import RichTextField
 from accounts.models import IpModel, RunnerProfile
 from django_s3_storage.storage import S3Storage
 from payment.paystack import PayStack
+from payment.models import Order
 
 storage = S3Storage(aws_s3_bucket_name=settings.YOUR_S3_BUCKET)
 # Create your models here.
@@ -214,6 +215,7 @@ class Timeline(models.Model):
         blank=True
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=255, choices=STATUS, default="STARTED")
