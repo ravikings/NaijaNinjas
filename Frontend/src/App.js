@@ -18,6 +18,8 @@ import {
 import Cookies from "js-cookie"
 import useAxiosPrivate from "./hooks/useAxiosPrivate"
 import Loader from "./markup/Element/Loader"
+import { messaging } from "./firebase";
+import { getToken } from "firebase/messaging";
 
 function App() {
   //const refreshToken = Cookies.get("refresh_token")
@@ -28,11 +30,33 @@ function App() {
     (state) => state.authReducer
   )
 
-  useEffect(() => {
-    if (refreshToken) {
-      dispatch(verifyToken(refreshToken))
+  // useEffect(() => {
+  //   if (refreshToken) {
+  //     dispatch(verifyToken(refreshToken))
+  //   }
+  // }, [])
+
+  async function requestPermission() {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      // Generate Token
+      const token = await getToken(messaging, {
+        vapidKey:
+          "BBNwjsZ0MdlII5dBdb9_KIrYFYXUptgWXNsv4O8pyPpVvUA7UJ1cku5296fwpwDgzVruObK_H9suJ9OsnQgL1_A",
+      });
+      console.log("Token Gen", token);
+      // Send this token  to server ( db)
+      localStorage.setItem("fcm_token", token)
+      console.log("Token Gen saved");
+    } else if (permission === "denied") {
+      alert("You denied for the notification");
     }
-  }, [])
+  }
+
+  useEffect(() => {
+    // Req user for notification permission
+    requestPermission();
+  }, []);
 
   useEffect(() => {
     let isMounted = true

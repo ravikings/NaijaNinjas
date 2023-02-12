@@ -518,10 +518,13 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
 
 @api_view(["GET"])
 @authentication_classes([DurinTokenAuthentication])
-# @permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def get_timeiline(request, task_id, task_owner):
-
+    order = request.data.get("order_id", False)
     data = Timeline.objects.get(task=task_id, task_owner=task_owner)
+    if order:
+        data = Timeline.objects.get(order=order, task_owner=task_owner)
+        
     serializer = TimelineSerializer(data)
     return Response(serializer.data)
 
@@ -556,7 +559,7 @@ def pro_assigned_task(request, task_owner):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsOwner])
 @authentication_classes([DurinTokenAuthentication])
 def task_ordered(request, task_owner):
 

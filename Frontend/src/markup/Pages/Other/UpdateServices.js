@@ -148,7 +148,7 @@ function UpdateServices() {
                           </div>
                         </div>
 
-                        <div className="col-lg-12 col-md-12">
+                        {/* <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Services Tags</label>
                             <input
@@ -160,7 +160,7 @@ function UpdateServices() {
                               required
                             />
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Service Price</label>
@@ -189,7 +189,7 @@ function UpdateServices() {
                         </div>
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
-                            <label>Delivery Method</label>
+                            <label>Service Type</label>
                             <Form.Control
                               as="select"
                               custom
@@ -199,8 +199,8 @@ function UpdateServices() {
                               onChange={handleChange}
                               required
                             >
-                              <option value="method 1">Method 1</option>
-                              <option value="method 2">Method 2</option>
+                              <option value="Payment">Payment</option>
+                              <option value="Service">Service</option>
                             </Form.Control>
                           </div>
                         </div>
