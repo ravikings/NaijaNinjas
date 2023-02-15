@@ -13,6 +13,8 @@ from django.db import transaction
 from rest_framework import viewsets
 from .serializers import CardSerializer
 from zappa.asynchronous import task
+from server.utility import try_except_decorator
+
 # Create your views here.
 
 @transaction.atomic
@@ -117,12 +119,15 @@ class CardsDetailView(viewsets.ModelViewSet):
     def get_queryset(self):
     
         return ClientPaymentInfo.objects.filter(author=self.request.user.id)
-  
-@task  
+   
+
+@try_except_decorator
+@task
 def testme():
     print("this was called")
     import time
-    time.sleep(10)   
+    time.sleep(15)
+    b = 2 //"11"
     print("this was called")
 
 @api_view(["GET"])
