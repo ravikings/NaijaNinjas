@@ -15,6 +15,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from rest_framework.settings import api_settings
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,6 +84,8 @@ INSTALLED_APPS = [
     "payment",
     "Marketing",
     "bank",
+    "fcm_django",
+    "app_notifications",
 ]
 
 REST_FRAMEWORK = {
@@ -208,25 +212,25 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-##TODO: Use pg bounder in the future: pip install django-postgrespool2
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "lastestgigxdb",
-        "USER": "postgres",
-        "PASSWORD": "2{c%v~TtV?_SFCer",
-        "HOST": "database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com",
-        "PORT": "5432",
-        "CONN_MAX_AGE": 60,
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+##TODO: Use pg bounder in the future: pip install django-postgrespool2
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "lastestgigxdb",
+#         "USER": "postgres",
+#         "PASSWORD": "2{c%v~TtV?_SFCer",
+#         "HOST": "database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com",
+#         "PORT": "5432",
+#         "CONN_MAX_AGE": 60,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -412,3 +416,10 @@ PASSWORDLESS_AUTH = {
     # The user's email field name
     "PASSWORDLESS_USER_EMAIL_FIELD_NAME": "email",
 }
+
+
+# Firebase configurations
+#GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+GOOGLE_APPLICATION_CREDENTIALS_PATH = os.path.join(BASE_DIR, "server/gigxnow-firebase.json")
+credentials = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS_PATH)
+firebase_admin.initialize_app(credentials)

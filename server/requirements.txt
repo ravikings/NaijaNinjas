@@ -35,4 +35,5 @@ celery_progress
 django-rest-durin
 django-cache-memoize
 drfpasswordless
-#pycurl
+firebase-admin
+fcm-django
