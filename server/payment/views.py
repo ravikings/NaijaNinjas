@@ -98,7 +98,7 @@ def webhook_handler_service(request):
         #to store transcation logs
         reference = webhook_data["data"]["reference"]
         log_data = webhook_data["data"]
-        log_transaction_task.delay(reference, log_data) 
+        log_transaction_task(reference, log_data) 
         print("transaction log ongoing")
 
         return True
