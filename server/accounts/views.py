@@ -78,7 +78,7 @@ from .serializers import (
     ChatSearchProfileSerializer,
     UserSerializer,
 )
-#from notifications.signals import notify
+from notifications.signals import notify
 from rest_framework.authentication import TokenAuthentication
 from durin.auth import (
     TokenAuthentication as DurinTokenAuthentication,
