@@ -71,8 +71,8 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework_simplejwt",
     "django_s3_storage",
-    "django_celery_results",
-    "celery_progress",
+    #"django_celery_results",
+    #"celery_progress",
     # "hitcount",
     # Local
     "forum",
