@@ -15,6 +15,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from rest_framework.settings import api_settings
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,8 +55,8 @@ INSTALLED_APPS = [
     "durin",
     "rest_framework.authtoken",
     "dj_rest_auth",
-    "notifications",
-    "notifications_rest",
+    #"notifications",
+    #"notifications_rest",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -64,24 +66,26 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
     "drfpasswordless",
-    "channels",
+    #"channels",
     "ckeditor",
     "django_filters",
     "rest_framework_simplejwt",
     "django_s3_storage",
-    "django_celery_results",
-    "celery_progress",
+    #"django_celery_results",
+    #"celery_progress",
     # "hitcount",
     # Local
     "forum",
     "history",
-    "chatserver",
+    #"chatserver",
     "accounts",
     "debug_toolbar",
     "task",
     "payment",
     "Marketing",
     "bank",
+    "fcm_django",
+    "app_notifications",
 ]
 
 REST_FRAMEWORK = {
@@ -157,6 +161,12 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8081",
+    "http://127.0.0.1:8082",
+    "http://127.0.0.1:8083",
+    "http://localhost:8081",
+    "http://localhost:8082",
+    "http://localhost:8083",
     "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
@@ -170,6 +180,12 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8081",
+    "http://127.0.0.1:8082",
+    "http://127.0.0.1:8083",
+    "http://localhost:8081",
+    "http://localhost:8082",
+    "http://localhost:8083",
     "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
@@ -412,3 +428,10 @@ PASSWORDLESS_AUTH = {
     # The user's email field name
     "PASSWORDLESS_USER_EMAIL_FIELD_NAME": "email",
 }
+
+
+# Firebase configurations
+#GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+# GOOGLE_APPLICATION_CREDENTIALS_PATH = os.path.join(BASE_DIR, "server/gigxnow-firebase.json")
+# credentials = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS_PATH)
+# firebase_admin.initialize_app(credentials)

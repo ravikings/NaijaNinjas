@@ -25,7 +25,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-import notifications.urls
+
+# import notifications.urls
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -47,9 +48,9 @@ urlpatterns = [
     path("api/v1/", include("accounts.urls")),
     path("api/v1/task/", include("task.urls")),
     path("api/v1/payment/", include("payment.urls")),
-    path("ws/chat/", include("chatserver.urls")),
+    # path("ws/chat/", include("chatserver.urls")),
     path("forum/", include("forum.urls")),
-    path("api/auth/v1.0/", include('durin.urls')),
+    path("api/auth/v1.0/", include("durin.urls")),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     path(
@@ -59,15 +60,15 @@ urlpatterns = [
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("__debug__/", include(debug_toolbar.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
-    path('notifications/', include('notifications_rest.urls')),
-    path('celery-progress/', include('celery_progress.urls')),
-    path('marketing/', include('Marketing.urls')),
-    path('money/', include('bank.urls')),
-    path('', include('drfpasswordless.urls')),
-
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
+    # path('notifications/', include('notifications_rest.urls')),
+    path("notifications/", include("app_notifications.urls")),
+    #path("celery-progress/", include("celery_progress.urls")),
+    path("marketing/", include("Marketing.urls")),
+    path("money/", include("bank.urls")),
+    path("", include("drfpasswordless.urls")),
 ]
 
 
