@@ -17,7 +17,8 @@ from django.urls import re_path
 from django.core.asgi import get_asgi_application
 from channels.routing import URLRouter, ProtocolTypeRouter
 from channels.auth import AuthMiddlewareStack
-import chatserver.routing
+
+# import chatserver.routing
 
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
@@ -29,6 +30,6 @@ application = ProtocolTypeRouter(
         # "websocket": AuthMiddlewareStack(
         #     URLRouter(chatserver.routing.websocket_urlpatterns)
         # ),
-        "websocket": URLRouter(chatserver.routing.websocket_urlpatterns),
+        # "websocket": URLRouter(chatserver.routing.websocket_urlpatterns),
     }
 )

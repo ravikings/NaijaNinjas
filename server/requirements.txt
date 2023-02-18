@@ -10,7 +10,7 @@ drf-yasg
 pillow
 django-debug-toolbar
 django-ckeditor==6.2.0
-channels==3.0.4
+# channels==3.0.4
 django-filter==21.1
 django-redis
 PyJWT==2.3.0
@@ -25,13 +25,13 @@ Arrow
 django-storages
 zappa
 django-s3-storage
-django-notifications-hq
-django-notifications-rest
-amqp
+# django-notifications-hq
+# django-notifications-rest
+# amqp
 celery
-redis
-django-celery-results
-celery_progress
+# redis
+# django-celery-results
+# celery_progress
 django-rest-durin
 django-cache-memoize
 drfpasswordless
