@@ -432,6 +432,6 @@ PASSWORDLESS_AUTH = {
 
 # Firebase configurations
 #GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-GOOGLE_APPLICATION_CREDENTIALS_PATH = os.path.join(BASE_DIR, "server/gigxnow-firebase.json")
-credentials = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS_PATH)
-firebase_admin.initialize_app(credentials)
+# GOOGLE_APPLICATION_CREDENTIALS_PATH = os.path.join(BASE_DIR, "server/gigxnow-firebase.json")
+# credentials = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS_PATH)
+# firebase_admin.initialize_app(credentials)
