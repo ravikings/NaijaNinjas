@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
     "drfpasswordless",
-    "channels",
+    #"channels",
     "ckeditor",
     "django_filters",
     "rest_framework_simplejwt",
