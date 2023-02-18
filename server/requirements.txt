@@ -28,7 +28,7 @@ django-s3-storage
 # django-notifications-hq
 # django-notifications-rest
 # amqp
-# celery
+celery
 # redis
 # django-celery-results
 # celery_progress
