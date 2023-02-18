@@ -161,6 +161,12 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8081",
+    "http://127.0.0.1:8082",
+    "http://127.0.0.1:8083",
+    "http://localhost:8081",
+    "http://localhost:8082",
+    "http://localhost:8083",
     "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 
@@ -174,6 +180,12 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8081",
+    "http://127.0.0.1:8082",
+    "http://127.0.0.1:8083",
+    "http://localhost:8081",
+    "http://localhost:8082",
+    "http://localhost:8083",
     "https://gigxnow-frontend-api.s3.amazonaws.com",
 ]
 

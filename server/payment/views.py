@@ -121,20 +121,20 @@ class CardsDetailView(viewsets.ModelViewSet):
         return ClientPaymentInfo.objects.filter(author=self.request.user.id)
    
 
-@try_except_decorator
-@task
-def testme():
-    print("this was called")
-    import time
-    time.sleep(15)
-    b = 2 //"11"
-    print("this was called")
+# @try_except_decorator
+# @task
+# def testme():
+#     print("this was called")
+#     import time
+#     time.sleep(15)
+#     b = 2 //"11"
+#     print("this was called")
 
 @api_view(["GET"])
 def accept_test(request):
     
     data = " i you welcome"
-    testme()
+    #testme()
     
     return Response({"message":"sorry log was not process"})
     

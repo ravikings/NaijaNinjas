@@ -59,7 +59,11 @@ class TestFCMDeviceView(APIView):
 
         device = FCMDevice.objects.filter(registration_id__isnull=False)
         data = Message(
-            notification=Notification(title="gigx now", body="text", image=""),
+            notification=Notification(
+                title="correcthustle.com",
+                body="welcome to correct hustle, here to make your task a success!",
+                image="",
+            ),
             topic=None,
         )
         # send_message parameters include: message, dry_run, app
