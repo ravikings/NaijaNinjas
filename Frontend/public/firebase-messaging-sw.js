@@ -16,29 +16,15 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-self.addEventListener('notificationclick', function(event) {
-  event.notification.close();
-
-  var promise = new Promise(function(resolve) {
-    setTimeout(resolve, 500);
-  }).then(function() {
-    console.log("test data out", event.notification.data)
-    return clients.openWindow(event.notification.data);
-  });
-  event.waitUntil(promise);
-});
-
 messaging.onBackgroundMessage((payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
-    payload,
+    payload
   );
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
     icon: payload.notification.image,
-    tag: notificationTitle,
-    requireInteraction: true,
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
