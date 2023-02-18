@@ -1,4 +1,4 @@
-eventlet
+#eventlet
 dj-rest-auth
 django-allauth
 django==4.0
@@ -35,5 +35,5 @@ celery
 django-rest-durin
 django-cache-memoize
 drfpasswordless
-#firebase-admin
+firebase-admin
 fcm-django
