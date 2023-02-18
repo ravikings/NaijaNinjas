@@ -35,5 +35,5 @@ celery
 django-rest-durin
 django-cache-memoize
 drfpasswordless
-firebase-admin
+#firebase-admin
 fcm-django
