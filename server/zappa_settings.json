@@ -13,6 +13,7 @@
         "runtime": "python3.9",
         "s3_bucket": "zappa-wnf4dp8g2",
         "keep_warm": true,
-        "memory_size": 2048
+        "memory_size": 2048,
+        "slim_handler": true
     }
 }

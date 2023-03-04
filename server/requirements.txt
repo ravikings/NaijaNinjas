@@ -26,3 +26,5 @@ django-cache-memoize
 drfpasswordless
 firebase-admin
 fcm-django
+celery
+pip-tools==6.1.0 
