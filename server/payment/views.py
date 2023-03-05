@@ -87,16 +87,16 @@ def webhook_handler_service(request):
     IP_WHITELIST = {"52.31.139.75", "52.49.173.169", "52.214.14.220"}
 
     webhook_data = request.data
-    # ip = get_client_ip(request)
-    # if ip not in IP_WHITELIST:
-    #     raise ValidationError("source request authentication not allow")
+    ip = get_client_ip(request)
+    if ip not in IP_WHITELIST:
+        raise ValidationError("source request authentication not allow")
 
     if webhook_data["event"] == "charge.success":
         
         #to store transcation logs
         reference = webhook_data["data"]["reference"]
         log_data = webhook_data["data"]
-        log_transaction_task.delay(reference, log_data) 
+        log_transaction_task(reference, log_data)
         print("transaction log ongoing")
 
         return True
