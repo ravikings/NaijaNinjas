@@ -69,8 +69,8 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework_simplejwt",
     "django_s3_storage",
-    "django_celery_results",
-    "celery_progress",
+    #"django_celery_results",
+    #"celery_progress",
     # "hitcount",
     # Local
     "forum",
@@ -94,6 +94,14 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
         # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '500/day',
+        'user': '2500/day'
+    },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 15,
     "ORDERING_PARAM": "ordering",
