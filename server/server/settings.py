@@ -69,8 +69,8 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework_simplejwt",
     "django_s3_storage",
-    #"django_celery_results",
-    #"celery_progress",
+    # "django_celery_results",
+    # "celery_progress",
     # "hitcount",
     # Local
     "forum",
@@ -94,14 +94,11 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
         # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
     ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '500/day',
-        'user': '2500/day'
-    },
+    "DEFAULT_THROTTLE_RATES": {"anon": "500/day", "user": "2500/day"},
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 15,
     "ORDERING_PARAM": "ordering",
@@ -287,8 +284,8 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {"google": {}, "facebook": {}}
 # LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = "accounts.AccountUser"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
@@ -359,14 +356,14 @@ STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 # AWS_S3_PUBLIC_URL_STATIC = "https://static.zappaguide.com/"
 
 
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
+EMAIL_HOST = "mail.privateemail.com"
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
 # # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 # # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-# EMAIL_HOST_USER = 'barry.shoki1@gmail.com'
-# EMAIL_HOST_PASSWORD = '123Amina4@'
+EMAIL_HOST_USER = "admin@correcthustle.com"
+EMAIL_HOST_PASSWORD = "kkWiP96dEmZujnF"
 
 # Celery settings
 CELERY_BROKER_URL = (
@@ -409,10 +406,10 @@ PASSWORDLESS_AUTH = {
     "PASSWORDLESS_AUTH_TYPES": [
         "EMAIL",
     ],
-    "PASSWORDLESS_EMAIL_NOREPLY_ADDRESS": "noreply@example.com",
+    "PASSWORDLESS_EMAIL_NOREPLY_ADDRESS": "admin@correcthustle.com",
     "PASSWORDLESS_REGISTER_NEW_USERS": False,
     # Token Generation Retry Count
-    "PASSWORDLESS_TOKEN_GENERATION_ATTEMPTS": 3,
+    "PASSWORDLESS_TOKEN_GENERATION_ATTEMPTS": 5,
     # Marks itself as verified the first time a user completes auth via token.
     # Automatically unmarks itself if email is changed.
     "PASSWORDLESS_USER_MARK_EMAIL_VERIFIED": True,
