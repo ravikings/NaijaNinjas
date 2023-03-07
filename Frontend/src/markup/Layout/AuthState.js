@@ -52,6 +52,7 @@ function AuthState({ userDetails }) {
   const signOut = () => {
     dispatch(logout(handleClose));
     history.push("/");
+    window.localStorage.clear();
     window.location.reload(false);
   }
 
