@@ -414,7 +414,7 @@ PASSWORDLESS_AUTH = {
     # Marks itself as verified the first time a user completes auth via token.
     # Automatically unmarks itself if email is changed.
     "PASSWORDLESS_USER_MARK_EMAIL_VERIFIED": True,
-    "PASSWORDLESS_USER_EMAIL_VERIFIED_FIELD_NAME": "email_verified",
+    "PASSWORDLESS_USER_EMAIL_VERIFIED_FIELD_NAME": "is_email_verified",
     # The user's email field name
     "PASSWORDLESS_USER_EMAIL_FIELD_NAME": "email",
 }

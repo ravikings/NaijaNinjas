@@ -50,8 +50,9 @@ function AuthState({ userDetails }) {
   let authKey = COMETCHAT_CONSTANTS.AUTH_KEY;
 
   const signOut = () => {
-    dispatch(logout(handleClose))
-    history.push("/")
+    dispatch(logout(handleClose));
+    history.push("/");
+    window.location.reload(false);
   }
 
   const cometCreate = (uid) => {
