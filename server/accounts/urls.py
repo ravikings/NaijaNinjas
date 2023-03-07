@@ -38,7 +38,7 @@ from accounts.views import (
     durinSingUp,
     MFATokenVerify,
     switch_to_pro,
-    # start_celery_work,
+    passwordless_login,
 )
 
 
@@ -114,6 +114,7 @@ urlpatterns = [
     path("delete-project/<str:pk>/", delete_projects, name="delete-project"),
     path("profile-bookmark/<str:pk>/", profile_favorite, name="profile-bookmark"),
     path("public-projects-view/<str:pk>/", public_project_viewset, name="public-projects-view"),
-    path("switch-pro-status/", switch_to_pro, name="switch-pro-status")
+    path("switch-pro-status/", switch_to_pro, name="switch-pro-status"),
+    path("passwordless-login/", passwordless_login, name="passwordless-login"),
     # path("public-celery/", start_celery_work, name="start-celery"),
 ]

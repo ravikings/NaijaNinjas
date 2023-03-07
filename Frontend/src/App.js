@@ -24,17 +24,18 @@ import { getToken } from "firebase/messaging";
 function App() {
   //const refreshToken = Cookies.get("refresh_token")
   const refreshToken = localStorage.getItem("access_token")
+  const mfaVerifyToken = localStorage.getItem("mfa")
   const axiosPrivate = useAxiosPrivate()
   const dispatch = useDispatch()
   const { loading, isVerified, currentUser } = useSelector(
     (state) => state.authReducer
   )
 
-  // useEffect(() => {
-  //   if (refreshToken) {
-  //     dispatch(verifyToken(refreshToken))
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (mfaVerifyToken) {
+      dispatch(verifyToken(refreshToken))
+    }
+  }, [])
 
   async function requestPermission() {
     const permission = await Notification.requestPermission();

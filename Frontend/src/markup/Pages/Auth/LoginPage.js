@@ -135,6 +135,7 @@ function LoginPage() {
   }
 
   const sendToken = () => {
+    localStorage.removeItem("access_token")
     createRequest().post("/auth/email/", { email: mfaemail })
       .then((res) => {
         toast.success("Secure token sent!");
@@ -177,85 +178,85 @@ function LoginPage() {
     <div className="page-content bg-gray login-form-bx browse-job login-style2">
       <div className="section-full">
         <div className="container-fluid">
-        {loading ? <Loader /> : (
-          <div className="row">
-            <div className="col-lg-6 col-md-7 box-skew d-flex">
-              <div
-                className="login-2 p-a30 seth d-flex align-self-center m-auto wow fadeInRight"
-                data-wow-delay="0.8s"
-              >
-                <div className="tab-content nav">
-                  <Formik
-                    initialValues={initialValues}
-                    validationSchema={SignInSchema}
-                    onSubmit={(values) => {
-                      handleSubmit(values);
-                    }}
-                  >
-                    {(formik) => {
-                      const {values, errors, touched, isValid, dirty } = formik;
-                      return (
-                        <div
-                          className="tab-pane active col-12 p-a0 "
-                          style={{ width: "310px" }}
-                          id="login"
-                        >
-                          <p className="font-weight-bold text-center text-dark h4">
-                            We're glad to see you again!
-                          </p>
-                          <p className="font-weight-600 text-center">
-                            Don't have an account?
-                            <Link to="register" className="text-primary">
-                              {" "}
-                              Sign Up
-                            </Link>
-                          </p>
-                          <Form>
-                            <div className="form-group">
-                              <label>E-Mail Address*</label>
-                              <div className="input-group">
-                                <Field
-                                  type="email"
+          {loading ? <Loader /> : (
+            <div className="row">
+              <div className="col-lg-6 col-md-7 box-skew d-flex">
+                <div
+                  className="login-2 p-a30 seth d-flex align-self-center m-auto wow fadeInRight"
+                  data-wow-delay="0.8s"
+                >
+                  <div className="tab-content nav">
+                    <Formik
+                      initialValues={initialValues}
+                      validationSchema={SignInSchema}
+                      onSubmit={(values) => {
+                        handleSubmit(values);
+                      }}
+                    >
+                      {(formik) => {
+                        const { values, errors, touched, isValid, dirty } = formik;
+                        return (
+                          <div
+                            className="tab-pane active col-12 p-a0 "
+                            style={{ width: "310px" }}
+                            id="login"
+                          >
+                            <p className="font-weight-bold text-center text-dark h4">
+                              We're glad to see you again!
+                            </p>
+                            <p className="font-weight-600 text-center">
+                              Don't have an account?
+                              <Link to="register" className="text-primary">
+                                {" "}
+                                Sign Up
+                              </Link>
+                            </p>
+                            <Form>
+                              <div className="form-group">
+                                <label>E-Mail Address*</label>
+                                <div className="input-group">
+                                  <Field
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    value={values.email}
+                                    className={
+                                      errors.email && touched.email
+                                        ? "input-error form-control border-danger "
+                                        : "form-control"
+                                    }
+                                  />
+                                </div>
+                                <ErrorMessage
                                   name="email"
-                                  id="email"
-                                  value={values.email}
-                                  className={
-                                    errors.email && touched.email
-                                      ? "input-error form-control border-danger "
-                                      : "form-control"
-                                  }
+                                  component="div"
+                                  className="error text-danger"
                                 />
                               </div>
-                              <ErrorMessage
-                                name="email"
-                                component="div"
-                                className="error text-danger"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Password *</label>
-                              <div className="input-group">
-                                <Field
-                                  type="password"
+                              <div className="form-group">
+                                <label>Password *</label>
+                                <div className="input-group">
+                                  <Field
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    className={
+                                      errors.password && touched.password
+                                        ? "input-error form-control border-danger"
+                                        : "form-control"
+                                    }
+                                  />
+                                </div>
+                                <ErrorMessage
                                   name="password"
-                                  id="password"
-                                  className={
-                                    errors.password && touched.password
-                                      ? "input-error form-control border-danger"
-                                      : "form-control"
-                                  }
+                                  component="span"
+                                  className="error text-danger"
                                 />
                               </div>
-                              <ErrorMessage
-                                name="password"
-                                component="span"
-                                className="error text-danger"
-                              />
-                            </div>
-                            <div className="form-group">
-                              {/* <label>Verify *</label> */}
-                              {/* <LoadCanvasTemplateNoReload /> */}
-                              {/* <div className="input-group mb-4">
+                              <div className="form-group">
+                                {/* <label>Verify *</label> */}
+                                {/* <LoadCanvasTemplateNoReload /> */}
+                                {/* <div className="input-group mb-4">
                                 <input
                                   name="text"
                                   onChange={(e) => setValue(e.target.value)}
@@ -266,76 +267,76 @@ function LoginPage() {
                                   className="form-control"
                                 />
                               </div> */}
+                              </div>
+                              <div className="text-left">
+                                <Button
+                                  fullWidth
+                                  variant={"contained"}
+                                  color={"primary"}
+                                  type={"submit"}
+                                  className={
+                                    !(dirty && isValid)
+                                      ? "disabled-btn"
+                                      : "site-button"
+                                  }
+                                  disabled={!(dirty && isValid)}
+                                // className='site-button'
+                                >
+                                  login
+                                </Button>
+                              </div>
+                            </Form>
+                            <div className={"separator"}>
+                              <span>Or, use your email</span>
                             </div>
-                            <div className="text-left">
-                              <Button
-                                fullWidth
-                                variant={"contained"}
-                                color={"primary"}
-                                type={"submit"}
-                                className={
-                                  !(dirty && isValid)
-                                    ? "disabled-btn"
-                                    : "site-button"
-                                }
-                                disabled={!(dirty && isValid)}
-                              // className='site-button'
-                              >
-                                login
-                              </Button>
-                            </div>
-                          </Form>
-                          <div className={"separator"}>
-                            <span>Or, use your email</span>
-                          </div>
-                          <div className="form-group">
-                            <div className="input-group">
-                              <input
-                                type="email"
-                                name="mfaemail"
-                                id="mfaemail"
-                                value={mfaemail}
-                                className={
-                                  errors.email && touched.email
-                                    ? "input-error form-control border-danger "
-                                    : "form-control"
-                                }
-                                onChange={(event) => handleMfa(event)}
+                            <div className="form-group">
+                              <div className="input-group">
+                                <input
+                                  type="email"
+                                  name="mfaemail"
+                                  id="mfaemail"
+                                  value={mfaemail}
+                                  className={
+                                    errors.email && touched.email
+                                      ? "input-error form-control border-danger "
+                                      : "form-control"
+                                  }
+                                  onChange={(event) => handleMfa(event)}
+                                />
+                              </div>
+                              <ErrorMessage
+                                name="email"
+                                component="div"
+                                className="error text-danger"
                               />
                             </div>
-                            <ErrorMessage
-                              name="email"
-                              component="div"
-                              className="error text-danger"
-                            />
-                          </div>
-                          <Button
-                            fullWidth
-                            variant={"contained"}
-                            color={"primary"}
-                            //type={"submit"}
-                            className={
-                              !mainLoginButton
-                                ? "disabled-btn"
-                                : "site-button"
-                            }
-                            disabled={!mainLoginButton}
-                            onClick={() => handlemfaCreate()}
-                          // className='site-button'
-                          >
-                            Send secure Code
-                          </Button>
-                          <div className="text-center">
-                            <Link
-                              data-toggle="tab"
-                              to="/forgot-password"
-                              className="site-button-link forget-pass m-t15"
+                            <Button
+                              fullWidth
+                              variant={"contained"}
+                              color={"primary"}
+                              //type={"submit"}
+                              className={
+                                !mainLoginButton
+                                  ? "disabled-btn"
+                                  : "site-button"
+                              }
+                              disabled={!mainLoginButton}
+                              onClick={() => handlemfaCreate()}
+                            // className='site-button'
                             >
-                              <i className="fa fa-unlock-alt"></i> Forgot
-                              Password
-                            </Link>
-                          </div>
-                          {/* <FacebookLoginButton
+                              Send secure Code
+                            </Button>
+                            <div className="text-center">
+                              <Link
+                                data-toggle="tab"
+                                to="/forgot-password"
+                                className="site-button-link forget-pass m-t15"
+                              >
+                                <i className="fa fa-unlock-alt"></i> Forgot
+                                Password
+                              </Link>
+                            </div>
+                            {/* <FacebookLoginButton
                             startIcon={<i className="fa fa-envelope"></i>}
                             fullWidth
                             onClick={console.log("i was clicked")}
@@ -343,91 +344,91 @@ function LoginPage() {
                             Send secure Token
                           </FacebookLoginButton> */}
 
-                          {/* <GoogleLoginButton
+                            {/* <GoogleLoginButton
                             className={"mt-3"}
                             startIcon={<i className="fa fa-google-plus"></i>}
                             fullWidth
                           >
                             Login via Google+
                           </GoogleLoginButton> */}
+                          </div>
+                        );
+                      }}
+                    </Formik>
+                    <form
+                      id="forgot-password"
+                      className="tab-pane fade col-12 p-a0"
+                    >
+                      <p>We will send you an email to reset your password. </p>
+                      <div className="form-group">
+                        <label>E-Mail address *</label>
+                        <div className="input-group">
+                          <input
+                            name="dzName"
+                            required=""
+                            className="form-control"
+                            placeholder="Your Email Address"
+                            type="email"
+                          />
                         </div>
-                      );
-                    }}
-                  </Formik>
-                  <form
-                    id="forgot-password"
-                    className="tab-pane fade col-12 p-a0"
-                  >
-                    <p>We will send you an email to reset your password. </p>
-                    <div className="form-group">
-                      <label>E-Mail address *</label>
-                      <div className="input-group">
-                        <input
-                          name="dzName"
-                          required=""
-                          className="form-control"
-                          placeholder="Your Email Address"
-                          type="email"
-                        />
                       </div>
-                    </div>
-                    <div className="text-left">
-                      <Link
-                        className="site-button outline gray"
-                        data-toggle="tab"
-                        to="#login"
-                      >
-                        Back
+                      <div className="text-left">
+                        <Link
+                          className="site-button outline gray"
+                          data-toggle="tab"
+                          to="#login"
+                        >
+                          Back
+                        </Link>
+                        <button className="site-button pull-right">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 col-md-5 d-flex box-skew1">
+                <div className="text-white max-w400 align-self-center">
+                  <div className="logo">
+                    <Link to={"/"}>
+                      <img src="assets/logo.png" alt="" />
+                    </Link>
+                  </div>
+                  <h2 className="m-b10">Login To You Now</h2>
+                  <p className="m-b30">
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry has been the industry.
+                  </p>
+                  <ul className="list-inline m-a0">
+                    <li>
+                      <Link to={""} className="m-r10 text-white">
+                        <i className="fa fa-facebook"></i>
                       </Link>
-                      <button className="site-button pull-right">Submit</button>
-                    </div>
-                  </form>
+                    </li>
+                    <li>
+                      <Link to={""} className="m-r10 text-white">
+                        <i className="fa fa-google-plus"></i>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={""} className="m-r10 text-white">
+                        <i className="fa fa-linkedin"></i>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={""} className="m-r10 text-white">
+                        <i className="fa fa-instagram"></i>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={""} className="m-r10 text-white">
+                        <i className="fa fa-twitter"></i>
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-5 d-flex box-skew1">
-              <div className="text-white max-w400 align-self-center">
-                <div className="logo">
-                  <Link to={"/"}>
-                    <img src="assets/logo.png" alt="" />
-                  </Link>
-                </div>
-                <h2 className="m-b10">Login To You Now</h2>
-                <p className="m-b30">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry has been the industry.
-                </p>
-                <ul className="list-inline m-a0">
-                  <li>
-                    <Link to={""} className="m-r10 text-white">
-                      <i className="fa fa-facebook"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={""} className="m-r10 text-white">
-                      <i className="fa fa-google-plus"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={""} className="m-r10 text-white">
-                      <i className="fa fa-linkedin"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={""} className="m-r10 text-white">
-                      <i className="fa fa-instagram"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={""} className="m-r10 text-white">
-                      <i className="fa fa-twitter"></i>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
         </div>
       </div>
       <footer className="login-footer">
