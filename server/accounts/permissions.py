@@ -17,16 +17,20 @@ class IsOwner(permissions.BasePermission):
     """
     Custom permission to only allow runner have access to view.
     """
-    
+
     def has_permission(self, request, view):
 
         if request.user.is_authenticated:
             return True
-        
+
         return False
+
     def has_object_permission(self, request, view, obj):
 
-        return obj.owner == request.user
+        print("hello abdul")
+        print(obj.author, request.user)
+        print("hello abdul")
+        return obj.author_id == request.user.id
 
 
 class CanApproveTask(permissions.BasePermission):
@@ -50,7 +54,7 @@ class ViewActiveTaskTimeline(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
 
         if request.user.is_authenticated:
-            
+
             if obj.author.id == request.user.id:
 
                 return True
@@ -70,7 +74,7 @@ class CanDownloadMessageFile(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
 
         if request.user.is_authenticated:
-            
+
             if obj.conversation_id.initiator == request.user:
 
                 return True

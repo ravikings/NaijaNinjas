@@ -152,37 +152,37 @@ export function* logout({ handleClose }) {
     console.log("logging out")
     const id = localStorage.getItem("userID");
     const mfa = localStorage.getItem("mfa");
-    yield createRequest().post("/dj-rest-auth/logout/");
-    if (!mfa) {
+    yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
+    if (mfa) {
       yield createRequest().post("/api/auth/v1.0/logout/");
     }
-    localStorage.removeItem('access_token');
-    yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
-    localStorage.removeItem('userID');
-    localStorage.removeItem('mfa');
-    localStorage.removeItem('checker');
-    localStorage.removeItem('userData');
+    yield createRequest().post("/dj-rest-auth/logout/");
+    // localStorage.removeItem('access_token');
+    // localStorage.removeItem('userID');
+    // localStorage.removeItem('mfa');
+    // localStorage.removeItem('checker');
+    // localStorage.removeItem('userData');
     yield call(handleClose);
     // yield call(getCurrentUser);
     Cookies.remove("access_token", { path: "/" });
     //Cookies.remove("refresh_token", { path: "/" });
-    yield put({ type: authActionTypes.LOGOUT_SUCCESS });
     localStorage.clear();
+    yield put({ type: authActionTypes.LOGOUT_SUCCESS });
   } catch (e) {
     console.log(e.response.data);
     const id = localStorage.getItem("userID");
     yield createRequest().get(`/api/v1/user-status/${id}/logout/`);
     //toast.error("Logout Failed");
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('userID');
-    localStorage.removeItem('userData');
-    localStorage.removeItem('mfa');
-    localStorage.removeItem('checker');
+    // localStorage.removeItem('access_token');
+    // localStorage.removeItem('userID');
+    // localStorage.removeItem('userData');
+    // localStorage.removeItem('mfa');
+    // localStorage.removeItem('checker');
     yield call(handleClose);
     Cookies.remove("access_token", { path: "/" });
     //Cookies.remove("refresh_token", { path: "/" });
-    yield put({ type: authActionTypes.LOGOUT_SUCCESS });
     localStorage.clear();
+    yield put({ type: authActionTypes.LOGOUT_SUCCESS });
   }
 }
 

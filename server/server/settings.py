@@ -90,8 +90,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
-        "durin.auth.TokenAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        "durin.auth.TokenAuthentication",
         # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
@@ -213,25 +213,25 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-##TODO: Use pg bounder in the future: pip install django-postgrespool2
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "lastestgigxdb",
-        "USER": "postgres",
-        "PASSWORD": "2{c%v~TtV?_SFCer",
-        "HOST": "database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com",
-        "PORT": "5432",
-        "CONN_MAX_AGE": 60,
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+##TODO: Use pg bounder in the future: pip install django-postgrespool2
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "lastestgigxdb",
+#         "USER": "postgres",
+#         "PASSWORD": "2{c%v~TtV?_SFCer",
+#         "HOST": "database-1.cr8hsmkceq6e.us-east-1.rds.amazonaws.com",
+#         "PORT": "5432",
+#         "CONN_MAX_AGE": 60,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -407,13 +407,14 @@ PASSWORDLESS_AUTH = {
         "EMAIL",
     ],
     "PASSWORDLESS_EMAIL_NOREPLY_ADDRESS": "admin@correcthustle.com",
-    "PASSWORDLESS_REGISTER_NEW_USERS": False,
+    # Registers previously unseen aliases as new users.
+    "PASSWORDLESS_REGISTER_NEW_USERS": True,
     # Token Generation Retry Count
-    "PASSWORDLESS_TOKEN_GENERATION_ATTEMPTS": 5,
+    "PASSWORDLESS_TOKEN_GENERATION_ATTEMPTS": 3,
     # Marks itself as verified the first time a user completes auth via token.
     # Automatically unmarks itself if email is changed.
     "PASSWORDLESS_USER_MARK_EMAIL_VERIFIED": True,
-    "PASSWORDLESS_USER_EMAIL_VERIFIED_FIELD_NAME": "email_verified",
+    "PASSWORDLESS_USER_EMAIL_VERIFIED_FIELD_NAME": "is_email_verified",
     # The user's email field name
     "PASSWORDLESS_USER_EMAIL_FIELD_NAME": "email",
 }

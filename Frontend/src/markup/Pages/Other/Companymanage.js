@@ -40,6 +40,7 @@ function Companymanage() {
         } else {
           console.log("Unknown Error");
         }
+        setLoading(false);
       });
   };
 

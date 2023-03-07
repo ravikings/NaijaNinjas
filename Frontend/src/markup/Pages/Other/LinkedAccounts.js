@@ -41,6 +41,7 @@ function LinkedAccount() {
         } else {
           console.log("Unknown Error")
         }
+        setLoading(false);
       })
   }
 
