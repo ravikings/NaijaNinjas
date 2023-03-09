@@ -36,7 +36,7 @@ export function* verify(token) {
         type: authActionTypes.VERIFY_RUNNER,
       });
     } else {
-      yield createRequest().get("/api/auth/v1.0/apiaccess/", tokens)
+      yield createRequest().post("/api/v1/during/verify-token/", tokens)
       yield put({
         type: authActionTypes.VERIFY_TOKEN_SUCCESS,
         accessToken: tokens,

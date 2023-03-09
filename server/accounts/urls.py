@@ -6,6 +6,7 @@ from accounts.views import (
     SearchProfile,
     DashboardProfile,
     account_status,
+    verify_during_token,
     ReviewView,
     ClientReviewView,
     UserSearchDetails,
@@ -105,6 +106,7 @@ urlpatterns = [
     path("user-profile-update/<str:pk>/", taskUpdate, name="user-profile-update"),
     path("user-resume-update/<str:pk>/", resumeUpdate, name="user-resume-update"),
     path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
+    path("during/verify-token/", verify_during_token, name="during-verify-token"),
     path(
         "profile-mode/<str:pk>/<str:type>/",
         profile_mode_status,

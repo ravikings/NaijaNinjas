@@ -92,7 +92,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "durin.auth.TokenAuthentication",
-        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        #"rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
@@ -220,7 +220,7 @@ DATABASES = {
     }
 }
 
-##TODO: Use pg bounder in the future: pip install django-postgrespool2
+# #TODO: Use pg bounder in the future: pip install django-postgrespool2
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -285,7 +285,7 @@ SOCIALACCOUNT_PROVIDERS = {"google": {}, "facebook": {}}
 # LOGIN_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = "accounts.AccountUser"
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

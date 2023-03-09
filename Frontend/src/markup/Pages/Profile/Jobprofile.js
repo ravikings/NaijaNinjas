@@ -86,12 +86,13 @@ function Jobprofile() {
   }
 
   const editUserDetails = (values) => {
-    const pk = localStorage.getItem("userID");
+    const pk = userDetails?.id;
     axiosPrivate
       .patch(`/api/v1/account/user-profile/${pk}/`, values)
       .then(({ data }) => {
+        setUserDetails(data)
         toast.success("Profile updated successfully")
-        getUserDetails()
+        //getUserDetails()
       })
       .catch((e) => {
         toast.error(e.response?.data?.message || "Unknown Error")

@@ -30,7 +30,6 @@ from bank.serializers import CurrentBalanceSerializer
 
 # from .models import IpModel, RunnerProfile, Review
 from .utilis import send_verify_email
-import arrow
 
 
 class CustomRegisterSerializer(RegisterSerializer):

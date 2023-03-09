@@ -158,8 +158,8 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     """
 
     authentication_classes = (
-        TokenAuthentication,
         DurinTokenAuthentication,
+        TokenAuthentication,
     )
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
@@ -282,18 +282,25 @@ def resumeUpdate(request, pk):
 
 @api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated and IsOwner])
-@authentication_classes([TokenAuthentication, DurinTokenAuthentication])
+@authentication_classes([DurinTokenAuthentication, TokenAuthentication])
 def account_status(request, pk, type):
 
     """
     uses to upload pictures to ui dashboard.
     """
-    queryset = RunnerProfile.objects.filter(author_id=pk)  # TODO: CHANGE TO REQUEST
-    queryset[0].set_online_status(
+    obj, created = RunnerProfile.objects.get_or_create(author=request.user)  # TODO: CHANGE TO REQUEST
+    obj.set_online_status(
         str(type).upper()
     )  # pass type, either login or logout
     return Response({"message": f"status updated to {type}"})
 
+
+@api_view(["POST"])
+@authentication_classes([DurinTokenAuthentication, TokenAuthentication])
+def verify_during_token(request):
+    
+    return Response({"message": f"token is active"})
+    
 
 @api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated and IsOwner and IsRunner])
@@ -962,6 +969,8 @@ class MFATokenVerify(APIView):
 # for validating an Email
 def check_email(email):
 
+    if not email:
+        return False
     # Make a regular expression
     # for validating an Email
     regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"
@@ -975,6 +984,10 @@ def check_email(email):
 
 
 def check_passowrd(password):
+
+    if not password:
+        return False
+
     # passwd = 'Geek12@'
     reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
 
@@ -987,8 +1000,8 @@ def check_passowrd(password):
     # validating conditions
     if mat:
         return True
-    else:
-        return False
+
+    return False
 
 
 @api_view(["POST"])
@@ -1004,6 +1017,8 @@ def durinSingUp(request):
     email = request.data.get("username")
     password = request.data.get("password")
     client = request.data.get("client")
+    is_a_runner = request.data.get("is_a_runner")
+    string_to_boolean = {"true": True, "false": False}
     data = {}
     if not check_email(email):
         return Response(
@@ -1019,7 +1034,11 @@ def durinSingUp(request):
             {"error": "user already exist!"}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    user = AccountUser.objects.create(username=email, email=email)
+    user = AccountUser.objects.create(
+        username=email,
+        email=email,
+        is_a_runner=string_to_boolean.get(is_a_runner, False),
+    )
     user.set_password(password)
     user.save()
 
