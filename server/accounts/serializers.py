@@ -29,7 +29,7 @@ from bank.models import CurrentBalance
 from bank.serializers import CurrentBalanceSerializer
 
 # from .models import IpModel, RunnerProfile, Review
-from .utilis import send_verify_email
+from .utilis import send_verify_email, get_token
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -59,7 +59,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         current_site = get_current_site(request)
         user = AccountUser.objects.get(email=str(email))
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        send_verify_email(user, current_site, email, uid)
+        token = get_token(user)
+        send_verify_email(token, current_site, email, uid)
 
         return user
 
@@ -70,7 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountUser
-        fields = ["pk", "username", "email", "last_seen_time", "is_a_runner"]
+        fields = ["pk", "username", "email", "last_seen_time", "is_a_runner", "is_email_verified"]
         ref_name = "User-serializer"
 
     def get_last_seen_time(self, instance):

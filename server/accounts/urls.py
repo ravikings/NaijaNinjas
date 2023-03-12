@@ -74,9 +74,9 @@ router.register(
     r"delete-project-image", DeleteProjectReview, basename="delete-project-images"
 )
 router.register(r"related-profiles", RelatedProfile, basename="related-profiles")
-router.register(
-    r"chat-search-profiles", ChatSearchProfile, basename="chat-search-profiles"
-)
+# router.register(
+#     r"chat-search-profiles", ChatSearchProfile, basename="chat-search-profiles"
+# )
 
 
 urlpatterns = [

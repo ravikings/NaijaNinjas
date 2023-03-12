@@ -29,6 +29,7 @@ import re
 from django.db import transaction
 from accounts.permissions import IsOwner
 from .utilis import (
+    get_token,
     send_verify_email,
     send_reset_password_email,
     send_successfully_change_password_email,
@@ -85,6 +86,7 @@ from durin.auth import (
     TokenAuthentication as DurinTokenAuthentication,
     CachedTokenAuthentication,
 )
+from zappa.asynchronous import task as async_task
 
 
 # @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -288,19 +290,19 @@ def account_status(request, pk, type):
     """
     uses to upload pictures to ui dashboard.
     """
-    obj, created = RunnerProfile.objects.get_or_create(author=request.user)  # TODO: CHANGE TO REQUEST
-    obj.set_online_status(
-        str(type).upper()
-    )  # pass type, either login or logout
+    obj, created = RunnerProfile.objects.get_or_create(
+        author=request.user
+    )  # TODO: CHANGE TO REQUEST
+    obj.set_online_status(str(type).upper())  # pass type, either login or logout
     return Response({"message": f"status updated to {type}"})
 
 
 @api_view(["POST"])
 @authentication_classes([DurinTokenAuthentication, TokenAuthentication])
 def verify_during_token(request):
-    
+
     return Response({"message": f"token is active"})
-    
+
 
 @api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated and IsOwner and IsRunner])
@@ -617,16 +619,17 @@ class ActivateAccountView(APIView):
 
             if not user.is_email_verified:
                 current_site = get_current_site(request)
-                send_verify_email(user, current_site, user.email)
+                send_verify_email(user, current_site, user.email, id)
                 return redirect("http://127.0.0.1:3000/react/demo/")
 
             else:
                 return redirect("http://127.0.0.1:3000/react/demo/")
 
         except jwt.exceptions.DecodeError as identifier:
-            return Response(
-                {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return redirect("http://127.0.0.1:3000/react/demo/")
+            # return Response(
+            #     {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
+            # )
 
 
 class ChangePasswordAccountView(APIView):
@@ -1004,6 +1007,17 @@ def check_passowrd(password):
     return False
 
 
+@async_task
+def send_singup_email(token, domain,email, uid):
+    print("calling zappa send sign up email")
+    # TODO Create a task to send email here
+    # current_site = get_current_site(request)
+    print(token, domain,email, uid)
+    # uid = urlsafe_base64_encode(force_bytes(id))
+    # send_verify_email(token, domain, email, uid)
+    print("sent sign up email")
+
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @transaction.atomic
@@ -1042,20 +1056,20 @@ def durinSingUp(request):
     user.set_password(password)
     user.save()
 
-    user_data = AccountUser.objects.filter(email=email).values(
-        "pk", "email", "username", "is_a_runner"
-    )
-    data["user"] = user_data[0]
+    token = str(get_token(user))
+    domain = get_current_site(request).domain
 
+    data["user"] = UserSerializer(user).data
     url = reverse("durin_login")
     c = Client()
     response = c.post(url, {"username": email, "password": password, "client": client})
+    send_verify_email(str(token), domain, user.email, user.pk)
     data.update(response.data)
     return Response(data)
 
 
 @authentication_classes([TokenAuthentication, DurinTokenAuthentication])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated and IsOwner])
 @api_view(["POST"])
 @transaction.atomic
 def switch_to_pro(request):
@@ -1076,7 +1090,15 @@ def switch_to_pro(request):
     )
 
 
+@async_task
+def help_me(data):
+    print("hello my word", data)
+
+
 @api_view(["GET"])
 def passwordless_login(request):
-
-    return redirect("/auth/email/", email="sr.rabiu@gmail.com")
+    account_info = get_object_or_404(AccountUser, id=1)
+    token = str(get_token(account_info))
+    domain = get_current_site(request).domain
+    send_verify_email(str(token), domain,account_info.email, account_info.id)
+    return Response({"message": f"user's pro status was updated to test"})
