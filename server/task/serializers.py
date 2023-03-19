@@ -39,6 +39,11 @@ class TaskSerializer(serializers.ModelSerializer):
         return my_list
 
 
+class CreateTaskSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Task
+            fields = ("author", "post_status", "title", "sector", "minimum_salary", "maximum_salary", "region", "location", "attachment", "department", "description", "category")
+
 class TaskWithTotalBidSerializer(serializers.ModelSerializer):
     """
     Task serializers use for creating task

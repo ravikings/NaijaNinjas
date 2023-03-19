@@ -23,6 +23,7 @@ class BiddersOnTask(models.Model):
         blank=True,
     )
 
+
 class Task(models.Model):
 
     STATUS = [
@@ -79,10 +80,12 @@ def upload_to(instance, filename):
     milliseconds = now.microsecond // 1000
     return f"users/{instance.pk}/{now:%Y%m%d%H%M%S}{milliseconds}{extension}"
 
+
 class TaskBidder(models.Model):
     """
     The junction table for task and bid models/tables. Contains every instance of a task for a placement
     """
+
     STATUS = [
         ("False", "False"),
         ("True", "True"),
@@ -117,7 +120,9 @@ class TaskBidder(models.Model):
     attachment = models.FileField(
         upload_to=upload_to, null=True, blank=True, storage=storage
     )
-    bid_approve_status = models.CharField(max_length=255, choices=STATUS, default="False")
+    bid_approve_status = models.CharField(
+        max_length=255, choices=STATUS, default="False"
+    )
     transaction_id = models.CharField(
         max_length=255, blank=True, null=True, db_index=True, unique=True
     )
@@ -138,7 +143,6 @@ class TaskBidder(models.Model):
             ref = secrets.token_urlsafe(50)
             self.transaction_id = ref
         super().save(*args, **kwargs)
-
 
     def approve_bids(self, id):
         self.bid_approve_status = True
@@ -203,8 +207,8 @@ class Timeline(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="timeline_author",
-        null=True, 
-        blank=True
+        null=True,
+        blank=True,
     )
     # TODO: Add validator to chech if user is a runner
     task_owner = models.ForeignKey(
@@ -212,7 +216,7 @@ class Timeline(models.Model):
         on_delete=models.CASCADE,
         related_name="timeline_task_owner",
         null=True,
-        blank=True
+        blank=True,
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
@@ -244,7 +248,8 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="timeline_comment_author",
-        null=True, blank=True
+        null=True,
+        blank=True,
     )
     task_timeline = models.ForeignKey(
         Timeline,
@@ -281,6 +286,7 @@ class TaskBookmarks(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="task_bookmarks_author",
-        null=True, blank=True
+        null=True,
+        blank=True,
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
