@@ -283,8 +283,6 @@ def account_status(request, pk, type):
     return Response({"message": f"status updated to {type}"})
 
 
-@api_view(["POST"])
-@authentication_classes([DurinTokenAuthentication, TokenAuthentication])
 @api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated and IsOwner and IsRunner])
 @authentication_classes([DurinTokenAuthentication])
