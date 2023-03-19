@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.75570530.css",
-    "main.js": "./static/js/main.8ef35fa6.js",
+    "main.js": "./static/js/main.bccaa90f.js",
     "static/js/68.d61664c6.chunk.js": "./static/js/68.d61664c6.chunk.js",
     "static/js/866.9d162550.chunk.js": "./static/js/866.9d162550.chunk.js",
     "static/js/467.3c865e3d.chunk.js": "./static/js/467.3c865e3d.chunk.js",
@@ -85,11 +85,11 @@
     "static/media/private-group.svg": "./static/media/private-group.01b98fbca06abeef2546f920d704d7a3.svg",
     "static/media/objects.svg": "./static/media/objects.6710ce63206dcb75271e36ed9cbec96b.svg",
     "static/media/logo-invision.svg": "./static/media/logo-invision.f3413d25dc0761bcc615835e48482191.svg",
-    "index.html": "./index.html",
     "static/media/adding.svg": "./static/media/adding.446449d03a8652a3b3e616503dbe15bf.svg",
     "static/media/creating.svg": "./static/media/creating.446449d03a8652a3b3e616503dbe15bf.svg",
     "static/media/progress.svg": "./static/media/progress.446449d03a8652a3b3e616503dbe15bf.svg",
     "static/media/transferring.svg": "./static/media/transferring.446449d03a8652a3b3e616503dbe15bf.svg",
+    "index.html": "./index.html",
     "static/media/info-filled.svg": "./static/media/info-filled.c300c7d4ff691ff0699ce831657d7931.svg",
     "static/media/slick.svg": "./static/media/slick.c850669a15996deab6d8.svg",
     "static/media/loading.svg": "./static/media/loading.bed961660a324531a71a.svg",
@@ -156,10 +156,10 @@
     "static/media/done.svg": "./static/media/done.25ee38ec4099b72cc19840356e5a92ae.svg",
     "static/media/message-sent.svg": "./static/media/message-sent.25ee38ec4099b72cc19840356e5a92ae.svg",
     "main.75570530.css.map": "./static/css/main.75570530.css.map",
-    "main.8ef35fa6.js.map": "./static/js/main.8ef35fa6.js.map"
+    "main.bccaa90f.js.map": "./static/js/main.bccaa90f.js.map"
   },
   "entrypoints": [
     "static/css/main.75570530.css",
-    "static/js/main.8ef35fa6.js"
+    "static/js/main.bccaa90f.js"
   ]
 }

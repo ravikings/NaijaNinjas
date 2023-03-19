@@ -79,7 +79,7 @@ function Componypostjobs() {
     formdata.append("location", location);
     formdata.append("department", department);
     formdata.append("description", description);
-    formdata.append("tags", tags);
+    // formdata.append("tags", tags);
     formdata.append("category", category);
     formdata.append("attachment", attachFile);
     formdata.append("author", userId);
@@ -111,6 +111,7 @@ function Componypostjobs() {
         history.push("/company-manage-job");
       },
       (error) => {
+        setLoading(false);
         console.log({ error });
       }
     );

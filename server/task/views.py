@@ -5,11 +5,12 @@ from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from accounts.permissions import IsOwner
 from accounts.models import AccountUser, RunnerProfile
 from bank.models import CurrentBalance
 from task.serializers import (
+    CreateTaskSerializer,
     TaskSerializer,
     TimelineStartSerializer,
     TaskBidderSerializer,
@@ -69,6 +70,13 @@ class TaskView(viewsets.ModelViewSet):
         DurinTokenAuthentication,
     )
 
+    def create(self, request, pk=None):
+    
+        serializer = CreateTaskSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "post created!"}, status=status.HTTP_201_CREATED)
+        
     def retrieve(self, request, pk=None):
 
         task = Task.objects.get(id=pk)
@@ -209,6 +217,11 @@ class TaskImageAPIView(viewsets.ModelViewSet):
     authentication_classes = (
         DurinTokenAuthentication,
     )
+    def get_permissions(self):
+        if self.action in ["list"]:
+            return [IsAdminUser()]
+        else:
+            return [AllowAny()]
 
     def create(self, request, pk=None):
         property_id = request.data["task"]
@@ -459,16 +472,16 @@ def accept_bid(request):
         response_data["professional_last_name"] = bid.bidder_profile.last_name
         response_data["total_charge"] = bid.total_charge
         print("creating timeline")
-        query_set = Timeline.objects.create(
+        obj, _created = Timeline.objects.update_or_create(
             author=bid.payment_author,
             task_owner=bid.bidder_profile.author,
             task=bid.task,
         )
         print("update task status")
-        bid.approve_bids(query_set.id)
+        bid.approve_bids(obj.id)
         # bid.add_bidder_to_task(bid.bidder_profile.author)
         print("timeline created")
-        serializer = TimelineStartSerializer(query_set)
+        serializer = TimelineStartSerializer(obj)
         response_data.update(serializer.data)
         return Response(response_data)
 
@@ -532,7 +545,7 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
                 id__in=[owner, bid.payment_author.id]
             )
             print("creating timeline")
-            obj, _created = Timeline.objects.get_or_create(
+            obj, _created = Timeline.objects.update_or_create(
                 author=bid.payment_author, task_owner=task_owner, task=bid.task
             )
             print("update task status")
@@ -550,7 +563,7 @@ class OwnerTaskApprove(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
-@authentication_classes([DurinTokenAuthentication])
+#@authentication_classes([DurinTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_timeiline(request, task_id, task_owner):
     order = request.data.get("order_id", False)

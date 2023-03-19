@@ -184,7 +184,20 @@ function CompanyManageBids() {
                                   <Ratings />
                                   <h6>{item.description}</h6>
                                   <div className="mt-3">
-                                    {item.bid_approve_status === 'True' ? (
+                                    {item.bid_approve_status === 'true' || "True" && item.payment_submitted === false ? (
+                                      <><Button
+                                        style={{
+                                          backgroundColor: "#2e55fa",
+                                          color: "white",
+                                        }}
+                                        onClick={() => displayPaymentPage(item)}
+                                        variant="outlined"
+                                        startIcon={<i className="fa fa-check"></i>}
+                                      >
+                                        Make payment
+                                      </Button></>
+                                    ) :
+                                    item.bid_approve_status === 'true' || "True" ? (
                                       <><Button
                                         style={{
                                           backgroundColor: "#2e55fa",
@@ -210,7 +223,7 @@ function CompanyManageBids() {
                                         </Button></>
                                     ) : (
                                       <>
-                                        {item.bid_approve_status !== "Reject" ? (<Button disabled style={{
+                                        {item.bid_approve_status === "reject" || "Reject" ? (<Button disabled style={{
                                           backgroundColor: "#E4A11B",
                                           color: "black",
                                         }}> Rejected</Button>) : (
