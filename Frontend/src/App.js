@@ -32,7 +32,7 @@ function App() {
   )
 
   useEffect(() => {
-    if (mfaVerifyToken) {
+    if (refreshToken || mfaVerifyToken) {
       dispatch(verifyToken(refreshToken))
     }
   }, [])

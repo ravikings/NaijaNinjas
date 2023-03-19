@@ -39,10 +39,11 @@ from accounts.views import (
     MFATokenVerify,
     switch_to_pro,
     passwordless_login,
+    verify_during_token,
 )
 
 
-#trailing_slash=False
+# trailing_slash=False
 router = DefaultRouter()
 router.register(r"profile", DashboardProfile, basename="dashboard-profile")
 router.register(r"user-profile", UserDashboardProfile, basename="user-profile")
@@ -73,9 +74,9 @@ router.register(
     r"delete-project-image", DeleteProjectReview, basename="delete-project-images"
 )
 router.register(r"related-profiles", RelatedProfile, basename="related-profiles")
-router.register(
-    r"chat-search-profiles", ChatSearchProfile, basename="chat-search-profiles"
-)
+# router.register(
+#     r"chat-search-profiles", ChatSearchProfile, basename="chat-search-profiles"
+# )
 
 
 urlpatterns = [
@@ -113,8 +114,13 @@ urlpatterns = [
     path("public-quotes/", public_quotes, name="public-quotes"),
     path("delete-project/<str:pk>/", delete_projects, name="delete-project"),
     path("profile-bookmark/<str:pk>/", profile_favorite, name="profile-bookmark"),
-    path("public-projects-view/<str:pk>/", public_project_viewset, name="public-projects-view"),
+    path(
+        "public-projects-view/<str:pk>/",
+        public_project_viewset,
+        name="public-projects-view",
+    ),
     path("switch-pro-status/", switch_to_pro, name="switch-pro-status"),
     path("passwordless-login/", passwordless_login, name="passwordless-login"),
+    path("during/verify-token/", verify_during_token, name="during-verify-token"),
     # path("public-celery/", start_celery_work, name="start-celery"),
 ]

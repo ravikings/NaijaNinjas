@@ -47,6 +47,7 @@ function MfaLogin() {
         type: authActionTypes.LOGIN_SUCCESS,
       });
       History.push("/");
+      window.location.reload(false);
     }
     ).catch((e) => {
       console(e);
