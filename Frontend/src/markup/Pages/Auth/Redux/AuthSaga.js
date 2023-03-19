@@ -19,11 +19,13 @@ export function* verify(token) {
     const tokens = localStorage.getItem("access_token");
     const mfa = localStorage.getItem("mfa");
     if (mfa) {
-      yield createRequest().post("/api/v1/mfa/auth/verify/", tokens)
+      yield createRequest().post("/api/v1/mfa/auth/verify/", { clients: "frontend" }, tokens)
         .then((res) => {
           localStorage.setItem("userID", res?.data?.pk);
           localStorage.setItem("userData", JSON.stringify(res?.data));
-          localStorage.setItem("checker", res?.data?.is_a_runner)
+          localStorage.setItem("checker", res?.data?.is_a_runner);
+          localStorage.setItem("access_token", res?.data?.access_token);
+          localStorage.remove("mfa", false);
         });
       yield put({
         type: authActionTypes.LOGIN_SUCCESS,

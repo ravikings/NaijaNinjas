@@ -6,7 +6,6 @@ from accounts.views import (
     SearchProfile,
     DashboardProfile,
     account_status,
-    verify_during_token,
     ReviewView,
     ClientReviewView,
     UserSearchDetails,
@@ -40,10 +39,11 @@ from accounts.views import (
     MFATokenVerify,
     switch_to_pro,
     passwordless_login,
+    verify_during_token,
 )
 
 
-#trailing_slash=False
+# trailing_slash=False
 router = DefaultRouter()
 router.register(r"profile", DashboardProfile, basename="dashboard-profile")
 router.register(r"user-profile", UserDashboardProfile, basename="user-profile")
@@ -106,7 +106,6 @@ urlpatterns = [
     path("user-profile-update/<str:pk>/", taskUpdate, name="user-profile-update"),
     path("user-resume-update/<str:pk>/", resumeUpdate, name="user-resume-update"),
     path("user-status/<str:pk>/<str:type>/", account_status, name="user-status"),
-    path("during/verify-token/", verify_during_token, name="during-verify-token"),
     path(
         "profile-mode/<str:pk>/<str:type>/",
         profile_mode_status,
@@ -115,8 +114,13 @@ urlpatterns = [
     path("public-quotes/", public_quotes, name="public-quotes"),
     path("delete-project/<str:pk>/", delete_projects, name="delete-project"),
     path("profile-bookmark/<str:pk>/", profile_favorite, name="profile-bookmark"),
-    path("public-projects-view/<str:pk>/", public_project_viewset, name="public-projects-view"),
+    path(
+        "public-projects-view/<str:pk>/",
+        public_project_viewset,
+        name="public-projects-view",
+    ),
     path("switch-pro-status/", switch_to_pro, name="switch-pro-status"),
     path("passwordless-login/", passwordless_login, name="passwordless-login"),
+    path("during/verify-token/", verify_during_token, name="during-verify-token"),
     # path("public-celery/", start_celery_work, name="start-celery"),
 ]

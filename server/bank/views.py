@@ -7,7 +7,6 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
 from durin.auth import (
     TokenAuthentication as DurinTokenAuthentication,
 )

@@ -82,10 +82,8 @@ from .serializers import (
 )
 from notifications.signals import notify
 from rest_framework.authentication import TokenAuthentication
-from durin.auth import (
-    TokenAuthentication as DurinTokenAuthentication,
-    CachedTokenAuthentication,
-)
+from durin.auth import TokenAuthentication as DurinTokenAuthentication
+from durin.models import AuthToken, Client as DurinClient
 from zappa.asynchronous import task as async_task
 
 
@@ -126,10 +124,7 @@ class RelatedProfile(viewsets.ModelViewSet):
 
     """
 
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
@@ -159,10 +154,7 @@ class UserDashboardProfile(viewsets.ModelViewSet):
     dashboard serializers use for entry data for getting data to the ui
     """
 
-    authentication_classes = (
-        DurinTokenAuthentication,
-        TokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerProfile.objects.all()
     serializer_class = PublicProfileSerializer
 
@@ -198,7 +190,7 @@ def save_user_profile(profile, request):
 
 
 @api_view(["POST", "PATCH"])
-@authentication_classes([TokenAuthentication, DurinTokenAuthentication])
+@authentication_classes([DurinTokenAuthentication])
 def taskUpdate(request, pk):
     profile = RunnerProfile.objects.filter(author_id=pk)
     if profile.exists():
@@ -221,10 +213,7 @@ class DashboardResume(viewsets.ModelViewSet):
     """
 
     permission_classes = [IsAuthenticated and IsOwner and IsRunner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
     # TODO: uncomment below
@@ -243,10 +232,7 @@ class UserDashboardResume(viewsets.ModelViewSet):
     """
 
     permission_classes = [IsAuthenticated and IsOwner and IsRunner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     queryset = RunnerResume.objects.all()
     serializer_class = UserResumeSerializer
 
@@ -267,7 +253,7 @@ def save_profile_resume(resume, request):
 
 @api_view(["POST", "PATCH"])
 @permission_classes([IsAuthenticated and IsOwner and IsRunner])
-@authentication_classes([TokenAuthentication, DurinTokenAuthentication])
+@authentication_classes([DurinTokenAuthentication])
 def resumeUpdate(request, pk):
     resume = RunnerResume.objects.filter(author_id=pk)
     if resume.exists():
@@ -299,14 +285,9 @@ def account_status(request, pk, type):
 
 @api_view(["POST"])
 @authentication_classes([DurinTokenAuthentication, TokenAuthentication])
-def verify_during_token(request):
-
-    return Response({"message": f"token is active"})
-
-
 @api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated and IsOwner and IsRunner])
-@authentication_classes([TokenAuthentication, DurinTokenAuthentication])
+@authentication_classes([DurinTokenAuthentication])
 def profile_mode_status(request, pk, type):
 
     """
@@ -316,6 +297,13 @@ def profile_mode_status(request, pk, type):
     queryset.private_mode(type)
     serializer = ProfileSerializer(queryset)
     return Response(serializer.data)
+
+
+@api_view(["POST"])
+@authentication_classes([DurinTokenAuthentication])
+def verify_during_token(request):
+
+    return Response({"message": f"token is active"})
 
 
 # @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -328,10 +316,7 @@ class PhotoUpload(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotosSerializer
     permissions_classes = [IsAuthenticated and IsOwner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
 
     def get_queryset(self):
         if self.request.method == "GET":
@@ -352,10 +337,7 @@ class VideoUpload(viewsets.ModelViewSet):
     queryset = Vidoe.objects.all()
     serializer_class = VidoesSerializer
     permissions_classes = [IsAuthenticated and IsRunner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
 
 
 class ProjectsViewSet(viewsets.ModelViewSet):
@@ -367,10 +349,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
     permissions_classes = [IsAuthenticated and IsOwner and IsRunner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
 
     # def get_queryset(self):
 
@@ -397,10 +376,7 @@ class ReviewView(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permissions_classes = [IsAuthenticated, IsOwner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
 
     # def get_queryset(self):
 
@@ -415,10 +391,7 @@ class ClientReviewView(viewsets.ModelViewSet):
 
     queryset = ClientReview.objects.all()
     serializer_class = ClientReviewSerializer
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     permissions_classes = [IsAuthenticated and IsOwner]
 
 
@@ -537,10 +510,7 @@ class DashboardServiceView(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     permissions_classes = [IsAuthenticated and IsOwner and IsRunner]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
 
 
 # @method_decorator(cache_page(60 * 15), name="dispatch")
@@ -551,10 +521,7 @@ class ServiceView(viewsets.ModelViewSet):
     """
 
     serializer_class = ServiceSerializer
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -571,10 +538,7 @@ class PrivateServiceView(viewsets.ModelViewSet):
     """
 
     serializer_class = ServiceSerializer
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
     # permissions_classes = [IsAuthenticated and IsOwner]
 
     def get_queryset(self):
@@ -635,10 +599,7 @@ class ActivateAccountView(APIView):
 class ChangePasswordAccountView(APIView):
 
     permission_classes = [IsAuthenticated]
-    authentication_classes = (
-        TokenAuthentication,
-        DurinTokenAuthentication,
-    )
+    authentication_classes = (DurinTokenAuthentication,)
 
     def get(self, request):
         """
@@ -874,7 +835,7 @@ class DeleteProjectReview(viewsets.ModelViewSet):
     uses to delete images attached to projects
     """
 
-    authentication_classes = [TokenAuthentication, DurinTokenAuthentication]
+    authentication_classes = [DurinTokenAuthentication]
     permissions_classes = IsAuthenticated  # [IsAuthenticated and IsOwner]
     queryset = ProjectPhoto.objects.all()
     serializer_class = ProjectPhotoSerializer
@@ -928,7 +889,7 @@ def public_quotes(request):
 
 
 @api_view(["POST", "GET"])
-@authentication_classes([TokenAuthentication, DurinTokenAuthentication])
+@authentication_classes([DurinTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def profile_favorite(request, pk):
 
@@ -964,7 +925,15 @@ class MFATokenVerify(APIView):
     authentication_classes = (TokenAuthentication,)
 
     def post(self, request, *args, **kwargs):
+        client_param = request.data.get("client", None)
+        if not client_param:
+            return Response({"Error": "client required"}, status=400)
         data = UserSerializer(request.user).data
+        client = get_object_or_404(DurinClient, name=client_param)
+        token_created, token_obj = AuthToken.objects.get_or_create(
+            user=request.user, client=client
+        )
+        data["access_token"] = token_created.token
         return Response(data)
 
 
@@ -1008,11 +977,11 @@ def check_passowrd(password):
 
 
 @async_task
-def send_singup_email(token, domain,email, uid):
+def send_singup_email(token, domain, email, uid):
     print("calling zappa send sign up email")
     # TODO Create a task to send email here
     # current_site = get_current_site(request)
-    print(token, domain,email, uid)
+    print(token, domain, email, uid)
     # uid = urlsafe_base64_encode(force_bytes(id))
     # send_verify_email(token, domain, email, uid)
     print("sent sign up email")
@@ -1068,10 +1037,10 @@ def durinSingUp(request):
     return Response(data)
 
 
-@authentication_classes([TokenAuthentication, DurinTokenAuthentication])
-@permission_classes([IsAuthenticated and IsOwner])
+# @transaction.atomic
 @api_view(["POST"])
-@transaction.atomic
+@authentication_classes([DurinTokenAuthentication])
+@permission_classes([IsAuthenticated and IsOwner])
 def switch_to_pro(request):
     """
     uses to update user pro status
@@ -1100,5 +1069,5 @@ def passwordless_login(request):
     account_info = get_object_or_404(AccountUser, id=1)
     token = str(get_token(account_info))
     domain = get_current_site(request).domain
-    send_verify_email(str(token), domain,account_info.email, account_info.id)
+    send_verify_email(str(token), domain, account_info.email, account_info.id)
     return Response({"message": f"user's pro status was updated to test"})
